@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Delete_Dialog</class>
+ <widget class="QDialog" name="Delete_Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>553</width>
+    <height>108</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>TurnFix - Veranstaltung löschen</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../../../../resources/TurnFix.qrc">
+    <normaloff>:/appicons/icon.png</normaloff>:/appicons/icon.png</iconset>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Wählen sie die Veranstaltung die sie löschen möchten!</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QDialogButtonBox" name="bbx_done">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Abort|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QComboBox" name="cmb_events"/>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="../../../../resources/TurnFix.qrc"/>
+ </resources>
+ <connections/>
+</ui>

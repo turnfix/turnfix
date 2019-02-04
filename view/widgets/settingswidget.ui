@@ -1,0 +1,536 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SettingsWidget</class>
+ <widget class="QWidget" name="SettingsWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>545</width>
+    <height>316</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_2">
+   <property name="margin">
+    <number>0</number>
+   </property>
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <item row="0" column="1">
+    <widget class="QStackedWidget" name="configStack">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="databasePage">
+      <layout class="QGridLayout" name="gridLayout_13">
+       <item row="0" column="0">
+        <widget class="QLabel" name="databaseTypeLabel">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Datenbank-Typ:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QComboBox" name="databaseTypeCombo">
+         <item>
+          <property name="text">
+           <string>PostgreSQL</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>SQLite</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="1" column="0" colspan="2">
+        <widget class="QStackedWidget" name="databaseStack">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="currentIndex">
+          <number>0</number>
+         </property>
+         <widget class="QWidget" name="postgresPage">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_12">
+           <property name="margin">
+            <number>0</number>
+           </property>
+           <item row="0" column="0">
+            <widget class="QLabel" name="databaseServerLabel">
+             <property name="text">
+              <string>Server:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLineEdit" name="databaseServerText"/>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="databaseUserLabel">
+             <property name="text">
+              <string>Benutzername:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QLineEdit" name="databaseUserText"/>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="databasePasswordLabel">
+             <property name="text">
+              <string>Passwort:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QLineEdit" name="databasePasswordText">
+             <property name="echoMode">
+              <enum>QLineEdit::Password</enum>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="databaseLabel">
+             <property name="text">
+              <string>Datenbank:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1">
+            <widget class="QLineEdit" name="databaseText"/>
+           </item>
+           <item row="4" column="1">
+            <widget class="QPushButton" name="databaseAssistantButton">
+             <property name="text">
+              <string>Einrichtungs-Assistent</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="sqlitePage">
+          <layout class="QGridLayout" name="gridLayout">
+           <property name="margin">
+            <number>0</number>
+           </property>
+           <item row="0" column="0">
+            <widget class="QLabel" name="databaseFileLabel">
+             <property name="text">
+              <string>Dateiname:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLineEdit" name="databaseFileText"/>
+           </item>
+           <item row="0" column="2">
+            <widget class="QToolButton" name="databaseFileButton">
+             <property name="text">
+              <string>...</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0" colspan="3">
+            <spacer name="verticalSpacer">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="0" column="3">
+            <widget class="QToolButton" name="databaseCreateButton">
+             <property name="text">
+              <string>Neu</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+       <item row="4" column="0" colspan="2">
+        <spacer name="verticalSpacer_4">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="emailPage">
+      <layout class="QGridLayout" name="gridLayout_14">
+       <item row="0" column="0">
+        <widget class="QLabel" name="mailServerLabel">
+         <property name="text">
+          <string>Server:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="mailServerText"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="mailUserLabel">
+         <property name="text">
+          <string>Benutzername:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="mailUserText"/>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="mailPasswordLabel">
+         <property name="text">
+          <string>Passwort:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="mailPasswordText">
+         <property name="echoMode">
+          <enum>QLineEdit::Password</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="emailLabel">
+         <property name="text">
+          <string>E-Mail (Absender):</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QLineEdit" name="emailText"/>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="senderLabel">
+         <property name="text">
+          <string>Absender-Name:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QLineEdit" name="senderText"/>
+       </item>
+       <item row="5" column="0" colspan="2">
+        <spacer name="emailSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="onlineAccountPage">
+      <layout class="QGridLayout" name="gridLayout_15">
+       <item row="0" column="0">
+        <widget class="QLabel" name="onlineUserLabel">
+         <property name="text">
+          <string>Benutzername:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="onlineUserText"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="onlinePasswordLabel">
+         <property name="text">
+          <string>Passwort:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="onlinePasswordText">
+         <property name="echoMode">
+          <enum>QLineEdit::Password</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0" colspan="2">
+        <spacer name="onlineAccountSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="miscPage">
+      <layout class="QGridLayout" name="gridLayout_16">
+       <item row="0" column="0">
+        <widget class="QLabel" name="creatorLabel">
+         <property name="text">
+          <string>Erstellt durch...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="creatorText"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="iconLabel">
+         <property name="text">
+          <string>Iconmodus:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QCheckBox" name="iconCheckbox">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="barcodeLabel">
+         <property name="text">
+          <string>Barcodes:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QCheckBox" name="barcodeCheckbox">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="fontLabel">
+         <property name="text">
+          <string>Barcode Schriftart:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QFontComboBox" name="fontCombo"/>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="nameFormatLabel">
+         <property name="text">
+          <string>Namenformat Ausdruck:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QComboBox" name="nameFormatCombo">
+         <item>
+          <property name="text">
+           <string>Vorname Nachname</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>NACHNAME Vorname</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Nachname, Vorname</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="juryLabel">
+         <property name="text">
+          <string>Jury-Wertungen runden auf:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QComboBox" name="juryCombo">
+         <property name="currentIndex">
+          <number>1</number>
+         </property>
+         <item>
+          <property name="text">
+           <string>0,5</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>0,05</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>0,005</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="6" column="0" colspan="2">
+        <spacer name="miscSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <layout class="QHBoxLayout" name="controlButtonLayout">
+     <property name="margin">
+      <number>12</number>
+     </property>
+     <item>
+      <widget class="QDialogButtonBox" name="controlButtons">
+       <property name="standardButtons">
+        <set>QDialogButtonBox::Reset|QDialogButtonBox::Save</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="0" column="0" rowspan="2">
+    <widget class="TFToolbarWidget" name="toolbarWidget" native="true">
+     <property name="minimumSize">
+      <size>
+       <width>75</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>75</width>
+       <height>16777215</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+  </layout>
+  <action name="databaseAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../assets/icons/icons.qrc">
+     <normaloff>:/icons/database.png</normaloff>:/icons/database.png</iconset>
+   </property>
+   <property name="text">
+    <string>Datenbank</string>
+   </property>
+  </action>
+  <action name="emailAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../assets/icons/icons.qrc">
+     <normaloff>:/icons/email.png</normaloff>:/icons/email.png</iconset>
+   </property>
+   <property name="text">
+    <string>Email</string>
+   </property>
+  </action>
+  <action name="onlineAccountAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../assets/icons/icons.qrc">
+     <normaloff>:/icons/toa.png</normaloff>:/icons/toa.png</iconset>
+   </property>
+   <property name="text">
+    <string>Online</string>
+   </property>
+  </action>
+  <action name="miscAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../assets/icons/icons.qrc">
+     <normaloff>:/icons/misc.png</normaloff>:/icons/misc.png</iconset>
+   </property>
+   <property name="text">
+    <string>sonstiges</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>TFToolbarWidget</class>
+   <extends>QWidget</extends>
+   <header>view/widgets/tftoolbarwidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="../../assets/icons/icons.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>databaseTypeCombo</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>databaseStack</receiver>
+   <slot>setCurrentIndex(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>234</x>
+     <y>32</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>194</x>
+     <y>43</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

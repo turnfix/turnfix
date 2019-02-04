@@ -1,0 +1,45 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icons/turnfix-gross.png</file>
+        <file>andere/ampel_gruen.png</file>
+        <file>andere/ampel_rot.png</file>
+        <file>appicons/database.png</file>
+        <file>appicons/misc.png</file>
+        <file>appicons/toa.png</file>
+        <file>appicons/email.png</file>
+        <file>appicons/drucken.png</file>
+        <file>appicons/ergebnisse.png</file>
+        <file>appicons/icon.png</file>
+        <file>appicons/leistungen.png</file>
+        <file>appicons/riegen.png</file>
+        <file>appicons/status.png</file>
+        <file>appicons/layout.png</file>
+        <file>appicons/fehler.png</file>
+        <file>appicons/haken.png</file>
+        <file>appicons/minus.png</file>
+        <file>appicons/plus.png</file>
+        <file>appicons/save.png</file>
+        <file>appicons/warnung.png</file>
+        <file>appicons/edit.png</file>
+        <file>appicons/time.png</file>
+        <file>appicons/down.png</file>
+        <file>appicons/up.png</file>
+        <file>appicons/teilnehmer.png</file>
+        <file>appicons/round.png</file>
+        <file>appicons/left.png</file>
+        <file>appicons/right.png</file>
+        <file>appicons/bin_closed.png</file>
+        <file>appicons/folder.png</file>
+        <file>appicons/shape_align_center.png</file>
+        <file>appicons/shape_move_back.png</file>
+        <file>appicons/shape_move_backwards.png</file>
+        <file>appicons/shape_move_forwards.png</file>
+        <file>appicons/shape_move_front.png</file>
+        <file>appicons/clock_red.png</file>
+        <file>appicons/processing.png</file>
+        <file>appicons/user_add.png</file>
+        <file>appicons/group_add.png</file>
+        <file>appicons/large_tiles.png</file>
+        <file>appicons/directory_listing.png</file>
+    </qresource>
+</RCC>

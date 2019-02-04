@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Formel_Dialog</class>
+ <widget class="QDialog" name="Formel_Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>609</width>
+    <height>212</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>TurnFix - Formel verwalten</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../../../../resources/TurnFix.qrc">
+    <normaloff>:/appicons/icon.png</normaloff>:/appicons/icon.png</iconset>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="1" column="0">
+    <widget class="QLabel" name="label">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Formelbaustein:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1" colspan="2">
+    <widget class="QComboBox" name="cmb_formel">
+     <item>
+      <property name="text">
+       <string>Abrunden: floor(x)</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Aufrunden: ceil(x)</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Betrag: abs(x)</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Maximum: max(x,y)</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Minimum: min(x,y)</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Potenzieren: pow(x,y)</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Runden: int(x)</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Wurzel: sqrt(x)</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Formel:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1" colspan="2">
+    <widget class="QLineEdit" name="txt_formel"/>
+   </item>
+   <item row="4" column="0" colspan="4">
+    <widget class="QDialogButtonBox" name="bbx_done">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Save</set>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Name:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1" colspan="3">
+    <widget class="QLineEdit" name="txt_name"/>
+   </item>
+   <item row="2" column="1" colspan="3">
+    <widget class="QLabel" name="label_4">
+     <property name="text">
+      <string>Verwende als Variablen die Buchstaben A-Z in Großbuchstaben.
+Bei Formeln zur Berechnung des Endwerts für eine Disziplin muss ein
+kleines x als einzige Variable definiert werden.</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="3">
+    <widget class="QPushButton" name="but_check">
+     <property name="text">
+      <string>Syntax überprüfen</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="3">
+    <widget class="QPushButton" name="but_add">
+     <property name="text">
+      <string>hinzufügen</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="../../../../resources/TurnFix.qrc"/>
+ </resources>
+ <connections/>
+</ui>

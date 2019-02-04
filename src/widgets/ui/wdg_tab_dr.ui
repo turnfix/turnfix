@@ -1,0 +1,684 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Tab_DR_Ui</class>
+ <widget class="QWidget" name="Tab_DR_Ui">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>716</width>
+    <height>614</height>
+   </rect>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>Ausgabe</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="0">
+       <widget class="QComboBox" name="cmb_output">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <item>
+         <property name="text">
+          <string>Drucker</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>PDF</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QCheckBox" name="chk_preview">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="text">
+         <string>Druckvorschau anzeigen</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <spacer name="horizontalSpacer_3">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="0" column="3">
+       <widget class="QPushButton" name="but_print">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Druck starten</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="title">
+      <string>Ausdruck selektieren</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_3">
+      <item row="0" column="0">
+       <widget class="QComboBox" name="cmb_printtype">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <item>
+         <property name="text">
+          <string>Ergebnisse</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Riegenlisten</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Meldeliste</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Wettkampfbögen</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Wettkampfkarten</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Urkunden</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>sonstige</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QStackedWidget" name="mainStack">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="currentIndex">
+         <number>0</number>
+        </property>
+        <widget class="QWidget" name="resultWidget">
+         <layout class="QGridLayout" name="gridLayout_10">
+          <property name="margin">
+           <number>0</number>
+          </property>
+          <item row="0" column="0">
+           <widget class="QComboBox" name="cmb_res_type">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <item>
+             <property name="text">
+              <string>ohne Details</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>mit Details</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Rundengesamtwertung</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Tabelle</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="8" column="0">
+           <widget class="QCheckBox" name="chk_res_pg">
+            <property name="text">
+             <string>Neue Seite für jeden Wettkampf</string>
+            </property>
+           </widget>
+          </item>
+          <item row="9" column="0">
+           <widget class="QStackedWidget" name="resultStack">
+            <property name="currentIndex">
+             <number>3</number>
+            </property>
+            <widget class="QWidget" name="page_3"/>
+            <widget class="QWidget" name="page_4">
+             <layout class="QGridLayout" name="gridLayout_11">
+              <property name="margin">
+               <number>0</number>
+              </property>
+              <item row="0" column="0">
+               <widget class="QCheckBox" name="chk_res_aw">
+                <property name="text">
+                 <string>Ausgangswert zusätzlich abdrucken</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="page_5">
+             <layout class="QGridLayout" name="gridLayout_12">
+              <property name="margin">
+               <number>0</number>
+              </property>
+              <item row="0" column="0">
+               <widget class="QCheckBox" name="chk_res_sc">
+                <property name="text">
+                 <string>Beste Plätze gewinnen nicht die meisten Punkte</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="page"/>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QCheckBox" name="chk_res_cl">
+            <property name="text">
+             <string>Vereine auswählen</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QCheckBox" name="chk_res_wk">
+            <property name="text">
+             <string>Wettkämpfe auswählen</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QCheckBox" name="chk_res_detail">
+            <property name="text">
+             <string>Einzelwertung für Land/Verband/Gau (je nach Selektion der Detailinformationen)</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="riegenWidget">
+         <layout class="QGridLayout" name="gridLayout_13">
+          <property name="margin">
+           <number>0</number>
+          </property>
+          <item row="0" column="0" colspan="2">
+           <widget class="QCheckBox" name="chk_rg_select">
+            <property name="text">
+             <string>Nur bestimmte Riegen drucken</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0" colspan="2">
+           <spacer name="verticalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_3">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Sortierung:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QComboBox" name="cmb_rg_sort">
+            <item>
+             <property name="text">
+              <string>nach Name</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>nach Startnummer</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="1" column="0" colspan="2">
+           <widget class="QCheckBox" name="chk_rg_page">
+            <property name="text">
+             <string>Neue Seite für jede Riege</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="meldeWidget">
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <property name="margin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QCheckBox" name="chk_ve_select">
+            <property name="text">
+             <string>nur bestimmte Vereine drucken</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_4">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="bogenWidget">
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <property name="margin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QCheckBox" name="chk_bo_split">
+            <property name="text">
+             <string>Neue Seite für jede Mannschaft</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_5">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="kartenWidget"/>
+        <widget class="QWidget" name="urkundenWidget">
+         <layout class="QVBoxLayout" name="verticalLayout_4">
+          <property name="margin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>Layout für Urkunde:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="cmb_urkunde"/>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="chk_ur_runde">
+            <property name="text">
+             <string>[Mannschafts-WK] Rundengesamtwertung auf Urkunde</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="chk_ur_platz">
+            <property name="text">
+             <string>[Mannschafts-WK] Beste Plätze gewinnen nicht die meisten Punkte </string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="chk_ur_single">
+            <property name="text">
+             <string>[Mannschafts-WK] Nur eine Urkunde pro Mannschaft</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="chk_ur_einzelwertung">
+            <property name="text">
+             <string>[Mannschafts-WK] Einzelergebnis auf Urkunden</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_7">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="sonstigesWidget">
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <property name="margin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QComboBox" name="cmb_misc_typ">
+            <item>
+             <property name="text">
+              <string>Ausschreibung</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Zeitplan</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Meldematrix</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Mannschaftsmatrix</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Startpass-Kontrolliste</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Vereinsliste mit Starterzahlen</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>EDV-Checkliste (Riegen)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>EDV-Checkliste (Teilnehmer)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Wettkampfbericht</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Medallienspiegel</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Ergebnisbogen</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_6">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QGroupBox" name="groupBox_3">
+     <property name="title">
+      <string>Layout individualisieren</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_4">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Layout für Cover:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>Layout für individuelles Layout:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QComboBox" name="cmb_cover"/>
+      </item>
+      <item row="1" column="1">
+       <widget class="QComboBox" name="cmb_headfoot"/>
+      </item>
+      <item row="1" column="2">
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QGroupBox" name="groupBox_6">
+     <property name="title">
+      <string>CSV-Datei für Seriendruck</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_5">
+      <item row="0" column="0">
+       <widget class="QPushButton" name="but_csvgesamt">
+        <property name="text">
+         <string>CSV-Datei Ergebnisse dieser Wettkampf</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QPushButton" name="but_csvrunde">
+        <property name="text">
+         <string>CSV-Datei Rundengesamtwertung</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="5" column="0">
+    <spacer name="verticalSpacer_2">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="0" column="1" rowspan="8">
+    <spacer name="horizontalSpacer_4">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="2" column="0">
+    <widget class="QGroupBox" name="groupBox_4">
+     <property name="title">
+      <string>Erweiterte Informationen auf den Ausdrucken</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_6">
+      <item row="0" column="0">
+       <widget class="QComboBox" name="cmb_detail">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <item>
+         <property name="text">
+          <string>keine Detailinformationen drucken</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Turnkreis/-gau auf Listen drucken</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Landesverband auf Listen drucken</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Land auf Listen drucken</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>cmb_printtype</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>mainStack</receiver>
+   <slot>setCurrentIndex(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>159</x>
+     <y>117</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>238</x>
+     <y>157</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cmb_res_type</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>resultStack</receiver>
+   <slot>setCurrentIndex(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>180</x>
+     <y>151</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>188</x>
+     <y>239</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

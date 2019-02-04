@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>PostgresSetupWizard</class>
+ <widget class="QWizard" name="PostgresSetupWizard">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>507</width>
+    <height>398</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>TurnFix - PostgreSQL Einrichtung</string>
+  </property>
+  <property name="wizardStyle">
+   <enum>QWizard::ModernStyle</enum>
+  </property>
+  <property name="options">
+   <set>QWizard::CancelButtonOnLeft|QWizard::IndependentPages|QWizard::NoDefaultButton</set>
+  </property>
+  <widget class="QWizardPage" name="welcomePage">
+   <property name="title">
+    <string>PostgreSQL Einrichtungsassistent</string>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QLabel" name="welcomeDescription">
+      <property name="text">
+       <string>Dieser Assisten hilft ihnen beim einrichten der PostgreSQL-Datenbank. Klicken Sie auf weiter um mit der Einrichtung zu beginnen.
+
+Bevor die Datenbank eingerichtet werden kann, muss PostgreSQL auf dem PC installiert werden.
+
+Weiter Informationen zu PostgreSQL finden Sie unter http://www.postgresql.org</string>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWizardPage" name="databaseDataPage">
+   <property name="title">
+    <string>PostgreSQL Einrichtungsassistent</string>
+   </property>
+   <property name="subTitle">
+    <string>Verbindungsdaten</string>
+   </property>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0" colspan="2">
+     <widget class="QLabel" name="databaseDataDescription">
+      <property name="text">
+       <string>Geben Sie das Passwort ein, das sie bei der Installation von PostgreSQL angegeben haben. Falls Sie auch einen anderen Benutzernamen für den Administrator angegeben haben, können Sie auch den Benutzernamen ändern. Wenn der Server nicht auf diesem PC läuft, muss auch die Serveradresse angepasst werden.</string>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0" colspan="2">
+     <widget class="Line" name="dividor">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="serverLabel">
+      <property name="text">
+       <string>Server:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QLabel" name="userLabel">
+      <property name="text">
+       <string>Benutzername:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0">
+     <widget class="QLabel" name="passwordLabel">
+      <property name="text">
+       <string>Passwort:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QLineEdit" name="serverText">
+      <property name="text">
+       <string>localhost</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="1">
+     <widget class="QLineEdit" name="userText">
+      <property name="text">
+       <string>postgres</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1">
+     <widget class="QLineEdit" name="passwordText">
+      <property name="echoMode">
+       <enum>QLineEdit::Password</enum>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWizardPage" name="turnfixUserPage">
+   <property name="title">
+    <string>PostgreSQL Einrichtungsassistent</string>
+   </property>
+   <property name="subTitle">
+    <string>TurnFix-User</string>
+   </property>
+   <layout class="QGridLayout" name="gridLayout_2">
+    <item row="0" column="0" colspan="2">
+     <widget class="QLabel" name="turnfixUserDescription">
+      <property name="text">
+       <string>Wählen Sie einen Benutzernamen und ein Passwort, mit dem Sie sich später bei TurnFix anmelden wollen.</string>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="turnfixUserLabel">
+      <property name="text">
+       <string>Benutzername:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QLineEdit" name="turnfixUserText"/>
+    </item>
+    <item row="1" column="0" colspan="2">
+     <widget class="Line" name="line">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QLabel" name="turnfixPassLabel">
+      <property name="text">
+       <string>Passwort:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="1">
+     <widget class="QLineEdit" name="turnfixPassText">
+      <property name="echoMode">
+       <enum>QLineEdit::Password</enum>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWizardPage" name="databasePage">
+   <property name="title">
+    <string>PostgreSQL Einrichtungsassistent</string>
+   </property>
+   <property name="subTitle">
+    <string>Datenbankname</string>
+   </property>
+   <layout class="QGridLayout" name="gridLayout_3">
+    <item row="0" column="0" colspan="2">
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>Geben Sie einen Namen für die Datenbank ein.</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="databaseNameLabel">
+      <property name="text">
+       <string>Name:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QLineEdit" name="databaseNameText"/>
+    </item>
+    <item row="1" column="0" colspan="2">
+     <widget class="Line" name="line_2">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWizardPage" name="executionPage">
+   <property name="title">
+    <string>PostgreSQL Einrichtungsassistent</string>
+   </property>
+   <property name="subTitle">
+    <string>Datenbank einrichten</string>
+   </property>
+   <layout class="QGridLayout" name="gridLayout_4">
+    <item row="0" column="0" colspan="2">
+     <widget class="QLabel" name="executionDescription">
+      <property name="text">
+       <string>Bitte warten Sie, bis die Datenbank eingerichtet wurde.</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="connectionStatus">
+      <property name="minimumSize">
+       <size>
+        <width>32</width>
+        <height>32</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>32</width>
+        <height>32</height>
+       </size>
+      </property>
+      <property name="pixmap">
+       <pixmap resource="../../assets/icons/icons.qrc">:/icons/hourglass.png</pixmap>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QLabel" name="connectionLabel">
+      <property name="text">
+       <string>Verbindung zur Datenbank herstellen</string>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0" colspan="2">
+     <widget class="Line" name="line_3">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QLabel" name="createUserStatus">
+      <property name="minimumSize">
+       <size>
+        <width>32</width>
+        <height>32</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>32</width>
+        <height>32</height>
+       </size>
+      </property>
+      <property name="pixmap">
+       <pixmap resource="../../assets/icons/icons.qrc">:/icons/hourglass.png</pixmap>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="1">
+     <widget class="QLabel" name="createUserLabel">
+      <property name="text">
+       <string>TurnFix-Benutzer erstellen</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0">
+     <widget class="QLabel" name="createDatabaseStatus">
+      <property name="minimumSize">
+       <size>
+        <width>32</width>
+        <height>32</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>32</width>
+        <height>32</height>
+       </size>
+      </property>
+      <property name="pixmap">
+       <pixmap resource="../../assets/icons/icons.qrc">:/icons/hourglass.png</pixmap>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1">
+     <widget class="QLabel" name="createDatabaseLabel">
+      <property name="text">
+       <string>Datenbank erstellen</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="0">
+     <widget class="QLabel" name="checkLoginStatus">
+      <property name="minimumSize">
+       <size>
+        <width>32</width>
+        <height>32</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>32</width>
+        <height>32</height>
+       </size>
+      </property>
+      <property name="pixmap">
+       <pixmap resource="../../assets/icons/icons.qrc">:/icons/hourglass.png</pixmap>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="1">
+     <widget class="QLabel" name="checkLoginLabel">
+      <property name="text">
+       <string>Überprüfe Login</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources>
+  <include location="../../assets/icons/icons.qrc"/>
+ </resources>
+ <connections/>
+</ui>

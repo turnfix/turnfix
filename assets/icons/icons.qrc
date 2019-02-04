@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>database.png</file>
+        <file>email.png</file>
+        <file>icon.png</file>
+        <file>lock_open.png</file>
+        <file>misc.png</file>
+        <file>setting_tools.png</file>
+        <file>toa.png</file>
+        <file>cross.png</file>
+        <file>tick.png</file>
+        <file>hourglass.png</file>
+    </qresource>
+</RCC>

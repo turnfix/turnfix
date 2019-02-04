@@ -1,0 +1,47 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icons/10t.png</file>
+        <file>icons/15t.png</file>
+        <file>icons/25b.png</file>
+        <file>icons/25k.png</file>
+        <file>icons/25r.png</file>
+        <file>icons/25s.png</file>
+        <file>icons/25t.png</file>
+        <file>icons/50.png</file>
+        <file>icons/50b.png</file>
+        <file>icons/50k.png</file>
+        <file>icons/50r.png</file>
+        <file>icons/50s.png</file>
+        <file>icons/75.png</file>
+        <file>icons/100.png</file>
+        <file>icons/100b.png</file>
+        <file>icons/100k.png</file>
+        <file>icons/100r.png</file>
+        <file>icons/100s.png</file>
+        <file>icons/200f.png</file>
+        <file>icons/1000.png</file>
+        <file>icons/2000.png</file>
+        <file>icons/3000.png</file>
+        <file>icons/balken.png</file>
+        <file>icons/ball.png</file>
+        <file>icons/band.png</file>
+        <file>icons/bank.png</file>
+        <file>icons/barren.png</file>
+        <file>icons/boden.png</file>
+        <file>icons/g-ball.png</file>
+        <file>icons/keule.png</file>
+        <file>icons/kugel.png</file>
+        <file>icons/minitramp.png</file>
+        <file>icons/pilz.png</file>
+        <file>icons/reck.png</file>
+        <file>icons/reifen.png</file>
+        <file>icons/ringe.png</file>
+        <file>icons/rope1.png</file>
+        <file>icons/rope2.png</file>
+        <file>icons/schleuder.png</file>
+        <file>icons/seitpferd.png</file>
+        <file>icons/sprung.png</file>
+        <file>icons/weitstand.png</file>
+        <file>icons/weitzone.png</file>
+    </qresource>
+</RCC>
