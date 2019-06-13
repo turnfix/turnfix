@@ -3,7 +3,7 @@
 #include <QCursor>
 #include "header/gri_editoritem.h"
 
-EditorTextItem::EditorTextItem(_global::itemdata v, QGraphicsItem *parent, QGraphicsScene *scene) : QGraphicsItem(parent,scene) {
+EditorTextItem::EditorTextItem(_global::itemdata v, QGraphicsItem *parent) : QGraphicsItem(parent) {
     p = new QPrinter(QPrinter::ScreenResolution);
     p->setPaperSize(QPrinter::A4);
     x = 0;
@@ -24,7 +24,7 @@ EditorTextItem::EditorTextItem(_global::itemdata v, QGraphicsItem *parent, QGrap
     case 0: text = fields.at(v.value.toInt()); break;
     case 1:
     case 2: text = v.value.toString(); break;
-    case 3: text = "Linienstärke: " + v.value.toString(); break;
+    case 3: text = "LinienstÃ¤rke: " + v.value.toString(); break;
     }
 }
 
@@ -61,22 +61,22 @@ void EditorTextItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, 
     if (values.typ == 0) {
         QString field = _global::getFields().at(values.value.toInt());
         painter->setFont(values.font);
-        painter->drawText((int)x,(int)y,(int)w,(int)h,align,field);
+        painter->drawText(static_cast<int>(x), static_cast<int>(y), static_cast<int>(w), static_cast<int>(h), align, field);
     } else if (values.typ == 1) {
         painter->setFont(values.font);
-        painter->drawText((int)x,(int)y,(int)w,(int)h,align,values.value.toString());
+        painter->drawText(static_cast<int>(x), static_cast<int>(y), static_cast<int>(w), static_cast<int>(h), align, values.value.toString());
     } else if (values.typ == 2) {
         QPixmap pm;
         pm.load(values.value.toString());
         if (!pm.isNull()) {
-            QPixmap pm2 = pm.scaled((int)w,(int)h,Qt::KeepAspectRatio,Qt::SmoothTransformation);
-            painter->drawPixmap((int)x,(int)y,pm2);
+            QPixmap pm2 = pm.scaled(static_cast<int>(w), static_cast<int>(h), Qt::KeepAspectRatio,Qt::SmoothTransformation);
+            painter->drawPixmap(static_cast<int>(x), static_cast<int>(y), pm2);
         }
     } else if (values.typ == 3) {
         QPen pen;
-        pen.setWidth((int)mmToPixel(values.value.toInt()));
+        pen.setWidth(static_cast<int>(mmToPixel(values.value.toInt())));
         painter->setPen(pen);
-        painter->drawLine((int)x,(int)y,(int)(w+x),(int)(h+y));
+        painter->drawLine(static_cast<int>(x), static_cast<int>(y), static_cast<int>(w+x), static_cast<int>(h+y));
         pen.setWidth(0);
         painter->setPen(pen);
     }
@@ -158,7 +158,7 @@ void EditorTextItem::hoverMoveEvent (QGraphicsSceneHoverEvent *e) {
 }
 
 qreal EditorTextItem::mmToPixel(double mm) {
-    qreal px = (double)p->width() * mm / (double)p->widthMM();
+    qreal px = static_cast<double>(p->width()) * mm / static_cast<int>(p->widthMM());
     return px;
 }
 

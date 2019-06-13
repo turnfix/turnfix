@@ -51,8 +51,8 @@ QVariant QQualiTableModel::headerData(int section, Qt::Orientation orientation, 
         return QVariant();
     if (orientation == Qt::Horizontal) {
         switch (section) {
-        case 0: return "Disziplin"; break;
-        case 1: return "Leistung"; break;
+        case 0: return "Disziplin";
+        case 1: return "Leistung";
         }
     }
     return QVariant();
@@ -109,7 +109,8 @@ bool QQualiTableModel::setData(const QModelIndex &index, const QVariant &value, 
 }
 
 void QQualiTableModel::setTableData(int we, QList<int> id) {
+    beginResetModel();
     disids = id;
     wertid = we;
-    this->reset();
+    endResetModel();
 }

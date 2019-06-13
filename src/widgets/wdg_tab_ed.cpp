@@ -40,8 +40,8 @@ Tab_ED::Tab_ED(QWidget *parent) : QWidget(parent) {
     QStringList header;
     header << "Typ" << "Inhalt";
     tbl_items->setHorizontalHeaderLabels(header);
-    tbl_items->horizontalHeader()->setResizeMode(0,QHeaderView::ResizeToContents);
-    tbl_items->horizontalHeader()->setResizeMode(1,QHeaderView::Stretch);
+    tbl_items->horizontalHeader()->setSectionResizeMode(0,QHeaderView::ResizeToContents);
+    tbl_items->horizontalHeader()->setSectionResizeMode(1,QHeaderView::Stretch);
     itm_size = new QtRectFPropertyManager(wdg_props);
     itm_font = new QtFontPropertyManager(wdg_props);
     val_db = new QtEnumPropertyManager(wdg_props);
@@ -49,7 +49,7 @@ Tab_ED::Tab_ED(QWidget *parent) : QWidget(parent) {
     val_txt = new QtStringPropertyManager(wdg_props);
     val_line = new QtDoublePropertyManager(wdg_props);
 
-    prop_size = itm_size->addProperty("Maße");
+    prop_size = itm_size->addProperty("MaÃŸe");
     prop_font = itm_font->addProperty("Schriftart");
 
     //Alignment
@@ -88,7 +88,7 @@ Tab_ED::Tab_ED(QWidget *parent) : QWidget(parent) {
     //Properties Linie
     man_line = new QtGroupPropertyManager(wdg_props);
     prop_line_root = man_txt->addProperty("Grafik");
-    prop_line = val_line->addProperty("Stärke");
+    prop_line = val_line->addProperty("StÃ¤rke");
     prop_line_root->addSubProperty(prop_size);
     prop_line_root->addSubProperty(prop_line);
     val_line->setMinimum(prop_line,0.0);
@@ -169,7 +169,7 @@ void Tab_ED::addNewItem(_global::itemdata lst) {
     case 0: text = fields.at(lst.value.toInt()); break;
     case 1:
     case 2: text = lst.value.toString(); break;
-    case 3: text = "Linienstärke: " + lst.value.toString(); break;
+    case 3: text = "LinienstÃ¤rke: " + lst.value.toString(); break;
     }
     tbl_items->insertRow(row);
     tbl_items->setItem(row,0,new QTableWidgetItem(types.at(lst.typ)));
@@ -348,7 +348,7 @@ void Tab_ED::setNewData() {
     case 0: text = fields.at(val.value.toInt()); break;
     case 1:
     case 2: text = val.value.toString(); break;
-    case 3: text = "Linienstärke: " + val.value.toString(); break;
+    case 3: text = "LinienstÃ¤rke: " + val.value.toString(); break;
     }
     tbl_items->item(row,1)->setText(text);
 }

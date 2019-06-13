@@ -21,9 +21,9 @@ LoginDialog::LoginDialog(QWidget *parent) :
 
     ui->eventsTable->setModel(eventTableModel);
 
-    ui->eventsTable->horizontalHeader()->setResizeMode(0,QHeaderView::ResizeToContents);
-    ui->eventsTable->horizontalHeader()->setResizeMode(1,QHeaderView::Stretch);
-    ui->eventsTable->horizontalHeader()->setResizeMode(2,QHeaderView::Stretch);
+    ui->eventsTable->horizontalHeader()->setSectionResizeMode(0,QHeaderView::ResizeToContents);
+    ui->eventsTable->horizontalHeader()->setSectionResizeMode(1,QHeaderView::Stretch);
+    ui->eventsTable->horizontalHeader()->setSectionResizeMode(2,QHeaderView::Stretch);
 
     connect(ui->selectionBarWidget, SIGNAL(currentTabChanged(int)), ui->mainStack, SLOT(setCurrentIndex(int)));
     connect(ui->loginButton, SIGNAL(clicked()), this, SLOT(doLogin()));

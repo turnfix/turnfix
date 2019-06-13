@@ -23,9 +23,9 @@ QVariant EventTableModel::headerData(int section, Qt::Orientation orientation, i
     {
         switch (section)
         {
-        case 0: return tr("Datum"); break;
-        case 1: return tr("Veranstaltung"); break;
-        case 2: return tr("Wettkampfort"); break;
+        case 0: return tr("Datum");
+        case 1: return tr("Veranstaltung");
+        case 2: return tr("Wettkampfort");
         }
     }
     return QVariant();
@@ -41,9 +41,9 @@ QVariant EventTableModel::data(const QModelIndex &index, int role) const
 
         switch (index.column())
         {
-        case 0: return event->getStartDate(); break;
-        case 1: return event->getName(); break;
-        case 2: return event->getLocation()->getNameAndCity(); break;
+        case 0: return event->getStartDate();
+        case 1: return event->getName();
+        case 2: return event->getLocation()->getNameAndCity();
         }
     }
     return QVariant();
@@ -51,14 +51,16 @@ QVariant EventTableModel::data(const QModelIndex &index, int role) const
 
 void EventTableModel::getEvents()
 {
+    beginResetModel();
     events = Event::getAllEvents();
-    this->reset();
+    endResetModel();
 }
 
 void EventTableModel::clear()
 {
+    beginResetModel();
     events.clear();
-    this->reset();
+    endResetModel();
 }
 
 Event* EventTableModel::getEventFromRow(int row)

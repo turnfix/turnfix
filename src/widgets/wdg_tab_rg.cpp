@@ -29,7 +29,7 @@ void Tab_RG::fillRETable2() {
     re_table2->setModel(re_model2);
     QHeaderView::ResizeMode resizeModeRE2[] = {QHeaderView::ResizeToContents, QHeaderView::Stretch, QHeaderView::ResizeToContents, QHeaderView::ResizeToContents, QHeaderView::Stretch, QHeaderView::ResizeToContents};
     for (int i=0;i<6;i++) {
-        re_table2->horizontalHeader()->setResizeMode(i, resizeModeRE2[i]);
+        re_table2->horizontalHeader()->setSectionResizeMode(i, resizeModeRE2[i]);
     }
     rg_model->removeRows(0,rg_model->rowCount());
     QSqlQuery query;
@@ -61,9 +61,9 @@ void Tab_RG::fillRETable2() {
     }
     QHeaderView::ResizeMode resizeModeRE[] = {QHeaderView::Stretch, QHeaderView::Fixed, QHeaderView::Fixed, QHeaderView::Fixed, QHeaderView::Fixed};
     QStringList heads;
-    heads << "Riege" << "Teiln." << "Manns." << "Gruppen" << "1. Gerät";
+    heads << "Riege" << "Teiln." << "Manns." << "Gruppen" << "1. GerÃ¤t";
     for (int i=0;i<5;i++) {
-        lst_all->horizontalHeader()->setResizeMode(i, resizeModeRE[i]);
+        lst_all->horizontalHeader()->setSectionResizeMode(i, resizeModeRE[i]);
         rg_model->setHeaderData(i, Qt::Horizontal, heads[i]);
     }
     lst_all->horizontalHeader()->resizeSection(1, 45);
@@ -98,7 +98,7 @@ void Tab_RG::getData() {
 
 void Tab_RG::addRiege() {
     bool ok;
-    QString text = QInputDialog::getText(this, tr("Namen festlegen"), tr("Bitte einen Namen für die Riege Eingeben"), QLineEdit::Normal, "", &ok);
+    QString text = QInputDialog::getText(this, tr("Namen festlegen"), tr("Bitte einen Namen fÃ¼r die Riege Eingeben"), QLineEdit::Normal, "", &ok);
     if (ok && !text.isEmpty()) {
         tbl_list->setEnabled(true);
         txt_nummer->setEnabled(true);
@@ -114,7 +114,7 @@ void Tab_RG::addRiege() {
         rg_model->setItem(rg_model->rowCount()-1,3,new QStandardItem(""));
         lst_all->selectRow(rg_model->rowCount()-1);
     } else {
-        QMessageBox::information(this,"Ungültiger Name","Sie haben keinen Namen eingegeben!");
+        QMessageBox::information(this,"UngÃ¼ltiger Name","Sie haben keinen Namen eingegeben!");
     }
 }
 
@@ -127,7 +127,7 @@ void Tab_RG::fetchRgData() {
     txt_nummer->setText(riege);
     QHeaderView::ResizeMode resizeModeRE2[] = {QHeaderView::ResizeToContents, QHeaderView::Stretch, QHeaderView::ResizeToContents, QHeaderView::ResizeToContents, QHeaderView::Stretch, QHeaderView::ResizeToContents};
     for (int i=0;i<6;i++) {
-        tbl_list->horizontalHeader()->setResizeMode(i, resizeModeRE2[i]);
+        tbl_list->horizontalHeader()->setSectionResizeMode(i, resizeModeRE2[i]);
     }
 }
 

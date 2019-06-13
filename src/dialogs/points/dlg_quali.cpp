@@ -14,8 +14,8 @@ Quali_Dialog::Quali_Dialog(int edit, QWidget* parent) : QDialog(parent) {
     editorDelegate *ed = new editorDelegate;
     connect(ed, SIGNAL(closeEditor(QWidget*,QAbstractItemDelegate::EndEditHint)), this, SLOT(finishEdit()));
     tbl_quali->setItemDelegateForColumn(1,ed);
-    tbl_quali->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
-    tbl_quali->horizontalHeader()->setResizeMode(1, QHeaderView::ResizeToContents);
+    tbl_quali->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+    tbl_quali->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
     QObject::connect(but_save, SIGNAL(clicked()), this, SLOT(close()));
     initData();
 }
@@ -41,8 +41,8 @@ void Quali_Dialog::initData() {
     lbl_club->setText(query.value(1).toString());
     QString to;
     switch (query.value(3).toInt()) {
-           case 1  : to =  QString(" und älter"); break;
-           case 2  : to =  QString(" und jünger"); break;
+           case 1  : to =  QString(" und Ã¤lter"); break;
+           case 2  : to =  QString(" und jÃ¼nger"); break;
            default : to =  QString(" - " + query.value(3).toString()); break;
        }
     if ( query.value(2).toString() == query.value(3).toString() ) {

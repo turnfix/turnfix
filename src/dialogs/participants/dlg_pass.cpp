@@ -38,7 +38,7 @@ void Pass_Dialog::fillTable(int row) {
     QString headers[3] = {"Name","Nummer","id"};
     for (int i=0;i<3;i++) {
         model->setHeaderData(i, Qt::Horizontal, headers[i]);
-        tbl_pass->horizontalHeader()->setResizeMode(i, resizeMode[i]);
+        tbl_pass->horizontalHeader()->setSectionResizeMode(i, resizeMode[i]);
         tbl_pass->horizontalHeader()->resizeSection(i, resize[i]);
     }
 }

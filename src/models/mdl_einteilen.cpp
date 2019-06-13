@@ -18,12 +18,12 @@ QVariant QEinteilTableModel::headerData(int section, Qt::Orientation orientation
         return QVariant();
     if (orientation == Qt::Horizontal) {
         switch (section) {
-        case 0: return "StNr."; break;
-        case 1: return "Name"; break;
-        case 2: return "Geb."; break;
-        case 3: return "m/w"; break;
-        case 4: return "Verein"; break;
-        case 5: return "WK"; break;
+        case 0: return "StNr.";
+        case 1: return "Name";
+        case 2: return "Geb.";
+        case 3: return "m/w";
+        case 4: return "Verein";
+        case 5: return "WK";
         }
     } else {
         return section+1;
@@ -84,6 +84,7 @@ void QEinteilTableModel::insertRow(QStringList data) {
 }
 
 void QEinteilTableModel::setTableData() {
+    beginResetModel();
     QString extra = " OR var_riege IS NULL";
     if (riege != "") extra ="";
     QSqlQuery query2;
@@ -100,7 +101,7 @@ void QEinteilTableModel::setTableData() {
         }
         tabledata.append(lst);
     }
-    this->reset();
+    endResetModel();
 }
 
 void QEinteilTableModel::setRiege(QString rg) {

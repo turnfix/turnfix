@@ -7,6 +7,7 @@
 #include <QFileInfo>
 #include <QHostInfo>
 #include <QCryptographicHash>
+#include <QDataStream>
 #include <time.h>
 #include "header/web_sendmail.h"
 
@@ -96,9 +97,9 @@ void MailSender::addMimeAttachment(QString *pdata, const QString &filename) cons
     quint8 a;
     char c;
     QString b;
-    while ( ! in.atEnd() ) {
+    while (!in.atEnd()) {
         in >> a;
-        c = a;    
+        c = static_cast<char>(a);
         b.append(c);
     }
     encodedFile = encodeBase64(b);

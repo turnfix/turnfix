@@ -1,0 +1,3 @@
+[submodule "libs/qtpropertybrowser"]
+	path = libs/qtpropertybrowser
+	url = git@github.com:commontk/QtPropertyBrowser.git

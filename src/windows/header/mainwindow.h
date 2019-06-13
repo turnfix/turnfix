@@ -22,7 +22,6 @@ protected slots:
     void editPass();
     void changeWK();
     void initTabs();
-    void uploadResults();
     void sendMLists();
 protected:
     virtual void closeEvent(QCloseEvent * e);

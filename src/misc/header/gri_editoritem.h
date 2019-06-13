@@ -10,7 +10,7 @@ class EditorTextItem : public QObject, public QGraphicsItem {
     Q_OBJECT
 
 public:
-    EditorTextItem(_global::itemdata values,QGraphicsItem *parent = 0, QGraphicsScene *scene = 0);
+    EditorTextItem(_global::itemdata values,QGraphicsItem *parent = nullptr);
     QRectF boundingRect() const;
     void setNewSizePos(double x, double y, double w, double h);
     void setNewData(QVariant data);

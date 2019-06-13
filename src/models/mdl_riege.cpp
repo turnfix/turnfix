@@ -1,6 +1,7 @@
 #include <QSqlQuery>
 #include <QSqlRecord>
 #include <QKeyEvent>
+#include <QColor>
 #include <math.h>
 #include "header/mdl_riege.h"
 #include "../global/header/_global.h"
@@ -26,7 +27,7 @@ QVariant QRiegenTableModel::data(const QModelIndex &index, int role) const {
     if (index.row() >= starter.size()*versuche)
         return QVariant();
     if (starter.size() > 0) {
-        int row = floor(index.row()/versuche);
+        int row = static_cast<int>(floor(index.row()/versuche));
         if (role == Qt::DisplayRole) {
             if (index.column() < 4) {
                 return starter.at(row).at(index.column());
@@ -51,7 +52,7 @@ QVariant QRiegenTableModel::data(const QModelIndex &index, int role) const {
             fparser.Parse(check.value(1).toString().replace(",",".").toStdString(),"x");
             double Vars[] = {endwerte.value(starter.at(row).at(4).toInt()).value((index.row()%versuche)+1)};
             if (fparser.Eval(Vars)>check.value(0).toDouble() && check.value(0).toDouble()>0) {
-                return Qt::red;
+                return QColor(Qt::red);
             }
         }
     }
@@ -63,10 +64,10 @@ QVariant QRiegenTableModel::headerData(int section, Qt::Orientation orientation,
         return QVariant();
     if (orientation == Qt::Horizontal) {
         switch (section) {
-        case 0: return "StNr."; break;
-        case 1: return "Name"; break;
-        case 2: return "Verein"; break;
-        case 3: return "WK"; break;
+        case 0: return "StNr.";
+        case 1: return "Name";
+        case 2: return "Verein";
+        case 3: return "WK";
         }
         if (geraet>0 && section == this->columnCount()-1) {
             if (disinfo.isValid()) return disinfo.value(3).toString();
@@ -88,7 +89,7 @@ Qt::ItemFlags QRiegenTableModel::flags(const QModelIndex &index) const  {
 
 bool QRiegenTableModel::setData(const QModelIndex &index, const QVariant &value, int role) {
     if (index.isValid() && role == Qt::EditRole) {
-        int row = floor(index.row()/versuche);
+        int row = static_cast<int>(floor(index.row()/versuche));
         int selectedPEItem = starter.at(row).at(4).toInt();
         int v=(index.row()%versuche)+1;
         int kp=0;
@@ -180,6 +181,8 @@ bool QRiegenTableModel::setData(const QModelIndex &index, const QVariant &value,
 }
 
 void QRiegenTableModel::setTableData(QString rg, int g, int v, bool k, bool j) {
+    beginResetModel();
+
     riege = rg;
     geraet = g;
     kuer = k;
@@ -188,7 +191,7 @@ void QRiegenTableModel::setTableData(QString rg, int g, int v, bool k, bool j) {
     QSqlQuery query4;
     query4.prepare("SELECT tfx_wertungen.int_startnummer, CASE WHEN tfx_gruppen.int_gruppenid IS NULL THEN var_vorname || ' ' || var_nachname ELSE tfx_gruppen.var_name END, tfx_vereine.var_name, tfx_wettkaempfe.var_nummer, tfx_wertungen.int_wertungenid, tfx_wertungen.int_wettkaempfeid, int_pos FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) LEFT JOIN tfx_teilnehmer ON tfx_teilnehmer.int_teilnehmerid = tfx_wertungen.int_teilnehmerid LEFT JOIN tfx_gruppen ON tfx_gruppen.int_gruppenid = tfx_wertungen.int_gruppenid LEFT JOIN tfx_mannschaften ON tfx_mannschaften.int_mannschaftenid = tfx_wertungen.int_mannschaftenid INNER JOIN tfx_vereine ON tfx_vereine.int_vereineid = tfx_teilnehmer.int_vereineid OR tfx_vereine.int_vereineid = tfx_gruppen.int_vereineid LEFT JOIN tfx_startreihenfolge ON tfx_startreihenfolge.int_wertungenid=tfx_wertungen.int_wertungenid AND tfx_startreihenfolge.int_disziplinenid=? AND tfx_startreihenfolge.int_kp=? WHERE int_veranstaltungenid=? AND tfx_wertungen.var_riege=? AND int_runde=? AND bol_startet_nicht='false' AND ((SELECT COUNT(*) FROM tfx_wettkaempfe_x_disziplinen WHERE int_disziplinenid=? AND int_wettkaempfeid=tfx_wettkaempfe.int_wettkaempfeid)>0 AND (NOT EXISTS (SELECT int_wertungen_x_disziplinenid FROM tfx_wertungen_x_disziplinen WHERE int_wertungenid=tfx_wertungen.int_wertungenid) OR EXISTS (SELECT int_wertungen_x_disziplinenid FROM tfx_wertungen_x_disziplinen WHERE tfx_wertungen_x_disziplinen.int_wertungenid=tfx_wertungen.int_wertungenid AND tfx_wertungen_x_disziplinen.int_disziplinenid=?))) AND (tfx_wettkaempfe.bol_kp='true' OR ?='true' OR (SELECT bol_kp FROM tfx_wettkaempfe_x_disziplinen WHERE int_wettkaempfeid=tfx_wettkaempfe.int_wettkaempfeid AND int_disziplinenid=?)='true') ORDER BY int_pos, tfx_wettkaempfe.var_nummer, tfx_mannschaften.int_nummer, tfx_mannschaften.int_mannschaftenid, tfx_wertungen.int_startnummer");
     query4.bindValue(0, geraet);
-    query4.bindValue(1, (int)kuer);
+    query4.bindValue(1, static_cast<int>(kuer));
     query4.bindValue(2, _global::checkHWK());
     query4.bindValue(3, riege);
     query4.bindValue(4, _global::getRunde());
@@ -260,7 +263,8 @@ void QRiegenTableModel::setTableData(QString rg, int g, int v, bool k, bool j) {
             detailwerte[detailwerteQuery.value(2).toInt()][detailwerteQuery.value(3).toInt()][detailwerteQuery.value(1).toInt()] = detailwerteQuery.value(0).toDouble();
         }
     }
-    this->reset();
+
+    endResetModel();
 }
 
 QList<int> QRiegenTableModel::getExtraColumnIDs() {
@@ -268,15 +272,15 @@ QList<int> QRiegenTableModel::getExtraColumnIDs() {
 }
 
 int QRiegenTableModel::getCurrentID(const QModelIndex &index) {
-    return starter.at(floor(index.row()/versuche)).at(4).toInt();
+    return starter.at(static_cast<int>(floor(index.row()/versuche))).at(4).toInt();
 }
 
 int QRiegenTableModel::getNextID(const QModelIndex &index) {
     if (floor((index.row()+versuche)/versuche) >= starter.size()) return -1;
-    return starter.at(floor((index.row()+versuche)/versuche)).at(4).toInt();
+    return starter.at(static_cast<int>(floor((index.row()+versuche)/versuche))).at(4).toInt();
 }
 
 int QRiegenTableModel::getLastID(const QModelIndex &index) {
     if (index.row()-versuche < 0) return -1;
-    return starter.at(floor((index.row()-versuche)/versuche)).at(4).toInt();
+    return starter.at(static_cast<int>(floor((index.row()-versuche)/versuche))).at(4).toInt();
 }

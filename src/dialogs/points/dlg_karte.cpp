@@ -47,8 +47,8 @@ void WK_Karte::init(int s, int we, QList< QList<int> > d) {
 void WK_Karte::fillPETable() {
     pe_table->clearSelection();
     pe_model->setTableData(wertid,disids);
-    pe_table->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
-    pe_table->horizontalHeader()->setResizeMode(1, QHeaderView::ResizeToContents);
+    pe_table->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+    pe_table->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
     editorDelegate *ed = new editorDelegate;
     connect(ed, SIGNAL(closeEditor(QWidget*,QAbstractItemDelegate::EndEditHint)), this, SLOT(finishEdit()));
     pe_table->setItemDelegateForColumn(1,ed);

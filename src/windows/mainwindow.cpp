@@ -7,11 +7,9 @@
 #include "header/mainwindow.h"
 #include "../dialogs/database/header/dlg_db_control.h"
 #include "../dialogs/others/header/dlg_about.h"
-//#include "../dialogs/others/header/dlg_login.h"
 #include "../dialogs/others/header/dlg_mail.h"
 #include "../dialogs/participants/header/dlg_pass.h"
 #include "../dialogs/wk/header/dlg_event.h"
-#include "../dialogs/web/header/dlg_upload.h"
 #include "../web/header/web_upload.h"
 #include "../global/header/settings.h"
 
@@ -131,7 +129,7 @@ void MainWindow::newNumbers() {
     int ret = QMessageBox::question(this,tr("Startnummern neu vergeben?"),tr("Sollen wirklich neue Startnummern vergeben werden?"),QMessageBox::Ok,QMessageBox::Cancel);
     if (ret != QMessageBox::Ok) return;
     bool ok;
-    int firstNumber = QInputDialog::getInteger(this,tr("Startnummern vergeben"),tr("Wählen sie die erste Startnummer die vergeben werden soll."),1,1,99999,1,&ok);
+    int firstNumber = QInputDialog::getInt(this,tr("Startnummern vergeben"),tr("WÃ¤hlen sie die erste Startnummer die vergeben werden soll."),1,1,99999,1,&ok);
     if (!ok) return;
     QSqlQuery query;
     query.prepare("SELECT int_wertungenid, var_nummer FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) LEFT JOIN tfx_teilnehmer USING (int_teilnehmerid) LEFT JOIN tfx_gruppen USING (int_gruppenid) INNER JOIN tfx_vereine ON tfx_vereine.int_vereineid = tfx_gruppen.int_vereineid OR tfx_vereine.int_vereineid = tfx_teilnehmer.int_vereineid WHERE int_veranstaltungenid=? AND int_runde=? ORDER BY "+_global::substring("tfx_vereine.var_name","int_start_ort+1")+", tfx_vereine.var_name, var_nummer, int_mannschaftenid, int_wertungenid");
@@ -191,11 +189,6 @@ void MainWindow::changeWK() {
         act_WK->trigger();
         updateTables(0);
     }*/
-}
-
-void MainWindow::uploadResults() {
-    Upload_Dialog *dlg = new Upload_Dialog();
-    dlg->exec();
 }
 
 void MainWindow::sendMLists() {

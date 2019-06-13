@@ -19,13 +19,13 @@ Db_Dis_Dialog::Db_Dis_Dialog(int dis, QWidget* parent) : QDialog(parent) {
     model = new QStandardItemModel();
     model->setColumnCount(4);
     tbl_fields->setModel(model);
-    tbl_fields->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
+    tbl_fields->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
     model->setHeaderData(0, Qt::Horizontal, "Feldbezeichnung");
-    tbl_fields->horizontalHeader()->setResizeMode(1, QHeaderView::ResizeToContents);
+    tbl_fields->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
     model->setHeaderData(1, Qt::Horizontal, "EW");
-    tbl_fields->horizontalHeader()->setResizeMode(2, QHeaderView::ResizeToContents);
+    tbl_fields->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
     model->setHeaderData(2, Qt::Horizontal, "AW");
-    tbl_fields->horizontalHeader()->setResizeMode(3, QHeaderView::ResizeToContents);
+    tbl_fields->horizontalHeader()->setSectionResizeMode(3, QHeaderView::ResizeToContents);
     model->setHeaderData(3, Qt::Horizontal, "Anz.");
     if (disid != 0) {
         QSqlQuery query;

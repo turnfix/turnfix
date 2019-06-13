@@ -123,7 +123,7 @@ void Tab_TN::fillTNTable() {
     for (int i=0;i<7;i++) {
         cmb_filterTN->addItem(headersTN[i]);
         tn_model->setHeaderData(i, Qt::Horizontal, headersTN[i]);
-        tn_table->horizontalHeader()->setResizeMode(i, resizeModeTN[i]);
+        tn_table->horizontalHeader()->setSectionResizeMode(i, resizeModeTN[i]);
         tn_table->horizontalHeader()->resizeSection(i, resizeTN[i]);
     }
     tn_table->hideColumn(7);
@@ -156,7 +156,7 @@ void Tab_TN::fillTNTable2() {
     for (int i=0;i<5;i++) {
         cmb_filterTN->addItem(headersTN[i]);
         tn_model2->setHeaderData(i, Qt::Horizontal, headersTN[i]);
-        tn_table2->horizontalHeader()->setResizeMode(i, resizeModeTN[i]);
+        tn_table2->horizontalHeader()->setSectionResizeMode(i, resizeModeTN[i]);
         tn_table2->horizontalHeader()->resizeSection(i, resizeTN[i]);
     }
     tn_table2->hideColumn(5);
@@ -190,7 +190,7 @@ void Tab_TN::fillTNTable3() {
     for (int i=0;i<5;i++) {
         cmb_filterTN->addItem(headersTN[i]);
         tn_model3->setHeaderData(i, Qt::Horizontal, headersTN[i]);
-        tn_table3->horizontalHeader()->setResizeMode(i, resizeModeTN[i]);
+        tn_table3->horizontalHeader()->setSectionResizeMode(i, resizeModeTN[i]);
         tn_table3->horizontalHeader()->resizeSection(i, resizeTN[i]);
     }
     tn_table3->hideColumn(5);
@@ -269,7 +269,7 @@ void Tab_TN::meldeTN() {
 void Tab_TN::delTN() {
     if (sta_tables->currentIndex() == 0) {
         if (tn_table->currentIndex().isValid()) {
-            QMessageBox msg(QMessageBox::Question, "Teilnehmer löschen", "Wollen sie diesen Teilnehmer wirklich löschen?",QMessageBox::Ok | QMessageBox::Cancel);
+            QMessageBox msg(QMessageBox::Question, "Teilnehmer lÃ¶schen", "Wollen sie diesen Teilnehmer wirklich lÃ¶schen?",QMessageBox::Ok | QMessageBox::Cancel);
             if(msg.exec() == QMessageBox::Ok) {
                 QSqlQuery query;
                 query.prepare("DELETE FROM tfx_wertungen WHERE int_wertungenid=?");
@@ -281,7 +281,7 @@ void Tab_TN::delTN() {
         }
     } else if (sta_tables->currentIndex() == 1) {
         if (tn_table2->currentIndex().isValid()) {
-            QMessageBox msg(QMessageBox::Question, "Mannschaft löschen", "Wollen sie diese Mannschaft wirklich löschen?",QMessageBox::Ok | QMessageBox::Cancel);
+            QMessageBox msg(QMessageBox::Question, "Mannschaft lÃ¶schen", "Wollen sie diese Mannschaft wirklich lÃ¶schen?",QMessageBox::Ok | QMessageBox::Cancel);
             if(msg.exec() == QMessageBox::Ok) {
                 QSqlQuery query;
                 query.prepare("DELETE FROM tfx_mannschaften WHERE int_mannschaftenid=?");
@@ -293,7 +293,7 @@ void Tab_TN::delTN() {
         }
     } else if (sta_tables->currentIndex() == 2) {
         if (tn_table3->currentIndex().isValid()) {
-            QMessageBox msg(QMessageBox::Question, "Gruppe löschen", "Wollen sie diese Gruppe wirklich löschen?",QMessageBox::Ok | QMessageBox::Cancel);
+            QMessageBox msg(QMessageBox::Question, "Gruppe lÃ¶schen", "Wollen sie diese Gruppe wirklich lÃ¶schen?",QMessageBox::Ok | QMessageBox::Cancel);
             if(msg.exec() == QMessageBox::Ok) {
                 QSqlQuery query;
                 query.prepare("DELETE FROM tfx_gruppen WHERE int_gruppenid=?");
@@ -325,7 +325,7 @@ void Tab_TN::updateMelde() {
 }
 
 void Tab_TN::syncTN() {
-    QMessageBox msg(QMessageBox::Question, "Mannschaften synchronisieren", "Wollen sie diese Mannschaft wirklich synchronisieren? Dabei werden alle vorhandenen Wertungen dieser Runde gelöscht.",QMessageBox::Ok | QMessageBox::Cancel);
+    QMessageBox msg(QMessageBox::Question, "Mannschaften synchronisieren", "Wollen sie diese Mannschaft wirklich synchronisieren? Dabei werden alle vorhandenen Wertungen dieser Runde gelÃ¶scht.",QMessageBox::Ok | QMessageBox::Cancel);
     if(msg.exec() == QMessageBox::Ok) {
         QSqlQuery query;
         query.prepare("DELETE FROM tfx_wertungen WHERE int_wertungenid IN (SELECT int_wertungenid FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) WHERE int_veranstaltungenid=? AND int_runde=?) AND int_mannschaftenid IS NOT NULL");

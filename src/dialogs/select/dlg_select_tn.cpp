@@ -1,4 +1,5 @@
 #include <QSqlQuery>
+#include <QList>
 #include "header/dlg_select_tn.h"
 #include "../../global/header/_global.h"
 #include "../../models/header/mdl_result.h"
@@ -42,15 +43,17 @@ void Select_Tn_Dialog::updateList() {
         QString nr = cmb_wk->itemData(cmb_wk->currentIndex()).toString();
         er_model->setList(list,nr,hwk,wktyp,false);
         if (list.size() > 0) {
-
             int size = list.at(0).size();
-            QHeaderView::ResizeMode resizeModeER[size];
+            QList<QHeaderView::ResizeMode> resizeModeER;
+
             resizeModeER[0] = QHeaderView::ResizeToContents;
             resizeModeER[1] = QHeaderView::Stretch;
             resizeModeER[2] = QHeaderView::Stretch;
             resizeModeER[3] = QHeaderView::ResizeToContents;
-            QString headersER[size];
+
+            QStringList headersER;
             headersER[0] = "Platz";
+
             int i;
             if (wktyp == 0 || wktyp == 2) {
                 i = 4;
@@ -63,7 +66,7 @@ void Select_Tn_Dialog::updateList() {
             }
             resizeModeER[i] = QHeaderView::ResizeToContents;
             for (int i=0;i<size;i++) {
-                tbl_tn->horizontalHeader()->setResizeMode(i, resizeModeER[i]);
+                tbl_tn->horizontalHeader()->setSectionResizeMode(i, resizeModeER[i]);
                 if (i > 2) {
                     tbl_tn->setItemDelegateForColumn(i,new alignItemDelegate);
                 }

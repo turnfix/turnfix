@@ -15,7 +15,7 @@ Riegen_Widget::Riegen_Widget(QString riege, QWidget *parent) : QWidget(parent), 
     ui->tbl_list->setModel(re_model);
     QHeaderView::ResizeMode resizeModeRE2[] = {QHeaderView::ResizeToContents, QHeaderView::Stretch, QHeaderView::ResizeToContents, QHeaderView::ResizeToContents, QHeaderView::Stretch, QHeaderView::ResizeToContents};
     for (int i=0;i<6;i++) {
-        ui->tbl_list->horizontalHeader()->setResizeMode(i, resizeModeRE2[i]);
+        ui->tbl_list->horizontalHeader()->setSectionResizeMode(i, resizeModeRE2[i]);
     }
     refreshDisziplinen();
     connect(ui->but_add, SIGNAL(clicked()), this, SLOT(request()));

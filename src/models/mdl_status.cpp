@@ -67,8 +67,9 @@ QVariant QStatusTableModel::headerData(int section, Qt::Orientation orientation,
 }
 
 void QStatusTableModel::setQuery(const QSqlQuery &qry) {
+    beginResetModel();
     query = qry;
-    this->reset();
+    endResetModel();
 }
 
 void QStatusTableModel::setSingle(bool s) {

@@ -19,7 +19,7 @@ Club_Dialog::Club_Dialog(QWidget *parent) : QDialog(parent), ui(new Ui::Club_Dia
     QString headers[5] = {"Name","Geb.","AK","SN","id"};
     for (int i=0;i<5;i++) {
         model->setHeaderData(i, Qt::Horizontal, headers[i]);
-        ui->tbl_tn->horizontalHeader()->setResizeMode(i, resizeMode[i]);
+        ui->tbl_tn->horizontalHeader()->setSectionResizeMode(i, resizeMode[i]);
         ui->tbl_tn->horizontalHeader()->resizeSection(i, resize[i]);
     }
 
@@ -91,7 +91,7 @@ void Club_Dialog::updateTable() {
     QString headers2[4] = {"Name","Geb.","Verein","id"};
     for (int i=0;i<4;i++) {
         model2->setHeaderData(i, Qt::Horizontal, headers2[i]);
-        ui->tbl_list->horizontalHeader()->setResizeMode(i, resizeMode2[i]);
+        ui->tbl_list->horizontalHeader()->setSectionResizeMode(i, resizeMode2[i]);
         ui->tbl_list->horizontalHeader()->resizeSection(i, resize2[i]);
     }
 }

@@ -20,9 +20,9 @@ Db_Disgroup_Dialog::Db_Disgroup_Dialog(int im_dgid, QWidget *parent) : QDialog(p
     QStringList headers;
     headers << "" << "Sport" << "Disziplin" << "m/w" << "";
     for (int i=0;i<5;i++) {
-        ui->tbl_all->horizontalHeader()->setResizeMode(i, resizeMode[i]);
+        ui->tbl_all->horizontalHeader()->setSectionResizeMode(i, resizeMode[i]);
         ui->tbl_all->horizontalHeader()->resizeSection(i, resize[i]);
-        ui->tbl_group->horizontalHeader()->setResizeMode(i, resizeMode[i]);
+        ui->tbl_group->horizontalHeader()->setSectionResizeMode(i, resizeMode[i]);
         ui->tbl_group->horizontalHeader()->resizeSection(i, resize[i]);
         model_all->setHeaderData(i, Qt::Horizontal, headers.at(i));
         model_group->setHeaderData(i, Qt::Horizontal, headers.at(i));

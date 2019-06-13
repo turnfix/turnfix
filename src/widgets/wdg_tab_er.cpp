@@ -36,7 +36,7 @@ void Tab_ER::fillERTable() {
 
             for (int i=0;i<size;i++) {
                 QHeaderView *hv = er_table->horizontalHeader();
-                hv->setResizeMode(i, resizeModeER.at(i));
+                hv->setSectionResizeMode(i, resizeModeER.at(i));
                 if (i > 2) {
                     er_table->setItemDelegateForColumn(i,new alignItemDelegate);
                 }

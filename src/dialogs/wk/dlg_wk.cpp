@@ -61,7 +61,7 @@ Wk_Dialog::Wk_Dialog(int edit, QWidget* parent) : QDialog(parent) {
     model->setHeaderData(6, Qt::Horizontal, tr("KP"));
     model->setHeaderData(7, Qt::Horizontal, tr("max. Pkt."));
     for (int i=0;i<9;i++) {
-        tbl_disziplinen->horizontalHeader()->setResizeMode(i, resizeMode[i]);
+        tbl_disziplinen->horizontalHeader()->setSectionResizeMode(i, resizeMode[i]);
         tbl_disziplinen->horizontalHeader()->resizeSection(i, resize[i]);
     }
     tbl_disziplinen->setItemDelegateForColumn(7,new dsbxDelegate);

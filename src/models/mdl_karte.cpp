@@ -1,5 +1,6 @@
 #include <QSqlQuery>
 #include <QKeyEvent>
+#include <QColor>
 #include "header/mdl_karte.h"
 #include "../global/header/_global.h"
 #include "../libs/fparser/fparser.hh"
@@ -29,7 +30,7 @@ QVariant QKartenTableModel::data(const QModelIndex &index, int role) const {
                 if (disidsv.at(index.row()).at(1) == 0) {
                     name += " (Pflicht)";
                 } else {
-                    name += " (Kür)";
+                    name += " (KÃ¼r)";
                 }
             }
             return name;
@@ -49,7 +50,7 @@ QVariant QKartenTableModel::data(const QModelIndex &index, int role) const {
         fparser.Parse(check.value(1).toString().replace(",",".").toStdString(),"x");
         double Vars[] = {werte.value(disidsv.at(index.row()).at(0)).value(v).value(disidsv.at(index.row()).at(1))};
         if (fparser.Eval(Vars)>check.value(0).toDouble() && check.value(0).toDouble()>0) {
-            return Qt::red;
+            return QColor(Qt::red);
         }
     }
     return QVariant();
@@ -60,8 +61,8 @@ QVariant QKartenTableModel::headerData(int section, Qt::Orientation orientation,
         return QVariant();
     if (orientation == Qt::Horizontal) {
         switch (section) {
-        case 0: return "Disziplin"; break;
-        case 1: return "Leistung"; break;
+        case 0: return "Disziplin";
+        case 1: return "Leistung";
         }
     }
     return QVariant();
@@ -132,6 +133,8 @@ bool QKartenTableModel::setData(const QModelIndex &index, const QVariant &value,
 }
 
 void QKartenTableModel::setTableData(int we, QList< QList<int> > id) {
+    beginResetModel();
+
     wertid = we;
     calcColumns(id);
 
@@ -154,7 +157,7 @@ void QKartenTableModel::setTableData(int we, QList< QList<int> > id) {
         werte[query2.value(0).toInt()][query2.value(1).toInt()][query2.value(2).toInt()] = query2.value(3).toDouble();
     }
 
-    this->reset();
+    endResetModel();
 }
 
 void QKartenTableModel::calcColumns(QList< QList<int> > disids) {

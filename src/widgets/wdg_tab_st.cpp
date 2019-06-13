@@ -44,17 +44,17 @@ void Tab_ST::updateStatus() {
     mdl_status2->setSingle(false);
     mdl_status2->setQuery(query3);
     tbl_status2->setModel(mdl_sort_status2);
-    tbl_status2->horizontalHeader()->setResizeMode(0, QHeaderView::Fixed);
+    tbl_status2->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
     tbl_status2->horizontalHeader()->resizeSection(0, 40);
     int size = _global::querySize(columns);
     for (int i=0; i<size;i++) {
-        tbl_status2->horizontalHeader()->setResizeMode(i+1, QHeaderView::Fixed);
+        tbl_status2->horizontalHeader()->setSectionResizeMode(i+1, QHeaderView::Fixed);
         tbl_status2->horizontalHeader()->resizeSection(i+1, 125);
     }
     QHeaderView::ResizeMode resizeModeST2[] = {QHeaderView::Fixed, QHeaderView::Stretch, QHeaderView::Fixed, QHeaderView::Fixed, QHeaderView::Fixed};
     int resizeST2[] = {40, 250,300,350,200};
     for (int i=0;i<5;i++) {
-        tbl_status1->horizontalHeader()->setResizeMode(i, resizeModeST2[i]);
+        tbl_status1->horizontalHeader()->setSectionResizeMode(i, resizeModeST2[i]);
         tbl_status1->horizontalHeader()->resizeSection(i, resizeST2[i]);
     }
 }

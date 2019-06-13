@@ -52,7 +52,7 @@ Team_Dialog::Team_Dialog(int edit, QWidget* parent) : QDialog(parent) {
     QString headers[6] = {"StNr.","Name","Geb.","AK","SN","id"};
     for (int i=0;i<6;i++) {
         model->setHeaderData(i, Qt::Horizontal, headers[i]);
-        tbl_tn->horizontalHeader()->setResizeMode(i, resizeMode[i]);
+        tbl_tn->horizontalHeader()->setSectionResizeMode(i, resizeMode[i]);
         tbl_tn->horizontalHeader()->resizeSection(i, resize[i]);
     }
     QSqlQuery query("SELECT rel_abzug || ' Pkt. ' || var_name, int_mannschaften_abzugid FROM tfx_mannschaften_abzug ORDER BY rel_abzug, var_name");
@@ -392,7 +392,7 @@ void Team_Dialog::fillTable2() {
     QString headers2[4] = {"Name","Geb.","Verein","id"};
     for (int i=0;i<4;i++) {
         model2->setHeaderData(i, Qt::Horizontal, headers2[i]);
-        tbl_avtn->horizontalHeader()->setResizeMode(i, resizeMode2[i]);
+        tbl_avtn->horizontalHeader()->setSectionResizeMode(i, resizeMode2[i]);
         tbl_avtn->horizontalHeader()->resizeSection(i, resize2[i]);
     }
 }

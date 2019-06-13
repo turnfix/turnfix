@@ -107,7 +107,7 @@ void SettingsWidget::openDatabaseFile()
     dialog.setFileMode(QFileDialog::ExistingFile);
     dialog.setViewMode(QFileDialog::List);
     dialog.setAcceptMode(QFileDialog::AcceptOpen);
-    dialog.setFilters(QStringList(tr("TurnFix-Datenbank-Dateien (*.tfdb)")));
+    dialog.setNameFilters(QStringList(tr("TurnFix-Datenbank-Dateien (*.tfdb)")));
     if (dialog.exec())
     {
         if (dialog.selectedFiles().size()>0)
@@ -126,7 +126,7 @@ void SettingsWidget::createDatabaseFile()
     dialog.setFileMode(QFileDialog::ExistingFile);
     dialog.setViewMode(QFileDialog::List);
     dialog.setAcceptMode(QFileDialog::AcceptSave);
-    dialog.setFilters(QStringList(tr("TurnFix-Datenbank-Dateien (*.tfdb)")));
+    dialog.setNameFilters(QStringList(tr("TurnFix-Datenbank-Dateien (*.tfdb)")));
     if (dialog.exec())
     {
         if (dialog.selectedFiles().size()>0)

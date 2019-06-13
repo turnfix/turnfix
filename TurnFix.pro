@@ -1,7 +1,7 @@
 TEMPLATE = app
 DEPENDPATH += .
 INCLUDEPATH += .
-QT += xml sql network
+QT += widgets xml sql network printsupport
 TRANSLATIONS = lang/turnfix_de.ts
 RC_FILE = turnfix.rc
 
@@ -60,6 +60,10 @@ HEADERS += src/dialogs/database/header/dlg_db_acc.h \
     src/dialogs/wk/header/dlg_wk.h \
     src/global/header/_delegates.h \
     src/global/header/_global.h \
+    src/libs/fparser/extrasrc/fpaux.hh \
+    src/libs/fparser/extrasrc/fptypes.hh \
+    src/libs/fparser/fparser_gmpint.hh \
+    src/libs/fparser/fparser_mpfr.hh \
     src/misc/header/gri_editoritem.h \
     src/misc/header/trd_progress.h \
     src/models/header/mdl_einteilen.h \
@@ -114,11 +118,8 @@ HEADERS += src/dialogs/database/header/dlg_db_acc.h \
     src/dialogs/wk/header/dlg_delete.h \
     src/dialogs/participants/header/dlg_club.h \
     src/dialogs/select/header/dlg_select_detail.h \
-    src/libs/fparser/fptypes.hh \
     src/libs/fparser/fpconfig.hh \
-    src/libs/fparser/fpaux.hh \
     src/libs/fparser/fparser.hh \
-    src/dialogs/web/header/dlg_upload.h \
     src/export/misc/header/medallienspiegel.h \
     src/dialogs/database/header/dlg_db_formel.h \
     src/global/header/result_calc.h \
@@ -187,7 +188,6 @@ SOURCES += src/main.cpp \
     src/models/mdl_riege.cpp \
     src/models/mdl_status.cpp \
     src/web/web_sendmail.cpp \
-    src/web/web_upload.cpp \
     src/widgets/wdg_tab_dr.cpp \
     src/widgets/wdg_tab_er.cpp \
     src/widgets/wdg_tab_pe.cpp \
@@ -233,7 +233,6 @@ SOURCES += src/main.cpp \
     src/dialogs/participants/dlg_club.cpp \
     src/dialogs/select/dlg_select_detail.cpp \
     src/libs/fparser/fparser.cc \
-    src/dialogs/web/dlg_upload.cpp \
     src/export/misc/medallienspiegel.cpp \
     src/dialogs/database/dlg_db_formel.cpp \
     src/global/result_calc.cpp \
@@ -312,7 +311,6 @@ FORMS += src/dialogs/database/ui/dlg_db_acc.ui \
     src/dialogs/wk/ui/dlg_delete.ui \
     src/dialogs/participants/ui/dlg_club.ui \
     src/dialogs/select/ui/dlg_select_detail.ui \
-    src/dialogs/web/ui/dlg_upload.ui \
     src/dialogs/database/ui/dlg_db_formel.ui \
     src/widgets/others/ui/wdg_pref.ui \
     src/widgets/others/ui/wdg_riegen.ui \
@@ -326,3 +324,6 @@ RESOURCES += resources/TurnFix.qrc \
     resources/TF_GeraeteIcons.qrc \
     assets/icons/icons.qrc
 include(libs/qtpropertybrowser/src/qtpropertybrowser.pri)
+
+DISTFILES += \
+    .gitignore

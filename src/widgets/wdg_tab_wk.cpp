@@ -24,7 +24,7 @@ Tab_WK::Tab_WK(QWidget* parent) : QWidget(parent) {
 void Tab_WK::fillWKTable() {
     int idx = cmb_filterWK->currentIndex();
     QSqlQuery query;
-    query.prepare("SELECT var_nummer, tfx_wettkaempfe.var_name, tfx_bereiche.var_name, CASE WHEN yer_bis = 3 THEN 'offen' ELSE CAST(yer_von AS text) END, CASE WHEN yer_bis=1 THEN 'und älter' WHEN yer_bis=2 THEN 'und jünger' WHEN yer_bis=3 THEN 'offen' ELSE CAST(yer_bis AS text) END , int_qualifikation, (SELECT COUNT(*) FROM tfx_wertungen WHERE int_wettkaempfeid=tfx_wettkaempfe.int_wettkaempfeid AND int_runde=?) AS starter, int_wettkaempfeid FROM tfx_wettkaempfe INNER JOIN tfx_bereiche USING (int_bereicheid) WHERE int_veranstaltungenid=? ORDER BY var_nummer ASC");
+    query.prepare("SELECT var_nummer, tfx_wettkaempfe.var_name, tfx_bereiche.var_name, CASE WHEN yer_bis = 3 THEN 'offen' ELSE CAST(yer_von AS text) END, CASE WHEN yer_bis=1 THEN 'und Ã¤lter' WHEN yer_bis=2 THEN 'und jÃ¼nger' WHEN yer_bis=3 THEN 'offen' ELSE CAST(yer_bis AS text) END , int_qualifikation, (SELECT COUNT(*) FROM tfx_wertungen WHERE int_wettkaempfeid=tfx_wettkaempfe.int_wettkaempfeid AND int_runde=?) AS starter, int_wettkaempfeid FROM tfx_wettkaempfe INNER JOIN tfx_bereiche USING (int_bereicheid) WHERE int_veranstaltungenid=? ORDER BY var_nummer ASC");
     query.bindValue( 0, _global::getRunde() );
     query.bindValue( 1,_global::checkHWK() );
     query.exec();
@@ -47,7 +47,7 @@ void Tab_WK::fillWKTable() {
     for (int i=0;i<7;i++) {
         cmb_filterWK->addItem(headersWK[i]);
         wk_model->setHeaderData(i, Qt::Horizontal, headersWK[i]);
-        wk_table->horizontalHeader()->setResizeMode(i, resizeModeWK[i]);
+        wk_table->horizontalHeader()->setSectionResizeMode(i, resizeModeWK[i]);
     }
     wk_table->hideColumn(7);
     cmb_filterWK->setCurrentIndex(idx);
@@ -74,7 +74,7 @@ void Tab_WK::editWK() {
 
 void Tab_WK::delWK() {
     if (wk_table->currentIndex().isValid()) {
-        QMessageBox msg(QMessageBox::Question, "Wettkampf löschen", "Wollen sie diesen Wettkampf wirklich löschen?",QMessageBox::Ok | QMessageBox::Cancel);
+        QMessageBox msg(QMessageBox::Question, "Wettkampf lÃ¶schen", "Wollen sie diesen Wettkampf wirklich lÃ¶schen?",QMessageBox::Ok | QMessageBox::Cancel);
         if(msg.exec() == QMessageBox::Ok) {
             QSqlQuery query;
             query.prepare("DELETE FROM tfx_wettkaempfe WHERE int_wettkaempfeid=?");

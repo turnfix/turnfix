@@ -31,7 +31,7 @@ void WK_Bogen::init(QString r, int g, bool k) {
     lbl_icon->setPixmap(query.value(0).toString());
     QString kp;
     if (kuer) {
-        kp = " (Kür)";
+        kp = " (KÃ¼r)";
     } else {
         kp = " (Pflicht)";
     }
@@ -62,12 +62,12 @@ void WK_Bogen::init(QString r, int g, bool k) {
 void WK_Bogen::fillPETable() {
     pe_table->clearSelection();
     pe_model->setTableData(riege,geraet,versuche,kuer,chk_jury->isChecked());
-    QHeaderView::ResizeMode resizeMode[pe_model->columnCount()];
+    QList<QHeaderView::ResizeMode> resizeMode;
     resizeMode[0] = QHeaderView::ResizeToContents;
     resizeMode[1] = QHeaderView::Stretch;
     resizeMode[2] = QHeaderView::Stretch;
     resizeMode[3] = QHeaderView::ResizeToContents;
-    int resize[pe_model->columnCount()];
+    QList<int> resize;
     resize[0] = 40;
     resize[1] = 200;
     resize[2] = 200;
@@ -79,7 +79,7 @@ void WK_Bogen::fillPETable() {
         k++;
     }
     for (int i=0;i<pe_model->columnCount();i++) {
-        pe_table->horizontalHeader()->setResizeMode(i, resizeMode[i]);
+        pe_table->horizontalHeader()->setSectionResizeMode(i, resizeMode[i]);
         pe_table->horizontalHeader()->resizeSection(i, resize[i]);
         if (i > 3) {
             editorDelegate *ed = new editorDelegate;
@@ -152,13 +152,13 @@ void WK_Bogen::calc() {
     FunctionParser fparser;
     fparser.Parse(query2.value(0).toString().toStdString(),vars.toStdString());
     int size = pe_model->columnCount()-5;
-    double Vars[size];
+    QVector<double> Vars(size);
     double max=0.0;
     for (int i=4;i<pe_model->columnCount()-1;i++) {
         Vars[i-4] = QVariant(pe_model->data(pe_model->index(pe_table->currentIndex().row(),i))).toDouble();
         if (Vars[i-4]>max) max = Vars[i-4];
     }
-    double res = fparser.Eval(Vars);
+    double res = fparser.Eval(Vars.data());
     if (max==0) res = 0.0;
     pe_model->setData(pe_model->index(pe_table->currentIndex().row(),pe_model->columnCount()-1),_global::strLeistung(res,query2.value(2).toString(),query2.value(3).toString(),query2.value(1).toInt()),Qt::EditRole);
 }

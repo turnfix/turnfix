@@ -178,15 +178,15 @@ void Db_Control_Dialog::loaddb() {
     QHeaderView::ResizeMode resizeMode9[] = {QHeaderView::Fixed, QHeaderView::Stretch, QHeaderView::Fixed, QHeaderView::Stretch};
     int resize9[] = {40,200,60,200};
     //Gaue
-    QString headers10[4] = {"ID","Turngau/-kreis","Kürzel",""};
+    QString headers10[4] = {"ID","Turngau/-kreis","KÃ¼rzel",""};
     QHeaderView::ResizeMode resizeMode10[] = {QHeaderView::Fixed, QHeaderView::Stretch, QHeaderView::ResizeToContents, QHeaderView::Fixed};
     int resize10[] = {40,200,70,0};
-    //Verbände
-    QString headers11[4] = {"ID","Landesverband","Kürzel",""};
+    //VerbÃ¤nde
+    QString headers11[4] = {"ID","Landesverband","KÃ¼rzel",""};
     QHeaderView::ResizeMode resizeMode11[] = {QHeaderView::Fixed, QHeaderView::Stretch, QHeaderView::ResizeToContents, QHeaderView::Fixed};
     int resize11[] = {40,200,70,0};
-    //Länder
-    QString headers12[4] = {"ID","Land","Kürzel",""};
+    //LÃ¤nder
+    QString headers12[4] = {"ID","Land","KÃ¼rzel",""};
     QHeaderView::ResizeMode resizeMode12[] = {QHeaderView::Fixed, QHeaderView::Stretch, QHeaderView::ResizeToContents, QHeaderView::Fixed};
     int resize12[] = {40,200,70,0};
     //Strafen
@@ -228,7 +228,7 @@ void Db_Control_Dialog::loaddb() {
         if (headers[i].length() > 0) {
             cmb_filter->addItem(headers[i],i);
         }
-        db_table->horizontalHeader()->setResizeMode(i, resizeMode[i]);
+        db_table->horizontalHeader()->setSectionResizeMode(i, resizeMode[i]);
         db_table->horizontalHeader()->resizeSection(i, resize[i]);
     }
     txt_filter->setText("");
@@ -319,14 +319,14 @@ void Db_Control_Dialog::edit() {
 void Db_Control_Dialog::del() {
     switch (currtype) {
     case 1: {
-            QMessageBox msg(QMessageBox::Question, "Teilnehmer löschen", "Wollen sie diesen Teilnehmer wirklich löschen?",QMessageBox::Ok | QMessageBox::Cancel);
+            QMessageBox msg(QMessageBox::Question, "Teilnehmer lÃ¶schen", "Wollen sie diesen Teilnehmer wirklich lÃ¶schen?",QMessageBox::Ok | QMessageBox::Cancel);
             if(msg.exec() == QMessageBox::Ok) {
                 QSqlQuery query;
                 query.prepare("DELETE FROM tfx_teilnehmer WHERE int_teilnehmerid=?");
                 query.bindValue( 0, QVariant(db_sort_model->data(db_sort_model->index(db_table->currentIndex().row(),0))).toInt() );
                 query.exec();
                 if (query.numRowsAffected() == -1) {
-                    QMessageBox msg(QMessageBox::Information, "Fehler!", "Dieser Teilnehmer kann nicht gelöscht werden, da er noch einem Wettkampf zugeordnet ist!",QMessageBox::Ok);
+                    QMessageBox msg(QMessageBox::Information, "Fehler!", "Dieser Teilnehmer kann nicht gelÃ¶scht werden, da er noch einem Wettkampf zugeordnet ist!",QMessageBox::Ok);
                     msg.exec();
                 } else {
                     QModelIndex sel = db_table->currentIndex();
@@ -336,14 +336,14 @@ void Db_Control_Dialog::del() {
             }
         }; break;
     case 2: {
-            QMessageBox msg(QMessageBox::Question, "Verein löschen", "Wollen sie diesen Verein wirklich löschen?",QMessageBox::Ok | QMessageBox::Cancel);
+            QMessageBox msg(QMessageBox::Question, "Verein lÃ¶schen", "Wollen sie diesen Verein wirklich lÃ¶schen?",QMessageBox::Ok | QMessageBox::Cancel);
             if(msg.exec() == QMessageBox::Ok) {
                 QSqlQuery query;
                 query.prepare("DELETE FROM tfx_vereine WHERE int_vereineid=?");
                 query.bindValue( 0, QVariant(db_sort_model->data(db_sort_model->index(db_table->currentIndex().row(),0))).toInt() );
                 query.exec();
                 if (query.numRowsAffected() == -1) {
-                    QMessageBox msg(QMessageBox::Information, "Fehler!", "Dieser Verein kann nicht gelöscht werden, da er noch einem Teilnehmer zugeordnet ist!",QMessageBox::Ok);
+                    QMessageBox msg(QMessageBox::Information, "Fehler!", "Dieser Verein kann nicht gelÃ¶scht werden, da er noch einem Teilnehmer zugeordnet ist!",QMessageBox::Ok);
                     msg.exec();
                 } else {
                     QModelIndex sel = db_table->currentIndex();
@@ -353,7 +353,7 @@ void Db_Control_Dialog::del() {
             }
         }; break;
     case 3: {
-            QMessageBox msg(QMessageBox::Question, "Disziplin löschen", "Wollen sie diese Disziplin wirklich löschen?",QMessageBox::Ok | QMessageBox::Cancel);
+            QMessageBox msg(QMessageBox::Question, "Disziplin lÃ¶schen", "Wollen sie diese Disziplin wirklich lÃ¶schen?",QMessageBox::Ok | QMessageBox::Cancel);
             if(msg.exec() == QMessageBox::Ok) {
                 QSqlQuery query;
                 query.prepare("SELECT * FROM tfx_wettkaempfe_x_disziplinen WHERE int_disziplinenid=?");
@@ -370,20 +370,20 @@ void Db_Control_Dialog::del() {
                     getData();
                     db_table->setCurrentIndex(sel);
                 } else {
-                    QMessageBox msg(QMessageBox::Information, "Fehler!", "Diese Disziplin kann nicht gelöscht werden, da sie noch in einem Wettkampf verwendet wird!",QMessageBox::Ok);
+                    QMessageBox msg(QMessageBox::Information, "Fehler!", "Diese Disziplin kann nicht gelÃ¶scht werden, da sie noch in einem Wettkampf verwendet wird!",QMessageBox::Ok);
                     msg.exec();
                 }
             }
         }; break;
     case 4: {
-            QMessageBox msg(QMessageBox::Question, "Sport löschen", "Wollen sie diesen Sport wirklich löschen?",QMessageBox::Ok | QMessageBox::Cancel);
+            QMessageBox msg(QMessageBox::Question, "Sport lÃ¶schen", "Wollen sie diesen Sport wirklich lÃ¶schen?",QMessageBox::Ok | QMessageBox::Cancel);
             if(msg.exec() == QMessageBox::Ok) {
                 QSqlQuery query;
                 query.prepare("DELETE FROM tfx_sport WHERE int_sportid=?");
                 query.bindValue( 0, QVariant(db_sort_model->data(db_sort_model->index(db_table->currentIndex().row(),0))).toInt() );
                 query.exec();
                 if (query.numRowsAffected() == -1) {
-                    QMessageBox msg(QMessageBox::Information, "Fehler!", "Dieser Sport kann nicht gelöscht werden, da er noch zugeordnet ist!",QMessageBox::Ok);
+                    QMessageBox msg(QMessageBox::Information, "Fehler!", "Dieser Sport kann nicht gelÃ¶scht werden, da er noch zugeordnet ist!",QMessageBox::Ok);
                     msg.exec();
                 } else {
                     QModelIndex sel = db_table->currentIndex();
@@ -393,14 +393,14 @@ void Db_Control_Dialog::del() {
             }
         }; break;
     case 5: {
-            QMessageBox msg(QMessageBox::Question, "Bereich löschen", "Wollen sie diesen Bereich wirklich löschen?",QMessageBox::Ok | QMessageBox::Cancel);
+            QMessageBox msg(QMessageBox::Question, "Bereich lÃ¶schen", "Wollen sie diesen Bereich wirklich lÃ¶schen?",QMessageBox::Ok | QMessageBox::Cancel);
             if(msg.exec() == QMessageBox::Ok) {
                 QSqlQuery query;
                 query.prepare("DELETE FROM tfx_bereiche WHERE int_bereicheid=?");
                 query.bindValue( 0, QVariant(db_sort_model->data(db_sort_model->index(db_table->currentIndex().row(),0))).toInt() );
                 query.exec();
                 if (query.numRowsAffected() == -1) {
-                    QMessageBox msg(QMessageBox::Information, "Fehler!", "Dieser Bereich kann nicht gelöscht werden, da er noch zugeordnet ist!",QMessageBox::Ok);
+                    QMessageBox msg(QMessageBox::Information, "Fehler!", "Dieser Bereich kann nicht gelÃ¶scht werden, da er noch zugeordnet ist!",QMessageBox::Ok);
                     msg.exec();
                 } else {
                     QModelIndex sel = db_table->currentIndex();
@@ -410,14 +410,14 @@ void Db_Control_Dialog::del() {
             }
         }; break;
     case 6: {
-            QMessageBox msg(QMessageBox::Question, "Person löschen", "Wollen sie diese Person wirklich löschen?",QMessageBox::Ok | QMessageBox::Cancel);
+            QMessageBox msg(QMessageBox::Question, "Person lÃ¶schen", "Wollen sie diese Person wirklich lÃ¶schen?",QMessageBox::Ok | QMessageBox::Cancel);
             if(msg.exec() == QMessageBox::Ok) {
                 QSqlQuery query;
                 query.prepare("DELETE FROM tfx_personen WHERE int_personenid=?");
                 query.bindValue( 0, QVariant(db_sort_model->data(db_sort_model->index(db_table->currentIndex().row(),0))).toInt() );
                 query.exec();
                 if (query.numRowsAffected() == -1) {
-                    QMessageBox msg(QMessageBox::Information, "Fehler!", "Diese Person kann nicht gelöscht werden, da sie noch zugeordnet ist!",QMessageBox::Ok);
+                    QMessageBox msg(QMessageBox::Information, "Fehler!", "Diese Person kann nicht gelÃ¶scht werden, da sie noch zugeordnet ist!",QMessageBox::Ok);
                     msg.exec();
                 } else {
                     QModelIndex sel = db_table->currentIndex();
@@ -427,14 +427,14 @@ void Db_Control_Dialog::del() {
             }
         }; break;
     case 7: {
-            QMessageBox msg(QMessageBox::Question, "Status löschen", "Wollen sie diesen Status wirklich löschen?",QMessageBox::Ok | QMessageBox::Cancel);
+            QMessageBox msg(QMessageBox::Question, "Status lÃ¶schen", "Wollen sie diesen Status wirklich lÃ¶schen?",QMessageBox::Ok | QMessageBox::Cancel);
             if(msg.exec() == QMessageBox::Ok) {
                 QSqlQuery query;
                 query.prepare("DELETE FROM tfx_status WHERE int_statusid=?");
                 query.bindValue( 0, QVariant(db_sort_model->data(db_sort_model->index(db_table->currentIndex().row(),0))).toInt() );
                 query.exec();
                 if (query.numRowsAffected() == -1) {
-                    QMessageBox msg(QMessageBox::Information, "Fehler!", "Dieser Status kann nicht gelöscht werden, da er noch zugeordnet ist!",QMessageBox::Ok);
+                    QMessageBox msg(QMessageBox::Information, "Fehler!", "Dieser Status kann nicht gelÃ¶scht werden, da er noch zugeordnet ist!",QMessageBox::Ok);
                     msg.exec();
                 } else {
                     QModelIndex sel = db_table->currentIndex();
@@ -444,14 +444,14 @@ void Db_Control_Dialog::del() {
             }
         }; break;
     case 8: {
-            QMessageBox msg(QMessageBox::Question, "Konto löschen", "Wollen sie dieses Konto wirklich löschen?",QMessageBox::Ok | QMessageBox::Cancel);
+            QMessageBox msg(QMessageBox::Question, "Konto lÃ¶schen", "Wollen sie dieses Konto wirklich lÃ¶schen?",QMessageBox::Ok | QMessageBox::Cancel);
             if(msg.exec() == QMessageBox::Ok) {
                 QSqlQuery query;
                 query.prepare("DELETE FROM tfx_konten WHERE int_kontenid=?");
                 query.bindValue( 0, QVariant(db_sort_model->data(db_sort_model->index(db_table->currentIndex().row(),0))).toInt() );
                 query.exec();
                 if (query.numRowsAffected() == -1) {
-                    QMessageBox msg(QMessageBox::Information, "Fehler!", "Dieses Konto kann nicht gelöscht werden, da es noch einem Wettkampf zugeordnet ist!",QMessageBox::Ok);
+                    QMessageBox msg(QMessageBox::Information, "Fehler!", "Dieses Konto kann nicht gelÃ¶scht werden, da es noch einem Wettkampf zugeordnet ist!",QMessageBox::Ok);
                     msg.exec();
                 } else {
                     QModelIndex sel = db_table->currentIndex();
@@ -461,14 +461,14 @@ void Db_Control_Dialog::del() {
             }
         }; break;
     case 9: {
-            QMessageBox msg(QMessageBox::Question, "Wettkampfort löschen", "Wollen sie diesen Wettkampfort wirklich löschen?",QMessageBox::Ok | QMessageBox::Cancel);
+            QMessageBox msg(QMessageBox::Question, "Wettkampfort lÃ¶schen", "Wollen sie diesen Wettkampfort wirklich lÃ¶schen?",QMessageBox::Ok | QMessageBox::Cancel);
             if(msg.exec() == QMessageBox::Ok) {
                 QSqlQuery query;
                 query.prepare("DELETE FROM tfx_wettkampforte WHERE int_wettkampforteid=?");
                 query.bindValue( 0, QVariant(db_sort_model->data(db_sort_model->index(db_table->currentIndex().row(),0))).toInt() );
                 query.exec();
                 if (query.numRowsAffected() == -1) {
-                    QMessageBox msg(QMessageBox::Information, "Fehler!", "Dieser Wettkampfort kann nicht gelöscht werden, da er noch einem Wettkampf zugeordnet ist!",QMessageBox::Ok);
+                    QMessageBox msg(QMessageBox::Information, "Fehler!", "Dieser Wettkampfort kann nicht gelÃ¶scht werden, da er noch einem Wettkampf zugeordnet ist!",QMessageBox::Ok);
                     msg.exec();
                 } else {
                     QModelIndex sel = db_table->currentIndex();
@@ -478,14 +478,14 @@ void Db_Control_Dialog::del() {
             }
         }; break;
     case 10: {
-            QMessageBox msg(QMessageBox::Question, "Turnkreis/-gau löschen", "Wollen sie diesen Turnkreis/-gau wirklich löschen?",QMessageBox::Ok | QMessageBox::Cancel);
+            QMessageBox msg(QMessageBox::Question, "Turnkreis/-gau lÃ¶schen", "Wollen sie diesen Turnkreis/-gau wirklich lÃ¶schen?",QMessageBox::Ok | QMessageBox::Cancel);
             if(msg.exec() == QMessageBox::Ok) {
                 QSqlQuery query;
                 query.prepare("DELETE FROM tfx_gaue WHERE int_gaueid=?");
                 query.bindValue( 0, QVariant(db_sort_model->data(db_sort_model->index(db_table->currentIndex().row(),0))).toInt() );
                 query.exec();
                 if (query.numRowsAffected() == -1) {
-                    QMessageBox msg(QMessageBox::Information, "Fehler!", "Dieser Turnkreis/-gau kann nicht gelöscht werden, da er noch einem Verein zugeordnet ist!",QMessageBox::Ok);
+                    QMessageBox msg(QMessageBox::Information, "Fehler!", "Dieser Turnkreis/-gau kann nicht gelÃ¶scht werden, da er noch einem Verein zugeordnet ist!",QMessageBox::Ok);
                     msg.exec();
                 } else {
                     QModelIndex sel = db_table->currentIndex();
@@ -495,14 +495,14 @@ void Db_Control_Dialog::del() {
             }
         }; break;
     case 11: {
-            QMessageBox msg(QMessageBox::Question, "Landesverband löschen", "Wollen sie diesen Landesverband wirklich löschen?",QMessageBox::Ok | QMessageBox::Cancel);
+            QMessageBox msg(QMessageBox::Question, "Landesverband lÃ¶schen", "Wollen sie diesen Landesverband wirklich lÃ¶schen?",QMessageBox::Ok | QMessageBox::Cancel);
             if(msg.exec() == QMessageBox::Ok) {
                 QSqlQuery query;
                 query.prepare("DELETE FROM tfx_verbaende WHERE int_verbaendeid=?");
                 query.bindValue( 0, QVariant(db_sort_model->data(db_sort_model->index(db_table->currentIndex().row(),0))).toInt() );
                 query.exec();
                 if (query.numRowsAffected() == -1) {
-                    QMessageBox msg(QMessageBox::Information, "Fehler!", "Dieser Landesverband kann nicht gelöscht werden, da er noch einem Turnkreis/-gau zugeordnet ist!",QMessageBox::Ok);
+                    QMessageBox msg(QMessageBox::Information, "Fehler!", "Dieser Landesverband kann nicht gelÃ¶scht werden, da er noch einem Turnkreis/-gau zugeordnet ist!",QMessageBox::Ok);
                     msg.exec();
                 } else {
                     QModelIndex sel = db_table->currentIndex();
@@ -512,14 +512,14 @@ void Db_Control_Dialog::del() {
             }
         }; break;
     case 12: {
-            QMessageBox msg(QMessageBox::Question, "Land löschen", "Wollen sie dieses Land wirklich löschen?",QMessageBox::Ok | QMessageBox::Cancel);
+            QMessageBox msg(QMessageBox::Question, "Land lÃ¶schen", "Wollen sie dieses Land wirklich lÃ¶schen?",QMessageBox::Ok | QMessageBox::Cancel);
             if(msg.exec() == QMessageBox::Ok) {
                 QSqlQuery query;
                 query.prepare("DELETE FROM tfx_laender WHERE int_laenderid=?");
                 query.bindValue( 0, QVariant(db_sort_model->data(db_sort_model->index(db_table->currentIndex().row(),0))).toInt() );
                 query.exec();
                 if (query.numRowsAffected() == -1) {
-                    QMessageBox msg(QMessageBox::Information, "Fehler!", "Dieses Land kann nicht gelöscht werden, da er noch einem Landesverband zugeordnet ist!",QMessageBox::Ok);
+                    QMessageBox msg(QMessageBox::Information, "Fehler!", "Dieses Land kann nicht gelÃ¶scht werden, da er noch einem Landesverband zugeordnet ist!",QMessageBox::Ok);
                     msg.exec();
                 } else {
                     QModelIndex sel = db_table->currentIndex();
@@ -529,14 +529,14 @@ void Db_Control_Dialog::del() {
             }
         }; break;
     case 13: {
-            QMessageBox msg(QMessageBox::Question, "Strafe löschen", "Wollen sie diese Strafe wirklich löschen?",QMessageBox::Ok | QMessageBox::Cancel);
+            QMessageBox msg(QMessageBox::Question, "Strafe lÃ¶schen", "Wollen sie diese Strafe wirklich lÃ¶schen?",QMessageBox::Ok | QMessageBox::Cancel);
             if(msg.exec() == QMessageBox::Ok) {
                 QSqlQuery query;
                 query.prepare("DELETE FROM tfx_mannschaften_abzug WHERE int_mannschaften_abzugid=?");
                 query.bindValue( 0, QVariant(db_sort_model->data(db_sort_model->index(db_table->currentIndex().row(),0))).toInt() );
                 query.exec();
                 if (query.numRowsAffected() == -1) {
-                    QMessageBox msg(QMessageBox::Information, "Fehler!", "Dieser Abzug kann nicht gelöscht werden, da er noch in Verwendung ist!",QMessageBox::Ok);
+                    QMessageBox msg(QMessageBox::Information, "Fehler!", "Dieser Abzug kann nicht gelÃ¶scht werden, da er noch in Verwendung ist!",QMessageBox::Ok);
                     msg.exec();
                 } else {
                     QModelIndex sel = db_table->currentIndex();
@@ -546,7 +546,7 @@ void Db_Control_Dialog::del() {
             }
         }; break;
     case 14: {
-            QMessageBox msg(QMessageBox::Question, "Disziplinengruppe löschen", "Wollen sie diese Disziplinengruppe wirklich löschen?",QMessageBox::Ok | QMessageBox::Cancel);
+            QMessageBox msg(QMessageBox::Question, "Disziplinengruppe lÃ¶schen", "Wollen sie diese Disziplinengruppe wirklich lÃ¶schen?",QMessageBox::Ok | QMessageBox::Cancel);
             if(msg.exec() == QMessageBox::Ok) {
                 QSqlQuery query;
                 query.prepare("DELETE FROM tfx_disziplinen_gruppen WHERE int_disziplinen_gruppenid=?");
@@ -558,7 +558,7 @@ void Db_Control_Dialog::del() {
             }
         }; break;
     case 15: {
-            QMessageBox msg(QMessageBox::Question, "Formel löschen", "Wollen sie diese Formel wirklich löschen?",QMessageBox::Ok | QMessageBox::Cancel);
+            QMessageBox msg(QMessageBox::Question, "Formel lÃ¶schen", "Wollen sie diese Formel wirklich lÃ¶schen?",QMessageBox::Ok | QMessageBox::Cancel);
             if(msg.exec() == QMessageBox::Ok) {
                 QSqlQuery query;
                 query.prepare("DELETE FROM tfx_formeln WHERE int_formelid=?");

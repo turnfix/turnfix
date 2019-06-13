@@ -50,7 +50,7 @@ Group_Dialog::Group_Dialog(int edit, QWidget* parent) : QDialog(parent) {
     QString headers[3] = {"Name","Geb.","id"};
     for (int i=0;i<3;i++) {
         model->setHeaderData(i, Qt::Horizontal, headers[i]);
-        tbl_tn->horizontalHeader()->setResizeMode(i, resizeMode[i]);
+        tbl_tn->horizontalHeader()->setSectionResizeMode(i, resizeMode[i]);
         tbl_tn->horizontalHeader()->resizeSection(i, resize[i]);
     }
     QSqlQuery query2;
@@ -379,7 +379,7 @@ void Group_Dialog::fillTable2() {
     QString headers2[4] = {"Name","Geb.","Verein","id"};
     for (int i=0;i<4;i++) {
         model2->setHeaderData(i, Qt::Horizontal, headers2[i]);
-        tbl_avtn->horizontalHeader()->setResizeMode(i, resizeMode2[i]);
+        tbl_avtn->horizontalHeader()->setSectionResizeMode(i, resizeMode2[i]);
         tbl_avtn->horizontalHeader()->resizeSection(i, resize2[i]);
     }
 }

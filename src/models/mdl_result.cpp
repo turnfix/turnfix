@@ -64,17 +64,17 @@ QVariant QErgebnisTableModel::headerData(int section, Qt::Orientation orientatio
         if (wktyp == 0 || wktyp == 2) {
             s = 4;
             switch (section) {
-            case 0: return "Platz"; break;
-            case 1: return "Name"; break;
-            case 2: return "Verein"; break;
-            case 3: return "Jg."; break;
+            case 0: return "Platz";
+            case 1: return "Name";
+            case 2: return "Verein";
+            case 3: return "Jg.";
             }
         } else {
             s = 3;
             switch (section) {
-            case 0: return "Platz"; break;
-            case 1: return "Verein"; break;
-            case 2: return "Mannschaft"; break;
+            case 0: return "Platz";
+            case 1: return "Verein";
+            case 2: return "Mannschaft";
             }
         }
         if (section < headers.size()+s) {
@@ -87,6 +87,7 @@ QVariant QErgebnisTableModel::headerData(int section, Qt::Orientation orientatio
 }
 
 void QErgebnisTableModel::setList(const QList<QStringList> &lst, QString n, int h, int typ, bool d, bool head) {
+    beginResetModel();
     list = lst;
     wktyp = typ;
     hwk = h;
@@ -108,5 +109,5 @@ void QErgebnisTableModel::setList(const QList<QStringList> &lst, QString n, int 
             headers.append(name);
         }
     }
-    this->reset();
+    endResetModel();
 }
