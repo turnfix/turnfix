@@ -27,7 +27,6 @@ MainWindow::MainWindow() {
     connect(act_exit, SIGNAL(triggered()), this, SLOT(close()));
     connect(act_competitordatabase, SIGNAL(triggered()), this, SLOT(showTNDB()));
     connect(act_clubdatabase, SIGNAL(triggered()), this, SLOT(showVNDB()));
-    connect(act_internet, SIGNAL(triggered()), this, SLOT(uploadResults()));
     connect(act_events, SIGNAL(triggered()), this, SLOT(showDisDB()));
     connect(act_pass, SIGNAL(triggered()), this, SLOT(editPass()));
     connect(act_license, SIGNAL(triggered()), this, SLOT(showAbout()));

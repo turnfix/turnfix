@@ -98,7 +98,16 @@ QPushButton:pressed, QPushButton:hover {
     </size>
    </property>
    <layout class="QGridLayout" name="gridLayout">
-    <property name="margin">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
      <number>0</number>
     </property>
     <property name="spacing">
@@ -107,11 +116,20 @@ QPushButton:pressed, QPushButton:hover {
     <item row="0" column="0" rowspan="2" colspan="2">
      <widget class="QWidget" name="headerWidget" native="true">
       <layout class="QGridLayout" name="gridLayout_2">
+       <property name="leftMargin">
+        <number>4</number>
+       </property>
+       <property name="topMargin">
+        <number>4</number>
+       </property>
+       <property name="rightMargin">
+        <number>4</number>
+       </property>
+       <property name="bottomMargin">
+        <number>4</number>
+       </property>
        <property name="verticalSpacing">
         <number>0</number>
-       </property>
-       <property name="margin">
-        <number>4</number>
        </property>
        <item row="0" column="1" rowspan="2">
         <spacer name="horizontalSpacer">
@@ -225,7 +243,16 @@ font-weight:bold;</string>
        <property name="spacing">
         <number>0</number>
        </property>
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
         <number>0</number>
        </property>
       </layout>
@@ -239,7 +266,7 @@ font-weight:bold;</string>
      <x>0</x>
      <y>0</y>
      <width>892</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuWettkampf">
@@ -252,7 +279,6 @@ font-weight:bold;</string>
     <addaction name="act_nos"/>
     <addaction name="separator"/>
     <addaction name="act_mail"/>
-    <addaction name="act_internet"/>
     <addaction name="separator"/>
     <addaction name="act_exit"/>
    </widget>
@@ -329,11 +355,6 @@ font-weight:bold;</string>
   <action name="act_nos">
    <property name="text">
     <string>Startnummern vergeben</string>
-   </property>
-  </action>
-  <action name="act_internet">
-   <property name="text">
-    <string>Ergebnisse ins Internet laden</string>
    </property>
   </action>
   <action name="act_mail">

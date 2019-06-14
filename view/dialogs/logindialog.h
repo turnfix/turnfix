@@ -25,6 +25,7 @@ private slots:
     void doLogin();
     void errorHandler(QString errorText);
     void checkDatabase();
+    void createEvent();
     void selectCurrentEvent();
 };
 

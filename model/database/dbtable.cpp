@@ -33,20 +33,18 @@ int DBTable::getColumnFKCount()
     return columns.size()+constraints.size();
 }
 
-void DBTable::checkTable()
+void DBTable::checkTable(DB *db)
 {
     bool found;
-    DB *db;
     DBColumn *column;
     DBConstraint *constraint;
-    TFSqlQuery tableExists;
-    TFSqlQuery columnList;
-    TFSqlQuery constraintList;
-    TFSqlQuery change;
+    TFSqlQuery tableExists(db);
+    TFSqlQuery columnList(db);
+    TFSqlQuery constraintList(db);
+    TFSqlQuery change(db);
     TFSettings *settings;
 
     found = false;
-    db = DB::getInstance();
     settings = TFSettings::getInstance();
 
     tableExists.prepare("SELECT TABLE WITH NAME :tablename");
@@ -56,7 +54,7 @@ void DBTable::checkTable()
     if (db->count(tableExists)==0)
     {
         //Create the table
-        this->create();
+        this->create(db);
     }
     else
     {
@@ -137,9 +135,9 @@ void DBTable::checkTable()
     }
 }
 
-void DBTable::create()
+void DBTable::create(DB* db)
 {
-    TFSqlQuery create;
+    TFSqlQuery create(db);
     QString query;
     int pk;
     int i;

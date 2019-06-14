@@ -4,11 +4,14 @@
 #include <QSqlQuery>
 
 class TFSettings;
+class DB;
 
 class TFSqlQuery : public QSqlQuery
 {
 
 public:
+    TFSqlQuery();
+    TFSqlQuery(DB* db);
     bool prepare(const QString &query);
     bool exec();
     bool exec(const QString &query);

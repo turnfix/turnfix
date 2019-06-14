@@ -15,12 +15,14 @@ public:
 
     bool establishConnection();
     void closeConnection();
+    QSqlDatabase internal();
 
     int count(TFSqlQuery query);
 
     void emitError(QString);
 
     static DB* getInstance();
+    static DB* createInstance(QString name);
     static void dropInstance();
 
 public slots:
@@ -29,8 +31,9 @@ private:
 
     TFSettings *settings;
     static DB* instance;
+    QString name;
 
-    DB();
+    DB(QString name = "");
     DB(const DB &);
     DB& operator=(const DB &);
 

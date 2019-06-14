@@ -5,6 +5,10 @@
 #include "tfsqlquery.h"
 #include "model/settings/tfsettings.h"
 
+TFSqlQuery::TFSqlQuery() : QSqlQuery() {}
+
+TFSqlQuery::TFSqlQuery(DB *db) : QSqlQuery(db->internal()) {}
+
 bool TFSqlQuery::prepare(const QString &query)
 {
     QString executeQuery = parseQuery(query);

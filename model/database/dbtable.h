@@ -5,6 +5,7 @@
 
 class DBColumn;
 class DBConstraint;
+class DB;
 
 class DBTable : public QObject
 {
@@ -16,8 +17,8 @@ public:
     QString getName();
     int getColumnFKCount();
 
-    void checkTable();
-    void create();
+    void checkTable(DB* db);
+    void create(DB* db);
 
     static void setupTables();
     static void clearTables();

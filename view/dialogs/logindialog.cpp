@@ -5,6 +5,7 @@
 #include "model/database/db.h"
 #include "model/settings/session.h"
 #include "model/viewmodels/eventtablemodel.h"
+#include "src/dialogs/wk/header/dlg_event.h"
 
 LoginDialog::LoginDialog(QWidget *parent) :
     QDialog(parent),
@@ -30,6 +31,7 @@ LoginDialog::LoginDialog(QWidget *parent) :
     connect(ui->checkDatabaseButton, SIGNAL(clicked()), this, SLOT(checkDatabase()));
     connect(DB::getInstance(), SIGNAL(errorOccured(QString)), this, SLOT(errorHandler(QString)));
     connect(ui->eventsTable, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(selectCurrentEvent()));
+    connect(ui->createEventButton, SIGNAL(clicked()), this, SLOT(createEvent()));
     connect(ui->selectEventButton, SIGNAL(clicked()), this, SLOT(selectCurrentEvent()));
 }
 
@@ -62,6 +64,14 @@ void LoginDialog::checkDatabase()
 {
     CheckDatabaseDialog dialog;
     dialog.exec();
+}
+
+void LoginDialog::createEvent()
+{
+    Event_Dialog *nwkw = new Event_Dialog();
+    if (nwkw->exec() == 1) {
+        eventTableModel->getEvents();
+    }
 }
 
 void LoginDialog::selectCurrentEvent()

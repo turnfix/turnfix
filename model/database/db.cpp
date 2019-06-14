@@ -7,10 +7,11 @@
 #include "db.h"
 #include "model/settings/tfsettings.h"
 
-DB* DB::instance = 0;
+DB* DB::instance = nullptr;
 
-DB::DB() {
+DB::DB(QString name) {
     settings = TFSettings::getInstance();
+    this->name = name;
 }
 
 bool DB::establishConnection()
@@ -28,14 +29,22 @@ bool DB::establishConnection()
         //No filename entered
         if (fileName == "")
         {
-            emit errorOccured("Kein Dateiname angegeben. Bitte in den Einstellungen die Datenbank auswählen.");
+            emit errorOccured("Kein Dateiname angegeben. Bitte in den Einstellungen die Datenbank auswÃ¤hlen.");
             return false;
         }
 
-        db = QSqlDatabase::addDatabase("QSQLITE");
+        if (this->name != "") {
+            db = QSqlDatabase::addDatabase("QSQLITE", this->name);
+        } else {
+            db = QSqlDatabase::addDatabase("QSQLITE");
+        }
         db.setDatabaseName(fileName);
     } else if (typ == DB::PostgreSQL) {
-        db = QSqlDatabase::addDatabase("QPSQL");
+        if (this->name != "") {
+            db = QSqlDatabase::addDatabase("QPSQL", this->name);
+        } else {
+            db = QSqlDatabase::addDatabase("QPSQL");
+        }
         db.setHostName(settings->getDbServer());
         db.setDatabaseName(settings->getDbDatabase());
         db.setUserName(settings->getDbUser());
@@ -43,8 +52,9 @@ bool DB::establishConnection()
     }
 
     successful = db.open();
-    if (!successful)
+    if (!successful) {
         emit errorOccured(db.lastError().text());
+    }
 
     //Enable Foreign Keys for SQLite Database
     if (successful && typ == DB::SQLite)
@@ -59,7 +69,7 @@ void DB::closeConnection()
 {
     QSqlDatabase database;
 
-    database = QSqlDatabase::database();
+    database = QSqlDatabase::database(this->name);
     database.close();
 }
 
@@ -69,7 +79,6 @@ int DB::count(TFSqlQuery query)
     {
     default:
         return query.size();
-        break;
     case SQLite:
         int i=0;
         query.exec();
@@ -77,13 +86,22 @@ int DB::count(TFSqlQuery query)
             i++;
         query.exec();
         return i;
-        break;
     }
+}
+
+QSqlDatabase DB::internal()
+{
+    return QSqlDatabase::database(this->name);
 }
 
 void DB::emitError(QString errorMessage)
 {
     emit errorOccured(errorMessage);
+}
+
+DB* DB::createInstance(QString name)
+{
+    return new DB(name);
 }
 
 DB* DB::getInstance()
@@ -106,6 +124,6 @@ void DB::dropInstance()
     static QMutex mutex;
     mutex.lock();
     delete instance;
-    instance = 0;
+    instance = nullptr;
     mutex.unlock();
 }
