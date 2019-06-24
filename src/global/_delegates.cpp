@@ -5,32 +5,32 @@
 #include <QDoubleSpinBox>
 #include <QPainter>
 #include <QApplication>
-#include <QDebug>
+#include "model/objects/event.h"
 #include "header/_delegates.h"
 #include "header/_global.h"
 
-QWidget *editorDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &, const QModelIndex &) const {
+QWidget *EditorDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &, const QModelIndex &) const {
     QLineEdit *editor = new QLineEdit(parent);
     return editor;
 }
 
-void editorDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const {
+void EditorDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const {
     QString value = index.model()->data(index, Qt::DisplayRole).toString();
     QLineEdit *lineEdit = static_cast<QLineEdit*>(editor);
     lineEdit->setText(value);
 }
 
-void editorDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const {
+void EditorDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const {
     QLineEdit *lineEdit = static_cast<QLineEdit*>(editor);
     QString value = lineEdit->text();
     model->setData(index, value, Qt::EditRole);
 }
 
-void editorDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &) const{
+void EditorDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &) const{
     editor->setGeometry(option.rect);
 }
 
-bool editorDelegate::eventFilter ( QObject *object, QEvent *event) {
+bool EditorDelegate::eventFilter ( QObject *object, QEvent *event) {
     QWidget *editor = qobject_cast<QWidget*>(object);
     if (!editor) return false;
     if (event->type() == QEvent::KeyPress) {
@@ -48,16 +48,20 @@ bool editorDelegate::eventFilter ( QObject *object, QEvent *event) {
     return false;
 }
 
+CmbDelegate::CmbDelegate(Event *event, QObject *parent) : QItemDelegate(parent)
+{
+    this->event = event;
+}
 
-QWidget *cmbDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &, const QModelIndex &index) const {
+QWidget *CmbDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &, const QModelIndex &index) const {
     QComboBox *editor = new QComboBox(parent);
     QStringList fields;
     fields << "";
     //fields << "Pause";
     QSqlQuery query;
     query.prepare("SELECT var_kurz2 FROM tfx_wertungen INNER JOIN tfx_wettkaempfe ON tfx_wettkaempfe.int_wettkaempfeid = tfx_wertungen.int_wettkaempfeid INNER JOIN tfx_wettkaempfe_x_disziplinen ON tfx_wettkaempfe.int_wettkaempfeid = tfx_wettkaempfe_x_disziplinen.int_wettkaempfeid INNER JOIN tfx_disziplinen USING (int_disziplinenid) WHERE int_veranstaltungenid=? AND tfx_wertungen.int_runde=? AND var_riege=? GROUP BY int_disziplinenid, var_kurz2 ORDER BY int_disziplinenid");
-    query.bindValue(0, _global::checkHWK());
-    query.bindValue(1, _global::getRunde());
+    query.bindValue(0, this->event->getMainEventId());
+    query.bindValue(1, this->event->getRound());
     query.bindValue(2, index.model()->index(index.row(),0).data().toString());
     query.exec();
     while (query.next()) {
@@ -67,20 +71,20 @@ QWidget *cmbDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &
     return editor;
 }
 
-void cmbDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const {
+void CmbDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const {
     QString value = index.model()->data(index, Qt::EditRole).toString();
     QComboBox *comboBox = static_cast<QComboBox*>(editor);
     comboBox->setCurrentIndex(comboBox->findText(value));
 }
 
-void cmbDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const {
+void CmbDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const {
     QComboBox *comboBox = static_cast<QComboBox*>(editor);
     QString value = comboBox->currentText();
     QSqlQuery query;
     query.prepare("SELECT int_riegen_x_disziplinenid FROM tfx_riegen_x_disziplinen INNER JOIN tfx_disziplinen USING (int_disziplinenid) WHERE int_veranstaltungenid=? AND int_runde=? AND var_name=? AND var_riege=?");
-    query.bindValue(0,_global::checkHWK());
-    query.bindValue(1,_global::getRunde());
-    query.bindValue(2,value);
+    query.bindValue(0, this->event->getMainEventId());
+    query.bindValue(1, this->event->getRound());
+    query.bindValue(2, value);
     query.bindValue(3, index.model()->index(index.row(),0).data().toString());
     query.exec();
     if (_global::querySize(query)==0) {
@@ -93,47 +97,47 @@ void cmbDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const
     query2.bindValue(0,query.value(0).toInt());
     query2.exec();
     query2.prepare("UPDATE tfx_riegen_x_disziplinen SET bol_erstes_geraet='false' WHERE int_veranstaltungenid=? AND int_runde=? AND var_riege=? AND int_riegen_x_disziplinenid != ?");
-    query2.bindValue(0, _global::checkHWK());
-    query2.bindValue(1, _global::getRunde());
+    query2.bindValue(0, this->event->getMainEventId());
+    query2.bindValue(1, this->event->getRound());
     query2.bindValue(2, index.model()->index(index.row(),0).data().toString());
     query2.bindValue(3, query.value(0).toInt());
     query2.exec();
     model->setData(index, value, Qt::EditRole);
 }
 
-void cmbDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &) const{
+void CmbDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &) const{
     editor->setGeometry(option.rect);
 }
 
-void alignItemDelegate::paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const {
+void AlignItemDelegate::paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const {
     QStyleOptionViewItem o = option;
     o.displayAlignment = Qt::AlignRight | Qt::AlignVCenter;
     QItemDelegate::paint( painter, o, index );
 }
 
-void alignCItemDelegate::paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const {
+void AlignCItemDelegate::paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const {
     QStyleOptionViewItem o = option;
     o.displayAlignment = Qt::AlignHCenter | Qt::AlignVCenter;
     QItemDelegate::paint( painter, o, index );
 }
 
-QWidget *dsbxDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &, const QModelIndex &) const {
+QWidget *DsbxDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &, const QModelIndex &) const {
     QDoubleSpinBox *editor = new QDoubleSpinBox(parent);
     return editor;
 }
 
-void dsbxDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const {
+void DsbxDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const {
     QString value = index.model()->data(index, Qt::EditRole).toString();
     QDoubleSpinBox *sbx = static_cast<QDoubleSpinBox*>(editor);
     sbx->setValue(value.toDouble());
 }
 
-void dsbxDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const {
+void DsbxDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const {
     QDoubleSpinBox *sbx = static_cast<QDoubleSpinBox*>(editor);
     QString value = QString::number(sbx->value());
     model->setData(index, value, Qt::EditRole);
 }
 
-void dsbxDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &) const{
+void DsbxDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &) const{
     editor->setGeometry(option.rect);
 }

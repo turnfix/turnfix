@@ -4,17 +4,21 @@
 #include <QStandardItem>
 #include "ui_wdg_tab_rg.h"
 
-class QEinteilTableModel;
+class AssignmentTableModel;
+class Event;
 class Riegen_Widget;
 class QStandardItemModel;
 class QItemSelection;
 
 class Tab_RG : public QWidget, public Ui::Tab_RG_Ui {
-    Q_OBJECT;
+    Q_OBJECT
+
 public:
     Tab_RG(QWidget* parent=0);
+
 public slots:
     void fillRETable2();
+
 private slots:
     void sendData();
     void getData();
@@ -23,9 +27,11 @@ private slots:
     void fetchRgData();
     void setRiegenData();
     void removeRiege();
-protected:
-    QEinteilTableModel *re_model;
-    QEinteilTableModel *re_model2;
+
+private:
+    Event *event;
+    AssignmentTableModel *re_model;
+    AssignmentTableModel *re_model2;
     QStandardItemModel *rg_model;
 };
 

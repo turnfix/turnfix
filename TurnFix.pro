@@ -32,6 +32,7 @@ win32 {
 }
 
 HEADERS += src/dialogs/database/header/dlg_db_acc.h \
+    model/objects/competition.h \
     src/dialogs/database/header/dlg_db_club.h \
     src/dialogs/database/header/dlg_db_control.h \
     src/dialogs/database/header/dlg_db_dis.h \
@@ -43,16 +44,15 @@ HEADERS += src/dialogs/database/header/dlg_db_acc.h \
     src/dialogs/database/header/dlg_db_tn.h \
     src/dialogs/others/header/dlg_about.h \
     src/dialogs/others/header/dlg_barcode.h \
-    src/dialogs/others/header/dlg_mail.h \
+    view/dialogs/maildialog.h \
     src/dialogs/participants/header/dlg_group.h \
     src/dialogs/participants/header/dlg_pass.h \
     src/dialogs/participants/header/dlg_team.h \
     src/dialogs/participants/header/dlg_tn.h \
     src/dialogs/points/header/dlg_bogen.h \
-    src/dialogs/points/header/dlg_karte.h \
+    view/dialogs/scorecarddialog.h \
     src/dialogs/points/header/dlg_quali.h \
-    src/dialogs/select/header/dlg_select_club.h \
-    src/dialogs/select/header/dlg_select_dis.h \
+    view/dialogs/selectdisciplinedialog.h \
     src/dialogs/select/header/dlg_select_rg.h \
     src/dialogs/select/header/dlg_select_tn.h \
     src/dialogs/select/header/dlg_select_wk.h \
@@ -60,17 +60,13 @@ HEADERS += src/dialogs/database/header/dlg_db_acc.h \
     src/dialogs/wk/header/dlg_wk.h \
     src/global/header/_delegates.h \
     src/global/header/_global.h \
-    src/libs/fparser/extrasrc/fpaux.hh \
-    src/libs/fparser/extrasrc/fptypes.hh \
-    src/libs/fparser/fparser_gmpint.hh \
-    src/libs/fparser/fparser_mpfr.hh \
     src/misc/header/gri_editoritem.h \
     src/misc/header/trd_progress.h \
-    src/models/header/mdl_einteilen.h \
     src/models/header/mdl_karte.h \
-    src/models/header/mdl_quali.h \
+    model/viewmodels/assignmenttablemodel.h \
+    model/viewmodels/qualitablemodel.h \
+    model/viewmodels/squadtablemodel.h \
     src/models/header/mdl_result.h \
-    src/models/header/mdl_riege.h \
     src/models/header/mdl_status.h \
     src/web/header/web_sendmail.h \
     src/web/header/web_upload.h \
@@ -81,34 +77,42 @@ HEADERS += src/dialogs/database/header/dlg_db_acc.h \
     src/widgets/header/wdg_tab_st.h \
     src/widgets/header/wdg_tab_tn.h \
     src/widgets/header/wdg_tab_wk.h \
-    src/windows/header/mainwindow.h \
+    view/windows/mainwindow.h \
     src/misc/header/gsc_editorscene.h \
     src/models/header/mdl_editor.h \
     src/dialogs/database/header/dlg_db_land.h \
     src/dialogs/database/header/dlg_db_verband.h \
     src/dialogs/database/header/dlg_db_gau.h \
     src/dialogs/database/header/dlg_db_penalty.h \
-    src/export/header/drucken.h \
     src/widgets/header/wdg_tab_ed.h \
-    src/export/ergebnisse/header/ergebnisse.h \
-    src/export/ergebnisse/header/einzel.h \
-    src/export/ergebnisse/header/detail.h \
-    src/export/ergebnisse/header/runde.h \
-    src/export/teilnehmerlisten/header/riege.h \
-    src/export/teilnehmerlisten/header/liste.h \
-    src/export/teilnehmerlisten/header/meldung.h \
-    src/export/teilnehmerlisten/header/bogen.h \
-    src/export/misc/header/karte.h \
-    src/export/teilnehmerlisten/header/pass.h \
-    src/export/teilnehmerlisten/header/edvchecktn.h \
-    src/export/misc/header/urkunde.h \
-    src/export/misc/header/meldematrix.h \
-    src/export/misc/header/vereinsliste.h \
-    src/export/misc/header/ausschreibung.h \
-    src/export/misc/header/bericht.h \
-    src/export/misc/header/zeitplan.h \
-    src/export/misc/header/edvcheckriege.h \
-    src/export/ergebnisse/header/tabelle.h \
+    export/print.h \
+    export/misc/card.h \
+    export/misc/certificate.h \
+    export/misc/clublist.h \
+    export/misc/invitation.h \
+    export/misc/itchecksquads.h \
+    export/misc/medalcount.h \
+    export/misc/registrationmatrix.h \
+    export/misc/summary.h \
+    export/misc/timetable.h \
+    export/participants/itchecklist.h \
+    export/participants/judgessheet.h \
+    export/participants/license.h \
+    export/participants/list.h \
+    export/participants/registration.h \
+    export/participants/resultssheet.h \
+    export/participants/squad.h \
+    export/results/detail.h \
+    export/results/individual.h \
+    export/results/results.h \
+    export/results/round.h \
+    export/results/table.h \
+    libs/fparser/fparser.hh \
+    libs/fparser/fparser_gmpint.hh \
+    libs/fparser/fparser_mpfr.hh \
+    libs/fparser/fpconfig.hh \
+    libs/fparser/extrasrc/fpaux.hh \
+    libs/fparser/extrasrc/fptypes.hh \
     src/global/header/settings.h \
     src/dialogs/others/header/dlg_db_check_dialog.h \
     src/misc/header/trd_checktablesthread.h \
@@ -118,39 +122,84 @@ HEADERS += src/dialogs/database/header/dlg_db_acc.h \
     src/dialogs/wk/header/dlg_delete.h \
     src/dialogs/participants/header/dlg_club.h \
     src/dialogs/select/header/dlg_select_detail.h \
-    src/libs/fparser/fpconfig.hh \
-    src/libs/fparser/fparser.hh \
-    src/export/misc/header/medallienspiegel.h \
     src/dialogs/database/header/dlg_db_formel.h \
     src/global/header/result_calc.h \
     src/widgets/others/header/wdg_pref.h \
     src/widgets/subclasses/header/extendedtabwidget.h \
     src/widgets/others/header/wdg_riegen.h \
-    src/export/teilnehmerlisten/header/ergebnisbogen.h \
     src/widgets/header/wdg_tab_sr.h \
     src/widgets/subclasses/header/extendedlistwidget.h \
     model/database/db.h \
     model/settings/tfsettings.h \
+    view/dialogs/checkdatabasedialog.h \
+    view/dialogs/logindialog.h \
+    view/dialogs/selectclubdialog.h \
     view/widgets/settingswidget.h \
     view/widgets/tftoolbarwidget.h \
-    view/dialogs/logindialog.h \
     view/widgets/tfselectionbar.h \
     view/widgets/tfabstracttoolbar.h \
+    view/widgets/tfheaderwidget.h \
+    view/wizards/postgressetupwizard.h \
     model/viewmodels/eventtablemodel.h \
     model/objects/event.h \
     model/database/dbcolumn.h \
     model/database/dbtable.h \
-    view/dialogs/checkdatabasedialog.h \
-    view/widgets/tfheaderwidget.h \
     model/database/tfsqlquery.h \
     model/database/dbconstraint.h \
     model/database/dbchecker.h \
     model/objects/location.h \
-    model/objects/tfobject.h \
     model/settings/session.h \
-    view/wizards/postgressetupwizard.h \
     model/database/dbinitializerpostgres.h
-SOURCES += src/main.cpp \
+SOURCES += main.cpp \
+    export/print.cpp \
+    export/misc/card.cpp \
+    export/misc/certificate.cpp \
+    export/misc/clublist.cpp \
+    export/misc/invitation.cpp \
+    export/misc/itchecksquads.cpp \
+    export/misc/medalcount.cpp \
+    export/misc/registrationmatrix.cpp \
+    export/misc/summary.cpp \
+    export/misc/timetable.cpp \
+    export/participants/itchecklist.cpp \
+    export/participants/judgessheet.cpp \
+    export/participants/license.cpp \
+    export/participants/list.cpp \
+    export/participants/registration.cpp \
+    export/participants/resultssheet.cpp \
+    export/participants/squad.cpp \
+    export/results/results.cpp \
+    export/results/individual.cpp \
+    export/results/detail.cpp \
+    export/results/round.cpp \
+    export/results/table.cpp \
+    libs/fparser/fparser.cc \
+    model/database/db.cpp \
+    model/database/dbchecker.cpp \
+    model/database/dbcolumn.cpp \
+    model/database/dbconstraint.cpp \
+    model/database/dbinitializerpostgres.cpp \
+    model/database/dbtable.cpp \
+    model/database/tfsqlquery.cpp \
+    model/objects/competition.cpp \
+    model/objects/event.cpp \
+    model/objects/location.cpp \
+    model/settings/session.cpp \
+    model/settings/tfsettings.cpp \
+    model/viewmodels/assignmenttablemodel.cpp \
+    model/viewmodels/eventtablemodel.cpp \
+    model/viewmodels/qualitablemodel.cpp \
+    model/viewmodels/squadtablemodel.cpp \
+    view/dialogs/checkdatabasedialog.cpp \
+    view/dialogs/logindialog.cpp \
+    view/dialogs/selectclubdialog.cpp \
+    view/widgets/settingswidget.cpp \
+    view/widgets/tfabstracttoolbar.cpp \
+    view/widgets/tfheaderwidget.cpp \
+    view/widgets/tfselectionbar.cpp \
+    view/widgets/tftoolbarwidget.cpp \
+    view/windows/mainwindow.cpp \
+    view/wizards/postgressetupwizard.cpp \
     src/dialogs/database/dlg_db_acc.cpp \
     src/dialogs/database/dlg_db_club.cpp \
     src/dialogs/database/dlg_db_control.cpp \
@@ -162,16 +211,15 @@ SOURCES += src/main.cpp \
     src/dialogs/database/dlg_db_status.cpp \
     src/dialogs/database/dlg_db_tn.cpp \
     src/dialogs/others/dlg_barcode.cpp \
-    src/dialogs/others/dlg_mail.cpp \
+    view/dialogs/maildialog.cpp \
     src/dialogs/participants/dlg_group.cpp \
     src/dialogs/participants/dlg_pass.cpp \
     src/dialogs/participants/dlg_team.cpp \
     src/dialogs/participants/dlg_tn.cpp \
     src/dialogs/points/dlg_bogen.cpp \
-    src/dialogs/points/dlg_karte.cpp \
+    view/dialogs/scorecarddialog.cpp \
     src/dialogs/points/dlg_quali.cpp \
-    src/dialogs/select/dlg_select_club.cpp \
-    src/dialogs/select/dlg_select_dis.cpp \
+    view/dialogs/selectdisciplinedialog.cpp \
     src/dialogs/select/dlg_select_rg.cpp \
     src/dialogs/select/dlg_select_tn.cpp \
     src/dialogs/select/dlg_select_wk.cpp \
@@ -181,11 +229,8 @@ SOURCES += src/main.cpp \
     src/global/_global.cpp \
     src/misc/gri_editoritem.cpp \
     src/misc/trd_progress.cpp \
-    src/models/mdl_einteilen.cpp \
     src/models/mdl_karte.cpp \
-    src/models/mdl_quali.cpp \
     src/models/mdl_result.cpp \
-    src/models/mdl_riege.cpp \
     src/models/mdl_status.cpp \
     src/web/web_sendmail.cpp \
     src/widgets/wdg_tab_dr.cpp \
@@ -195,34 +240,13 @@ SOURCES += src/main.cpp \
     src/widgets/wdg_tab_st.cpp \
     src/widgets/wdg_tab_tn.cpp \
     src/widgets/wdg_tab_wk.cpp \
-    src/windows/mainwindow.cpp \
     src/misc/gsc_editorscene.cpp \
     src/models/mdl_editor.cpp \
     src/dialogs/database/dlg_db_land.cpp \
     src/dialogs/database/dlb_db_verband.cpp \
     src/dialogs/database/dlg_db_gau.cpp \
     src/dialogs/database/dlg_db_penalty.cpp \
-    src/export/drucken.cpp \
     src/widgets/wdg_tab_ed.cpp \
-    src/export/ergebnisse/ergebnisse.cpp \
-    src/export/ergebnisse/einzel.cpp \
-    src/export/ergebnisse/detail.cpp \
-    src/export/ergebnisse/runde.cpp \
-    src/export/teilnehmerlisten/riege.cpp \
-    src/export/teilnehmerlisten/liste.cpp \
-    src/export/teilnehmerlisten/meldung.cpp \
-    src/export/teilnehmerlisten/bogen.cpp \
-    src/export/misc/karte.cpp \
-    src/export/teilnehmerlisten/pass.cpp \
-    src/export/teilnehmerlisten/edvchecktn.cpp \
-    src/export/misc/urkunde.cpp \
-    src/export/misc/meldematrix.cpp \
-    src/export/misc/vereinsliste.cpp \
-    src/export/misc/ausschreibung.cpp \
-    src/export/misc/bericht.cpp \
-    src/export/misc/zeitplan.cpp \
-    src/export/misc/edvcheckriege.cpp \
-    src/export/ergebnisse/tabelle.cpp \
     src/global/settings.cpp \
     src/dialogs/others/dlg_db_check_dialog.cpp \
     src/misc/trd_checktablesthread.cpp \
@@ -232,37 +256,13 @@ SOURCES += src/main.cpp \
     src/dialogs/wk/dlg_delete.cpp \
     src/dialogs/participants/dlg_club.cpp \
     src/dialogs/select/dlg_select_detail.cpp \
-    src/libs/fparser/fparser.cc \
-    src/export/misc/medallienspiegel.cpp \
     src/dialogs/database/dlg_db_formel.cpp \
     src/global/result_calc.cpp \
     src/widgets/others/wdg_pref.cpp \
     src/widgets/subclasses/extendedtabwidget.cpp \
     src/widgets/others/wdg_riegen.cpp \
-    src/export/teilnehmerlisten/ergebnisbogen.cpp \
     src/widgets/wdg_tab_sr.cpp \
-    src/widgets/subclasses/extendedlistwidget.cpp \
-    model/database/db.cpp \
-    model/settings/tfsettings.cpp \
-    view/widgets/settingswidget.cpp \
-    view/widgets/tftoolbarwidget.cpp \
-    view/dialogs/logindialog.cpp \
-    view/widgets/tfselectionbar.cpp \
-    view/widgets/tfabstracttoolbar.cpp \
-    model/viewmodels/eventtablemodel.cpp \
-    model/objects/event.cpp \
-    model/database/dbcolumn.cpp \
-    model/database/dbtable.cpp \
-    view/dialogs/checkdatabasedialog.cpp \
-    view/widgets/tfheaderwidget.cpp \
-    model/database/tfsqlquery.cpp \
-    model/database/dbconstraint.cpp \
-    model/database/dbchecker.cpp \
-    model/objects/location.cpp \
-    model/objects/tfobject.cpp \
-    model/settings/session.cpp \
-    view/wizards/postgressetupwizard.cpp \
-    model/database/dbinitializerpostgres.cpp
+    src/widgets/subclasses/extendedlistwidget.cpp
 FORMS += src/dialogs/database/ui/dlg_db_acc.ui \
     src/dialogs/database/ui/dlg_db_club.ui \
     src/dialogs/database/ui/dlg_db_control.ui \
@@ -275,19 +275,24 @@ FORMS += src/dialogs/database/ui/dlg_db_acc.ui \
     src/dialogs/database/ui/dlg_db_tn.ui \
     src/dialogs/others/ui/dlg_about.ui \
     src/dialogs/others/ui/dlg_barcode.ui \
-    src/dialogs/others/ui/dlg_mail.ui \
+    view/dialogs/maildialog.ui \
     src/dialogs/participants/ui/dlg_group.ui \
     src/dialogs/participants/ui/dlg_pass.ui \
     src/dialogs/participants/ui/dlg_team.ui \
     src/dialogs/participants/ui/dlg_tn.ui \
     src/dialogs/points/ui/dlg_bogen.ui \
     src/dialogs/points/ui/dlg_jury.ui \
-    src/dialogs/points/ui/dlg_karte.ui \
+    view/dialogs/scorecarddialog.ui \
     src/dialogs/points/ui/dlg_quali.ui \
-    src/dialogs/select/ui/dlg_select_club.ui \
-    src/dialogs/select/ui/dlg_select_dis.ui \
-    src/dialogs/select/ui/dlg_select_rg.ui \
+    view/dialogs/selectclubdialog.ui \
+    view/dialogs/selectdisciplinedialog.ui \
     src/dialogs/select/ui/dlg_select_tn.ui \
+    src/dialogs/select/ui/dlg_select_rg.ui \
+    view/windows/mainwindow.ui \
+    view/widgets/settingswidget.ui \
+    view/dialogs/logindialog.ui \
+    view/dialogs/checkdatabasedialog.ui \
+    view/wizards/postgressetupwizard.ui \
     src/dialogs/select/ui/dlg_select_wk.ui \
     src/dialogs/wk/ui/dlg_event.ui \
     src/dialogs/wk/ui/dlg_wk.ui \
@@ -298,7 +303,6 @@ FORMS += src/dialogs/database/ui/dlg_db_acc.ui \
     src/widgets/ui/wdg_tab_st.ui \
     src/widgets/ui/wdg_tab_tn.ui \
     src/widgets/ui/wdg_tab_wk.ui \
-    src/windows/ui/mainwindow.ui \
     src/dialogs/database/ui/dlg_db_land.ui \
     src/dialogs/database/ui/dlg_db_verband.ui \
     src/dialogs/database/ui/dlg_db_gau.ui \
@@ -309,16 +313,12 @@ FORMS += src/dialogs/database/ui/dlg_db_acc.ui \
     src/dialogs/others/ui/dlg_save_layout.ui \
     src/dialogs/database/ui/dlg_db_disgroup.ui \
     src/dialogs/wk/ui/dlg_delete.ui \
-    src/dialogs/participants/ui/dlg_club.ui \
     src/dialogs/select/ui/dlg_select_detail.ui \
     src/dialogs/database/ui/dlg_db_formel.ui \
     src/widgets/others/ui/wdg_pref.ui \
     src/widgets/others/ui/wdg_riegen.ui \
-    src/widgets/ui/wdg_tab_sr.ui \
-    view/widgets/settingswidget.ui \
-    view/dialogs/logindialog.ui \
-    view/dialogs/checkdatabasedialog.ui \
-    view/wizards/postgressetupwizard.ui
+    src/dialogs/participants/ui/dlg_club.ui \
+    src/widgets/ui/wdg_tab_sr.ui
 RESOURCES += resources/TurnFix.qrc \
     resources/TF_Language.qrc \
     resources/TF_GeraeteIcons.qrc \

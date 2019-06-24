@@ -1,21 +1,27 @@
 #include <QSqlQuery>
 #include <QSqlQueryModel>
 #include <QKeyEvent>
+#include "model/objects/event.h"
 #include "header/dlg_pass.h"
 #include "../../global/header/_global.h"
 
-Pass_Dialog::Pass_Dialog(QWidget* parent) : QDialog(parent) {
+Pass_Dialog::Pass_Dialog(Event *event, QWidget* parent) : QDialog(parent) {
     setupUi(this);
     setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
-    model = new QSqlQueryModel();
+
+    this->event = event;
+    this->model = new QSqlQueryModel();
+
     tbl_pass->setModel(model);
+
     connect(but_close, SIGNAL(clicked()), this, SLOT(close()));
     connect(cmb_club, SIGNAL(currentIndexChanged(int)), this, SLOT(fillTable()));
     connect(tbl_pass->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), this, SLOT(selectLine()));
+
     txt_number->installEventFilter(this);
     QSqlQuery query;
     query.prepare("SELECT int_vereineid, tfx_vereine.var_name FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) INNER JOIN tfx_teilnehmer ON tfx_teilnehmer.int_teilnehmerid = tfx_wertungen.int_teilnehmerid INNER JOIN tfx_vereine USING (int_vereineid) WHERE int_veranstaltungenid=? GROUP BY int_vereineid, tfx_vereine.var_name, int_start_ort ORDER BY "+_global::substring("tfx_vereine.var_name","int_start_ort+1")+", tfx_vereine.var_name");
-    query.bindValue(0,_global::checkHWK());
+    query.bindValue(0, this->event->getMainEventId());
     query.exec();
     while (query.next()) {
         cmb_club->addItem(query.value(1).toString(),query.value(0).toInt());
@@ -26,9 +32,9 @@ Pass_Dialog::Pass_Dialog(QWidget* parent) : QDialog(parent) {
 void Pass_Dialog::fillTable(int row) {
     QSqlQuery query;
     query.prepare("SELECT var_nachname || ', ' || var_vorname, int_startpassnummer, int_teilnehmerid FROM tfx_wertungen INNER JOIN tfx_teilnehmer USING (int_teilnehmerid) INNER JOIN tfx_vereine USING (int_vereineid) INNER JOIN tfx_wettkaempfe ON tfx_wettkaempfe.int_wettkaempfeid = tfx_wertungen.int_wettkaempfeid WHERE int_veranstaltungenid=? AND int_vereineid=? AND int_runde=? ORDER BY tfx_wettkaempfe.var_nummer, "+_global::substring("tfx_vereine.var_name","int_start_ort+1")+", var_nachname, var_vorname");
-    query.bindValue(0,_global::checkHWK());
-    query.bindValue(1,QVariant(cmb_club->itemData(cmb_club->currentIndex())).toInt());
-    query.bindValue(2,_global::getRunde());
+    query.bindValue(0, this->event->getMainEventId());
+    query.bindValue(1, QVariant(cmb_club->itemData(cmb_club->currentIndex())).toInt());
+    query.bindValue(2, this->event->getRound());
     query.exec();
     model->setQuery(query);
     tbl_pass->setFocus();

@@ -2,16 +2,19 @@
 #include <QMessageBox>
 #include <QToolBar>
 #include <QSignalMapper>
+#include "model/objects/event.h"
 #include "header/dlg_event.h"
 #include "../database/header/dlg_db_person.h"
 #include "../database/header/dlg_db_loc.h"
 #include "../database/header/dlg_db_acc.h"
 #include "../../global/header/_global.h"
 
-Event_Dialog::Event_Dialog(int edit, QWidget* parent) : QDialog(parent) {
+Event_Dialog::Event_Dialog(Event *event, int edit, QWidget* parent) : QDialog(parent) {
     editid=edit;
     setupUi(this);
     setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
+
+    this->event = event;
 
     QToolBar *tb = new QToolBar();
     QActionGroup *ag = new QActionGroup(this);
@@ -41,7 +44,7 @@ Event_Dialog::Event_Dialog(int edit, QWidget* parent) : QDialog(parent) {
     dae_to->setDate(QDate::currentDate());
     dae_ms->setDate(QDate::currentDate());
     QSqlQuery query2("SELECT int_veranstaltungenid, dat_von, var_name FROM tfx_veranstaltungen ORDER BY dat_von DESC");
-    cmb_mainround->addItem(tr("Dies ist der Hauptwettkampf"),_global::getWkNr());
+    cmb_mainround->addItem(tr("Dies ist der Hauptwettkampf"), this->event->getId());
     while (query2.next()) {
         cmb_mainround->addItem(QDate().fromString(query2.value(1).toString(),"yyyy-MM-dd").toString("dd.MM.yyyy") + " - " + query2.value(2).toString(),query2.value(0).toInt());
     }
@@ -152,7 +155,7 @@ void Event_Dialog::initData() {
 
 void Event_Dialog::save() {
     if (cmb_locations->currentText().length() == 0) {
-        QMessageBox msg(QMessageBox::Warning,tr("Keine Wettkampfort gew‰hlt!"),tr("Bitte w‰hlen sie einen Wettkampfort aus!"));
+        QMessageBox msg(QMessageBox::Warning,tr("Keine Wettkampfort gew√§hlt!"),tr("Bitte w√§hlen sie einen Wettkampfort aus!"));
         msg.exec();
     } else {
         QSqlQuery query;

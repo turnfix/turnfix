@@ -2,8 +2,8 @@
 #include <QKeyEvent>
 #include <QColor>
 #include "header/mdl_karte.h"
-#include "../global/header/_global.h"
-#include "../libs/fparser/fparser.hh"
+#include "src/global/header/_global.h"
+#include "libs/fparser/fparser.hh"
 
 int QKartenTableModel::rowCount(const QModelIndex &) const {
     return disidsv.count();

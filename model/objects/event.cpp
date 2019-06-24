@@ -22,6 +22,25 @@ QDate Event::getStartDate()
     return this->startDate;
 }
 
+int Event::getMainEventId()
+{
+    if (this->mainEventId != 0) {
+        return this->mainEventId;
+    } else {
+        return this->id;
+    }
+}
+
+int Event::getRound()
+{
+    return this->round;
+}
+
+bool Event::isMultiRoundEvent()
+{
+    return this->multiRoundEvent;
+}
+
 QList<Event*> Event::getAllEvents()
 {
     QList<Event*> output;
@@ -30,7 +49,7 @@ QList<Event*> Event::getAllEvents()
     Event *event;
     TFSqlQuery query;
 
-    query.prepare("SELECT * FROM tfx_veranstaltungen ORDER BY dat_von DESC");
+    query.prepare("SELECT int_veranstaltungenid, int_wettkampforteid, int_hauptwettkampf, int_runde, bol_rundenwettkampf, var_name, dat_von FROM tfx_veranstaltungen ORDER BY dat_von DESC");
     query.exec();
     while (query.next())
     {
@@ -55,6 +74,9 @@ void Event::setData(TFSqlQuery query)
 {
     this->id = query.value(0).toInt();
     this->locationId = query.value(1).toInt();
-    this->name = query.value(6).toString();
-    this->startDate = query.value(8).toDate();
+    this->mainEventId = query.value(2).toInt();
+    this->round = query.value(3).toInt();
+    this->multiRoundEvent = query.value(4).toBool();
+    this->name = query.value(5).toString();
+    this->startDate = query.value(6).toDate();
 }

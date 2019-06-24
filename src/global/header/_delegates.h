@@ -4,8 +4,9 @@
 #include <QItemDelegate>
 
 class QPainter;
+class Event;
 
-class editorDelegate : public QItemDelegate {
+class EditorDelegate : public QItemDelegate {
     Q_OBJECT
 
 public:
@@ -16,29 +17,35 @@ public:
     bool eventFilter ( QObject * editor, QEvent * event );
 };
 
-class cmbDelegate : public QItemDelegate {
+class CmbDelegate : public QItemDelegate {
     Q_OBJECT
 
 public:
+    CmbDelegate(Event *event, QObject *parent = nullptr);
     QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     void setEditorData(QWidget *editor, const QModelIndex &index) const;
     void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
     void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+
+private:
+    Event *event;
 };
 
-class alignItemDelegate : public QItemDelegate {
+class AlignItemDelegate : public QItemDelegate {
     Q_OBJECT
-    public:
-        void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+
+public:
+    void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 };
 
-class alignCItemDelegate : public QItemDelegate {
+class AlignCItemDelegate : public QItemDelegate {
     Q_OBJECT
-    public:
-        void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+
+public:
+    void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 };
 
-class dsbxDelegate : public QItemDelegate {
+class DsbxDelegate : public QItemDelegate {
     Q_OBJECT
 
 public:

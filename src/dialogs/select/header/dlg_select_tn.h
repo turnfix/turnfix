@@ -3,20 +3,26 @@
 #include <QDialog>
 #include "ui_dlg_select_tn.h"
 
+class Event;
 class QErgebnisTableModel;
 
 class Select_Tn_Dialog : public QDialog, public Ui::Select_Tn_Dialog_Ui {
-    Q_OBJECT;
+    Q_OBJECT
+
 public:
-    Select_Tn_Dialog(QWidget* parent=0);
+    Select_Tn_Dialog(Event *event, QWidget* parent = nullptr);
+
 public slots:
     QList<int> getTnList();
     QString getTnWk();
-protected slots:
+
+private slots:
     void initData();
     void updateList();
     void submit();
-protected:
+
+private:
+    Event *event;
     QList<int> tnlist;
     QString tnwk;
     QErgebnisTableModel *er_model;

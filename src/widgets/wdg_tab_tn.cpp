@@ -2,6 +2,8 @@
 #include <QSortFilterProxyModel>
 #include <QSqlQuery>
 #include <QSqlQueryModel>
+#include "model/settings/session.h"
+#include "model/objects/event.h"
 #include "header/wdg_tab_tn.h"
 #include "../dialogs/participants/header/dlg_tn.h"
 #include "../dialogs/participants/header/dlg_team.h"
@@ -9,11 +11,11 @@
 #include "../dialogs/participants/header/dlg_club.h"
 #include "../dialogs/points/header/dlg_quali.h"
 #include "../global/header/_global.h"
-#include <QDebug>
 #include <QSqlError>
 
 Tab_TN::Tab_TN(QWidget* parent) : QWidget(parent) {
     setupUi(this);
+    event = Session::getInstance()->getEvent();
     tn_model = new QSqlQueryModel();
     tn_sort_model = new QSortFilterProxyModel();
     //tn_sort_model->setFilterCaseSensitivity(Qt::CaseInsensitive);
@@ -47,7 +49,7 @@ Tab_TN::Tab_TN(QWidget* parent) : QWidget(parent) {
 void Tab_TN::loadBestView() {
     QSqlQuery query;
     query.prepare("SELECT COUNT(CASE WHEN int_typ=0 THEN 1 END), COUNT(CASE WHEN int_typ=1 THEN 1 END), COUNT(CASE WHEN int_typ=2 THEN 1 END) FROM tfx_wettkaempfe WHERE int_veranstaltungenid=?");
-    query.bindValue(0,_global::checkHWK());
+    query.bindValue(0, this->event->getMainEventId());
     query.exec();
     query.next();
     if (query.value(1).toInt()>query.value(0).toInt()) {
@@ -77,9 +79,9 @@ void Tab_TN::refresh() {
         fillTNTable2();
         but_timeTN->setEnabled(false);
         but_addCL->setEnabled(false);
-        if (!_global::checkRoundWK()) {
+        if (!this->event->isMultiRoundEvent()) {
             but_copyTN->setVisible(false);
-        } else if (_global::getRunde() > 1) {
+        } else if (this->event->getRound() > 1) {
             but_copyTN->setVisible(true);
         }
     } else if (sta_tables->currentIndex() == 2) {
@@ -95,31 +97,13 @@ void Tab_TN::fillTNTable() {
     cmb_filterTN->clear();
     QSqlQuery query;
     query.prepare("SELECT tfx_wertungen.int_startnummer, tfx_teilnehmer.var_nachname || ', ' || tfx_teilnehmer.var_vorname || CASE WHEN tfx_wertungen.bol_ak THEN ' (AK)' ELSE '' END, "+_global::date("dat_geburtstag",2)+", CASE WHEN tfx_teilnehmer.int_geschlecht=0 THEN 'w' ELSE 'm' END, tfx_vereine.var_name, tfx_wettkaempfe.var_nummer, tfx_wertungen.var_riege, tfx_wertungen.int_wertungenid FROM tfx_wertungen INNER JOIN tfx_teilnehmer USING (int_teilnehmerid) INNER JOIN tfx_vereine USING (int_vereineid) INNER JOIN tfx_wettkaempfe ON tfx_wettkaempfe.int_wettkaempfeid = tfx_wertungen.int_wettkaempfeid WHERE tfx_wettkaempfe.int_veranstaltungenid=? AND int_runde=? AND tfx_wertungen.int_gruppenid IS NULL AND tfx_wertungen.int_mannschaftenid IS NULL ORDER BY tfx_wettkaempfe.var_nummer, "+_global::substring("tfx_vereine.var_name","int_start_ort+1")+", tfx_vereine.var_name, tfx_teilnehmer.var_nachname, tfx_teilnehmer.var_vorname");
-    query.bindValue( 0, _global::checkHWK() );
-    query.bindValue( 1, _global::getRunde());
+    query.bindValue( 0, this->event->getMainEventId() );
+    query.bindValue( 1, this->event->getRound());
     query.exec();
     tn_model->setQuery(query);
-    QHeaderView::ResizeMode resizeModeTN[] = {QHeaderView::Fixed,
-                                              QHeaderView::Stretch,
-                                              QHeaderView::Fixed,
-                                              QHeaderView::Fixed,
-                                              QHeaderView::Stretch,
-                                              QHeaderView::Fixed,
-                                              QHeaderView::Fixed};
-    int resizeTN[] = {40,
-                      200,
-                      40,
-                      40,
-                      200,
-                      45,
-                      45};
-    QString headersTN[7] = {"StNr.",
-                            "Name",
-                            "Geb.",
-                            "m/w",
-                            "Verein",
-                            "WK",
-                            "Riege"};
+    QHeaderView::ResizeMode resizeModeTN[] = {QHeaderView::Fixed, QHeaderView::Stretch, QHeaderView::Fixed, QHeaderView::Fixed, QHeaderView::Stretch, QHeaderView::Fixed, QHeaderView::Fixed};
+    int resizeTN[] = {40, 200, 40, 40, 200, 45, 45};
+    QString headersTN[7] = {"StNr.", "Name", "Geb.", "m/w", "Verein", "WK", "Riege"};
     for (int i=0;i<7;i++) {
         cmb_filterTN->addItem(headersTN[i]);
         tn_model->setHeaderData(i, Qt::Horizontal, headersTN[i]);
@@ -135,7 +119,7 @@ void Tab_TN::fillTNTable2() {
     cmb_filterTN->clear();
     QSqlQuery query;
     query.prepare("SELECT tfx_mannschaften.int_startnummer, tfx_vereine.var_name, tfx_mannschaften.int_nummer || '. Mannschaft', tfx_wettkaempfe.var_nummer, tfx_mannschaften.var_riege, tfx_mannschaften.int_mannschaftenid FROM tfx_mannschaften INNER JOIN tfx_vereine USING (int_vereineid) INNER JOIN tfx_wettkaempfe ON tfx_wettkaempfe.int_wettkaempfeid = tfx_mannschaften.int_wettkaempfeid WHERE tfx_wettkaempfe.int_veranstaltungenid=? ORDER BY tfx_wettkaempfe.var_nummer, "+_global::substring("tfx_vereine.var_name","int_start_ort+1")+", tfx_vereine.var_name, tfx_mannschaften.int_nummer");
-    query.bindValue( 0,_global::checkHWK() );
+    query.bindValue( 0,this->event->getMainEventId() );
     query.exec();
     tn_model2->setQuery(query);
     QHeaderView::ResizeMode resizeModeTN[] = {QHeaderView::Fixed,
@@ -168,8 +152,8 @@ void Tab_TN::fillTNTable3() {
     cmb_filterTN->clear();
     QSqlQuery query;
     query.prepare("SELECT tfx_wertungen.int_startnummer, tfx_gruppen.var_name, tfx_vereine.var_name, tfx_wettkaempfe.var_nummer, tfx_wertungen.var_riege, tfx_gruppen.int_gruppenid FROM tfx_wertungen INNER JOIN tfx_gruppen USING (int_gruppenid) INNER JOIN tfx_vereine USING (int_vereineid) INNER JOIN tfx_wettkaempfe ON tfx_wettkaempfe.int_wettkaempfeid = tfx_wertungen.int_wettkaempfeid WHERE tfx_wettkaempfe.int_veranstaltungenid=? AND int_runde=? ORDER BY tfx_wettkaempfe.var_nummer, "+_global::substring("tfx_vereine.var_name","int_start_ort+1")+", tfx_vereine.var_name, tfx_gruppen.var_name");
-    query.bindValue( 0,_global::checkHWK() );
-    query.bindValue( 1, _global::getRunde());
+    query.bindValue( 0,this->event->getMainEventId() );
+    query.bindValue( 1, this->event->getRound());
     query.exec();
     tn_model3->setQuery(query);
     QHeaderView::ResizeMode resizeModeTN[] = {QHeaderView::Fixed,
@@ -199,27 +183,27 @@ void Tab_TN::fillTNTable3() {
 
 void Tab_TN::addTN() {
     if (sta_tables->currentIndex() == 0) {
-        Tn_Dialog *tn = new Tn_Dialog(0,this);
+        Tn_Dialog *tn = new Tn_Dialog(this->event, 0,this);
         if(tn->exec() == 1) {
             fillTNTable();
         }
     } else if (sta_tables->currentIndex() == 1) {
-        Team_Dialog *tn = new Team_Dialog(0,this);
+        Team_Dialog *tn = new Team_Dialog(this->event, 0,this);
         if(tn->exec() == 1) {
             fillTNTable2();
         }
     } else if (sta_tables->currentIndex() == 2) {
-        Group_Dialog *tn = new Group_Dialog(0,this);
+        Group_Dialog *tn = new Group_Dialog(this->event, 0,this);
         if(tn->exec() == 1) {
             fillTNTable3();
         }
     }
-    _global::updateRgDis();
+    _global::updateRgDis(this->event);
     tn_table->setFocus();
 }
 
 void Tab_TN::addCL() {
-    Club_Dialog *cl = new Club_Dialog(this);
+    Club_Dialog *cl = new Club_Dialog(this->event, this);
     if(cl->exec() == 1) {
         fillTNTable();
     }
@@ -229,7 +213,7 @@ void Tab_TN::editTN() {
     if (sta_tables->currentIndex() == 0) {
         if (tn_table->currentIndex().isValid()) {
             QModelIndex idx = tn_table->currentIndex();
-            Tn_Dialog *tn = new Tn_Dialog(QVariant(tn_sort_model->data(tn_sort_model->index(tn_table->currentIndex().row(),7))).toInt(),this);
+            Tn_Dialog *tn = new Tn_Dialog(this->event, QVariant(tn_sort_model->data(tn_sort_model->index(tn_table->currentIndex().row(),7))).toInt(),this);
             if(tn->exec() == 1) {
                 fillTNTable();
             }
@@ -239,7 +223,7 @@ void Tab_TN::editTN() {
     } else if (sta_tables->currentIndex() == 1) {
         if (tn_table2->currentIndex().isValid()) {
             QModelIndex idx = tn_table2->currentIndex();
-            Team_Dialog *tn = new Team_Dialog(QVariant(tn_sort_model2->data(tn_sort_model2->index(tn_table2->currentIndex().row(),5))).toInt(),this);
+            Team_Dialog *tn = new Team_Dialog(this->event, QVariant(tn_sort_model2->data(tn_sort_model2->index(tn_table2->currentIndex().row(),5))).toInt(),this);
             if(tn->exec() == 1) {
                 fillTNTable2();
             }
@@ -249,7 +233,7 @@ void Tab_TN::editTN() {
     } else if (sta_tables->currentIndex() == 2) {
         if (tn_table3->currentIndex().isValid()) {
             QModelIndex idx = tn_table3->currentIndex();
-            Group_Dialog *tn = new Group_Dialog(QVariant(tn_sort_model3->data(tn_sort_model3->index(tn_table3->currentIndex().row(),5))).toInt(),this);
+            Group_Dialog *tn = new Group_Dialog(this->event, QVariant(tn_sort_model3->data(tn_sort_model3->index(tn_table3->currentIndex().row(),5))).toInt(),this);
             if(tn->exec() == 1) {
                 fillTNTable3();
             }
@@ -257,11 +241,11 @@ void Tab_TN::editTN() {
             tn_table3->setFocus();
         }
     }
-    _global::updateRgDis();
+    _global::updateRgDis(this->event);
 }
 
 void Tab_TN::meldeTN() {
-    Quali_Dialog *ml = new Quali_Dialog(QVariant(tn_sort_model->data(tn_sort_model->index(tn_table->currentIndex().row(),7))).toInt(),this);
+    Quali_Dialog *ml = new Quali_Dialog(this->event, QVariant(tn_sort_model->data(tn_sort_model->index(tn_table->currentIndex().row(),7))).toInt(),this);
     if(ml->exec() == 1) {}
     tn_table->setFocus();
 }
@@ -304,14 +288,14 @@ void Tab_TN::delTN() {
             tn_table3->setFocus();
         }
     }
-    _global::updateRgDis();
+    _global::updateRgDis(this->event);
 }
 
 void Tab_TN::updateMelde() {
     if (tn_table->currentIndex().isValid()) {
         QSqlQuery query;
         query.prepare("SELECT tfx_disziplinen.var_name, int_disziplinenid, int_wertungenid, var_maske FROM tfx_wettkaempfe_x_disziplinen INNER JOIN tfx_disziplinen USING (int_disziplinenid) INNER JOIN tfx_wettkaempfe ON tfx_wettkaempfe.int_wettkaempfeid = tfx_wettkaempfe_x_disziplinen.int_wettkaempfeid INNER JOIN tfx_wertungen ON tfx_wertungen.int_wettkaempfeid = tfx_wettkaempfe.int_wettkaempfeid WHERE int_veranstaltungenid=? AND int_wertungenid=? AND bol_bahnen AND (int_disziplinenid IN (SELECT int_disziplinenid FROM tfx_wertungen_x_disziplinen WHERE int_disziplinenid=tfx_disziplinen.int_disziplinenid AND int_wertungenid=tfx_wertungen.int_wertungenid) OR (SELECT COUNT(*) FROM tfx_wertungen_x_disziplinen WHERE int_wertungenid=tfx_wertungen.int_wertungenid)=0)");
-        query.bindValue(0,_global::getWkNr());
+        query.bindValue(0,this->event->getId());
         query.bindValue(1,QVariant(tn_sort_model->data(tn_sort_model->index(tn_table->currentIndex().row(),7))).toInt());
         query.exec();
         if (_global::querySize(query) <= 0) {
@@ -329,17 +313,17 @@ void Tab_TN::syncTN() {
     if(msg.exec() == QMessageBox::Ok) {
         QSqlQuery query;
         query.prepare("DELETE FROM tfx_wertungen WHERE int_wertungenid IN (SELECT int_wertungenid FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) WHERE int_veranstaltungenid=? AND int_runde=?) AND int_mannschaftenid IS NOT NULL");
-        query.bindValue( 0, _global::checkHWK() );
-        query.bindValue( 1, _global::getRunde());
+        query.bindValue( 0, this->event->getMainEventId() );
+        query.bindValue( 1, this->event->getRound());
         query.exec();
         query.prepare("DELETE FROM tfx_man_x_teilnehmer WHERE int_mannschaftenid IN (SELECT int_mannschaftenid FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) WHERE int_veranstaltungenid=? AND int_runde=?) AND int_runde=?");
-        query.bindValue( 0, _global::checkHWK() );
+        query.bindValue( 0, this->event->getMainEventId() );
         query.bindValue( 1, 1);
-        query.bindValue( 2, _global::getRunde());
+        query.bindValue( 2, this->event->getRound());
         query.exec();
         QSqlQuery query2;
         query2.prepare("SELECT * FROM tfx_wertungen WHERE int_wertungenid IN (SELECT int_wertungenid FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) WHERE int_veranstaltungenid=? AND int_runde=?) AND int_mannschaftenid IS NOT NULL");
-        query2.bindValue( 0, _global::checkHWK() );
+        query2.bindValue( 0, this->event->getMainEventId() );
         query2.bindValue( 1, 1);
         query2.exec();
         while (query2.next()) {
@@ -348,7 +332,7 @@ void Tab_TN::syncTN() {
                 query6.prepare("INSERT INTO tfx_man_x_teilnehmer (int_mannschaftenid,int_teilnehmerid, int_runde) VALUES (?,?,?)");
                 query6.bindValue(0,query2.value(4).toString());
                 query6.bindValue(1,query2.value(2).toString());
-                query6.bindValue(2,_global::getRunde());
+                query6.bindValue(2,this->event->getRound());
                 query6.exec();
             }
             QSqlQuery query7;
@@ -358,12 +342,12 @@ void Tab_TN::syncTN() {
             query7.bindValue( 2, query2.value(10).toString() );
             query7.bindValue( 3, query2.value(8).toBool() );
             query7.bindValue( 4, query2.value(4).toString() );
-            query7.bindValue( 5, _global::getRunde() );
+            query7.bindValue( 5, this->event->getRound() );
             query7.bindValue( 6, query2.value(7).toString() );
             query7.bindValue( 7, 1);
             query7.exec();
         }
-        _global::updateRgDis();
+        _global::updateRgDis(this->event);
         fillTNTable();
     }
 }

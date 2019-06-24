@@ -7,6 +7,8 @@ namespace Ui {
     class Tab_SR;
 }
 
+class Event;
+
 class Tab_SR : public QWidget {
     Q_OBJECT
 
@@ -14,15 +16,19 @@ public:
     explicit Tab_SR(QWidget *parent = 0);
     ~Tab_SR();
     void setRgDis(QString riege, QString dis);
+
 public slots:
     void init();
     QStringList getClubs();
+
 private:
+    Event *event;
     Ui::Tab_SR *ui;
     QList<int> wertungenInList();
     QList<int> wertungenInList2();
     QStringList clubs;
     bool eventFilter(QObject *, QEvent *);
+
 private slots:
     void squadChange(QString squad="");
     void load();

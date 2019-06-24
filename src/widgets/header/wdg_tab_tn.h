@@ -3,16 +3,20 @@
 #include <QWidget>
 #include "ui_wdg_tab_tn.h"
 
+class Event;
 class QSqlQueryModel;
 class QSortFilterProxyModel;
 
 class Tab_TN : public QWidget, public Ui::Tab_TN_Ui {
-    Q_OBJECT;
+    Q_OBJECT
+
 public:
-    Tab_TN(QWidget* parent=0);
+    Tab_TN(QWidget* parent = nullptr);
+
 public slots:
     void loadBestView();
     void refresh();
+
 private slots:
     void fillTNTable();
     void fillTNTable2();
@@ -26,7 +30,9 @@ private slots:
     void syncTN();
     void updateTNFilterColumn(int index);
     void updateTNFilterText(QString text);
-protected:
+
+private:
+    Event *event;
     QSqlQueryModel *tn_model;
     QSqlQueryModel *tn_model2;
     QSqlQueryModel *tn_model3;

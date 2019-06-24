@@ -3,13 +3,16 @@
 #include <QDialog>
 #include "ui_dlg_wk.h"
 
+class Event;
 class QStandardItemModel;
 
 class Wk_Dialog : public QDialog, public Ui::Wk_Dialog_Ui {
-    Q_OBJECT;
+    Q_OBJECT
+
 public:
-    Wk_Dialog(int edit=0, QWidget* parent=0);
-protected slots:
+    Wk_Dialog(Event *event, int edit=0, QWidget* parent = nullptr);
+
+private slots:
     void initData();
     void save();
     void fillTable();
@@ -23,7 +26,9 @@ protected slots:
     void orderMoveDown();
     void orderMoveLeft();
     void orderMoveRight();
-protected:
+
+private:
+    Event *event;
     int editid;
     QStandardItemModel *model;
     QStandardItemModel *model2;

@@ -4,15 +4,18 @@
 #include <QToolBar>
 #include <QSignalMapper>
 #include <QMessageBox>
+#include "model/objects/event.h"
 #include "header/dlg_wk.h"
 #include "../../global/header/_global.h"
 #include "../../global/header/settings.h"
 #include "../../global/header/_delegates.h"
 
-Wk_Dialog::Wk_Dialog(int edit, QWidget* parent) : QDialog(parent) {
+Wk_Dialog::Wk_Dialog(Event *event, int edit, QWidget* parent) : QDialog(parent) {
     setupUi(this);
     setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
-    editid=edit;
+
+    this->event = event;
+    this->editid=edit;
 
     QToolBar *tb = new QToolBar();
     QActionGroup *ag = new QActionGroup(this);
@@ -64,7 +67,7 @@ Wk_Dialog::Wk_Dialog(int edit, QWidget* parent) : QDialog(parent) {
         tbl_disziplinen->horizontalHeader()->setSectionResizeMode(i, resizeMode[i]);
         tbl_disziplinen->horizontalHeader()->resizeSection(i, resize[i]);
     }
-    tbl_disziplinen->setItemDelegateForColumn(7,new dsbxDelegate);
+    tbl_disziplinen->setItemDelegateForColumn(7,new DsbxDelegate);
     enableOptions(0);
     QSqlQuery query;
     query.prepare("SELECT var_name, int_bereicheid FROM tfx_bereiche ORDER BY int_bereicheid");
@@ -193,7 +196,7 @@ void Wk_Dialog::save() {
         query.prepare("UPDATE tfx_wettkaempfe SET int_veranstaltungenid=?, int_bereicheid=?, int_typ=?, var_nummer=?, var_name=?, yer_von=?, yer_bis=?, int_qualifikation=?, int_wertungen=?, bol_streichwertung=?, bol_ak_anzeigen=?, bol_wahlwettkampf=?, int_durchgang=?, int_bahn=?, tim_startzeit=?, tim_einturnen=?, bol_info_anzeigen=?, bol_kp=?, bol_sortasc=?, bol_mansort=?, bol_gerpkt=?, int_anz_streich=? WHERE int_wettkaempfeid=?");
         query.bindValue( 22, editid );
     }
-    query.bindValue(0, _global::checkHWK());
+    query.bindValue(0, this->event->getMainEventId());
     query.bindValue(1, cmb_bereich->itemData(cmb_bereich->currentIndex()));
     query.bindValue(2, cmb_typ->currentIndex());
     query.bindValue(3, txt_wknr->text());
@@ -287,7 +290,7 @@ void Wk_Dialog::save() {
                 for (int i=0;i<model2->rowCount();i++) {
                     if (found) break;
                     for (int j=0;j<model2->columnCount();j++) {
-                        if (model2->item(i,j) == NULL) continue;
+                        if (model2->item(i,j) == nullptr) continue;
                         if (model2->item(i,j)->data().toInt() == query8.value(1).toInt()) {
                             if (kp==0 || model2->item(i,j)->text().right(3)=="(K)") {
                                 QSqlQuery query12;
@@ -471,14 +474,14 @@ void Wk_Dialog::orderMoveUp() {
     if (selIdx.row()==0) return;
     QStandardItem *itm = model2->takeItem(selIdx.row(),selIdx.column());
     QStandardItem *itm2 = model2->takeItem(selIdx.row()-1,selIdx.column());
-    if (itm2 == NULL) itm2 = new QStandardItem("");
+    if (itm2 == nullptr) itm2 = new QStandardItem("");
     QModelIndex newIdx = model2->index(selIdx.row()-1,selIdx.column());
     model2->setItem(selIdx.row(),selIdx.column(),itm2);
     model2->setItem(selIdx.row()-1,selIdx.column(),itm);
     tbl_order->selectionModel()->setCurrentIndex(newIdx,QItemSelectionModel::Select);
     bool check=true;
     for (int i=0;i<model2->columnCount();i++) {
-        if (model2->item(selIdx.row(),i) == NULL) continue;
+        if (model2->item(selIdx.row(),i) == nullptr) continue;
         if (model2->item(selIdx.row(),i)->text() != "") {
             check = false;
             break;
@@ -493,7 +496,7 @@ void Wk_Dialog::orderMoveDown() {
     if (selIdx.row()+1 == model2->rowCount()) model2->insertRow(model2->rowCount());
     QStandardItem *itm = model2->takeItem(selIdx.row(),selIdx.column());
     QStandardItem *itm2 = model2->takeItem(selIdx.row()+1,selIdx.column());
-    if (itm2 == NULL) itm2 = new QStandardItem("");
+    if (itm2 == nullptr) itm2 = new QStandardItem("");
     QModelIndex newIdx = model2->index(selIdx.row()+1,selIdx.column());
     model2->setItem(selIdx.row(),selIdx.column(),itm2);
     model2->setItem(selIdx.row()+1,selIdx.column(),itm);
@@ -506,14 +509,14 @@ void Wk_Dialog::orderMoveLeft() {
     if (selIdx.column()==0) return;
     QStandardItem *itm = model2->takeItem(selIdx.row(),selIdx.column());
     QStandardItem *itm2 = model2->takeItem(selIdx.row(),selIdx.column()-1);
-    if (itm2 == NULL) itm2 = new QStandardItem("");
+    if (itm2 == nullptr) itm2 = new QStandardItem("");
     QModelIndex newIdx = model2->index(selIdx.row(),selIdx.column()-1);
     model2->setItem(selIdx.row(),selIdx.column(),itm2);
     model2->setItem(selIdx.row(),selIdx.column()-1,itm);
     tbl_order->selectionModel()->setCurrentIndex(newIdx,QItemSelectionModel::Select);
     bool check=true;
     for (int i=0;i<model2->rowCount();i++) {
-        if (model2->item(i,selIdx.column()) == NULL) continue;
+        if (model2->item(i,selIdx.column()) == nullptr) continue;
         if (model2->item(i,selIdx.column())->text() != "") {
             check = false;
             break;
@@ -528,7 +531,7 @@ void Wk_Dialog::orderMoveRight() {
     if (selIdx.column()+1 == model2->columnCount()) model2->insertColumn(model2->columnCount());
     QStandardItem *itm = model2->takeItem(selIdx.row(),selIdx.column());
     QStandardItem *itm2 = model2->takeItem(selIdx.row(),selIdx.column()+1);
-    if (itm2 == NULL) itm2 = new QStandardItem("");
+    if (itm2 == nullptr) itm2 = new QStandardItem("");
     QModelIndex newIdx = model2->index(selIdx.row(),selIdx.column()+1);
     model2->setItem(selIdx.row(),selIdx.column(),itm2);
     model2->setItem(selIdx.row(),selIdx.column()+1,itm);

@@ -1,24 +1,28 @@
 #include <QFile>
 #include <QSqlQuery>
 #include <QVariant>
+#include "model/objects/event.h"
 #include "header/trd_progress.h"
 #include "../global/header/settings.h"
 #include "../global/header/_global.h"
 #include "../web/header/web_sendmail.h"
-#include "../export/header/drucken.h"
-#include "../export/ergebnisse/header/detail.h"
-#include "../export/ergebnisse/header/einzel.h"
-#include "../export/ergebnisse/header/runde.h"
-#include "../export/teilnehmerlisten/header/meldung.h"
-#include "../export/teilnehmerlisten/header/riege.h"
-#include "../export/misc/header/meldematrix.h"
-#include "../export/misc/header/zeitplan.h"
+#include "export/print.h"
+#include "export/results/detail.h"
+#include "export/results/individual.h"
+#include "export/results/round.h"
+#include "export/participants/registration.h"
+#include "export/participants/squad.h"
+#include "export/misc/registrationmatrix.h"
+#include "export/misc/timetable.h"
 
-#include <QDebug>
+Progress_Thread::Progress_Thread(Event *event) : QThread()
+{
+    this->event = event;
+}
 
 void Progress_Thread::run() {
-    Drucken::setCoverID(0);
-    Drucken::setDetailInfo(detailinfo);
+    Print::setCoverID(0);
+    Print::setDetailInfo(detailinfo);
     createPDF();
     sendMails();
     delFiles();
@@ -45,7 +49,7 @@ void Progress_Thread::setMailVars(QString sub, QString bod) {
 void Progress_Thread::createPDF() {
     for(int i=0;i<checked.size();i++) {
         if (checked.at(i) == true) {
-            Drucken *ausdruck;
+            Print *ausdruck;
             switch (i) {
             case 0: {
                     for (int j=0; j<vereine.size(); j++) {
@@ -54,10 +58,10 @@ void Progress_Thread::createPDF() {
                         query.bindValue(0,vereine.at(j));
                         query.exec();
                         query.next();
-                        QString send_filename = "Meldeliste_"+ query.value(0).toString().replace(" ","_").replace("‰","ae").replace("ˆ","oe").replace("¸","ue").replace("ﬂ","ss").replace("ƒ","Ae").replace("÷","Oe").replace("‹","Ue") + ".pdf";
+                        QString send_filename = "Meldeliste_"+ query.value(0).toString().replace(" ","_").replace("√§","ae").replace("√∂","oe").replace("√º","ue").replace("√ü","ss").replace("√Ñ","Ae").replace("√ñ","Oe").replace("√ú","Ue") + ".pdf";
                         files.append(send_filename);
                         emit(textChanged("PDF-Dateien werden erzeugt...\n" + send_filename));
-                        ausdruck = new Meldung;
+                        ausdruck = new Registration(this->event);
                         ausdruck->setOutputFileName(send_filename);
                         ausdruck->setVerein(vereine.at(j).toInt());
                         ausdruck->setTypeString("Meldeliste");
@@ -66,35 +70,35 @@ void Progress_Thread::createPDF() {
             case 1: {
                     files.append("Meldeliste.pdf");
                     emit(textChanged("PDF-Dateien werden erzeugt...\nMeldeliste.pdf"));
-                    ausdruck = new Meldung;
+                    ausdruck = new Registration(this->event);
                     ausdruck->setOutputFileName("Meldeliste.pdf");
                     ausdruck->setTypeString("Meldeliste");
                 }; break;
             case 2: {
                     files.append("Meldematrix.pdf");
                     emit(textChanged("PDF-Dateien werden erzeugt...\nMeldematrix.pdf"));
-                    ausdruck = new MeldeMatrix;
+                    ausdruck = new RegistrationMatrix(this->event);
                     ausdruck->setOutputFileName("Meldematrix.pdf");
                     ausdruck->setTypeString("Meldematrix");
                 }; break;
             case 3: {
                     files.append("Riegenlisten.pdf");
                     emit(textChanged("PDF-Dateien werden erzeugt...\nRiegenlisten.pdf"));
-                    ausdruck = new Riege;
+                    ausdruck = new Squad(this->event);
                     ausdruck->setOutputFileName("Riegenlisten.pdf");
                     ausdruck->setTypeString("Riegen");
                 }; break;
             case 4: {
                     files.append("Ergebnisse_mit_Details.pdf");
                     emit(textChanged("PDF-Dateien werden erzeugt...\nErgebnisse_mit_Details.pdf"));
-                    ausdruck = new Detail;
+                    ausdruck = new Detail(this->event);
                     ausdruck->setOutputFileName("Ergebnisse_mit_Details.pdf");
                     ausdruck->setTypeString("Ergebnisse");
                 }; break;
             case 5: {
                     files.append("Ergebnisse_ohne_Details.pdf");
                     emit(textChanged("PDF-Dateien werden erzeugt...\nErgebnisse_ohne_Details.pdf"));
-                    ausdruck = new Einzel;
+                    ausdruck = new Individual(this->event);
                     ausdruck->setOutputFileName("Ergebnisse_ohne_Details.pdf");
                     ausdruck->setTypeString("Ergebnisse");
                 }; break;
@@ -105,10 +109,10 @@ void Progress_Thread::createPDF() {
                         query.bindValue(0,vereine.at(j));
                         query.exec();
                         query.next();
-                        QString send_filename = "Vereinsergebnisse_mit_Details_"+ query.value(0).toString().replace(" ","_").replace("‰","ae").replace("ˆ","oe").replace("¸","ue").replace("ﬂ","ss").replace("ƒ","Ae").replace("÷","Oe").replace("‹","Ue") + ".pdf";
+                        QString send_filename = "Vereinsergebnisse_mit_Details_"+ query.value(0).toString().replace(" ","_").replace("√§","ae").replace("√∂","oe").replace("√º","ue").replace("√ü","ss").replace("√Ñ","Ae").replace("√ñ","Oe").replace("√ú","Ue") + ".pdf";
                         files.append(send_filename);
                         emit(textChanged("PDF-Dateien werden erzeugt...\n" + send_filename));
-                        ausdruck = new Detail;
+                        ausdruck = new Detail(this->event);
                         ausdruck->setOutputFileName(send_filename);
                         ausdruck->setVerein(vereine.at(j).toInt());
                         ausdruck->setTypeString("Ergebnisse");
@@ -121,10 +125,10 @@ void Progress_Thread::createPDF() {
                         query.bindValue(0,vereine.at(j));
                         query.exec();
                         query.next();
-                        QString send_filename = "Vereinsergebnisse_ohne_Details_"+ query.value(0).toString().replace(" ","_").replace("‰","ae").replace("ˆ","oe").replace("¸","ue").replace("ﬂ","ss").replace("ƒ","Ae").replace("÷","Oe").replace("‹","Ue") + ".pdf";
+                        QString send_filename = "Vereinsergebnisse_ohne_Details_"+ query.value(0).toString().replace(" ","_").replace("√§","ae").replace("√∂","oe").replace("√º","ue").replace("√ü","ss").replace("√Ñ","Ae").replace("√ñ","Oe").replace("√ú","Ue") + ".pdf";
                         files.append(send_filename);
                         emit(textChanged("PDF-Dateien werden erzeugt...\n" + send_filename));
-                        ausdruck = new Einzel;
+                        ausdruck = new Individual(this->event);
                         ausdruck->setOutputFileName(send_filename);
                         ausdruck->setVerein(vereine.at(j).toInt());
                         ausdruck->setTypeString("Ergebnisse");
@@ -133,14 +137,14 @@ void Progress_Thread::createPDF() {
             case 8: {
                     files.append("Gesamtergebnisliste.pdf");
                     emit(textChanged("PDF-Dateien werden erzeugt...\nGesamtergebnisliste.pdf"));
-                    ausdruck = new Runde;
+                    ausdruck = new Round(this->event);
                     ausdruck->setOutputFileName("Gesamtergebnisliste.pdf");
                     ausdruck->setTypeString("Ergebnisse");
                 }; break;
             case 9: {
                     files.append("Zeitplan.pdf");
                     emit(textChanged("PDF-Dateien werden erzeugt...\nZeitplan.pdf"));
-                    ausdruck = new Zeitplan;
+                    ausdruck = new Timetable(this->event);
                     ausdruck->setOutputFileName("Zeitplan.pdf");
                     ausdruck->setTypeString("Zeitplan");
                 }; break;
@@ -164,20 +168,20 @@ void Progress_Thread::sendMails() {
             MailSender mail(Settings::smtpServer, Settings::smtpMail, QStringList(query.value(1).toString()));
             mail.setSubject(subject);
             mail.setFromName(Settings::smtpFrom);
-            mail.setBody(body + "\n\n\n\nDiese Email wurde automatisch mit TurnFix generiert.\nCopyright (c) 2008-2010 Christoph Kr‰mer\nhttp://www.turnfix.de");
+            mail.setBody(body + "\n\n\n\nDiese Email wurde automatisch mit TurnFix generiert.\nCopyright (c) 2008-2010 Christoph Kr√§mer\nhttp://www.turnfix.de");
             mail.setLogin(Settings::smtpUser, Settings::smtpPass);
             QStringList attachments;
             for(int j=0;j<checked.size();j++) {
                 if (checked.at(j) == true) {
                     switch(j) {
-                        case 0: attachments.append("Meldeliste_"+ query.value(0).toString().replace(" ","_").replace("‰","ae").replace("ˆ","oe").replace("¸","ue").replace("ﬂ","ss").replace("ƒ","Ae").replace("÷","Oe").replace("‹","Ue") + ".pdf"); break;
+                        case 0: attachments.append("Meldeliste_"+ query.value(0).toString().replace(" ","_").replace("√§","ae").replace("√∂","oe").replace("√º","ue").replace("√ü","ss").replace("√Ñ","Ae").replace("√ñ","Oe").replace("√ú","Ue") + ".pdf"); break;
                         case 1: attachments.append("Meldeliste.pdf"); break;
                         case 2: attachments.append("Meldematrix.pdf"); break;
                         case 3: attachments.append("Riegenlisten.pdf"); break;
                         case 4: attachments.append("Ergebnisse_mit_Details.pdf"); break;
                         case 5: attachments.append("Ergebnisse_ohne_Details.pdf"); break;
-                        case 6: attachments.append("Vereinsergebnisse_mit_Details_"+ query.value(0).toString().replace(" ","_").replace("‰","ae").replace("ˆ","oe").replace("¸","ue").replace("ﬂ","ss").replace("ƒ","Ae").replace("÷","Oe").replace("‹","Ue") + ".pdf"); break;
-                        case 7: attachments.append("Vereinsergebnisse_ohne_Details_"+ query.value(0).toString().replace(" ","_").replace("‰","ae").replace("ˆ","oe").replace("¸","ue").replace("ﬂ","ss").replace("ƒ","Ae").replace("÷","Oe").replace("‹","Ue") + ".pdf"); break;
+                        case 6: attachments.append("Vereinsergebnisse_mit_Details_"+ query.value(0).toString().replace(" ","_").replace("√§","ae").replace("√∂","oe").replace("√º","ue").replace("√ü","ss").replace("√Ñ","Ae").replace("√ñ","Oe").replace("√ú","Ue") + ".pdf"); break;
+                        case 7: attachments.append("Vereinsergebnisse_ohne_Details_"+ query.value(0).toString().replace(" ","_").replace("√§","ae").replace("√∂","oe").replace("√º","ue").replace("√ü","ss").replace("√Ñ","Ae").replace("√ñ","Oe").replace("√ú","Ue") + ".pdf"); break;
                         case 8: attachments.append("Gesamtergebnisliste.pdf"); break;
                         case 9: attachments.append("Zeitplan.pdf"); break;
                     }
@@ -191,7 +195,7 @@ void Progress_Thread::sendMails() {
                 emit message("Critical", "Fehler beim versenden!", "Email an " + query.value(1).toString() + " konnte nicht gesendet werden! Fehlermeldung: "+mail.lastError());
             }
         } else {
-            emit message("Warning", "Keine Emailadresse", "Keine Emailadresse f¸r " + query.value(0).toString() + " vorhanden!");
+            emit message("Warning", "Keine Emailadresse", "Keine Emailadresse f√ºr " + query.value(0).toString() + " vorhanden!");
         }
     }
 }

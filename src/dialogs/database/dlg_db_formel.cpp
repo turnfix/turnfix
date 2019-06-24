@@ -1,8 +1,8 @@
-#include "header/dlg_db_formel.h"
-#include "ui_dlg_db_formel.h"
 #include <QSqlQuery>
 #include <QMessageBox>
-#include "../../libs/fparser/fparser.hh"
+#include "header/dlg_db_formel.h"
+#include "ui_dlg_db_formel.h"
+#include "libs/fparser/fparser.hh"
 
 Formel_Dialog::Formel_Dialog(int fid, QWidget *parent) : QDialog(parent), ui(new Ui::Formel_Dialog) {
     ui->setupUi(this);

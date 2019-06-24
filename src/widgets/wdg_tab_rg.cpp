@@ -2,19 +2,25 @@
 #include <QInputDialog>
 #include <QMessageBox>
 #include <QStandardItemModel>
+#include "model/objects/event.h"
+#include "model/settings/session.h"
+#include "model/viewmodels/assignmenttablemodel.h"
 #include "header/wdg_tab_rg.h"
-#include "../global/header/_delegates.h"
-#include "../global/header/_global.h"
-#include "../models/header/mdl_einteilen.h"
+#include "src/global/header/_delegates.h"
+#include "src/global/header/_global.h"
 #include "others/header/wdg_riegen.h"
 
 Tab_RG::Tab_RG(QWidget* parent) : QWidget(parent) {
     setupUi(this);
-    re_model = new QEinteilTableModel();
-    re_model2 = new QEinteilTableModel();
-    rg_model = new QStandardItemModel();
-    rg_model->setColumnCount(4);
+
+    this->event = Session::getInstance()->getEvent();
+    this->re_model = new AssignmentTableModel(this->event);
+    this->re_model2 = new AssignmentTableModel(this->event);
+    this->rg_model = new QStandardItemModel();
+    this->rg_model->setColumnCount(4);
+
     lst_all->setModel(rg_model);
+
     connect(but_add, SIGNAL(clicked()), this, SLOT(addRiege()));
     connect(lst_all->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)), this, SLOT(fetchRgData()));
     connect(but_add_2, SIGNAL(clicked()), this, SLOT(sendData()));
@@ -35,13 +41,13 @@ void Tab_RG::fillRETable2() {
     QSqlQuery query;
     query.prepare("SELECT var_riege, COUNT(DISTINCT int_teilnehmerid)+(SELECT COUNT(*) FROM tfx_gruppen_x_teilnehmer INNER JOIN tfx_wertungen AS w USING (int_gruppenid) INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) WHERE int_Veranstaltungenid=? AND int_runde=? AND var_riege=tfx_wertungen.var_riege) as count, (SELECT COUNT(*) FROM tfx_mannschaften INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) WHERE int_veranstaltungenid=? AND tfx_mannschaften.var_riege=tfx_wertungen.var_riege),(SELECT COUNT(int_gruppenid) FROM tfx_wertungen AS w WHERE int_veranstaltungenid=? AND int_runde=? AND var_riege=tfx_wertungen.var_riege), (SELECT var_name FROM tfx_riegen_x_disziplinen INNER JOIN tfx_disziplinen USING (int_disziplinenid) WHERE int_veranstaltungenid=tfx_wettkaempfe.int_veranstaltungenid AND int_runde=tfx_wertungen.int_runde AND var_riege=tfx_wertungen.var_riege AND bol_erstes_geraet='true' LIMIT 1) FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) WHERE int_veranstaltungenid=? AND tfx_wertungen.int_runde=? AND var_riege != '' GROUP BY var_riege, int_runde, int_veranstaltungenid");
 
-    query.bindValue(0,_global::checkHWK());
-    query.bindValue(1, _global::getRunde());
-    query.bindValue(2,_global::getWkNr());
-    query.bindValue(3,_global::checkHWK());
-    query.bindValue(4, _global::getRunde());
-    query.bindValue(5,_global::checkHWK());
-    query.bindValue(6, _global::getRunde());
+    query.bindValue(0, this->event->getMainEventId());
+    query.bindValue(1, this->event->getRound());
+    query.bindValue(2, this->event->getId());
+    query.bindValue(3, this->event->getMainEventId());
+    query.bindValue(4, this->event->getRound());
+    query.bindValue(5, this->event->getMainEventId());
+    query.bindValue(6, this->event->getRound());
     query.exec();
     while (query.next()) {
         tbl_list->setEnabled(true);
@@ -70,7 +76,7 @@ void Tab_RG::fillRETable2() {
     lst_all->horizontalHeader()->resizeSection(2, 45);
     lst_all->horizontalHeader()->resizeSection(3, 45);
     lst_all->horizontalHeader()->resizeSection(4, 90);
-    lst_all->setItemDelegateForColumn(4,new cmbDelegate);
+    lst_all->setItemDelegateForColumn(4,new CmbDelegate(this->event));
     lst_all->selectRow(0);
 }
 
@@ -79,7 +85,7 @@ void Tab_RG::sendData() {
     for (int i=list.size()-1;i>=0;i--) {
         re_model->insertRow(re_model2->takeRow(list.at(i).row()));
     }
-    _global::updateRgDis();
+    _global::updateRgDis(this->event);
     re_model->setTableData();
     re_model2->setTableData();
     setRiegenData();
@@ -90,7 +96,7 @@ void Tab_RG::getData() {
     for (int i=list.size()-1;i>=0;i--) {
         re_model2->insertRow(re_model->takeRow(list.at(i).row()));
     }
-    _global::updateRgDis();
+    _global::updateRgDis(this->event);
     re_model->setTableData();
     re_model2->setTableData();
     setRiegenData();
@@ -143,9 +149,9 @@ void Tab_RG::updateRiege() {
 void Tab_RG::setRiegenData() {
     QSqlQuery query;
     query.prepare("SELECT COUNT(DISTINCT int_teilnehmerid) as count, (SELECT COUNT(*) FROM tfx_mannschaften INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) WHERE int_veranstaltungenid=? AND tfx_mannschaften.var_riege=tfx_wertungen.var_riege) FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) WHERE int_veranstaltungenid=? AND tfx_wertungen.int_runde=? AND var_riege=? GROUP BY var_riege");
-    query.bindValue(0, _global::getWkNr());
-    query.bindValue(1, _global::checkHWK());
-    query.bindValue(2, _global::getRunde());
+    query.bindValue(0, this->event->getId());
+    query.bindValue(1, this->event->getMainEventId());
+    query.bindValue(2, this->event->getRound());
     query.bindValue(3, rg_model->item(lst_all->selectionModel()->currentIndex().row(),0)->text());
     query.exec();
     query.next();
@@ -157,7 +163,7 @@ void Tab_RG::removeRiege() {
     re_model->updateRiege("");
     rg_model->removeRow(lst_all->selectionModel()->currentIndex().row());
     re_model2->setTableData();
-    if (rg_model->item(0,0) == NULL) {
+    if (rg_model->item(0,0) == nullptr) {
         re_model->setRiege("#####");
         txt_nummer->setText("");
         tbl_list->setEnabled(false);

@@ -1,17 +1,19 @@
 #include <QSqlQuery>
 #include <QSqlQueryModel>
 #include <QStandardItemModel>
+#include "model/objects/event.h"
 #include "header/dlg_club.h"
 #include "ui_dlg_club.h"
 #include "../../global/header/_global.h"
 
-Club_Dialog::Club_Dialog(QWidget *parent) : QDialog(parent), ui(new Ui::Club_Dialog) {
+Club_Dialog::Club_Dialog(Event *event, QWidget *parent) : QDialog(parent), ui(new Ui::Club_Dialog) {
     ui->setupUi(this);
     setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
 
-    model = new QStandardItemModel();
-    model->setColumnCount(5);
-    model2 = new QSqlQueryModel();
+    this->event = event;
+    this->model = new QStandardItemModel();
+    this->model->setColumnCount(5);
+    this->model2 = new QSqlQueryModel();
     ui->tbl_tn->setModel(model);
     ui->tbl_list->setModel(model2);
     QHeaderView::ResizeMode resizeMode[] = {QHeaderView::Stretch, QHeaderView::ResizeToContents, QHeaderView::ResizeToContents, QHeaderView::ResizeToContents, QHeaderView::Fixed};
@@ -25,7 +27,7 @@ Club_Dialog::Club_Dialog(QWidget *parent) : QDialog(parent), ui(new Ui::Club_Dia
 
     QSqlQuery query2;
     query2.prepare("SELECT int_wettkaempfeid, var_nummer, var_name, int_typ FROM tfx_wettkaempfe WHERE int_veranstaltungenid=? AND int_typ=0 ORDER BY var_nummer ASC");
-    query2.bindValue( 0, _global::getWkNr() );
+    query2.bindValue( 0, this->event->getId());
     query2.exec();
     while (query2.next()) {
         ui->cmb_wk->addItem(query2.value(1).toString() + " " + query2.value(2).toString(),query2.value(0).toInt());
@@ -82,7 +84,7 @@ void Club_Dialog::updateTable() {
     query3.prepare(query);
     query3.bindValue(0,ui->cmb_club->itemData(ui->cmb_club->currentIndex()));
     if (ui->chk_vp->isChecked()) {
-        query3.bindValue(1,_global::checkHWK());
+        query3.bindValue(1, this->event->getMainEventId());
     }
     query3.exec();
     model2->setQuery(query3);
@@ -120,8 +122,8 @@ void Club_Dialog::save() {
     for (int i=0;i<lst_int_ids.size();i++) {
         QSqlQuery query20;
         query20.prepare("SELECT MAX(int_startnummer) FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) INNER JOIN tfx_teilnehmer ON tfx_teilnehmer.int_teilnehmerid = tfx_wertungen.int_teilnehmerid INNER JOIN tfx_vereine USING (int_vereineid) WHERE int_veranstaltungenid=? AND int_runde=?");
-        query20.bindValue(0, _global::getWkNr());
-        query20.bindValue(1, _global::getRunde());
+        query20.bindValue(0, this->event->getId());
+        query20.bindValue(1, this->event->getRound());
         query20.exec();
         query20.next();
         QSqlQuery query7;
@@ -133,7 +135,7 @@ void Club_Dialog::save() {
         } else {
             query7.bindValue(2,false);
         }
-        query7.bindValue( 3, _global::getRunde() );
+        query7.bindValue( 3, this->event->getRound() );
         query7.bindValue( 4, (query20.value(0).toInt()+1) );
         if (model->item(i,3)->checkState() == Qt::Checked) {
             query7.bindValue(5,true);

@@ -1,9 +1,10 @@
 #ifndef LOCATION_H
 #define LOCATION_H
 
-#include "tfobject.h"
+#include <QObject>
+#include "model/database/tfsqlquery.h"
 
-class Location : public TFObject
+class Location : public QObject
 {
     Q_OBJECT
 public:

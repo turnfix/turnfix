@@ -3,14 +3,15 @@
 #include <QDialog>
 #include "ui_dlg_bogen.h"
 
-class QRiegenTableModel;
+class SquadTableModel;
+class Event;
 
 class WK_Bogen : public QDialog, public Ui::WK_Bogen_Ui {
     Q_OBJECT;
 public:
-    WK_Bogen(QWidget* parent=0);
+    WK_Bogen(Event *event, QWidget* parent=0);
     void init(QString riege, int geraet, bool kuer);
-    QRiegenTableModel *pe_model;
+    SquadTableModel *pe_model;
 private slots:
     void fillPETable();
     void finishEdit();
@@ -18,6 +19,7 @@ private slots:
     void saveClose();
     void saveJuryMethod();
 private:
+    Event *event;
     void calc();
     QString riege;
     int geraet;

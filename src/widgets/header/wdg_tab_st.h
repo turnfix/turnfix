@@ -3,16 +3,21 @@
 #include <QWidget>
 #include "ui_wdg_tab_st.h"
 
+class Event;
 class QSortFilterProxyModel;
 class QStatusTableModel;
 
 class Tab_ST : public QWidget, public Ui::Tab_ST_Ui {
-    Q_OBJECT;
+    Q_OBJECT
+
 public:
-    Tab_ST(QWidget* parent=0);
+    Tab_ST(QWidget* parent = nullptr);
+
 public slots:
     void updateStatus();
-protected:
+
+private:
+    Event *event;
     QStatusTableModel *mdl_status1;
     QStatusTableModel *mdl_status2;
     QSortFilterProxyModel *mdl_sort_status1;

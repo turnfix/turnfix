@@ -1,17 +1,21 @@
 #include <QSqlQuery>
 #include <QMessageBox>
 #include <math.h>
+#include "libs/fparser/fparser.hh"
+#include "model/objects/event.h"
+#include "model/viewmodels/squadtablemodel.h"
 #include "header/dlg_bogen.h"
 #include "../../global/header/_delegates.h"
 #include "../../global/header/_global.h"
 #include "../../global/header/settings.h"
-#include "../../models/header/mdl_riege.h"
-#include "../../libs/fparser/fparser.hh"
 
-WK_Bogen::WK_Bogen(QWidget* parent) : QDialog(parent) {
+WK_Bogen::WK_Bogen(Event *event, QWidget* parent) : QDialog(parent) {
     setupUi(this);
     setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint | Qt::WindowMaximizeButtonHint);
-    pe_model = new QRiegenTableModel();
+
+    this->event = event;
+
+    pe_model = new SquadTableModel(event);
     pe_table->setModel(pe_model);
     chk_jury->setChecked(Settings::juryResults);
     connect(but_save, SIGNAL(clicked()), this, SLOT(saveClose()));
@@ -48,10 +52,10 @@ void WK_Bogen::init(QString r, int g, bool k) {
     }
     QSqlQuery query2;
     query2.prepare("SELECT int_statusid FROM tfx_riegen_x_disziplinen WHERE int_veranstaltungenid=? AND int_disziplinenid=? AND var_riege=? AND int_runde=?");
-    query2.bindValue(0, _global::checkHWK());
+    query2.bindValue(0, this->event->getMainEventId());
     query2.bindValue(1, geraet);
     query2.bindValue(2, riege);
-    query2.bindValue(3, _global::getRunde());
+    query2.bindValue(3, this->event->getRound());
     query2.exec();
     query2.next();
     cmb_status1->setCurrentIndex(cmb_status1->findData(query2.value(0).toInt()));
@@ -82,11 +86,11 @@ void WK_Bogen::fillPETable() {
         pe_table->horizontalHeader()->setSectionResizeMode(i, resizeMode[i]);
         pe_table->horizontalHeader()->resizeSection(i, resize[i]);
         if (i > 3) {
-            editorDelegate *ed = new editorDelegate;
+            EditorDelegate *ed = new EditorDelegate;
             connect(ed, SIGNAL(closeEditor(QWidget*,QAbstractItemDelegate::EndEditHint)), this, SLOT(finishEdit()));
             pe_table->setItemDelegateForColumn(i,ed);
         } else if (i==3) {
-            pe_table->setItemDelegateForColumn(i,new alignCItemDelegate);
+            pe_table->setItemDelegateForColumn(i,new AlignCItemDelegate);
         }
     }
     if (versuche>1) {
@@ -122,10 +126,10 @@ void WK_Bogen::statusChange1() {
     QSqlQuery query;
     query.prepare("UPDATE tfx_riegen_x_disziplinen SET int_statusid=? WHERE int_veranstaltungenid=? AND int_disziplinenid=? AND var_riege=? AND int_runde=?");
     query.bindValue(0, cmb_status1->itemData(cmb_status1->currentIndex()).toInt());
-    query.bindValue(1, _global::checkHWK());
+    query.bindValue(1, this->event->getMainEventId());
     query.bindValue(2, geraet);
     query.bindValue(3, riege);
-    query.bindValue(4, _global::getRunde());
+    query.bindValue(4, this->event->getRound());
     query.exec();
 }
 

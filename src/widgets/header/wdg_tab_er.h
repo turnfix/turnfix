@@ -4,15 +4,19 @@
 #include "ui_wdg_tab_er.h"
 
 class QErgebnisTableModel;
+class Event;
 
 class Tab_ER : public QWidget, public Ui::Tab_ER_Ui {
-    Q_OBJECT;
+    Q_OBJECT
 public:
-    Tab_ER(QWidget* parent=0);
+    Tab_ER(QWidget* parent = nullptr);
+
 public slots:
     void fillERTable();
     void updateERList();
-protected:
+
+private:
     QErgebnisTableModel *er_model;
+    Event *event;
 };
 #endif

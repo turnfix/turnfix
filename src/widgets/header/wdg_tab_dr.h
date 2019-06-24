@@ -4,14 +4,17 @@
 #include <QPrinter>
 #include "ui_wdg_tab_dr.h"
 
-class Drucken;
+class Print;
+class Event;
 class QPrintPreviewDialog;
 
 class Tab_DR : public QWidget, public Ui::Tab_DR_Ui {
     Q_OBJECT
+
 public:
     Tab_DR(QWidget* parent = nullptr);
     void updateData();
+
 private slots:
     void csvGesamt();
     void csvRunde();
@@ -25,8 +28,9 @@ private slots:
     void showPrintPreview(QPrinter*);
 
 private:
+    Event *event;
     void createCSV(int mode);
-    Drucken *ausdruck;
+    Print *ausdruck;
     QPrintPreviewDialog *dialog;
 };
 #endif

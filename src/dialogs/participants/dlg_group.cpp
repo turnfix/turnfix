@@ -3,6 +3,7 @@
 #include <QStandardItemModel>
 #include <QToolBar>
 #include <QSignalMapper>
+#include "model/objects/event.h"
 #include "header/dlg_group.h"
 #include "../database/header/dlg_db_tn.h"
 #include "../database/header/dlg_db_club.h"
@@ -11,10 +12,12 @@
 
 #include <QDebug>
 
-Group_Dialog::Group_Dialog(int edit, QWidget* parent) : QDialog(parent) {
+Group_Dialog::Group_Dialog(Event *event, int edit, QWidget* parent) : QDialog(parent) {
     setupUi(this);
     setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
-    editid=edit;
+
+    this->editid = edit;
+    this->event = event;
 
     QToolBar *tb = new QToolBar();
     QActionGroup *ag = new QActionGroup(this);
@@ -87,7 +90,7 @@ void Group_Dialog::initData() {
     updateClubs();
     QSqlQuery query2;
     query2.prepare("SELECT int_wettkaempfeid, var_nummer, var_name FROM tfx_wettkaempfe WHERE int_veranstaltungenid=? AND int_typ=2 ORDER BY var_nummer ASC");
-    query2.bindValue(0,_global::checkHWK());
+    query2.bindValue(0, this->event->getMainEventId());
     query2.exec();
     while (query2.next()) {
         cmb_wk->addItem(query2.value(1).toString() + " " + query2.value(2).toString(),query2.value(0).toInt());
@@ -172,12 +175,12 @@ void Group_Dialog::save() {
     query6.bindValue(0, cmb_wk->itemData(cmb_wk->currentIndex()));
     query6.bindValue(1, group);
     query6.bindValue(2, cmb_status->itemData(cmb_status->currentIndex()));
-    query6.bindValue(3, _global::getRunde());
+    query6.bindValue(3, this->event->getRound());
     if (editid == 0) {
         QSqlQuery query2;
         query2.prepare("SELECT MAX(int_startnummer) FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) INNER JOIN tfx_teilnehmer ON tfx_teilnehmer.int_teilnehmerid = tfx_wertungen.int_teilnehmerid INNER JOIN tfx_vereine USING (int_vereineid) WHERE int_veranstaltungenid=? AND int_runde=?");
-        query2.bindValue(0, _global::getWkNr());
-        query2.bindValue(1, _global::getRunde());
+        query2.bindValue(0, this->event->getId());
+        query2.bindValue(1, this->event->getRound());
         query2.exec();
         query2.next();
         query6.bindValue(4,query2.value(0).toInt()+1);
@@ -365,12 +368,12 @@ void Group_Dialog::fillTable2() {
     if (chk_club->isChecked() && chk_planned->isChecked()) {
         query2.next();
         query3.bindValue(0,query2.value(0).toInt());
-        query3.bindValue(1,_global::checkHWK());
+        query3.bindValue(1,this->event->getMainEventId());
     } else if (chk_club->isChecked() ) {
         query2.next();
         query3.bindValue(0,query2.value(0).toInt());
     } else {
-        query3.bindValue(0,_global::checkHWK());
+        query3.bindValue(0,this->event->getMainEventId());
     }
     query3.exec();
     model2->setQuery(query3);

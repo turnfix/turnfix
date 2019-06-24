@@ -2,15 +2,17 @@
 #include <QMessageBox>
 #include <QToolBar>
 #include <QSignalMapper>
+#include "model/objects/event.h"
 #include "header/dlg_tn.h"
 #include "../database/header/dlg_db_club.h"
 #include "../../global/header/_global.h"
 
-Tn_Dialog::Tn_Dialog(int edit, QWidget* parent) : QDialog(parent) {
+Tn_Dialog::Tn_Dialog(Event *event, int edit, QWidget* parent) : QDialog(parent) {
     editid=edit;
     setupUi(this);
     setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
 
+    this->event = event;
 
     QToolBar *tb = new QToolBar();
     QActionGroup *ag = new QActionGroup(this);
@@ -34,7 +36,7 @@ Tn_Dialog::Tn_Dialog(int edit, QWidget* parent) : QDialog(parent) {
 
 
     cmb_sex->addItem("weiblich",0);
-    cmb_sex->addItem("männlich",1);
+    cmb_sex->addItem("mÃ¤nnlich",1);
     cmb_name->addItem("",0);
     QSqlQuery query3("SELECT int_teilnehmerid, var_nachname || ', ' || var_vorname FROM tfx_teilnehmer ORDER BY var_nachname,var_vorname  ASC");
     while (query3.next()) {
@@ -72,7 +74,7 @@ void Tn_Dialog::changeDat() {
 void Tn_Dialog::initData() {
     QSqlQuery query2;
     query2.prepare("SELECT int_wettkaempfeid, var_nummer, var_name, int_typ FROM tfx_wettkaempfe WHERE int_veranstaltungenid=? AND int_typ=0 ORDER BY var_nummer ASC");
-    query2.bindValue( 0, _global::getWkNr() );
+    query2.bindValue(0, this->event->getId());
     query2.exec();
     while (query2.next()) {
         cmb_wk->addItem(query2.value(1).toString() + " " + query2.value(2).toString(),query2.value(0).toInt());
@@ -92,7 +94,7 @@ void Tn_Dialog::initData() {
         chk_nostart->setChecked(query3.value(5).toBool());
         cmb_status->setCurrentIndex(cmb_status->findData(query3.value(6).toInt()));
         txt_comment->setText(query3.value(7).toString());
-        QObject::disconnect(cmb_name,0,0,0);
+        QObject::disconnect(cmb_name, nullptr, nullptr, nullptr);
     }
 }
 
@@ -136,20 +138,20 @@ void Tn_Dialog::save() {
         }
         QSqlQuery query10;
         query10.prepare("SELECT tfx_teilnehmer.int_teilnehmerid FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) INNER JOIN tfx_veranstaltungen USING (int_veranstaltungenid) INNER JOIN tfx_teilnehmer ON tfx_teilnehmer.int_teilnehmerid = tfx_wertungen.int_teilnehmerid WHERE int_veranstaltungenid=? AND tfx_teilnehmer.int_teilnehmerid=?");
-        query10.bindValue( 0, _global::getWkNr() );
-        query10.bindValue( 1, tnid );
+        query10.bindValue(0, this->event->getId());
+        query10.bindValue(1, tnid);
         query10.exec();
         bool cont = true;
         if (_global::querySize(query10) > 0) {
-            QMessageBox msg(QMessageBox::Warning, "Teilnehmer vorhanden!", "Dieser Teilnehmer ist bereits für diese Veranstaltung eingetragen! Soll er trotzdem hinzugefügt werden?", QMessageBox::Yes | QMessageBox::No);
+            QMessageBox msg(QMessageBox::Warning, "Teilnehmer vorhanden!", "Dieser Teilnehmer ist bereits fÃ¼r diese Veranstaltung eingetragen! Soll er trotzdem hinzugefÃ¼gt werden?", QMessageBox::Yes | QMessageBox::No);
             int ret = msg.exec();
             if (ret == QMessageBox::No) cont = false;
         }
         if (cont) {
             QSqlQuery query2;
             query2.prepare("SELECT MAX(int_startnummer) FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) WHERE int_veranstaltungenid=? AND int_runde=?");
-            query2.bindValue(0, _global::checkHWK());
-            query2.bindValue(1, _global::getRunde());
+            query2.bindValue(0, this->event->getMainEventId());
+            query2.bindValue(1, this->event->getRound());
             query2.exec();
             query2.next();
             QSqlQuery query;
@@ -160,7 +162,7 @@ void Tn_Dialog::save() {
             query.bindValue( 3, chk_ak->isChecked() );
             query.bindValue( 4, (query2.value(0).toInt()+1) );
             query.bindValue( 5, chk_nostart->isChecked());
-            query.bindValue( 6, _global::getRunde());
+            query.bindValue( 6, this->event->getRound());
             query.bindValue( 7, cmb_status->itemData(cmb_status->currentIndex()));
             query.bindValue( 8, txt_comment->text());
             query.exec();
@@ -319,7 +321,7 @@ void Tn_Dialog::checkJg() {
         if (query.value(1).toInt() == 2) {
             if (dae_year->date().toString("yyyy").toInt() < query.value(0).toInt()) {
                 lbl_control->setStyleSheet("QLabel { background-color: red }\nQLabel { color: white }");
-                lbl_control->setText("Jahrgangsüberprüfung fehlgeschlagen!");
+                lbl_control->setText("JahrgangsÃ¼berprÃ¼fung fehlgeschlagen!");
             } else {
                 lbl_control->setStyleSheet("");
                 lbl_control->setText("");
@@ -327,7 +329,7 @@ void Tn_Dialog::checkJg() {
         } else if (query.value(1).toInt() == 1) {
             if (dae_year->date().toString("yyyy").toInt() > query.value(0).toInt()) {
                 lbl_control->setStyleSheet("QLabel { background-color: red }\nQLabel { color: white }");
-                lbl_control->setText("Jahrgangsüberprüfung fehlgeschlagen!");
+                lbl_control->setText("JahrgangsÃ¼berprÃ¼fung fehlgeschlagen!");
             } else {
                 lbl_control->setStyleSheet("");
                 lbl_control->setText("");
@@ -338,7 +340,7 @@ void Tn_Dialog::checkJg() {
                 lbl_control->setText("");
             } else {
                 lbl_control->setStyleSheet("QLabel { background-color: red }\nQLabel { color: white }");
-                lbl_control->setText("Jahrgangsüberprüfung fehlgeschlagen!");
+                lbl_control->setText("JahrgangsÃ¼berprÃ¼fung fehlgeschlagen!");
             }
         } else {
             lbl_control->setStyleSheet("");

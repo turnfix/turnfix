@@ -4,6 +4,7 @@
 #include "ui_logindialog.h"
 #include "model/database/db.h"
 #include "model/settings/session.h"
+#include "model/objects/event.h"
 #include "model/viewmodels/eventtablemodel.h"
 #include "src/dialogs/wk/header/dlg_event.h"
 
@@ -68,7 +69,7 @@ void LoginDialog::checkDatabase()
 
 void LoginDialog::createEvent()
 {
-    Event_Dialog *nwkw = new Event_Dialog();
+    Event_Dialog *nwkw = new Event_Dialog(new Event);
     if (nwkw->exec() == 1) {
         eventTableModel->getEvents();
     }

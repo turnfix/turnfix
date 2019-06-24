@@ -7,6 +7,7 @@ namespace Ui {
     class Club_Dialog;
 }
 
+class Event;
 class QSqlQueryModel;
 class QStandardItemModel;
 
@@ -15,7 +16,7 @@ class Club_Dialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit Club_Dialog(QWidget *parent = 0);
+    explicit Club_Dialog(Event *event, QWidget *parent = 0);
     ~Club_Dialog();
 
 private slots:
@@ -26,6 +27,7 @@ private slots:
     void save();
 
 private:
+    Event *event;
     Ui::Club_Dialog *ui;
     QStandardItemModel *model;
     QSqlQueryModel *model2;

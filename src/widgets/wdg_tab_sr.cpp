@@ -1,5 +1,7 @@
 #include <QSqlQuery>
 #include <QKeyEvent>
+#include "model/settings/session.h"
+#include "model/objects/event.h"
 #include "header/wdg_tab_sr.h"
 #include "ui_wdg_tab_sr.h"
 #include "../global/header/_global.h"
@@ -10,6 +12,9 @@
 Tab_SR::Tab_SR(QWidget *parent) : QWidget(parent), ui(new Ui::Tab_SR) {
     ui->setupUi(this);
     ui->listWidget_2->installEventFilter(this);
+
+    this->event = Session::getInstance()->getEvent();
+
     connect(ui->cmb_riege, SIGNAL(currentIndexChanged(QString)), this, SLOT(squadChange(QString)));
     connect(ui->cmb_dis, SIGNAL(currentIndexChanged(int)), this, SLOT(load()));
     connect(ui->but_reset, SIGNAL(clicked()), this, SLOT(reset()));
@@ -26,8 +31,8 @@ void Tab_SR::init() {
     ui->cmb_riege->clear();
     QSqlQuery query2;
     query2.prepare("SELECT DISTINCT(var_riege) FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) WHERE int_veranstaltungenid=? AND int_runde=? ORDER BY var_riege");
-    query2.bindValue(0,_global::checkHWK());
-    query2.bindValue(1,_global::getRunde());
+    query2.bindValue(0, this->event->getMainEventId());
+    query2.bindValue(1, this->event->getRound());
     query2.exec();
     while (query2.next()) {
         ui->cmb_riege->addItem(query2.value(0).toString(),query2.value(0).toString());
@@ -38,8 +43,8 @@ void Tab_SR::squadChange(QString squadno) {
     ui->cmb_dis->clear();
     QSqlQuery query;
     query.prepare("SELECT DISTINCT int_disziplinenid, tfx_disziplinen.var_name, var_icon, CASE WHEN tfx_wettkaempfe.bol_kp='true' OR tfx_wettkaempfe_x_disziplinen.bol_kp='true' THEN 1 ELSE 0 END as kp FROM tfx_disziplinen INNER JOIN tfx_wettkaempfe_x_disziplinen USING (int_disziplinenid) INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) INNER JOIN tfx_wertungen USING (int_wettkaempfeid) WHERE int_veranstaltungenid=? AND var_riege=? ORDER BY tfx_disziplinen.var_name, kp");
-    query.bindValue(0,_global::checkHWK());
-    query.bindValue(1,squadno);
+    query.bindValue(0, this->event->getMainEventId());
+    query.bindValue(1 ,squadno);
     query.exec();
     while (query.next()) {
         QString name = query.value(1).toString();
@@ -48,7 +53,7 @@ void Tab_SR::squadChange(QString squadno) {
         }
         ui->cmb_dis->addItem(QIcon(query.value(2).toString()),name,query.value(0).toInt());
         if (query.value(3).toInt() == 1) {
-            ui->cmb_dis->addItem(QIcon(query.value(2).toString()),query.value(1).toString()+" (Kür)",query.value(0).toInt());
+            ui->cmb_dis->addItem(QIcon(query.value(2).toString()),query.value(1).toString()+" (KÃ¼r)",query.value(0).toInt());
         }
     }
 }
@@ -60,15 +65,15 @@ void Tab_SR::load() {
     ui->listWidget->clear();
     ui->listWidget_2->clear();
     bool kuer=false;
-    if (ui->cmb_dis->currentText().right(5) == "(Kür)") kuer = true;
+    if (ui->cmb_dis->currentText().right(5) == "(KÃ¼r)") kuer = true;
     QSqlQuery query4;
     query4.prepare("SELECT CASE WHEN tfx_gruppen.int_gruppenid IS NULL THEN var_vorname || ' ' || var_nachname ELSE tfx_gruppen.var_name END, tfx_vereine.var_name, tfx_wertungen.int_wertungenid, int_pos FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) LEFT JOIN tfx_teilnehmer ON tfx_teilnehmer.int_teilnehmerid = tfx_wertungen.int_teilnehmerid LEFT JOIN tfx_gruppen ON tfx_gruppen.int_gruppenid = tfx_wertungen.int_gruppenid LEFT JOIN tfx_mannschaften ON tfx_mannschaften.int_mannschaftenid = tfx_wertungen.int_mannschaftenid INNER JOIN tfx_vereine ON tfx_vereine.int_vereineid = tfx_teilnehmer.int_vereineid OR tfx_vereine.int_vereineid = tfx_gruppen.int_vereineid LEFT JOIN tfx_startreihenfolge ON tfx_startreihenfolge.int_wertungenid = tfx_wertungen.int_wertungenid AND tfx_startreihenfolge.int_disziplinenid=? AND tfx_startreihenfolge.int_kp=? INNER JOIN tfx_wettkaempfe_x_disziplinen ON tfx_wettkaempfe_x_disziplinen.int_wettkaempfeid = tfx_wettkaempfe.int_wettkaempfeid AND tfx_wettkaempfe_x_disziplinen.int_disziplinenid=? WHERE int_veranstaltungenid=? AND tfx_wertungen.var_riege=? AND int_runde=? AND bol_startet_nicht='false' AND ((SELECT COUNT(*) FROM tfx_wettkaempfe_x_disziplinen WHERE int_disziplinenid=? AND int_wettkaempfeid=tfx_wettkaempfe.int_wettkaempfeid)>0 AND (NOT EXISTS (SELECT int_wertungen_x_disziplinenid FROM tfx_wertungen_x_disziplinen WHERE int_wertungenid=tfx_wertungen.int_wertungenid) OR EXISTS (SELECT int_wertungen_x_disziplinenid FROM tfx_wertungen_x_disziplinen WHERE tfx_wertungen_x_disziplinen.int_wertungenid=tfx_wertungen.int_wertungenid AND tfx_wertungen_x_disziplinen.int_disziplinenid=?))) AND (CASE WHEN tfx_wettkaempfe.bol_kp='true' OR tfx_wettkaempfe_x_disziplinen.bol_kp='true' THEN 'true' ELSE 'false' END = 'true' OR ?='true') ORDER BY int_pos, tfx_wettkaempfe.var_nummer, tfx_mannschaften.int_nummer, tfx_mannschaften.int_mannschaftenid, tfx_wertungen.int_startnummer");
     query4.bindValue(0, ui->cmb_dis->itemData(ui->cmb_dis->currentIndex()));
     query4.bindValue(1, (int)kuer);
     query4.bindValue(2, ui->cmb_dis->itemData(ui->cmb_dis->currentIndex()));
-    query4.bindValue(3, _global::checkHWK());
+    query4.bindValue(3, this->event->getMainEventId());
     query4.bindValue(4, ui->cmb_riege->currentText());
-    query4.bindValue(5, _global::getRunde());
+    query4.bindValue(5, this->event->getRound());
     query4.bindValue(6, ui->cmb_dis->itemData(ui->cmb_dis->currentIndex()));
     query4.bindValue(7, ui->cmb_dis->itemData(ui->cmb_dis->currentIndex()));
     query4.bindValue(8, !kuer);
@@ -93,7 +98,7 @@ void Tab_SR::load() {
 
 void Tab_SR::reset() {
     int kuer=0;
-    if (ui->cmb_dis->currentText().right(5) == "(Kür)") kuer = 1;
+    if (ui->cmb_dis->currentText().right(5) == "(KÃ¼r)") kuer = 1;
     QSqlQuery query;
     query.prepare("DELETE FROM tfx_startreihenfolge WHERE int_disziplinenid=? AND int_kp=? AND (int_wertungenid IN ("+_global::intListToString(wertungenInList())+") OR int_wertungenid IN ("+_global::intListToString(wertungenInList2())+"))");
     query.bindValue(0,ui->cmb_dis->itemData(ui->cmb_dis->currentIndex()));
@@ -104,7 +109,7 @@ void Tab_SR::reset() {
 
 void Tab_SR::itemDropped() {
     int kuer=0;
-    if (ui->cmb_dis->currentText().right(5) == "(Kür)") kuer = 1;
+    if (ui->cmb_dis->currentText().right(5) == "(KÃ¼r)") kuer = 1;
     QList<int> ids = wertungenInList2();
     QSqlQuery query2;
     query2.prepare("SELECT int_startreihenfolgeid FROM tfx_startreihenfolge WHERE int_disziplinenid=? AND int_kp=? AND int_wertungenid=?");
@@ -132,7 +137,7 @@ void Tab_SR::itemDropped() {
 
 void Tab_SR::itemRemoved() {
     int kuer=0;
-    if (ui->cmb_dis->currentText().right(5) == "(Kür)") kuer = 1;
+    if (ui->cmb_dis->currentText().right(5) == "(KÃ¼r)") kuer = 1;
     QSqlQuery query;
     query.prepare("DELETE FROM tfx_startreihenfolge WHERE int_disziplinenid=? AND int_kp=? AND int_wertungenid IN ("+_global::intListToString(wertungenInList())+")");
     query.bindValue(0,ui->cmb_dis->itemData(ui->cmb_dis->currentIndex()));
@@ -174,7 +179,7 @@ void Tab_SR::copy() {
     for (int i=0;i<ui->cmb_dis->count();i++) {
         if (i == ui->cmb_dis->currentIndex()) continue;
         bool kuer=false;
-        if (ui->cmb_dis->itemText(i).right(5) == "(Kür)") kuer = true;
+        if (ui->cmb_dis->itemText(i).right(5) == "(KÃ¼r)") kuer = true;
         QSqlQuery query;
         query.prepare("DELETE FROM tfx_startreihenfolge WHERE int_disziplinenid=? AND int_kp=? AND (int_wertungenid IN ("+_global::intListToString(wertungenInList())+") OR int_wertungenid IN ("+_global::intListToString(wertungenInList2())+"))");
         query.bindValue(0,ui->cmb_dis->itemData(i));

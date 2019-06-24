@@ -3,12 +3,10 @@
 #include <QVariant>
 #include <QStringList>
 #include <math.h>
+#include "model/objects/event.h"
 #include "header/_global.h"
 #include "header/settings.h"
 
-int _global::wknr = 0;
-int _global::runde = 0;
-int _global::hwk = 0;
 int _global::dbtyp = 0;
 
 QStringList _global::fields = QStringList();
@@ -25,12 +23,6 @@ void _global::initFields() {
     fields = f;
 }
 
-void _global::setWkVars(int wnr, int rnd, int hnr) {
-    wknr = wnr;
-    runde = rnd;
-    hwk = hnr;
-}
-
 void _global::setDBTyp(int typ) {
     dbtyp = typ;
 }
@@ -39,49 +31,14 @@ int _global::getDBTyp() {
     return dbtyp;
 }
 
-int _global::checkHWK() {
-    if (hwk != 0) {
-        return hwk;
-    } else {
-        return wknr;
-    }
-}
-
-int _global::getRunde() {
-    return runde;
-}
-
-int _global::getWkNr() {
-    return wknr;
-}
-
 QStringList _global::getFields() {
     return fields;
 }
 
-int _global::checkTyp(QString swknr) {
-    QSqlQuery wkinfo;
-    wkinfo.prepare("SELECT int_typ FROM tfx_wettkaempfe WHERE int_veranstaltungenid=? AND var_nummer=? LIMIT 1");
-    wkinfo.bindValue(0, checkHWK());
-    wkinfo.bindValue(1, swknr);
-    wkinfo.exec();
-    wkinfo.next();
-    return wkinfo.value(0).toInt();
-}
-
-bool _global::checkRoundWK() {
-    QSqlQuery query;
-    query.prepare("SELECT bol_rundenwettkampf FROM tfx_veranstaltungen WHERE int_veranstaltungenid=? LIMIT 1");
-    query.bindValue(0,wknr);
-    query.exec();
-    query.next();
-    return query.value(0).toBool();
-}
-
-QString _global::wkBez(QString swknr) {
+QString _global::wkBez(Event *event, QString swknr) {
     QSqlQuery query;
     query.prepare("SELECT bol_ak_anzeigen, yer_von, yer_bis, dat_von FROM tfx_wettkaempfe INNER JOIN tfx_veranstaltungen USING (int_veranstaltungenid) WHERE int_veranstaltungenid=? AND var_nummer=? ORDER BY var_nummer LIMIT 1");
-    query.bindValue(0,checkHWK());
+    query.bindValue(0,event->getMainEventId());
     query.bindValue(1,swknr);
     query.exec();
     query.next();
@@ -96,8 +53,8 @@ QString _global::wkBez(QString swknr) {
     }
     QString to;
     switch (query.value(2).toInt()) {
-    case 1  : to = QString(" und älter"); break;
-    case 2  : to = QString(" und jünger"); break;
+    case 1  : to = QString(" und Ã¤lter"); break;
+    case 2  : to = QString(" und jÃ¼nger"); break;
     default : to = QString(" - " + jahr2);  break;
     }
     if (query.value(1).toString() == query.value(2).toString()) {
@@ -110,25 +67,25 @@ QString _global::wkBez(QString swknr) {
     return " " + jahr1 + to;
 }
 
-void _global::updateRgDis() {
+void _global::updateRgDis(Event *event) {
     QSqlQuery query;
     query.prepare("SELECT var_riege FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) WHERE int_veranstaltungenid=? AND int_runde=? GROUP BY var_riege");
-    query.bindValue(0, checkHWK());
-    query.bindValue(1, runde);
+    query.bindValue(0, event->getMainEventId());
+    query.bindValue(1, event->getRound());
     query.exec();
     QSqlQuery query2;
     query2.prepare("SELECT int_disziplinenid FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) INNER JOIN tfx_wettkaempfe_x_disziplinen USING (int_wettkaempfeid) WHERE int_veranstaltungenid=? AND int_runde=? AND var_riege=? GROUP BY int_disziplinenid ORDER BY int_disziplinenid");
-    query2.bindValue(0,checkHWK());
-    query2.bindValue(1, runde);
+    query2.bindValue(0, event->getMainEventId());
+    query2.bindValue(1, event->getRound());
     query2.exec();
     QSqlQuery query3;
     query3.prepare("SELECT int_riegen_x_disziplinenid FROM tfx_riegen_x_disziplinen WHERE int_veranstaltungenid=? AND int_runde=? AND int_disziplinenid=? AND var_riege=?");
-    query3.bindValue(0, checkHWK());
-    query3.bindValue(1, runde);
+    query3.bindValue(0, event->getMainEventId());
+    query3.bindValue(1, event->getRound());
     QSqlQuery query4;
     query4.prepare("INSERT INTO tfx_riegen_x_disziplinen (int_veranstaltungenid,int_disziplinenid,var_riege,int_runde,int_statusid,bol_erstes_geraet) VALUES (?,?,?,?,?,?)");
-    query4.bindValue(0, checkHWK());
-    query4.bindValue(3, runde);
+    query4.bindValue(0, event->getMainEventId());
+    query4.bindValue(3, event->getRound());
     query4.bindValue(4, 1);
     query4.bindValue(5, false);
     while(query.next()) {
@@ -147,11 +104,11 @@ void _global::updateRgDis() {
     }
     QSqlQuery query5;
     query5.prepare("DELETE FROM tfx_riegen_x_disziplinen WHERE int_veranstaltungenid=? AND var_riege NOT IN (SELECT var_riege FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) WHERE int_veranstaltungenid=? AND int_runde=? GROUP BY var_riege) AND int_disziplinenid NOT IN (SELECT int_disziplinenid FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) INNER JOIN tfx_wettkaempfe_x_disziplinen USING (int_wettkaempfeid) WHERE int_veranstaltungenid=? AND int_runde=? AND var_riege=tfx_riegen_x_disziplinen.var_riege GROUP BY int_disziplinenid ORDER BY int_disziplinenid)");
-    query5.bindValue(0,checkHWK());
-    query5.bindValue(1,checkHWK());
-    query5.bindValue(2,runde);
-    query5.bindValue(3,checkHWK());
-    query5.bindValue(4,runde);
+    query5.bindValue(0, event->getMainEventId());
+    query5.bindValue(1, event->getMainEventId());
+    query5.bindValue(2, event->getRound());
+    query5.bindValue(3, event->getMainEventId());
+    query5.bindValue(4, event->getRound());
     query5.exec();
 }
 
@@ -191,68 +148,12 @@ QString _global::strLeistung(double lst, QString einheit, QString maske, int nk)
     return meldeleistung;
 }
 
-QList<QStringList> _global::createStartlist(QString riege,int dis,int bahnen) {
-    QSqlQuery tn;
-    tn.prepare("SELECT int_startnummer, CASE WHEN tfx_gruppen.int_gruppenid IS NULL THEN var_vorname || ' ' || var_nachname ELSE tfx_gruppen.var_name END, tfx_vereine.var_name, CASE WHEN EXISTS(SELECT rel_leistung FROM tfx_quali_leistungen WHERE int_wertungenid=tfx_wertungen.int_wertungenid AND int_disziplinenid=tfx_wettkaempfe_x_disziplinen.int_disziplinenid) THEN (SELECT rel_leistung FROM tfx_quali_leistungen WHERE int_wertungenid=tfx_wertungen.int_wertungenid AND int_disziplinenid=tfx_wettkaempfe_x_disziplinen.int_disziplinenid) ELSE 0 END AS leistung FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) INNER JOIN tfx_wettkaempfe_x_disziplinen USING (int_wettkaempfeid) LEFT JOIN tfx_teilnehmer ON tfx_teilnehmer.int_teilnehmerid = tfx_wertungen.int_teilnehmerid LEFT JOIN tfx_gruppen ON tfx_gruppen.int_gruppenid = tfx_wertungen.int_gruppenid INNER JOIN tfx_vereine ON tfx_vereine.int_vereineid = tfx_teilnehmer.int_vereineid OR tfx_vereine.int_vereineid = tfx_gruppen.int_vereineid WHERE int_veranstaltungenid=? AND var_riege=? AND int_disziplinenid=? AND int_runde=? AND (NOT EXISTS (SELECT int_wertungen_x_disziplinenid FROM tfx_wertungen_x_disziplinen WHERE int_wertungenid=tfx_wertungen.int_wertungenid) OR EXISTS (SELECT int_wertungen_x_disziplinenid FROM tfx_wertungen_x_disziplinen WHERE tfx_wertungen_x_disziplinen.int_wertungenid=tfx_wertungen.int_wertungenid AND tfx_wertungen_x_disziplinen.int_disziplinenid=?)) ORDER BY leistung");
-    tn.bindValue(0,checkHWK());
-    tn.bindValue(1,riege);
-    tn.bindValue(2,dis);
-    tn.bindValue(3,runde);
-    tn.bindValue(4,dis);
-    tn.exec();
-    int curr=ceil(bahnen/2.0);
-    int opp = 0;
-    QList<int> bahn;
-    int currbahn=0;
-    int lauf=1;
-    for (int i=0;i<bahnen;i++) {
-        bahn.append(curr);
-        if (opp == 1 || (i==0 && curr==1)) {
-            curr = curr + 1*(i+1);
-            opp = 0;
-        } else {
-            curr = curr - 1*(i+1);
-            opp = 1;
-        }
-    }
-    curr = 1;
-    int prolauf = ceil((double)_global::querySize(tn)/ceil((double)_global::querySize(tn)/bahnen));
-    int count = _global::querySize(tn);
-    QList<QStringList> startlist;
-    while (tn.next()) {
-        QStringList lst;
-        lst << QString().setNum(lauf);
-        lst << QString().setNum(bahn[currbahn]);
-        lst << tn.value(0).toString();
-        lst << tn.value(1).toString();
-        lst << tn.value(2).toString();
-        startlist.append(lst);
-        if (currbahn == (prolauf-1)) {
-            lauf++;
-            if (ceil((count-curr)/bahnen) > 0) {
-                prolauf = ceil((count-curr)/ceil((count-curr)/bahnen));
-            }
-            currbahn = -1;
-        }
-        currbahn++;
-        curr++;
-    }
-    for (int i=0;i<startlist.size();i++) {
-        for (int j=0;j<(i+1);j++) {
-            if (startlist.at(i).at(1).toDouble() < startlist.at(j).at(1).toDouble() && startlist.at(i).at(0) == startlist.at(j).at(0)) {
-                startlist.swap(i,j);
-            }
-        }
-    }
-    return startlist;
-}
-
 
 QString _global::nameFormat() {
     switch (Settings::nameFormat) {
-    case 0: return "tfx_teilnehmer.var_vorname || ' ' || tfx_teilnehmer.var_nachname"; break;
-    case 1: return "upper(tfx_teilnehmer.var_nachname) || ' ' || tfx_teilnehmer.var_vorname"; break;
-    case 2: return "tfx_teilnehmer.var_nachname || ', ' || tfx_teilnehmer.var_vorname"; break;
+    case 0: return "tfx_teilnehmer.var_vorname || ' ' || tfx_teilnehmer.var_nachname";
+    case 1: return "upper(tfx_teilnehmer.var_nachname) || ' ' || tfx_teilnehmer.var_vorname";
+    case 2: return "tfx_teilnehmer.var_nachname || ', ' || tfx_teilnehmer.var_vorname";
     }
     return "tfx_teilnehmer.var_vorname || ' ' || tfx_teilnehmer.var_nachname";
 }
