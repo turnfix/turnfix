@@ -55,7 +55,7 @@ void MedalCount::print(QPrinter *printer) {
     for (int i=0;i<ids.size();i++) {
         for (int j=0;j<(i+1);j++) {
             if (gold[ids.at(i)]>gold[ids.at(j)] || (gold[ids.at(i)]==gold[ids.at(j)] && silber[ids.at(i)]>silber[ids.at(j)]) || (gold[ids.at(i)]==gold[ids.at(j)] && silber[ids.at(i)]==silber[ids.at(j)] && bronze[ids.at(i)]>bronze[ids.at(j)])) {
-                ids.swap(i,j);
+                ids.swapItemsAt(i,j);
             }
         }
     }

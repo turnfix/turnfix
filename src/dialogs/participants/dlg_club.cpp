@@ -111,7 +111,7 @@ void Club_Dialog::addTn() {
 
 void Club_Dialog::removeTn() {
     QModelIndexList indexes = ui->tbl_tn->selectionModel()->selectedRows();
-    qSort(indexes);
+    std::sort(indexes.begin(), indexes.end());
     for (int i=indexes.count()-1;i>=0;i--) {
         model->removeRow(indexes.at(i).row());
         lst_int_ids.removeAt(indexes.at(i).row());

@@ -1,7 +1,6 @@
 #include <QSqlQuery>
 #include <QMessageBox>
 #include <QToolBar>
-#include <QSignalMapper>
 #include "model/objects/event.h"
 #include "header/dlg_event.h"
 #include "../database/header/dlg_db_person.h"
@@ -31,14 +30,16 @@ Event_Dialog::Event_Dialog(Event *event, int edit, QWidget* parent) : QDialog(pa
     ag->addAction(act_round);
     act_event->setChecked(true);
     sidebar->layout()->addWidget(tb);
-    QSignalMapper *mapper = new QSignalMapper(this);
-    mapper->setMapping(act_event, 0);
-    mapper->setMapping(act_aus, 1);
-    mapper->setMapping(act_round, 2);
-    connect(act_event, SIGNAL(triggered()), mapper, SLOT(map()));
-    connect(act_aus, SIGNAL(triggered()), mapper, SLOT(map()));
-    connect(act_round, SIGNAL(triggered()), mapper, SLOT(map()));
-    connect(mapper, SIGNAL(mapped(int)), stackedWidget, SLOT(setCurrentIndex(int)));
+
+    connect(act_event, &QAction::triggered, [this]() {
+        stackedWidget->setCurrentIndex(0);
+    });
+    connect(act_aus, &QAction::triggered, [this]() {
+        stackedWidget->setCurrentIndex(1);
+    });
+    connect(act_round, &QAction::triggered, [this]() {
+        stackedWidget->setCurrentIndex(2);
+    });
 
     dae_from->setDate(QDate::currentDate());
     dae_to->setDate(QDate::currentDate());

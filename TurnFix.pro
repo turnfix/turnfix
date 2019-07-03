@@ -25,7 +25,7 @@ macx {
     CONFIG += x86_64
     TARGET = TurnFix
     ICON += resources/icon.icns
-    LIBS += "-L/Library/PostgreSQL/8.4/lib" -lpq
+    LIBS += "-L/Library/PostgreSQL/11/lib" -lpq
 }
 win32 {
     TARGET = TurnFix
@@ -69,7 +69,6 @@ HEADERS += src/dialogs/database/header/dlg_db_acc.h \
     src/models/header/mdl_result.h \
     src/models/header/mdl_status.h \
     src/web/header/web_sendmail.h \
-    src/web/header/web_upload.h \
     src/widgets/header/wdg_tab_dr.h \
     src/widgets/header/wdg_tab_er.h \
     src/widgets/header/wdg_tab_pe.h \

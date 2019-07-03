@@ -28,7 +28,7 @@ void Save_Layout::closeDialog() {
     layoutQuery.bindValue(0,ui->cmb_layout->currentText());
     layoutQuery.exec();
     if (_global::querySize(layoutQuery)>0) {
-        QMessageBox msg(QMessageBox::Warning, "Layout existiert bereits", "Ein Layout mit diesem Namen existiert bereits. Soll es überschrieben werden?",QMessageBox::Yes | QMessageBox::No);
+        QMessageBox msg(QMessageBox::Warning, "Layout existiert bereits", "Ein Layout mit diesem Namen existiert bereits. Soll es Ã¼berschrieben werden?",QMessageBox::Yes | QMessageBox::No);
         int ret = msg.exec();
         if (ret == QMessageBox::No) {
             return;

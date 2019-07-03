@@ -7,7 +7,7 @@ Db_Tn_Dialog::Db_Tn_Dialog(int tid, QWidget* parent) : QDialog(parent) {
     setupUi(this);
     setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
     cmb_sex->addItem("weiblich",0);
-    cmb_sex->addItem("männlich",1);
+    cmb_sex->addItem("mÃ¤nnlich",1);
     cmb_club->addItem("",0);
     QSqlQuery query;
     query.prepare("SELECT int_vereineid, var_name FROM tfx_vereine ORDER BY "+_global::substring("tfx_vereine.var_name","int_start_ort+1")+" ASC");

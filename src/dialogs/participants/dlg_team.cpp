@@ -2,7 +2,6 @@
 #include <QSqlQueryModel>
 #include <QStandardItemModel>
 #include <QToolBar>
-#include <QSignalMapper>
 #include <QMessageBox>
 #include <QSortFilterProxyModel>
 #include "model/objects/event.h"
@@ -34,14 +33,16 @@ Team_Dialog::Team_Dialog(Event *event, int edit, QWidget* parent) : QDialog(pare
     ag->addAction(act_penalty);
     act_team->setChecked(true);
     sidebar->layout()->addWidget(tb);
-    QSignalMapper *mapper = new QSignalMapper(this);
-    mapper->setMapping(act_team, 0);
-    mapper->setMapping(act_tn, 1);
-    mapper->setMapping(act_penalty, 2);
-    connect(act_team, SIGNAL(triggered()), mapper, SLOT(map()));
-    connect(act_tn, SIGNAL(triggered()), mapper, SLOT(map()));
-    connect(act_penalty, SIGNAL(triggered()), mapper, SLOT(map()));
-    connect(mapper, SIGNAL(mapped(int)), stackedWidget, SLOT(setCurrentIndex(int)));
+
+    connect(act_team, &QAction::triggered, [this](){
+        stackedWidget->setCurrentIndex(0);
+    });
+    connect(act_tn, &QAction::triggered, [this](){
+        stackedWidget->setCurrentIndex(1);
+    });
+    connect(act_penalty, &QAction::triggered, [this](){
+        stackedWidget->setCurrentIndex(2);
+    });
 
     model2 = new QSqlQueryModel();
     sortmodel = new QSortFilterProxyModel();
@@ -305,7 +306,7 @@ void Team_Dialog::addTn() {
 
 void Team_Dialog::removeTn() {
     QModelIndexList indexes = tbl_tn->selectionModel()->selectedRows();
-    qSort(indexes);
+    std::sort(indexes.begin(), indexes.end());
     for (int i=indexes.count()-1;i>=0;i--) {
         model->removeRow(indexes.at(i).row());
         lst_int_ids.removeAt(indexes.at(i).row());

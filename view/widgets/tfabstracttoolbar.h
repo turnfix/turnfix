@@ -6,7 +6,6 @@
 class QVBoxLayout;
 class QToolBar;
 class QActionGroup;
-class QSignalMapper;
 
 class TFAbstractToolbar : public QWidget
 {
@@ -22,7 +21,6 @@ protected:
 private:
     QVBoxLayout *mainLayout;
     QActionGroup *actionGroup;
-    QSignalMapper *mapper;
     QList<QAction*> actions;
 
 private slots:

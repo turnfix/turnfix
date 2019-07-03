@@ -2,15 +2,12 @@
 #include <QSqlQueryModel>
 #include <QStandardItemModel>
 #include <QToolBar>
-#include <QSignalMapper>
 #include "model/objects/event.h"
 #include "header/dlg_group.h"
 #include "../database/header/dlg_db_tn.h"
 #include "../database/header/dlg_db_club.h"
 #include "../../global/header/_global.h"
 #include "../../global/header/settings.h"
-
-#include <QDebug>
 
 Group_Dialog::Group_Dialog(Event *event, int edit, QWidget* parent) : QDialog(parent) {
     setupUi(this);
@@ -34,14 +31,16 @@ Group_Dialog::Group_Dialog(Event *event, int edit, QWidget* parent) : QDialog(pa
     ag->addAction(act_dis);
     act_group->setChecked(true);
     sidebar->layout()->addWidget(tb);
-    QSignalMapper *mapper = new QSignalMapper(this);
-    mapper->setMapping(act_group, 0);
-    mapper->setMapping(act_tn, 1);
-    mapper->setMapping(act_dis, 2);
-    connect(act_group, SIGNAL(triggered()), mapper, SLOT(map()));
-    connect(act_tn, SIGNAL(triggered()), mapper, SLOT(map()));
-    connect(act_dis, SIGNAL(triggered()), mapper, SLOT(map()));
-    connect(mapper, SIGNAL(mapped(int)), stackedWidget, SLOT(setCurrentIndex(int)));
+
+    connect(act_group, &QAction::triggered, [this](){
+        stackedWidget->setCurrentIndex(0);
+    });
+    connect(act_tn, &QAction::triggered, [this](){
+        stackedWidget->setCurrentIndex(1);
+    });
+    connect(act_dis, &QAction::triggered, [this](){
+        stackedWidget->setCurrentIndex(2);
+    });
 
     model = new QStandardItemModel();
     model->setColumnCount(3);
@@ -321,7 +320,7 @@ void Group_Dialog::addTn() {
 
 void Group_Dialog::removeTn() {
     QModelIndexList indexes = tbl_tn->selectionModel()->selectedRows();
-    qSort(indexes);
+    std::sort(indexes.begin(), indexes.end());
     for (int i=indexes.count()-1;i>=0;i--) {
         model->removeRow(indexes.at(i).row());
         lst_int_ids.removeAt(indexes.at(i).row());

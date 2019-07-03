@@ -19,7 +19,7 @@ Delete_Dialog::~Delete_Dialog() {
 }
 
 void Delete_Dialog::closeAndDelete() {
-    QMessageBox msg(QMessageBox::Question, "Wirklich löschen?", "Soll diese Veranstaltung wirklich gelöscht werden? Alle Daten (auch eventuelle zugehörige Runden) werden unwiederruflich gelöscht.",QMessageBox::Yes | QMessageBox::No);
+    QMessageBox msg(QMessageBox::Question, "Wirklich lÃ¶schen?", "Soll diese Veranstaltung wirklich gelÃ¶scht werden? Alle Daten (auch eventuelle zugehÃ¶rige Runden) werden unwiederruflich gelÃ¶scht.",QMessageBox::Yes | QMessageBox::No);
     int ret = msg.exec();
     if (ret == QMessageBox::Yes) {
         QSqlQuery deleteQuery;

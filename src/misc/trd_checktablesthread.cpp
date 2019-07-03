@@ -28,7 +28,7 @@ void CheckTable_Thread::run() {
     tabellen.insert("tfx_bereiche",tfx_bereiche);
     constraints.insert("tfx_bereiche",ctfx_bereiche);
     QStringList lst;
-    lst << "INSERT INTO tfx_bereiche (var_name, bol_maennlich, bol_weiblich) VALUES ('m‰nnlich', 'true', 'false')";
+    lst << "INSERT INTO tfx_bereiche (var_name, bol_maennlich, bol_weiblich) VALUES ('m√§nnlich', 'true', 'false')";
     lst << "INSERT INTO tfx_bereiche (var_name, bol_maennlich, bol_weiblich) VALUES ('weiblich', 'false', 'true')";
     lst << "INSERT INTO tfx_bereiche (var_name, bol_maennlich, bol_weiblich) VALUES ('mixed', 'true', 'true')";
     entries.insert("tfx_bereiche",lst);
@@ -58,7 +58,7 @@ void CheckTable_Thread::run() {
     lst2 << "INSERT INTO tfx_sport (var_name) VALUES ('Schwimmen')";
     lst2 << "INSERT INTO tfx_sport (var_name) VALUES ('Gymnastik')";
     lst2 << "INSERT INTO tfx_sport (var_name) VALUES ('TGW')";
-    lst2 << "INSERT INTO tfx_sport (var_name) VALUES ('Rˆhnrad')";
+    lst2 << "INSERT INTO tfx_sport (var_name) VALUES ('R√∂hnrad')";
     entries.insert("tfx_sport",lst2);
     creator.insert("tfx_sport","CREATE TABLE tfx_sport ("
                    "int_sportid "+primary()+" NOT NULL,"
@@ -121,11 +121,11 @@ void CheckTable_Thread::run() {
     lst4 << "INSERT INTO tfx_disziplinen (int_sportid, var_name, var_kurz1, var_kurz2, var_formel, var_maske, int_versuche, var_icon, var_kuerzel, int_berechnung, var_einheit, bol_bahnen, bol_m, bol_w) VALUES (2, '50-m-Lauf elektrische Zeitm.', '50M', '50m-Lauf', '(((100/(x*1,7)-4,341)/0,00676)/49)', '00.00', 1, ':/icons/50.png', 'Ctrl+Shift+O', 2, 's', 'true', 'true', 'false')";
     lst4 << "INSERT INTO tfx_disziplinen (int_sportid, var_name, var_kurz1, var_kurz2, var_formel, var_maske, int_versuche, var_icon, var_kuerzel, int_berechnung, var_einheit, bol_bahnen, bol_m, bol_w) VALUES (2, '2.000-m-Lauf', '2000', '2000m', '(((2000/x)-1,584)/0,00566)/49', '00:00.00', 1, ':/icons/2000.png', 'Ctrl+Shift+D', 2, '', 'false', 'false', 'true')";
     lst4 << "INSERT INTO tfx_disziplinen (int_sportid, var_name, var_kurz1, var_kurz2, var_formel, var_maske, int_versuche, var_icon, var_kuerzel, int_berechnung, var_einheit, bol_bahnen, bol_m, bol_w) VALUES (2, 'Weitsprung / Zone', 'WEZ', 'Weit (Zone)', '2,2*x', '0.00', 3, ':/icons/weitzone.png', 'Ctrl+Shift+G', 2, 'm', 'false', 'false', 'true')";
-    lst4 << "INSERT INTO tfx_disziplinen (int_sportid, var_name, var_kurz1, var_kurz2, var_formel, var_maske, int_versuche, var_icon, var_kuerzel, int_berechnung, var_einheit, bol_bahnen, bol_m, bol_w) VALUES (2, 'Kugelstoﬂen + Medizinball', 'KUGEL', 'Kugel', '1*x', '00.00', 3, ':/icons/kugel.png', 'Ctrl+Shift+J', 2, 'm', 'false', 'true', 'false')";
+    lst4 << "INSERT INTO tfx_disziplinen (int_sportid, var_name, var_kurz1, var_kurz2, var_formel, var_maske, int_versuche, var_icon, var_kuerzel, int_berechnung, var_einheit, bol_bahnen, bol_m, bol_w) VALUES (2, 'Kugelsto√üen + Medizinball', 'KUGEL', 'Kugel', '1*x', '00.00', 3, ':/icons/kugel.png', 'Ctrl+Shift+J', 2, 'm', 'false', 'true', 'false')";
     lst4 << "INSERT INTO tfx_disziplinen (int_sportid, var_name, var_kurz1, var_kurz2, var_formel, var_maske, int_versuche, var_icon, var_kuerzel, int_berechnung, var_einheit, bol_bahnen, bol_m, bol_w) VALUES (2, 'Schleuderball / Schlagball', 'SBALL', 'Schleuderball', 'x/4,5', '00.00', 3, ':/icons/schleuder.png', 'Ctrl+Shift+K', 2, 'm', 'false', 'true', 'false')";
     lst4 << "INSERT INTO tfx_disziplinen (int_sportid, var_name, var_kurz1, var_kurz2, var_formel, var_maske, int_versuche, var_icon, var_kuerzel, int_berechnung, var_einheit, bol_bahnen, bol_m, bol_w) VALUES (2, 'Weitsprung aus dem Stand', 'WES', 'Weit (Stand)', '4*x', '0.00', 3, ':/icons/weitstand.png', 'Ctrl+Shift+H', 2, 'm', 'false', 'true', 'false')";
     lst4 << "INSERT INTO tfx_disziplinen (int_sportid, var_name, var_kurz1, var_kurz2, var_formel, var_maske, int_versuche, var_icon, var_kuerzel, int_berechnung, var_einheit, bol_bahnen, bol_m, bol_w) VALUES (2, 'Weitsprung aus dem Stand', 'WES', 'Weit (Stand)', '4,4*x', '0.00', 3, ':/icons/weitstand.png', 'Ctrl+Shift+H', 2, 'm', 'false', 'false', 'true')";
-    lst4 << "INSERT INTO tfx_disziplinen (int_sportid, var_name, var_kurz1, var_kurz2, var_formel, var_maske, int_versuche, var_icon, var_kuerzel, int_berechnung, var_einheit, bol_bahnen, bol_m, bol_w) VALUES (2, 'Kugelstoﬂen + Medizinball', 'KUGEL', 'Kugel', '1,2*x', '00.00', 3, ':/icons/kugel.png', 'Ctrl+Shift+J', 2, 'm', 'false', 'false', 'true')";
+    lst4 << "INSERT INTO tfx_disziplinen (int_sportid, var_name, var_kurz1, var_kurz2, var_formel, var_maske, int_versuche, var_icon, var_kuerzel, int_berechnung, var_einheit, bol_bahnen, bol_m, bol_w) VALUES (2, 'Kugelsto√üen + Medizinball', 'KUGEL', 'Kugel', '1,2*x', '00.00', 3, ':/icons/kugel.png', 'Ctrl+Shift+J', 2, 'm', 'false', 'false', 'true')";
     lst4 << "INSERT INTO tfx_disziplinen (int_sportid, var_name, var_kurz1, var_kurz2, var_formel, var_maske, int_versuche, var_icon, var_kuerzel, int_berechnung, var_einheit, bol_bahnen, bol_m, bol_w) VALUES (2, 'Schleuderball / Schlagball', 'SBALL', 'Schleuderball', 'x/3,5', '00.00', 3, ':/icons/schleuder.png', 'Ctrl+Shift+K', 2, 'm', 'false', 'false', 'true')";
     lst4 << "INSERT INTO tfx_disziplinen (int_sportid, var_name, var_kurz1, var_kurz2, var_formel, var_maske, int_versuche, var_icon, var_kuerzel, int_berechnung, var_einheit, bol_bahnen, bol_m, bol_w) VALUES (2, 'Vollball', 'VBALL', 'Vollball', 'x/1,5', '00.00', 3, ':/icons/ball.png', 'Ctrl+Shift+L', 2, 'm', 'false', 'false', 'true')";
     lst4 << "INSERT INTO tfx_disziplinen (int_sportid, var_name, var_kurz1, var_kurz2, var_formel, var_maske, int_versuche, var_icon, var_kuerzel, int_berechnung, var_einheit, bol_bahnen, bol_m, bol_w) VALUES (2, 'Weitsprung / Zone', 'WEZ', 'Weit (Zone)', '2*x', '0.00', 3, ':/icons/weitzone.png', 'Ctrl+Shift+G', 2, 'm', 'false', 'true', 'false')";
@@ -146,8 +146,8 @@ void CheckTable_Thread::run() {
     lst4 << "INSERT INTO tfx_disziplinen (int_sportid, var_name, var_kurz1, var_kurz2, var_formel, var_maske, int_versuche, var_icon, var_kuerzel, int_berechnung, var_einheit, bol_bahnen, bol_m, bol_w) VALUES (5, '100 m Brust', '100BR', '100 Brust', '12*(((100/(1,2*(x-14,5)))-0,3))', '00:00.00', 1, ':/icons/100b.png', 'Ctrl+Shift+C', 2, NULL, 'true', 'true', 'false')";
     lst4 << "INSERT INTO tfx_disziplinen (int_sportid, var_name, var_kurz1, var_kurz2, var_formel, var_maske, int_versuche, var_icon, var_kuerzel, int_berechnung, var_einheit, bol_bahnen, bol_m, bol_w) VALUES (5, '50 m Brust', '50BR', '50 Brust', '12*(((100/(1,2*(2*x-10,5)))-0,3))', '00:00.00', 1, ':/icons/50b.png', 'Ctrl+Shift+X', 2, NULL, 'true', 'true', 'false')";
     lst4 << "INSERT INTO tfx_disziplinen (int_sportid, var_name, var_kurz1, var_kurz2, var_formel, var_maske, int_versuche, var_icon, var_kuerzel, int_berechnung, var_einheit, bol_bahnen, bol_m, bol_w) VALUES (1, 'Pauschenpferd', 'PPFR', 'Pauschenpferd', '1*x', '00.000', 1, ':/icons/seitpferd.png', 'Ctrl+Shift+U', 3, '', 'false', 'true', 'false')";
-    lst4 << "INSERT INTO tfx_disziplinen (int_sportid, var_name, var_kurz1, var_kurz2, var_formel, var_maske, int_versuche, var_icon, var_kuerzel, int_berechnung, var_einheit, bol_bahnen, bol_m, bol_w) VALUES (5, '50 m R¸cken', '50R‹', '50 R¸cken', '12*(((100/(1,2*(2*x-4,5)))-0,3))', '00:00.00', 1, ':/icons/50r.png', 'Ctrl+Shift+F1', 2, NULL, 'true', 'true', 'false')";
-    lst4 << "INSERT INTO tfx_disziplinen (int_sportid, var_name, var_kurz1, var_kurz2, var_formel, var_maske, int_versuche, var_icon, var_kuerzel, int_berechnung, var_einheit, bol_bahnen, bol_m, bol_w) VALUES (5, '25 m R¸cken', '25R‹', '25 R¸cken', '12*(((100/(1,2*(4*x-5,7)))-0,3))', '00:00.00', 1, ':/icons/25r.png', 'Ctrl+Shift+M', 2, NULL, 'true', 'true', 'false')";
+    lst4 << "INSERT INTO tfx_disziplinen (int_sportid, var_name, var_kurz1, var_kurz2, var_formel, var_maske, int_versuche, var_icon, var_kuerzel, int_berechnung, var_einheit, bol_bahnen, bol_m, bol_w) VALUES (5, '50 m R√ºcken', '50R√ú', '50 R√ºcken', '12*(((100/(1,2*(2*x-4,5)))-0,3))', '00:00.00', 1, ':/icons/50r.png', 'Ctrl+Shift+F1', 2, NULL, 'true', 'true', 'false')";
+    lst4 << "INSERT INTO tfx_disziplinen (int_sportid, var_name, var_kurz1, var_kurz2, var_formel, var_maske, int_versuche, var_icon, var_kuerzel, int_berechnung, var_einheit, bol_bahnen, bol_m, bol_w) VALUES (5, '25 m R√ºcken', '25R√ú', '25 R√ºcken', '12*(((100/(1,2*(4*x-5,7)))-0,3))', '00:00.00', 1, ':/icons/25r.png', 'Ctrl+Shift+M', 2, NULL, 'true', 'true', 'false')";
     lst4 << "INSERT INTO tfx_disziplinen (int_sportid, var_name, var_kurz1, var_kurz2, var_formel, var_maske, int_versuche, var_icon, var_kuerzel, int_berechnung, var_einheit, bol_bahnen, bol_m, bol_w) VALUES (5, '50 m Schmetterling', '50SM', '50 Schmetterling', '12*(((100/(1,2*(2*x-1,5)))-0,3))', '00:00.00', 1, ':/icons/50s.png', 'Ctrl+Shift+F4', 2, NULL, 'true', 'true', 'false')";
     lst4 << "INSERT INTO tfx_disziplinen (int_sportid, var_name, var_kurz1, var_kurz2, var_formel, var_maske, int_versuche, var_icon, var_kuerzel, int_berechnung, var_einheit, bol_bahnen, bol_m, bol_w) VALUES (5, '25 m Schmetterling', '25SM', '25 Schmetterling', '12*(((100/(1,2*(4*x-1,7)))-0,3))', '00:00.00', 1, ':/icons/25s.png', 'Ctrl+Shift+F3', 2, NULL, 'true', 'true', 'false')";
     lst4 << "INSERT INTO tfx_disziplinen (int_sportid, var_name, var_kurz1, var_kurz2, var_formel, var_maske, int_versuche, var_icon, var_kuerzel, int_berechnung, var_einheit, bol_bahnen, bol_m, bol_w) VALUES (5, '200 m Freistil', '200FS', '200 Freistil', '12*(((100/(1,2*(0,5*x-5)))-0,3))', '00:00.00', 1, ':/icons/200f.png', 'Ctrl+Shift+F9', 2, NULL, 'true', 'true', 'false')";
@@ -156,8 +156,8 @@ void CheckTable_Thread::run() {
     lst4 << "INSERT INTO tfx_disziplinen (int_sportid, var_name, var_kurz1, var_kurz2, var_formel, var_maske, int_versuche, var_icon, var_kuerzel, int_berechnung, var_einheit, bol_bahnen, bol_m, bol_w) VALUES (5, '100 m Brust', '100BR', '100 Brust', '12*(((100/(1,2*(x-22,5)))-0,3))', '00:00.00', 1, ':/icons/100b.png', 'Ctrl+Shift+C', 2, NULL, 'true', 'false', 'true')";
     lst4 << "INSERT INTO tfx_disziplinen (int_sportid, var_name, var_kurz1, var_kurz2, var_formel, var_maske, int_versuche, var_icon, var_kuerzel, int_berechnung, var_einheit, bol_bahnen, bol_m, bol_w) VALUES (5, '50 m Brust', '50BR', '50 Brust', '12*(((100/(1,2*(2*x-18,5)))-0,3))', '00:00.00', 1, ':/icons/50b.png', 'Ctrl+Shift+X', 2, NULL, 'true', 'false', 'true')";
     lst4 << "INSERT INTO tfx_disziplinen (int_sportid, var_name, var_kurz1, var_kurz2, var_formel, var_maske, int_versuche, var_icon, var_kuerzel, int_berechnung, var_einheit, bol_bahnen, bol_m, bol_w) VALUES (5, '25 m Brust', '25BR', '25 Brust', '12*(((100/(1,2*(4*x-13,7)))-0,3))', '00:00.00', 1, ':/icons/25b.png', 'Ctrl+Shift+Y', 2, NULL, 'true', 'false', 'true')";
-    lst4 << "INSERT INTO tfx_disziplinen (int_sportid, var_name, var_kurz1, var_kurz2, var_formel, var_maske, int_versuche, var_icon, var_kuerzel, int_berechnung, var_einheit, bol_bahnen, bol_m, bol_w) VALUES (5, '100 m R¸cken', '100R‹', '100 R¸cken', '12*(((100/(1,2*(x-13,5)))-0,3))', '00:00.00', 1, ':/icons/100r.png', 'Ctrl+Shift+F2', 2, NULL, 'true', 'false', 'true')";
-    lst4 << "INSERT INTO tfx_disziplinen (int_sportid, var_name, var_kurz1, var_kurz2, var_formel, var_maske, int_versuche, var_icon, var_kuerzel, int_berechnung, var_einheit, bol_bahnen, bol_m, bol_w) VALUES (5, '25 m R¸cken', '25R‹', '25 R¸cken', '12*(((100/(1,2*(4*x-5,7)))-0,3))', '00:00.00', 1, ':/icons/25r.png', 'Ctrl+Shift+M', 2, NULL, 'true', 'false', 'true')";
+    lst4 << "INSERT INTO tfx_disziplinen (int_sportid, var_name, var_kurz1, var_kurz2, var_formel, var_maske, int_versuche, var_icon, var_kuerzel, int_berechnung, var_einheit, bol_bahnen, bol_m, bol_w) VALUES (5, '100 m R√ºcken', '100R√ú', '100 R√ºcken', '12*(((100/(1,2*(x-13,5)))-0,3))', '00:00.00', 1, ':/icons/100r.png', 'Ctrl+Shift+F2', 2, NULL, 'true', 'false', 'true')";
+    lst4 << "INSERT INTO tfx_disziplinen (int_sportid, var_name, var_kurz1, var_kurz2, var_formel, var_maske, int_versuche, var_icon, var_kuerzel, int_berechnung, var_einheit, bol_bahnen, bol_m, bol_w) VALUES (5, '25 m R√ºcken', '25R√ú', '25 R√ºcken', '12*(((100/(1,2*(4*x-5,7)))-0,3))', '00:00.00', 1, ':/icons/25r.png', 'Ctrl+Shift+M', 2, NULL, 'true', 'false', 'true')";
     lst4 << "INSERT INTO tfx_disziplinen (int_sportid, var_name, var_kurz1, var_kurz2, var_formel, var_maske, int_versuche, var_icon, var_kuerzel, int_berechnung, var_einheit, bol_bahnen, bol_m, bol_w) VALUES (2, '1.000-m-Lauf', '1000', '1000m', '(((1000/x)-2,158)/0,006)/49', '00:00.00', 1, ':/icons/1000.png', 'Ctrl+Shift+S', 2, '', 'true', 'true', 'false')";
     lst4 << "INSERT INTO tfx_disziplinen (int_sportid, var_name, var_kurz1, var_kurz2, var_formel, var_maske, int_versuche, var_icon, var_kuerzel, int_berechnung, var_einheit, bol_bahnen, bol_m, bol_w) VALUES (2, '1.000-m-Lauf', '1000', '1000m', '((((1000/x)-1,9231)/0,00566)/49)', '00:00.00', 1, ':/icons/1000.png', 'Ctrl+Shift+S', 2, '', 'true', 'false', 'true')";
     lst4 << "INSERT INTO tfx_disziplinen (int_sportid, var_name, var_kurz1, var_kurz2, var_formel, var_maske, int_versuche, var_icon, var_kuerzel, int_berechnung, var_einheit, bol_bahnen, bol_m, bol_w) VALUES (1, 'Reck', 'RECK', 'Reck', '1*x', '00.000', 1, ':/icons/reck.png', 'Ctrl+Shift+T', 3, '', 'false', 'true', 'true')";
@@ -171,10 +171,10 @@ void CheckTable_Thread::run() {
     lst4 << "INSERT INTO tfx_disziplinen (int_sportid, var_name, var_kurz1, var_kurz2, var_formel, var_maske, int_versuche, var_icon, var_kuerzel, int_berechnung, var_einheit, bol_bahnen, bol_m, bol_w) VALUES (2, '100-m-Lauf Handstoppung', '100M', '100m-Lauf', '(((100/(x+0,24)-4,341)/0,00676)/49)', '00.00', 1, ':/icons/100.png', '', 2, 's', 'true', 'true', 'false')";
     lst4 << "INSERT INTO tfx_disziplinen (int_sportid, var_name, var_kurz1, var_kurz2, var_formel, var_maske, int_versuche, var_icon, var_kuerzel, int_berechnung, var_einheit, bol_bahnen, bol_m, bol_w) VALUES (2, '100-m-Lauf elektrische Zeitm.', '100M', '100m-Lauf', '(((100/(x*0,90)-4,341)/0,00676)/49)', '00.00', 1, ':/icons/100.png', 'Ctrl+Shift+F12', 2, 's', 'true', 'false', 'true')";
     lst4 << "INSERT INTO tfx_disziplinen (int_sportid, var_name, var_kurz1, var_kurz2, var_formel, var_maske, int_versuche, var_icon, var_kuerzel, int_berechnung, var_einheit, bol_bahnen, bol_m, bol_w) VALUES (5, '50 m Kraul', '50KR', '50 Kraul', '12*(((100/(1,2*(2*x+3,5)))-0,3))', '00:00.00', 1, ':/icons/50k.png', 'Ctrl+Shift+B', 2, NULL, 'true', 'true', 'false')";
-    lst4 << "INSERT INTO tfx_disziplinen (int_sportid, var_name, var_kurz1, var_kurz2, var_formel, var_maske, int_versuche, var_icon, var_kuerzel, int_berechnung, var_einheit, bol_bahnen, bol_m, bol_w) VALUES (5, '100 m R¸cken', '100R‹', '100 R¸cken', '12*(((100/(1,2*(x-7,5)))-0,3))', '00:00.00', 1, ':/icons/100r.png', 'Ctrl+Shift+F2', 2, NULL, 'true', 'true', 'false')";
+    lst4 << "INSERT INTO tfx_disziplinen (int_sportid, var_name, var_kurz1, var_kurz2, var_formel, var_maske, int_versuche, var_icon, var_kuerzel, int_berechnung, var_einheit, bol_bahnen, bol_m, bol_w) VALUES (5, '100 m R√ºcken', '100R√ú', '100 R√ºcken', '12*(((100/(1,2*(x-7,5)))-0,3))', '00:00.00', 1, ':/icons/100r.png', 'Ctrl+Shift+F2', 2, NULL, 'true', 'true', 'false')";
     lst4 << "INSERT INTO tfx_disziplinen (int_sportid, var_name, var_kurz1, var_kurz2, var_formel, var_maske, int_versuche, var_icon, var_kuerzel, int_berechnung, var_einheit, bol_bahnen, bol_m, bol_w) VALUES (5, '100 m Schmetterling', '100SM', '100 Schmetterling', '12*(((100/(1,2*(x-5,5)))-0,3))', '00:00.00', 1, ':/icons/100s.png', 'Ctrl+Shift+F5', 2, NULL, 'true', 'true', 'false')";
     lst4 << "INSERT INTO tfx_disziplinen (int_sportid, var_name, var_kurz1, var_kurz2, var_formel, var_maske, int_versuche, var_icon, var_kuerzel, int_berechnung, var_einheit, bol_bahnen, bol_m, bol_w) VALUES (5, '25 m Kraul', '25KR', '25 Kraul', '12*(((100/(1,2*(4*x+6,3)))-0,3))', '00:00.00', 1, ':/icons/25k.png', 'Ctrl+Shift+V', 2, NULL, 'true', 'false', 'true')";
-    lst4 << "INSERT INTO tfx_disziplinen (int_sportid, var_name, var_kurz1, var_kurz2, var_formel, var_maske, int_versuche, var_icon, var_kuerzel, int_berechnung, var_einheit, bol_bahnen, bol_m, bol_w) VALUES (5, '50 m R¸cken', '50R‹', '50 R¸cken', '12*(((100/(1,2*(2*x-10,5)))-0,3))', '00:00.00', 1, ':/icons/50r.png', 'Ctrl+Shift+F1', 2, NULL, 'true', 'false', 'true')";
+    lst4 << "INSERT INTO tfx_disziplinen (int_sportid, var_name, var_kurz1, var_kurz2, var_formel, var_maske, int_versuche, var_icon, var_kuerzel, int_berechnung, var_einheit, bol_bahnen, bol_m, bol_w) VALUES (5, '50 m R√ºcken', '50R√ú', '50 R√ºcken', '12*(((100/(1,2*(2*x-10,5)))-0,3))', '00:00.00', 1, ':/icons/50r.png', 'Ctrl+Shift+F1', 2, NULL, 'true', 'false', 'true')";
     lst4 << "INSERT INTO tfx_disziplinen (int_sportid, var_name, var_kurz1, var_kurz2, var_formel, var_maske, int_versuche, var_icon, var_kuerzel, int_berechnung, var_einheit, bol_bahnen, bol_m, bol_w) VALUES (5, '50 m Schmetterling', '50SM', '50 Schmetterling', '12*(((100/(1,2*(2*x-7,5)))-0,3))', '00:00.00', 1, ':/icons/50s.png', 'Ctrl+Shift+F4', 2, NULL, 'true', 'false', 'true')";
     lst4 << "INSERT INTO tfx_disziplinen (int_sportid, var_name, var_kurz1, var_kurz2, var_formel, var_maske, int_versuche, var_icon, var_kuerzel, int_berechnung, var_einheit, bol_bahnen, bol_m, bol_w) VALUES (6, 'Band', 'BAND', 'Band', '1*x', '00.000', 1, ':/icons/band.png', '', 3, '', 'false', 'false', 'true')";
     lst4 << "INSERT INTO tfx_disziplinen (int_sportid, var_name, var_kurz1, var_kurz2, var_formel, var_maske, int_versuche, var_icon, var_kuerzel, int_berechnung, var_einheit, bol_bahnen, bol_m, bol_w) VALUES (6, 'Keule', 'KEUL', 'Keule', '1*x', '00.000', 1, ':/icons/keule.png', '', 3, '', 'false', 'false', 'true')";
@@ -459,8 +459,8 @@ void CheckTable_Thread::run() {
     lst3 << "INSERT INTO tfx_status (var_name, ary_colorcode, bol_bogen, bol_karte) VALUES ('Riegenbogen gedruckt', '{251,249,42}', 'true', 'false')";
     lst3 << "INSERT INTO tfx_status (var_name, ary_colorcode, bol_bogen, bol_karte) VALUES ('Wettkampfkarte gedruckt', '{251,249,42}', 'false', 'true')";
     lst3 << "INSERT INTO tfx_status (var_name, ary_colorcode, bol_bogen, bol_karte) VALUES ('Wettkampf gestartet', '{108,208,34}', 'true', 'true')";
-    lst3 << "INSERT INTO tfx_status (var_name, ary_colorcode, bol_bogen, bol_karte) VALUES ('Riegenbogen im Wettkampfb¸ro', '{0,255,0}', 'true', 'false')";
-    lst3 << "INSERT INTO tfx_status (var_name, ary_colorcode, bol_bogen, bol_karte) VALUES ('Wettkampfkarte im Wettkampfb¸ro', '{0,255,0}', 'false', 'true')";
+    lst3 << "INSERT INTO tfx_status (var_name, ary_colorcode, bol_bogen, bol_karte) VALUES ('Riegenbogen im Wettkampfb√ºro', '{0,255,0}', 'true', 'false')";
+    lst3 << "INSERT INTO tfx_status (var_name, ary_colorcode, bol_bogen, bol_karte) VALUES ('Wettkampfkarte im Wettkampfb√ºro', '{0,255,0}', 'false', 'true')";
     lst3 << "INSERT INTO tfx_status (var_name, ary_colorcode, bol_bogen, bol_karte) VALUES ('Leistungen erfasst', '{4,172,39}', 'true', 'true')";
     lst3 << "INSERT INTO tfx_status (var_name, ary_colorcode, bol_bogen, bol_karte) VALUES ('Urkunde gedruckt', '{5,201,252}', 'false', 'true')";
     entries.insert("tfx_status",lst3);
@@ -1116,7 +1116,7 @@ void CheckTable_Thread::run() {
     for (int i=0;i<tabellenNamen.size();i++) {
         if (!check) continue;
         QString tabelle = tabellenNamen.at(i);
-        emit newStatus("‹berpr¸fe Tabelle "+tabelle,"processing.png");
+        emit newStatus("√úberpr√ºfe Tabelle "+tabelle,"processing.png");
         QSqlQuery checkExistsQuery;
         if (_global::getDBTyp() == 0) {
             checkExistsQuery.prepare("SELECT tablename FROM pg_tables WHERE tablename=?");
@@ -1186,11 +1186,11 @@ void CheckTable_Thread::run() {
                         }
                     }
                     if (_global::getDBTyp() == 0 && columns.value(4).toInt() != spaltenListe.at(j).length) {
-                        emit newStatus("Spalte hat falsche L‰nge","warnung.png");
-                        emit newStatus("Versuche Spaltenl‰nge zu ‰ndern.","warnung.png");
+                        emit newStatus("Spalte hat falsche L√§nge","warnung.png");
+                        emit newStatus("Versuche Spaltenl√§nge zu √§ndern.","warnung.png");
                         QSqlQuery alterTable("ALTER TABLE "+tabelle+" ALTER "+columnName+" TYPE "+type+spaltenListe.at(j).use);
                         if (alterTable.numRowsAffected()!=-1) {
-                            emit newStatus("Spaltenl‰nge erfolgreich ge‰ndert","haken.png");
+                            emit newStatus("Spaltenl√§nge erfolgreich ge√§ndert","haken.png");
                         } else {
                             emit newStatus("Es ist ein Fehler aufgetreten.","error.png");
                             emit newStatus("Fehler: "+alterTable.lastError().text(),"error.png");
@@ -1200,10 +1200,10 @@ void CheckTable_Thread::run() {
                     }
                 } else {
                     emit newStatus("Spalte "+tabelle+" - "+spaltenListe.at(j).name+" fehlt in der Datenbank","warnung.png");
-                    emit newStatus("Spalte wird zur Tabelle hinzugef¸gt...","warnung.png");
+                    emit newStatus("Spalte wird zur Tabelle hinzugef√ºgt...","warnung.png");
                     QSqlQuery insertColumn("ALTER TABLE "+tabelle+" ADD COLUMN "+spaltenListe.at(j).name+" "+type+null+defaultValue);
                     if (insertColumn.numRowsAffected()!=-1) {
-                        emit newStatus("Spalte erfolgreich hinzugef¸gt","haken.png");
+                        emit newStatus("Spalte erfolgreich hinzugef√ºgt","haken.png");
                     } else {
                         emit newStatus("Es ist ein Fehler aufgetreten.","error.png");
                         emit newStatus("Fehler: "+insertColumn.lastError().text(),"error.png");
@@ -1212,7 +1212,7 @@ void CheckTable_Thread::run() {
                     }
                 }
             }
-            emit newStatus("‹berpr¸fe Schl¸sselfelder","processing.png");
+            emit newStatus("√úberpr√ºfe Schl√ºsselfelder","processing.png");
             if (check) {
                 QList<cons> keyListe = constraints[tabelle];
                 for (int j=0;j<keyListe.size();j++) {
@@ -1233,11 +1233,11 @@ void CheckTable_Thread::run() {
                         }
                     }
                     if (!found) {
-                        emit newStatus("Schl¸ssel "+keyListe.at(j).name+" fehlt.","warnung.png");
-                        emit newStatus("Versuche Schl¸ssel zu erstellen.","warnung.png");
+                        emit newStatus("Schl√ºssel "+keyListe.at(j).name+" fehlt.","warnung.png");
+                        emit newStatus("Versuche Schl√ºssel zu erstellen.","warnung.png");
                         QSqlQuery addKey("ALTER TABLE "+tabelle+" ADD CONSTRAINT "+keyListe.at(j).name+" "+keyListe.at(j).typ+" ("+keyListe.at(j).column+") REFERENCES "+keyListe.at(j).ftable+" ("+keyListe.at(j).fcolumn+") ON UPDATE "+keyListe.at(j).onUpdate+" ON DELETE "+keyListe.at(j).onDelete);
                         if (addKey.numRowsAffected()!=-1) {
-                            emit newStatus("Schl¸ssel erfolgreich hinzugef¸gt","haken.png");
+                            emit newStatus("Schl√ºssel erfolgreich hinzugef√ºgt","haken.png");
                         } else {
                             emit newStatus("Es ist ein Fehler aufgetreten.","error.png");
                             emit newStatus("Fehler: "+addKey.lastError().text(),"error.png");
@@ -1246,12 +1246,12 @@ void CheckTable_Thread::run() {
                         }
                     }
                 }
-                if (check) emit newStatus("‹berpr¸fung der Schl¸ssel erfolgreich.","haken.png");
+                if (check) emit newStatus("√úberpr√ºfung der Schl√ºssel erfolgreich.","haken.png");
             }
-            if (check) emit newStatus("‹berpr¸fung von Tabelle "+tabelle+" erfolgreich.","haken.png");
+            if (check) emit newStatus("√úberpr√ºfung von Tabelle "+tabelle+" erfolgreich.","haken.png");
         } else {
             emit newStatus("Die Tabelle existiert nicht","warnung.png");
-            emit newStatus("Tabelle wird zur Datenbank hinzugef¸gt...","warnung.png");
+            emit newStatus("Tabelle wird zur Datenbank hinzugef√ºgt...","warnung.png");
             QSqlQuery createTable(creator[tabelle]);
             if (createTable.numRowsAffected() == -1) {
                 emit newStatus("Es ist ein Fehler aufgetreten.","error.png");
@@ -1261,11 +1261,11 @@ void CheckTable_Thread::run() {
             } else {
                 emit newStatus("Tabelle "+tabelle+" erfolgreich erstellt.","haken.png");
                 if (entries.value(tabelle).size()>0) {
-                    emit newStatus("Eintr‰ge erstellen","processing.png");
+                    emit newStatus("Eintr√§ge erstellen","processing.png");
                     for (int k=0;k<entries.value(tabelle).size();k++) {
                         QSqlQuery entry(entries.value(tabelle).at(k));
                     }
-                    emit newStatus("Eintr‰ge wurden erstellt.","haken.png");
+                    emit newStatus("Eintr√§ge wurden erstellt.","haken.png");
                 }
             }
         }

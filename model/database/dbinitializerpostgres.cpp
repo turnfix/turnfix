@@ -33,7 +33,7 @@ void DBInitializerPostgres::run()
             emit statusUpdate(1,true);
         }
     } else {
-        emit statusUpdate(1,true,tr("Der Benutzer %1 existiert bereits. Sie müssen später zum Login das Passwort des Benutzers angeben.").arg(tfUser));
+        emit statusUpdate(1,true,tr("Der Benutzer %1 existiert bereits. Sie mÃ¼ssen spÃ¤ter zum Login das Passwort des Benutzers angeben.").arg(tfUser));
     }
     query.exec("SELECT datname FROM pg_database WHERE datname='"+databaseName+"'");
     if (query.size()==0) {
@@ -45,7 +45,7 @@ void DBInitializerPostgres::run()
             emit statusUpdate(2,true);
         }
     } else {
-        emit statusUpdate(2,true,tr("Die Datenbank %1 existiert bereits. Eventuell hat der TurnFix-Benutzer keine Rechte auf die Daten zuzugreifen. Wählen Sie einen anderen Namen wenn es Probleme gibt.").arg(databaseName));
+        emit statusUpdate(2,true,tr("Die Datenbank %1 existiert bereits. Eventuell hat der TurnFix-Benutzer keine Rechte auf die Daten zuzugreifen. WÃ¤hlen Sie einen anderen Namen wenn es Probleme gibt.").arg(databaseName));
     }
     db.close();
 

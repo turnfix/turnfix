@@ -113,7 +113,7 @@ QList<QStringList> Result_Calc::resultArrayNew(Competition *competition, QList<i
                 }
             }
             if (wk.value(0).toBool() && wk.value(7).toInt() != 1) {
-                qSort(streich.begin(),streich.end());
+                std::sort(streich.begin(),streich.end());
                 for (int i=0;i<wk.value(6).toInt();i++) {
                     sum -= streich.at(i);
                 }
@@ -163,7 +163,7 @@ QList<QStringList> Result_Calc::resultArrayNew(Competition *competition, QList<i
                         tlist.append(0);
                     }
                 }
-                qSort(tlist.begin(),tlist.end());
+                std::sort(tlist.begin(),tlist.end());
                 double total=0;
                 for (int i=(tlist.size()-1);i>(tlist.size()-1-wk.value(2).toInt());i--) {
                     if (i>=0) {
@@ -181,7 +181,7 @@ QList<QStringList> Result_Calc::resultArrayNew(Competition *competition, QList<i
                 sum -= abzug.value(0).toDouble();
             }
             if (wk.value(0).toBool()) {
-                qSort(streich.begin(),streich.end());
+                std::sort(streich.begin(),streich.end());
                 for (int i=0;i<wk.value(6).toInt();i++) {
                     sum -= streich.at(i);
                 }
@@ -504,13 +504,13 @@ QList<QStringList> Result_Calc::tabllenArray(Competition *competition) {
     for (int i=0;i<reslist.size();i++) {
         for (int j=0;j<(i+1);j++) {
             if (reslist.at(i).at(k).toInt() > reslist.at(j).at(k).toInt()) {
-                reslist.swap(i,j);
+                reslist.swapItemsAt(i,j);
             } else if (reslist.at(i).at(k).toInt() == reslist.at(j).at(k).toInt()) {
                 if (reslist.at(i).at(m).toInt() < reslist.at(j).at(m).toInt()) {
-                    reslist.swap(i,j);
+                    reslist.swapItemsAt(i,j);
                 } else if (reslist.at(i).at(m).toInt() == reslist.at(j).at(m).toInt()) {
                     if (reslist.at(i).at(n).toDouble() > reslist.at(j).at(n).toDouble()) {
-                        reslist.swap(i,j);
+                        reslist.swapItemsAt(i,j);
                     }
                 }
             }
@@ -565,7 +565,7 @@ QList<QStringList> Result_Calc::quicksort(QList<QStringList> a, int left, int ri
                     r--;
                     continue;
                 }
-                a.swap(l,r);
+                a.swapItemsAt(l,r);
                 l++;
                 r--;
             }

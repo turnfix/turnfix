@@ -1,7 +1,6 @@
 #include <QSqlQuery>
 #include <QMessageBox>
 #include <QToolBar>
-#include <QSignalMapper>
 #include "model/objects/event.h"
 #include "header/dlg_tn.h"
 #include "../database/header/dlg_db_club.h"
@@ -27,13 +26,13 @@ Tn_Dialog::Tn_Dialog(Event *event, int edit, QWidget* parent) : QDialog(parent) 
     ag->addAction(act_dis);
     act_tn->setChecked(true);
     sidebar->layout()->addWidget(tb);
-    QSignalMapper *mapper = new QSignalMapper(this);
-    mapper->setMapping(act_tn, 0);
-    mapper->setMapping(act_dis, 1);
-    connect(act_tn, SIGNAL(triggered()), mapper, SLOT(map()));
-    connect(act_dis, SIGNAL(triggered()), mapper, SLOT(map()));
-    connect(mapper, SIGNAL(mapped(int)), stackedWidget, SLOT(setCurrentIndex(int)));
 
+    connect(act_tn, &QAction::triggered, [this](){
+        stackedWidget->setCurrentIndex(0);
+    });
+    connect(act_dis, &QAction::triggered, [this](){
+        stackedWidget->setCurrentIndex(1);
+    });
 
     cmb_sex->addItem("weiblich",0);
     cmb_sex->addItem("männlich",1);

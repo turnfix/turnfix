@@ -1,6 +1,5 @@
 #include <QSqlQuery>
 #include <QActionGroup>
-#include <QSignalMapper>
 #include <QToolBar>
 #include <QMessageBox>
 #include <QInputDialog>
@@ -12,7 +11,6 @@
 #include "view/dialogs/maildialog.h"
 #include "src/dialogs/participants/header/dlg_pass.h"
 #include "src/dialogs/wk/header/dlg_event.h"
-#include "src/web/header/web_upload.h"
 #include "src/global/header/settings.h"
 
 MainWindow::MainWindow() {
@@ -50,6 +48,7 @@ MainWindow::MainWindow() {
     tb->addAction(act_DR);
     tb->addAction(act_ST);
     tb->addAction(act_ED);
+
     QActionGroup *menu = new QActionGroup(this);
     menu->addAction(act_WK);
     menu->addAction(act_TN);
@@ -60,27 +59,44 @@ MainWindow::MainWindow() {
     menu->addAction(act_DR);
     menu->addAction(act_ST);
     menu->addAction(act_ED);
-    QSignalMapper *mapper = new QSignalMapper(this);
-    mapper->setMapping(act_WK, 0);
-    mapper->setMapping(act_TN, 1);
-    mapper->setMapping(act_RG, 2);
-    mapper->setMapping(act_SR, 3);
-    mapper->setMapping(act_PE, 4);
-    mapper->setMapping(act_ER, 5);
-    mapper->setMapping(act_DR, 6);
-    mapper->setMapping(act_ST, 7);
-    mapper->setMapping(act_ED, 8);
-    connect(act_WK, SIGNAL(triggered()), mapper, SLOT(map()));
-    connect(act_TN, SIGNAL(triggered()), mapper, SLOT(map()));
-    connect(act_RG, SIGNAL(triggered()), mapper, SLOT(map()));
-    connect(act_PE, SIGNAL(triggered()), mapper, SLOT(map()));
-    connect(act_ER, SIGNAL(triggered()), mapper, SLOT(map()));
-    connect(act_DR, SIGNAL(triggered()), mapper, SLOT(map()));
-    connect(act_ST, SIGNAL(triggered()), mapper, SLOT(map()));
-    connect(act_ED, SIGNAL(triggered()), mapper, SLOT(map()));
-    connect(act_SR, SIGNAL(triggered()), mapper, SLOT(map()));
-    connect(mapper, SIGNAL(mapped(int)), sta_wdg, SLOT(setCurrentIndex(int)));
-    connect(mapper, SIGNAL(mapped(int)), this, SLOT(updateTables(int)));
+
+    connect(act_WK, &QAction::triggered, [this](){
+        sta_wdg->setCurrentIndex(0);
+        updateTables(0);
+    });
+    connect(act_TN, &QAction::triggered, [this](){
+        sta_wdg->setCurrentIndex(1);
+        updateTables(1);
+    });
+    connect(act_RG, &QAction::triggered, [this](){
+        sta_wdg->setCurrentIndex(2);
+        updateTables(2);
+    });
+    connect(act_SR, &QAction::triggered, [this](){
+        sta_wdg->setCurrentIndex(3);
+        updateTables(3);
+    });
+    connect(act_PE, &QAction::triggered, [this](){
+        sta_wdg->setCurrentIndex(4);
+        updateTables(4);
+    });
+    connect(act_ER, &QAction::triggered, [this](){
+        sta_wdg->setCurrentIndex(5);
+        updateTables(5);
+    });
+    connect(act_DR, &QAction::triggered, [this](){
+        sta_wdg->setCurrentIndex(6);
+        updateTables(6);
+    });
+    connect(act_ST, &QAction::triggered, [this](){
+        sta_wdg->setCurrentIndex(7);
+        updateTables(7);
+    });
+    connect(act_ED, &QAction::triggered, [this](){
+        sta_wdg->setCurrentIndex(8);
+        updateTables(8);
+    });
+
     sidebar->layout()->addWidget(tb);
     this->installEventFilter(this);
 }

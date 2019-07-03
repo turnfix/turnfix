@@ -1,6 +1,5 @@
 #include <QFileDialog>
 #include <QToolBar>
-#include <QSignalMapper>
 #include "settingswidget.h"
 #include "ui_settingswidget.h"
 #include "model/settings/tfsettings.h"

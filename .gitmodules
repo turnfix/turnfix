@@ -1,3 +1,4 @@
 [submodule "libs/qtpropertybrowser"]
 	path = libs/qtpropertybrowser
-	url = git@github.com:commontk/QtPropertyBrowser.git
+	url = git@github.com:abhijitkundu/QtPropertyBrowser.git
+	branch = master

@@ -8,6 +8,7 @@
 
 class EditorTextItem : public QObject, public QGraphicsItem {
     Q_OBJECT
+    Q_INTERFACES(QGraphicsItem)
 
 public:
     EditorTextItem(_global::itemdata values,QGraphicsItem *parent = nullptr);

@@ -2,7 +2,6 @@
 #include <QStandardItemModel>
 #include <QList>
 #include <QToolBar>
-#include <QSignalMapper>
 #include <QMessageBox>
 #include "model/objects/event.h"
 #include "header/dlg_wk.h"
@@ -36,19 +35,22 @@ Wk_Dialog::Wk_Dialog(Event *event, int edit, QWidget* parent) : QDialog(parent) 
     ag->addAction(act_order);
     act_wk->setChecked(true);
     sidebar->layout()->addWidget(tb);
-    QSignalMapper *mapper = new QSignalMapper(this);
-    mapper->setMapping(act_wk, 0);
-    mapper->setMapping(act_dis, 1);
-    mapper->setMapping(act_misc, 2);
-    mapper->setMapping(act_timetable, 3);
-    mapper->setMapping(act_order, 4);
-    connect(act_wk, SIGNAL(triggered()), mapper, SLOT(map()));
-    connect(act_dis, SIGNAL(triggered()), mapper, SLOT(map()));
-    connect(act_misc, SIGNAL(triggered()), mapper, SLOT(map()));
-    connect(act_timetable, SIGNAL(triggered()), mapper, SLOT(map()));
-    connect(act_order, SIGNAL(triggered()), mapper, SLOT(map()));
-    connect(mapper, SIGNAL(mapped(int)), stackedWidget, SLOT(setCurrentIndex(int)));
 
+    connect(act_wk, &QAction::triggered, [this](){
+        stackedWidget->setCurrentIndex(0);
+    });
+    connect(act_dis, &QAction::triggered, [this](){
+        stackedWidget->setCurrentIndex(1);
+    });
+    connect(act_misc, &QAction::triggered, [this](){
+        stackedWidget->setCurrentIndex(2);
+    });
+    connect(act_timetable, &QAction::triggered, [this](){
+        stackedWidget->setCurrentIndex(3);
+    });
+    connect(act_order, &QAction::triggered, [this](){
+        stackedWidget->setCurrentIndex(4);
+    });
 
     model = new QStandardItemModel();
     model->setColumnCount(9);

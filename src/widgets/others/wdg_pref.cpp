@@ -1,7 +1,6 @@
 #include "header/wdg_pref.h"
 #include "ui_wdg_pref.h"
 #include "../../global/header/settings.h"
-#include <QSignalMapper>
 #include <QToolBar>
 #include <QActionGroup>
 
@@ -63,16 +62,19 @@ Preferences_Widget::Preferences_Widget(QWidget *parent) : QWidget(parent), ui(ne
     ag->addAction(ui->act_misc);
     ui->act_db->setChecked(true);
     ui->configSidebar->layout()->addWidget(tb);
-    QSignalMapper *mapper = new QSignalMapper(this);
-    mapper->setMapping(ui->act_db, 0);
-    mapper->setMapping(ui->act_mail, 1);
-    mapper->setMapping(ui->act_online, 2);
-    mapper->setMapping(ui->act_misc, 3);
-    connect(ui->act_db, SIGNAL(triggered()), mapper, SLOT(map()));
-    connect(ui->act_mail, SIGNAL(triggered()), mapper, SLOT(map()));
-    connect(ui->act_online, SIGNAL(triggered()), mapper, SLOT(map()));
-    connect(ui->act_misc, SIGNAL(triggered()), mapper, SLOT(map()));
-    connect(mapper, SIGNAL(mapped(int)), ui->configStack, SLOT(setCurrentIndex(int)));
+
+    connect(ui->act_db, &QAction::triggered, [this](){
+        ui->configStack->setCurrentIndex(0);
+    });
+    connect(ui->act_mail, &QAction::triggered, [this](){
+        ui->configStack->setCurrentIndex(1);
+    });
+    connect(ui->act_online, &QAction::triggered, [this](){
+        ui->configStack->setCurrentIndex(2);
+    });
+    connect(ui->act_misc, &QAction::triggered, [this](){
+        ui->configStack->setCurrentIndex(3);
+    });
 }
 
 Preferences_Widget::~Preferences_Widget() {

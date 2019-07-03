@@ -3,11 +3,6 @@
 
 #include "tfabstracttoolbar.h"
 
-class QVBoxLayout;
-class QToolBar;
-class QActionGroup;
-class QSignalMapper;
-
 class TFToolbarWidget : public TFAbstractToolbar
 {
     Q_OBJECT

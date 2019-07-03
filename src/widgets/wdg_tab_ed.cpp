@@ -243,7 +243,7 @@ void Tab_ED::sizePosChanged(int row,QRectF r) {
 
 void Tab_ED::move(bool moving) {
     if (moving) {
-        disconnect(itm_size,0,0,0);
+        disconnect(itm_size, nullptr, nullptr, nullptr);
     } else {
         connect(itm_size, SIGNAL(valueChanged(QtProperty*,QRectF)), this, SLOT(setNewSizePos(QtProperty*,QRectF)));
     }
@@ -448,7 +448,7 @@ QList<EditorTextItem*> Tab_ED::sortItems(QList<EditorTextItem*> items) {
     for (int i=0;i<items.size();i++) {
         for (int j=0;j<(i+1);j++) {
             if (items.at(i)->zValue() < items.at(j)->zValue()) {
-                items.swap(i,j);
+                items.swapItemsAt(i,j);
             }
         }
     }

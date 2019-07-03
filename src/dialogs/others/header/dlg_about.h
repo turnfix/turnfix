@@ -6,7 +6,7 @@
 class About_Dialog : public QDialog, public Ui::About_Dialog_Ui {
       Q_OBJECT
       public:
-             About_Dialog(QWidget* parent = nullptr) {
+             About_Dialog(QWidget* parent = nullptr): QDialog(parent) {
                  setupUi(this);
                  setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
                 }
