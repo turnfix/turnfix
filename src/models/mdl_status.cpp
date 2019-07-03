@@ -3,8 +3,6 @@
 #include "header/mdl_status.h"
 #include "../global/header/_global.h"
 
-#include <QDebug>
-
 int QStatusTableModel::rowCount(const QModelIndex &) const {
     return _global::querySize(query);
 }

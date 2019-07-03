@@ -1,7 +1,6 @@
 #include "print.h"
 #include <QSqlQuery>
 #include <QDateTime>
-#include <QDebug>
 #include "model/objects/competition.h"
 #include "misc/certificate.h"
 #include "src/global/header/settings.h"

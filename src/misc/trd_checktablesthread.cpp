@@ -5,8 +5,6 @@
 #include "header/trd_checktablesthread.h"
 #include "../global/header/_global.h"
 
-#include <QDebug>
-
 void CheckTable_Thread::run() {
 
     QStringList tabellenNamen;

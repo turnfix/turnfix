@@ -1,4 +1,3 @@
-#include <QDebug>
 #include "dbchecker.h"
 #include "dbtable.h"
 #include "db.h"

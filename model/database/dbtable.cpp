@@ -1,4 +1,3 @@
-#include <QDebug>
 #include <QVariant>
 #include "db.h"
 #include "dbtable.h"

@@ -5,8 +5,6 @@
 #include "header/wdg_tab_sr.h"
 #include "ui_wdg_tab_sr.h"
 #include "../global/header/_global.h"
-
-#include <QDebug>
 #include <QSqlError>
 
 Tab_SR::Tab_SR(QWidget *parent) : QWidget(parent), ui(new Ui::Tab_SR) {

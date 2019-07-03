@@ -1,5 +1,4 @@
 #include <QSqlQuery>
-#include <QDebug>
 #include "model/objects/competition.h"
 #include "model/settings/session.h"
 #include "header/wdg_tab_er.h"

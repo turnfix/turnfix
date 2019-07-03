@@ -4,7 +4,6 @@
 #include "model/viewmodels/assignmenttablemodel.h"
 #include "../../global/header/_global.h"
 
-#include <QDebug>
 #include <QSqlError>
 
 Riegen_Widget::Riegen_Widget(Event *event, QString riege, QWidget *parent) : QWidget(parent), ui(new Ui::Riegen_Widget) {

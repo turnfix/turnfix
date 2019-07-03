@@ -1,5 +1,5 @@
-#include <QDebug>
 #include <QRegExp>
+#include <QDebug>
 #include <QSqlError>
 #include "db.h"
 #include "tfsqlquery.h"
