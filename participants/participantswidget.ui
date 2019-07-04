@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Tab_TN_Ui</class>
- <widget class="QWidget" name="Tab_TN_Ui">
+ <class>ParticipantsWidgetUi</class>
+ <widget class="QWidget" name="ParticipantsWidgetUi">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -14,11 +14,20 @@
    <string>Form</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../../../resources/TurnFix.qrc">
+   <iconset resource="../resources/TurnFix.qrc">
     <normaloff>:/appicons/icon.png</normaloff>:/appicons/icon.png</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <property name="spacing">
@@ -51,7 +60,7 @@
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="../../../resources/TurnFix.qrc">
+         <iconset resource="../resources/TurnFix.qrc">
           <normaloff>:/appicons/user_add.png</normaloff>:/appicons/user_add.png</iconset>
         </property>
         <property name="iconSize">
@@ -77,7 +86,7 @@
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="../../../resources/TurnFix.qrc">
+         <iconset resource="../resources/TurnFix.qrc">
           <normaloff>:/appicons/group_add.png</normaloff>:/appicons/group_add.png</iconset>
         </property>
         <property name="iconSize">
@@ -103,7 +112,7 @@
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="../../../resources/TurnFix.qrc">
+         <iconset resource="../resources/TurnFix.qrc">
           <normaloff>:/appicons/edit.png</normaloff>:/appicons/edit.png</iconset>
         </property>
         <property name="iconSize">
@@ -135,7 +144,7 @@
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="../../../resources/TurnFix.qrc">
+         <iconset resource="../resources/TurnFix.qrc">
           <normaloff>:/appicons/minus.png</normaloff>:/appicons/minus.png</iconset>
         </property>
         <property name="iconSize">
@@ -164,7 +173,7 @@
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="../../../resources/TurnFix.qrc">
+         <iconset resource="../resources/TurnFix.qrc">
           <normaloff>:/appicons/clock_red.png</normaloff>:/appicons/clock_red.png</iconset>
         </property>
         <property name="iconSize">
@@ -287,136 +296,28 @@
     <widget class="QWidget" name="widget" native="true">
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <widget class="QStackedWidget" name="sta_tables">
-        <property name="currentIndex">
-         <number>0</number>
+       <widget class="QTableView" name="participantsTable">
+        <property name="selectionMode">
+         <enum>QAbstractItemView::SingleSelection</enum>
         </property>
-        <widget class="QWidget" name="page">
-         <layout class="QGridLayout" name="gridLayout_2">
-          <property name="margin">
-           <number>0</number>
-          </property>
-          <item row="0" column="0" rowspan="3">
-           <widget class="QTableView" name="tn_table">
-            <property name="selectionMode">
-             <enum>QAbstractItemView::SingleSelection</enum>
-            </property>
-            <property name="selectionBehavior">
-             <enum>QAbstractItemView::SelectRows</enum>
-            </property>
-            <property name="sortingEnabled">
-             <bool>true</bool>
-            </property>
-            <attribute name="horizontalHeaderHighlightSections">
-             <bool>false</bool>
-            </attribute>
-            <attribute name="verticalHeaderVisible">
-             <bool>false</bool>
-            </attribute>
-            <attribute name="verticalHeaderDefaultSectionSize">
-             <number>20</number>
-            </attribute>
-            <attribute name="verticalHeaderHighlightSections">
-             <bool>false</bool>
-            </attribute>
-            <attribute name="verticalHeaderVisible">
-             <bool>false</bool>
-            </attribute>
-            <attribute name="verticalHeaderDefaultSectionSize">
-             <number>20</number>
-            </attribute>
-            <attribute name="horizontalHeaderHighlightSections">
-             <bool>false</bool>
-            </attribute>
-            <attribute name="verticalHeaderHighlightSections">
-             <bool>false</bool>
-            </attribute>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-        <widget class="QWidget" name="page_2">
-         <layout class="QGridLayout" name="gridLayout_5">
-          <property name="margin">
-           <number>0</number>
-          </property>
-          <item row="0" column="0" rowspan="2">
-           <widget class="QTableView" name="tn_table2">
-            <property name="selectionMode">
-             <enum>QAbstractItemView::SingleSelection</enum>
-            </property>
-            <property name="selectionBehavior">
-             <enum>QAbstractItemView::SelectRows</enum>
-            </property>
-            <property name="sortingEnabled">
-             <bool>true</bool>
-            </property>
-            <attribute name="horizontalHeaderHighlightSections">
-             <bool>false</bool>
-            </attribute>
-            <attribute name="verticalHeaderVisible">
-             <bool>false</bool>
-            </attribute>
-            <attribute name="verticalHeaderDefaultSectionSize">
-             <number>20</number>
-            </attribute>
-            <attribute name="verticalHeaderHighlightSections">
-             <bool>false</bool>
-            </attribute>
-            <attribute name="verticalHeaderVisible">
-             <bool>false</bool>
-            </attribute>
-            <attribute name="verticalHeaderDefaultSectionSize">
-             <number>20</number>
-            </attribute>
-            <attribute name="horizontalHeaderHighlightSections">
-             <bool>false</bool>
-            </attribute>
-            <attribute name="verticalHeaderHighlightSections">
-             <bool>false</bool>
-            </attribute>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-        <widget class="QWidget" name="page_3">
-         <layout class="QGridLayout" name="gridLayout_9">
-          <property name="margin">
-           <number>0</number>
-          </property>
-          <item row="0" column="0">
-           <widget class="QTableView" name="tn_table3">
-            <property name="alternatingRowColors">
-             <bool>true</bool>
-            </property>
-            <property name="selectionBehavior">
-             <enum>QAbstractItemView::SelectRows</enum>
-            </property>
-            <property name="sortingEnabled">
-             <bool>true</bool>
-            </property>
-            <attribute name="horizontalHeaderHighlightSections">
-             <bool>false</bool>
-            </attribute>
-            <attribute name="verticalHeaderVisible">
-             <bool>false</bool>
-            </attribute>
-            <attribute name="verticalHeaderDefaultSectionSize">
-             <number>20</number>
-            </attribute>
-            <attribute name="verticalHeaderVisible">
-             <bool>false</bool>
-            </attribute>
-            <attribute name="verticalHeaderDefaultSectionSize">
-             <number>20</number>
-            </attribute>
-            <attribute name="horizontalHeaderHighlightSections">
-             <bool>false</bool>
-            </attribute>
-           </widget>
-          </item>
-         </layout>
-        </widget>
+        <property name="selectionBehavior">
+         <enum>QAbstractItemView::SelectRows</enum>
+        </property>
+        <property name="sortingEnabled">
+         <bool>true</bool>
+        </property>
+        <attribute name="horizontalHeaderHighlightSections">
+         <bool>false</bool>
+        </attribute>
+        <attribute name="verticalHeaderVisible">
+         <bool>false</bool>
+        </attribute>
+        <attribute name="verticalHeaderDefaultSectionSize">
+         <number>21</number>
+        </attribute>
+        <attribute name="verticalHeaderHighlightSections">
+         <bool>false</bool>
+        </attribute>
        </widget>
       </item>
      </layout>
@@ -425,24 +326,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../../../resources/TurnFix.qrc"/>
+  <include location="../resources/TurnFix.qrc"/>
  </resources>
- <connections>
-  <connection>
-   <sender>cmb_typ</sender>
-   <signal>currentIndexChanged(int)</signal>
-   <receiver>sta_tables</receiver>
-   <slot>setCurrentIndex(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>54</x>
-     <y>605</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>85</x>
-     <y>588</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

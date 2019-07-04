@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Quali_Dialog_Ui</class>
- <widget class="QDialog" name="Quali_Dialog_Ui">
+ <class>QualificationStandardsDialogUi</class>
+ <widget class="QDialog" name="QualificationStandardsDialogUi">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -20,7 +20,7 @@
    <string>TurnFix - Qualifikationsleistungen erfassen</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../../../../resources/TurnFix.qrc">
+   <iconset resource="../resources/TurnFix.qrc">
     <normaloff>:/appicons/icon.png</normaloff>:/appicons/icon.png</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -159,16 +159,7 @@
          <bool>false</bool>
         </attribute>
         <attribute name="verticalHeaderDefaultSectionSize">
-         <number>20</number>
-        </attribute>
-        <attribute name="verticalHeaderVisible">
-         <bool>false</bool>
-        </attribute>
-        <attribute name="verticalHeaderDefaultSectionSize">
-         <number>20</number>
-        </attribute>
-        <attribute name="horizontalHeaderVisible">
-         <bool>false</bool>
+         <number>21</number>
         </attribute>
        </widget>
       </item>
@@ -194,7 +185,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../../../../resources/TurnFix.qrc"/>
+  <include location="../resources/TurnFix.qrc"/>
  </resources>
  <connections/>
 </ui>

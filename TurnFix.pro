@@ -31,6 +31,8 @@ win32 {
     TARGET = TurnFix
 }
 
+include(participants/participants.pri)
+
 HEADERS += src/dialogs/database/header/dlg_db_acc.h \
     model/objects/competition.h \
     src/dialogs/database/header/dlg_db_club.h \
@@ -45,13 +47,9 @@ HEADERS += src/dialogs/database/header/dlg_db_acc.h \
     src/dialogs/others/header/dlg_about.h \
     src/dialogs/others/header/dlg_barcode.h \
     view/dialogs/maildialog.h \
-    src/dialogs/participants/header/dlg_group.h \
     src/dialogs/participants/header/dlg_pass.h \
-    src/dialogs/participants/header/dlg_team.h \
-    src/dialogs/participants/header/dlg_tn.h \
     src/dialogs/points/header/dlg_bogen.h \
     view/dialogs/scorecarddialog.h \
-    src/dialogs/points/header/dlg_quali.h \
     view/dialogs/selectdisciplinedialog.h \
     src/dialogs/select/header/dlg_select_rg.h \
     src/dialogs/select/header/dlg_select_tn.h \
@@ -74,7 +72,6 @@ HEADERS += src/dialogs/database/header/dlg_db_acc.h \
     src/widgets/header/wdg_tab_pe.h \
     src/widgets/header/wdg_tab_rg.h \
     src/widgets/header/wdg_tab_st.h \
-    src/widgets/header/wdg_tab_tn.h \
     src/widgets/header/wdg_tab_wk.h \
     view/windows/mainwindow.h \
     src/misc/header/gsc_editorscene.h \
@@ -119,7 +116,6 @@ HEADERS += src/dialogs/database/header/dlg_db_acc.h \
     src/dialogs/others/header/dlg_save_layout.h \
     src/dialogs/database/header/dlg_db_disgroup.h \
     src/dialogs/wk/header/dlg_delete.h \
-    src/dialogs/participants/header/dlg_club.h \
     src/dialogs/select/header/dlg_select_detail.h \
     src/dialogs/database/header/dlg_db_formel.h \
     src/global/header/result_calc.h \
@@ -211,13 +207,9 @@ SOURCES += main.cpp \
     src/dialogs/database/dlg_db_tn.cpp \
     src/dialogs/others/dlg_barcode.cpp \
     view/dialogs/maildialog.cpp \
-    src/dialogs/participants/dlg_group.cpp \
     src/dialogs/participants/dlg_pass.cpp \
-    src/dialogs/participants/dlg_team.cpp \
-    src/dialogs/participants/dlg_tn.cpp \
     src/dialogs/points/dlg_bogen.cpp \
     view/dialogs/scorecarddialog.cpp \
-    src/dialogs/points/dlg_quali.cpp \
     view/dialogs/selectdisciplinedialog.cpp \
     src/dialogs/select/dlg_select_rg.cpp \
     src/dialogs/select/dlg_select_tn.cpp \
@@ -237,7 +229,6 @@ SOURCES += main.cpp \
     src/widgets/wdg_tab_pe.cpp \
     src/widgets/wdg_tab_rg.cpp \
     src/widgets/wdg_tab_st.cpp \
-    src/widgets/wdg_tab_tn.cpp \
     src/widgets/wdg_tab_wk.cpp \
     src/misc/gsc_editorscene.cpp \
     src/models/mdl_editor.cpp \
@@ -253,7 +244,6 @@ SOURCES += main.cpp \
     src/dialogs/others/dlg_save_layout.cpp \
     src/dialogs/database/dlg_db_disgroup.cpp \
     src/dialogs/wk/dlg_delete.cpp \
-    src/dialogs/participants/dlg_club.cpp \
     src/dialogs/select/dlg_select_detail.cpp \
     src/dialogs/database/dlg_db_formel.cpp \
     src/global/result_calc.cpp \
@@ -275,14 +265,10 @@ FORMS += src/dialogs/database/ui/dlg_db_acc.ui \
     src/dialogs/others/ui/dlg_about.ui \
     src/dialogs/others/ui/dlg_barcode.ui \
     view/dialogs/maildialog.ui \
-    src/dialogs/participants/ui/dlg_group.ui \
     src/dialogs/participants/ui/dlg_pass.ui \
-    src/dialogs/participants/ui/dlg_team.ui \
-    src/dialogs/participants/ui/dlg_tn.ui \
     src/dialogs/points/ui/dlg_bogen.ui \
     src/dialogs/points/ui/dlg_jury.ui \
     view/dialogs/scorecarddialog.ui \
-    src/dialogs/points/ui/dlg_quali.ui \
     view/dialogs/selectclubdialog.ui \
     view/dialogs/selectdisciplinedialog.ui \
     src/dialogs/select/ui/dlg_select_tn.ui \
@@ -300,7 +286,6 @@ FORMS += src/dialogs/database/ui/dlg_db_acc.ui \
     src/widgets/ui/wdg_tab_pe.ui \
     src/widgets/ui/wdg_tab_rg.ui \
     src/widgets/ui/wdg_tab_st.ui \
-    src/widgets/ui/wdg_tab_tn.ui \
     src/widgets/ui/wdg_tab_wk.ui \
     src/dialogs/database/ui/dlg_db_land.ui \
     src/dialogs/database/ui/dlg_db_verband.ui \
@@ -316,7 +301,6 @@ FORMS += src/dialogs/database/ui/dlg_db_acc.ui \
     src/dialogs/database/ui/dlg_db_formel.ui \
     src/widgets/others/ui/wdg_pref.ui \
     src/widgets/others/ui/wdg_riegen.ui \
-    src/dialogs/participants/ui/dlg_club.ui \
     src/widgets/ui/wdg_tab_sr.ui
 RESOURCES += resources/TurnFix.qrc \
     resources/TF_Language.qrc \

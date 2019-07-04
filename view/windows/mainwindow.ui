@@ -215,7 +215,7 @@ font-weight:bold;</string>
     <item row="2" column="1">
      <widget class="QStackedWidget" name="sta_wdg">
       <widget class="Tab_WK" name="wk_tab"/>
-      <widget class="Tab_TN" name="tn_tab"/>
+      <widget class="ParticipantsWidget" name="tn_tab"/>
       <widget class="Tab_RG" name="rg_tab"/>
       <widget class="Tab_SR" name="sr_tab"/>
       <widget class="Tab_PE" name="pe_tab"/>
@@ -487,9 +487,9 @@ font-weight:bold;</string>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>Tab_TN</class>
+   <class>ParticipantsWidget</class>
    <extends>QWidget</extends>
-   <header>src/widgets/header/wdg_tab_tn.h</header>
+   <header>participants/participantswidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Group_Dialog_Ui</class>
- <widget class="QDialog" name="Group_Dialog_Ui">
+ <class>GroupDialog</class>
+ <widget class="QDialog" name="GroupDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -14,11 +14,20 @@
    <string>TurnFix - Gruppenverwaltung</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../../../../resources/TurnFix.qrc">
+   <iconset>
     <normaloff>:/appicons/icon.png</normaloff>:/appicons/icon.png</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <property name="spacing">
@@ -78,7 +87,7 @@
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="../../../../resources/TurnFix.qrc">
+          <iconset>
            <normaloff>:/appicons/plus.png</normaloff>:/appicons/plus.png</iconset>
          </property>
          <property name="iconSize">
@@ -222,23 +231,23 @@
           <bool>false</bool>
          </attribute>
          <attribute name="verticalHeaderDefaultSectionSize">
-          <number>20</number>
-         </attribute>
-         <attribute name="verticalHeaderVisible">
-          <bool>false</bool>
-         </attribute>
-         <attribute name="verticalHeaderDefaultSectionSize">
-          <number>20</number>
-         </attribute>
-         <attribute name="horizontalHeaderHighlightSections">
-          <bool>false</bool>
+          <number>21</number>
          </attribute>
         </widget>
        </item>
        <item row="1" column="0">
         <widget class="QWidget" name="widget_2" native="true">
          <layout class="QHBoxLayout" name="horizontalLayout_3">
-          <property name="margin">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
            <number>0</number>
           </property>
           <item>
@@ -278,7 +287,7 @@
              <string>Strg+Pfeil links</string>
             </property>
             <property name="icon">
-             <iconset resource="../../../../resources/TurnFix.qrc">
+             <iconset>
               <normaloff>:/appicons/up.png</normaloff>:/appicons/up.png</iconset>
             </property>
             <property name="iconSize">
@@ -319,7 +328,7 @@
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="../../../../resources/TurnFix.qrc">
+             <iconset>
               <normaloff>:/appicons/down.png</normaloff>:/appicons/down.png</iconset>
             </property>
             <property name="iconSize">
@@ -373,16 +382,7 @@
           <bool>false</bool>
          </attribute>
          <attribute name="verticalHeaderDefaultSectionSize">
-          <number>20</number>
-         </attribute>
-         <attribute name="verticalHeaderVisible">
-          <bool>false</bool>
-         </attribute>
-         <attribute name="verticalHeaderDefaultSectionSize">
-          <number>20</number>
-         </attribute>
-         <attribute name="horizontalHeaderHighlightSections">
-          <bool>false</bool>
+          <number>21</number>
          </attribute>
         </widget>
        </item>
@@ -413,7 +413,7 @@
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="../../../../resources/TurnFix.qrc">
+          <iconset>
            <normaloff>:/appicons/plus.png</normaloff>:/appicons/plus.png</iconset>
          </property>
          <property name="iconSize">
@@ -445,7 +445,7 @@
           <string>Strg+E</string>
          </property>
          <property name="icon">
-          <iconset resource="../../../../resources/TurnFix.qrc">
+          <iconset>
            <normaloff>:/appicons/edit.png</normaloff>:/appicons/edit.png</iconset>
          </property>
          <property name="shortcut">
@@ -519,7 +519,16 @@
       <property name="spacing">
        <number>0</number>
       </property>
-      <property name="margin">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
        <number>0</number>
       </property>
      </layout>
@@ -569,7 +578,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../../../resources/TurnFix.qrc">
+    <iconset>
      <normaloff>:/appicons/misc.png</normaloff>:/appicons/misc.png</iconset>
    </property>
    <property name="text">
@@ -581,7 +590,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../../../resources/TurnFix.qrc">
+    <iconset>
      <normaloff>:/appicons/teilnehmer.png</normaloff>:/appicons/teilnehmer.png</iconset>
    </property>
    <property name="text">
@@ -593,7 +602,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../../../../resources/TF_GeraeteIcons.qrc">
+    <iconset>
      <normaloff>:/icons/sprung.png</normaloff>:/icons/sprung.png</iconset>
    </property>
    <property name="text">
@@ -601,9 +610,6 @@
    </property>
   </action>
  </widget>
- <resources>
-  <include location="../../../../resources/TF_GeraeteIcons.qrc"/>
-  <include location="../../../../resources/TurnFix.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

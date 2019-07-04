@@ -3,14 +3,15 @@
 #include <QStandardItemModel>
 #include <QToolBar>
 #include "model/objects/event.h"
-#include "header/dlg_group.h"
-#include "../database/header/dlg_db_tn.h"
-#include "../database/header/dlg_db_club.h"
-#include "../../global/header/_global.h"
-#include "../../global/header/settings.h"
+#include "groupdialog.h"
+#include "ui_groupdialog.h"
+#include "src/dialogs/database/header/dlg_db_tn.h"
+#include "src/dialogs/database/header/dlg_db_club.h"
+#include "src/global/header/_global.h"
+#include "src/global/header/settings.h"
 
-Group_Dialog::Group_Dialog(Event *event, int edit, QWidget* parent) : QDialog(parent) {
-    setupUi(this);
+GroupDialog::GroupDialog(Event *event, int edit, QWidget* parent) : QDialog(parent), ui(new Ui::GroupDialog) {
+    ui->setupUi(this);
     setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
 
     this->editid = edit;
@@ -23,76 +24,76 @@ Group_Dialog::Group_Dialog(Event *event, int edit, QWidget* parent) : QDialog(pa
     tb->setFloatable(false);
     tb->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     tb->setOrientation(Qt::Vertical);
-    tb->addAction(act_group);
-    ag->addAction(act_group);
-    tb->addAction(act_tn);
-    ag->addAction(act_tn);
-    tb->addAction(act_dis);
-    ag->addAction(act_dis);
-    act_group->setChecked(true);
-    sidebar->layout()->addWidget(tb);
+    tb->addAction(ui->act_group);
+    ag->addAction(ui->act_group);
+    tb->addAction(ui->act_tn);
+    ag->addAction(ui->act_tn);
+    tb->addAction(ui->act_dis);
+    ag->addAction(ui->act_dis);
+    ui->act_group->setChecked(true);
+    ui->sidebar->layout()->addWidget(tb);
 
-    connect(act_group, &QAction::triggered, [this](){
-        stackedWidget->setCurrentIndex(0);
+    connect(ui->act_group, &QAction::triggered, [this](){
+        ui->stackedWidget->setCurrentIndex(0);
     });
-    connect(act_tn, &QAction::triggered, [this](){
-        stackedWidget->setCurrentIndex(1);
+    connect(ui->act_tn, &QAction::triggered, [this](){
+        ui->stackedWidget->setCurrentIndex(1);
     });
-    connect(act_dis, &QAction::triggered, [this](){
-        stackedWidget->setCurrentIndex(2);
+    connect(ui->act_dis, &QAction::triggered, [this](){
+        ui->stackedWidget->setCurrentIndex(2);
     });
 
     model = new QStandardItemModel();
     model->setColumnCount(3);
     model2 = new QSqlQueryModel();
-    tbl_tn->setModel(model);
-    tbl_avtn->setModel(model2);
+    ui->tbl_tn->setModel(model);
+    ui->tbl_avtn->setModel(model2);
     QHeaderView::ResizeMode resizeMode[] = {QHeaderView::Stretch, QHeaderView::ResizeToContents, QHeaderView::Fixed};
     int resize[] = {200,40,0};
     QString headers[3] = {"Name","Geb.","id"};
     for (int i=0;i<3;i++) {
         model->setHeaderData(i, Qt::Horizontal, headers[i]);
-        tbl_tn->horizontalHeader()->setSectionResizeMode(i, resizeMode[i]);
-        tbl_tn->horizontalHeader()->resizeSection(i, resize[i]);
+        ui->tbl_tn->horizontalHeader()->setSectionResizeMode(i, resizeMode[i]);
+        ui->tbl_tn->horizontalHeader()->resizeSection(i, resize[i]);
     }
     QSqlQuery query2;
     query2.prepare("SELECT int_statusid, var_name, ary_colorcode FROM tfx_status WHERE bol_karte='true' ORDER BY int_statusid ASC");
     query2.exec();
     while(query2.next()) {
-        cmb_status->addItem(query2.value(1).toString(),query2.value(0).toInt());
+        ui->cmb_status->addItem(query2.value(1).toString(),query2.value(0).toInt());
         QList<int> color = _global::splitColorArray(query2.value(2).toString());
-        cmb_status->setItemData(cmb_status->count()-1,QColor(color.at(0),color.at(1),color.at(2)),Qt::BackgroundColorRole);
+        ui->cmb_status->setItemData(ui->cmb_status->count()-1,QColor(color.at(0),color.at(1),color.at(2)),Qt::BackgroundColorRole);
     }
-    chk_club->setChecked(Settings::clubFilter);
-    chk_planned->setChecked(Settings::usedFilter);
-    connect(but_save, SIGNAL(clicked()), this, SLOT(save()));
-    connect(but_add, SIGNAL(clicked()), this, SLOT(addTn()));
-    connect(but_del, SIGNAL(clicked()), this, SLOT(removeTn()));
-    connect(but_add, SIGNAL(clicked()), this, SLOT(fillTable2()));
-    connect(but_del, SIGNAL(clicked()), this, SLOT(fillTable2()));
-    connect(chk_club, SIGNAL(clicked()), this, SLOT(fillTable2()));
-    connect(chk_planned, SIGNAL(clicked()), this, SLOT(fillTable2()));
-    connect(but_TNadd, SIGNAL(clicked()), this, SLOT(addAv()));
-    connect(cmb_wk, SIGNAL(currentIndexChanged(int)), this, SLOT(checkDisziplinen()));
-    connect(cmb_club, SIGNAL(currentIndexChanged(int)), this, SLOT(fillTable2()));
-    connect(but_TNedit, SIGNAL(clicked()), this, SLOT(editAv()));
+    ui->chk_club->setChecked(Settings::clubFilter);
+    ui->chk_planned->setChecked(Settings::usedFilter);
+    connect(ui->but_save, SIGNAL(clicked()), this, SLOT(save()));
+    connect(ui->but_add, SIGNAL(clicked()), this, SLOT(addTn()));
+    connect(ui->but_del, SIGNAL(clicked()), this, SLOT(removeTn()));
+    connect(ui->but_add, SIGNAL(clicked()), this, SLOT(fillTable2()));
+    connect(ui->but_del, SIGNAL(clicked()), this, SLOT(fillTable2()));
+    connect(ui->chk_club, SIGNAL(clicked()), this, SLOT(fillTable2()));
+    connect(ui->chk_planned, SIGNAL(clicked()), this, SLOT(fillTable2()));
+    connect(ui->but_TNadd, SIGNAL(clicked()), this, SLOT(addAv()));
+    connect(ui->cmb_wk, SIGNAL(currentIndexChanged(int)), this, SLOT(checkDisziplinen()));
+    connect(ui->cmb_club, SIGNAL(currentIndexChanged(int)), this, SLOT(fillTable2()));
+    connect(ui->but_TNedit, SIGNAL(clicked()), this, SLOT(editAv()));
     connect(this, SIGNAL(finished(int)), this, SLOT(saveWindowState()));
-    connect(but_addclub, SIGNAL(clicked()), this, SLOT(addClub()));
+    connect(ui->but_addclub, SIGNAL(clicked()), this, SLOT(addClub()));
     initData();
 }
 
-void Group_Dialog::saveWindowState() {
-    Settings::updateFiler(chk_club->isChecked(),chk_planned->isChecked());
+void GroupDialog::saveWindowState() {
+    Settings::updateFiler(ui->chk_club->isChecked(), ui->chk_planned->isChecked());
 }
 
-void Group_Dialog::initData() {
+void GroupDialog::initData() {
     updateClubs();
     QSqlQuery query2;
     query2.prepare("SELECT int_wettkaempfeid, var_nummer, var_name FROM tfx_wettkaempfe WHERE int_veranstaltungenid=? AND int_typ=2 ORDER BY var_nummer ASC");
     query2.bindValue(0, this->event->getMainEventId());
     query2.exec();
     while (query2.next()) {
-        cmb_wk->addItem(query2.value(1).toString() + " " + query2.value(2).toString(),query2.value(0).toInt());
+        ui->cmb_wk->addItem(query2.value(1).toString() + " " + query2.value(2).toString(),query2.value(0).toInt());
     }
     if (editid != 0) {
         QSqlQuery query;
@@ -100,13 +101,13 @@ void Group_Dialog::initData() {
         query.bindValue( 0, editid );
         query.exec();
         query.next();
-        cmb_club->setCurrentIndex(cmb_club->findData(query.value(0).toInt()));
-        txt_name->setText(query.value(1).toString());
-        cmb_wk->setCurrentIndex(cmb_wk->findData(query.value(2).toInt()));
-        txt_rg->setText(query.value(3).toString());
-        cmb_status->setCurrentIndex(cmb_status->findData(query.value(4).toInt()));
-        chk_ak->setChecked(query.value(5).toBool());
-        chk_miss->setChecked(query.value(6).toBool());
+        ui->cmb_club->setCurrentIndex(ui->cmb_club->findData(query.value(0).toInt()));
+        ui->txt_name->setText(query.value(1).toString());
+        ui->cmb_wk->setCurrentIndex(ui->cmb_wk->findData(query.value(2).toInt()));
+        ui->txt_rg->setText(query.value(3).toString());
+        ui->cmb_status->setCurrentIndex(ui->cmb_status->findData(query.value(4).toInt()));
+        ui->chk_ak->setChecked(query.value(5).toBool());
+        ui->chk_miss->setChecked(query.value(6).toBool());
         QSqlQuery query8;
         query8.prepare("SELECT int_teilnehmerid FROM tfx_gruppen_x_teilnehmer WHERE int_gruppenid=?");
         query8.bindValue(0,editid);
@@ -120,11 +121,11 @@ void Group_Dialog::initData() {
     fillTable2();
 }
 
-void Group_Dialog::save() {
+void GroupDialog::save() {
     int vid=0;
     QSqlQuery query;
     query.prepare("SELECT int_vereineid FROM tfx_vereine WHERE var_name=?");
-    query.bindValue(0,cmb_club->currentText());
+    query.bindValue(0, ui->cmb_club->currentText());
     query.exec();
     if (_global::querySize(query) > 0) {
         query.next();
@@ -132,7 +133,7 @@ void Group_Dialog::save() {
     } else {
         QSqlQuery query2;
         query2.prepare("INSERT INTO tfx_vereine (var_name) VALUES (?)");
-        query2.bindValue(0,cmb_club->currentText());
+        query2.bindValue(0, ui->cmb_club->currentText());
         query2.exec();
         if (_global::getDBTyp() == 0) {
             QSqlQuery query3("SELECT last_value FROM tfx_vereine_int_vereineid_seq");
@@ -150,7 +151,7 @@ void Group_Dialog::save() {
         query4.bindValue( 2, editid );
     }
     query4.bindValue( 0, vid );
-    query4.bindValue( 1, txt_name->text() );
+    query4.bindValue( 1, ui->txt_name->text() );
     query4.exec();
     int group;
     if (editid == 0) {
@@ -171,9 +172,9 @@ void Group_Dialog::save() {
         query6.prepare("UPDATE tfx_wertungen SET int_wettkaempfeid=?, int_gruppenid=?, int_statusid=?, int_runde=?, int_startnummer=?, bol_ak=?, bol_startet_nicht=?, var_riege=? WHERE int_gruppenid=?");
         query6.bindValue(8, group);
     }
-    query6.bindValue(0, cmb_wk->itemData(cmb_wk->currentIndex()));
+    query6.bindValue(0, ui->cmb_wk->itemData(ui->cmb_wk->currentIndex()));
     query6.bindValue(1, group);
-    query6.bindValue(2, cmb_status->itemData(cmb_status->currentIndex()));
+    query6.bindValue(2, ui->cmb_status->itemData(ui->cmb_status->currentIndex()));
     query6.bindValue(3, this->event->getRound());
     if (editid == 0) {
         QSqlQuery query2;
@@ -191,9 +192,9 @@ void Group_Dialog::save() {
         query2.next();
         query6.bindValue(4,query2.value(0).toInt());
     }
-    query6.bindValue(5, chk_ak->isChecked());
-    query6.bindValue(6, chk_miss->isChecked());
-    query6.bindValue(7, txt_rg->text());
+    query6.bindValue(5, ui->chk_ak->isChecked());
+    query6.bindValue(6, ui->chk_miss->isChecked());
+    query6.bindValue(7, ui->txt_rg->text());
     query6.exec();
     int wert;
     if (editid == 0) {
@@ -213,24 +214,24 @@ void Group_Dialog::save() {
         wert = query5.value(0).toInt();
     }
     bool all = true;
-    for (int i=0;i<lst_dis->count();i++) {
-        if (lst_dis->item(i)->checkState() == Qt::Unchecked) {
+    for (int i=0;i<ui->lst_dis->count();i++) {
+        if (ui->lst_dis->item(i)->checkState() == Qt::Unchecked) {
             all = false;
             break;
         }
     }
     if (!all) {
-        for (int i=0;i<lst_dis->count();i++) {
+        for (int i=0;i<ui->lst_dis->count();i++) {
             QSqlQuery query7;
             query7.prepare("SELECT * FROM tfx_wertungen_x_disziplinen WHERE int_wertungenid=? AND int_disziplinenid=?");
             query7.bindValue(0,wert);
-            query7.bindValue(1,lst_dis->item(i)->data(Qt::UserRole).toInt());
+            query7.bindValue(1,ui->lst_dis->item(i)->data(Qt::UserRole).toInt());
             query7.exec();
-            if (_global::querySize(query7) == 0 && lst_dis->item(i)->checkState() == Qt::Checked) {
+            if (_global::querySize(query7) == 0 && ui->lst_dis->item(i)->checkState() == Qt::Checked) {
                 QSqlQuery query8;
                 query8.prepare("INSERT INTO tfx_wertungen_x_disziplinen (int_wertungenid,int_disziplinenid) VALUES(?,?)");
                 query8.bindValue(0,wert);
-                query8.bindValue(1,lst_dis->item(i)->data(Qt::UserRole).toInt());
+                query8.bindValue(1,ui->lst_dis->item(i)->data(Qt::UserRole).toInt());
                 query8.exec();
             }
         }
@@ -240,15 +241,15 @@ void Group_Dialog::save() {
         query9.exec();
         while (query9.next()) {
             int test = 0;
-            for (int i=0;i<lst_dis->count();i++) {
-                if (lst_dis->item(i)->data(Qt::UserRole).toInt() == query9.value(2).toInt()){
+            for (int i=0;i<ui->lst_dis->count();i++) {
+                if (ui->lst_dis->item(i)->data(Qt::UserRole).toInt() == query9.value(2).toInt()){
                     QSqlQuery query10;
                     query10.prepare("SELECT int_disziplinenid FROM tfx_wertungen_x_disziplinen WHERE int_wertungenid=? AND int_disziplinenid=? LIMIT 1");
                     query10.bindValue(0,wert);
-                    query10.bindValue(1,lst_dis->item(i)->data(Qt::UserRole).toInt());
+                    query10.bindValue(1,ui->lst_dis->item(i)->data(Qt::UserRole).toInt());
                     query10.exec();
                     query10.next();
-                    if (_global::querySize(query10) > 0 && lst_dis->item(i)->checkState() == Qt::Checked) {
+                    if (_global::querySize(query10) > 0 && ui->lst_dis->item(i)->checkState() == Qt::Checked) {
                         test = 1;
                         break;
                     } else {
@@ -307,8 +308,8 @@ void Group_Dialog::save() {
     done(1);
 }
 
-void Group_Dialog::addTn() {
-    QModelIndexList indexes = tbl_avtn->selectionModel()->selectedRows();
+void GroupDialog::addTn() {
+    QModelIndexList indexes = ui->tbl_avtn->selectionModel()->selectedRows();
     for (int i=0;i<indexes.count();i++) {
         if (lst_int_ids.indexOf(QVariant(model2->data(model2->index(indexes.at(i).row(),3))).toInt()) == -1) {
             lst_int_ids.append(QVariant(model2->data(model2->index(indexes.at(i).row(),3))).toInt());
@@ -318,8 +319,8 @@ void Group_Dialog::addTn() {
     fillTable();
 }
 
-void Group_Dialog::removeTn() {
-    QModelIndexList indexes = tbl_tn->selectionModel()->selectedRows();
+void GroupDialog::removeTn() {
+    QModelIndexList indexes = ui->tbl_tn->selectionModel()->selectedRows();
     std::sort(indexes.begin(), indexes.end());
     for (int i=indexes.count()-1;i>=0;i--) {
         model->removeRow(indexes.at(i).row());
@@ -327,7 +328,7 @@ void Group_Dialog::removeTn() {
     }
 }
 
-void Group_Dialog::fillTable() {
+void GroupDialog::fillTable() {
     for (int i=0;i<lst_int_ids.size();i++) {
         QSqlQuery query;
         query.prepare("SELECT tfx_teilnehmer.var_nachname || ', ' || tfx_teilnehmer.var_vorname, tfx_teilnehmer.dat_geburtstag, tfx_teilnehmer.int_teilnehmerid FROM tfx_teilnehmer WHERE tfx_teilnehmer.int_teilnehmerid=? LIMIT 1");
@@ -340,10 +341,10 @@ void Group_Dialog::fillTable() {
     }
 }
 
-void Group_Dialog::fillTable2() {
+void GroupDialog::fillTable2() {
     QSqlQuery query2;
     query2.prepare("SELECT int_vereineid FROM tfx_vereine WHERE var_name = ?");
-    query2.bindValue(0,cmb_club->currentText());
+    query2.bindValue(0, ui->cmb_club->currentText());
     query2.exec();
     QString numbers;
     for (int i=0;i<lst_int_ids.size();i++) {
@@ -353,22 +354,22 @@ void Group_Dialog::fillTable2() {
     QSqlQuery query3;
     QString query;
     query = "SELECT var_nachname || ', ' || var_vorname, "+_global::date("dat_geburtstag",2)+", tfx_vereine.var_name, int_teilnehmerid FROM tfx_teilnehmer INNER JOIN tfx_vereine USING (int_vereineid) ";
-    if (chk_club->isChecked() && chk_planned->isChecked()) {
+    if (ui->chk_club->isChecked() && ui->chk_planned->isChecked()) {
         query += "WHERE int_vereineid=? AND int_teilnehmerid NOT IN (SELECT int_teilnehmerid FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) WHERE int_veranstaltungenid=? AND int_teilnehmerid IS NOT NULL AND int_gruppenid != "+QString::number(editid)+") ";
         if (lst_int_ids.size()>0) query += "AND int_teilnehmerid NOT IN (" + _global::intListToString(lst_int_ids) + ") ";
-    } else if (chk_club->isChecked() ) {
+    } else if (ui->chk_club->isChecked() ) {
         query += "WHERE int_vereineid=? ";
-    } else if (chk_planned->isChecked() ) {
+    } else if (ui->chk_planned->isChecked() ) {
         query += "WHERE int_teilnehmerid NOT IN (SELECT int_teilnehmerid FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) WHERE int_veranstaltungenid=? AND int_teilnehmerid IS NOT NULL AND int_gruppenid != "+QString::number(editid)+") ";
         if (lst_int_ids.size()>0) query += "AND int_teilnehmerid NOT IN (" + _global::intListToString(lst_int_ids) + ") ";
     }
     query += "ORDER BY tfx_vereine.var_name, var_nachname, var_vorname";
     query3.prepare(query);
-    if (chk_club->isChecked() && chk_planned->isChecked()) {
+    if (ui->chk_club->isChecked() && ui->chk_planned->isChecked()) {
         query2.next();
         query3.bindValue(0,query2.value(0).toInt());
         query3.bindValue(1,this->event->getMainEventId());
-    } else if (chk_club->isChecked() ) {
+    } else if (ui->chk_club->isChecked() ) {
         query2.next();
         query3.bindValue(0,query2.value(0).toInt());
     } else {
@@ -381,39 +382,39 @@ void Group_Dialog::fillTable2() {
     QString headers2[4] = {"Name","Geb.","Verein","id"};
     for (int i=0;i<4;i++) {
         model2->setHeaderData(i, Qt::Horizontal, headers2[i]);
-        tbl_avtn->horizontalHeader()->setSectionResizeMode(i, resizeMode2[i]);
-        tbl_avtn->horizontalHeader()->resizeSection(i, resize2[i]);
+        ui->tbl_avtn->horizontalHeader()->setSectionResizeMode(i, resizeMode2[i]);
+        ui->tbl_avtn->horizontalHeader()->resizeSection(i, resize2[i]);
     }
 }
 
-void Group_Dialog::addAv() {
+void GroupDialog::addAv() {
     Db_Tn_Dialog *tu = new Db_Tn_Dialog(0,this);
-    tu->setVerein(cmb_club->currentText());
+    tu->setVerein(ui->cmb_club->currentText());
     tu->exec();
     fillTable2();
 }
 
-void Group_Dialog::editAv() {
-    Db_Tn_Dialog *tu = new Db_Tn_Dialog(QVariant(model2->data(model2->index(tbl_avtn->currentIndex().row(),3))).toInt(),this);
-    tu->setVerein(cmb_club->currentText());
+void GroupDialog::editAv() {
+    Db_Tn_Dialog *tu = new Db_Tn_Dialog(QVariant(model2->data(model2->index(ui->tbl_avtn->currentIndex().row(),3))).toInt(),this);
+    tu->setVerein(ui->cmb_club->currentText());
     tu->exec();
     fillTable2();
 }
 
-void Group_Dialog::checkDisziplinen() {
-    lst_dis->clear();
+void GroupDialog::checkDisziplinen() {
+    ui->lst_dis->clear();
     QSqlQuery query;
     query.prepare("SELECT int_disziplinenid, var_name FROM tfx_disziplinen INNER JOIN tfx_wettkaempfe_x_disziplinen USING (int_disziplinenid) WHERE int_wettkaempfeid=? ORDER BY int_sportid, int_disziplinenid");
-    query.bindValue(0, cmb_wk->itemData(cmb_wk->currentIndex()));
+    query.bindValue(0, ui->cmb_wk->itemData(ui->cmb_wk->currentIndex()));
     query.exec();
     while (query.next()) {
-        lst_dis->addItem(query.value(1).toString());
-        lst_dis->item(lst_dis->count()-1)->setData(Qt::UserRole,query.value(0).toInt());
-        lst_dis->item(lst_dis->count()-1)->setCheckState(Qt::Unchecked);
+        ui->lst_dis->addItem(query.value(1).toString());
+        ui->lst_dis->item(ui->lst_dis->count()-1)->setData(Qt::UserRole,query.value(0).toInt());
+        ui->lst_dis->item(ui->lst_dis->count()-1)->setCheckState(Qt::Unchecked);
     }
     if (editid != 0) {
-        for (int i=0;i<lst_dis->count();i++) {
-            lst_dis->item(i)->setCheckState(Qt::Unchecked);
+        for (int i=0;i<ui->lst_dis->count();i++) {
+            ui->lst_dis->item(i)->setCheckState(Qt::Unchecked);
         }
         QSqlQuery query2;
         query2.prepare("SELECT int_disziplinenid FROM tfx_wertungen_x_disziplinen INNER JOIN tfx_wertungen USING (int_wertungenid) WHERE int_gruppenid=?");
@@ -421,34 +422,34 @@ void Group_Dialog::checkDisziplinen() {
         query2.exec();
         if (_global::querySize(query2) > 0) {
             while (query2.next()) {
-                for (int i=0;i<lst_dis->count();i++) {
-                    if (lst_dis->item(i)->data(Qt::UserRole).toInt() == query2.value(0).toInt()) {
-                        lst_dis->item(i)->setCheckState(Qt::Checked);
+                for (int i=0;i<ui->lst_dis->count();i++) {
+                    if (ui->lst_dis->item(i)->data(Qt::UserRole).toInt() == query2.value(0).toInt()) {
+                        ui->lst_dis->item(i)->setCheckState(Qt::Checked);
                         break;
                     }
                 }
             }
         } else {
-            for (int i=0;i<lst_dis->count();i++) {
-                lst_dis->item(i)->setCheckState(Qt::Checked);
+            for (int i=0;i<ui->lst_dis->count();i++) {
+                ui->lst_dis->item(i)->setCheckState(Qt::Checked);
             }
         }
     }
 }
 
-void Group_Dialog::updateClubs() {
-    QString currtext = cmb_club->currentText();
-    cmb_club->clear();
+void GroupDialog::updateClubs() {
+    QString currtext = ui->cmb_club->currentText();
+    ui->cmb_club->clear();
     QSqlQuery query;
     query.prepare("SELECT int_vereineid, var_name FROM tfx_vereine ORDER BY var_name");
     query.exec();
     while (query.next()) {
-        cmb_club->addItem(query.value(1).toString(),query.value(0).toInt());
+        ui->cmb_club->addItem(query.value(1).toString(),query.value(0).toInt());
     }
-    cmb_club->setCurrentIndex(cmb_club->findText(currtext));
+    ui->cmb_club->setCurrentIndex(ui->cmb_club->findText(currtext));
 }
 
-void Group_Dialog::addClub() {
+void GroupDialog::addClub() {
     Db_Club_Dialog *pe = new Db_Club_Dialog(0,this);
     if(pe->exec() == 1) { updateClubs(); }
 }

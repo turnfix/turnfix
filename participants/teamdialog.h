@@ -1,18 +1,18 @@
-#ifndef DLG_TEAM_H
-#define DLG_TEAM_H
+#ifndef TEAMDIALOG_H
+#define TEAMDIALOG_H
 #include <QDialog>
-#include "ui_dlg_team.h"
+#include "ui_teamdialog.h"
 
 class Event;
 class QStandardItemModel;
 class QSortFilterProxyModel;
 class QSqlQueryModel;
 
-class Team_Dialog : public QDialog, public Ui::Team_Dialog_Ui {
+class TeamDialog : public QDialog, public Ui::TeamDialogUi {
     Q_OBJECT
 
 public:
-    Team_Dialog(Event *event, int edit=0, QWidget* parent = nullptr);
+    TeamDialog(Event *event, int edit=0, QWidget* parent = nullptr);
 
 private slots:
     void initData();

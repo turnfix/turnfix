@@ -5,13 +5,13 @@
 #include <QMessageBox>
 #include <QSortFilterProxyModel>
 #include "model/objects/event.h"
-#include "header/dlg_team.h"
-#include "../database/header/dlg_db_tn.h"
-#include "../database/header/dlg_db_club.h"
-#include "../../global/header/_global.h"
-#include "../../global/header/settings.h"
+#include "teamdialog.h"
+#include "src/dialogs/database/header/dlg_db_tn.h"
+#include "src/dialogs/database/header/dlg_db_club.h"
+#include "src/global/header/_global.h"
+#include "src/global/header/settings.h"
 
-Team_Dialog::Team_Dialog(Event *event, int edit, QWidget* parent) : QDialog(parent) {
+TeamDialog::TeamDialog(Event *event, int edit, QWidget* parent) : QDialog(parent) {
     setupUi(this);
     setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
 
@@ -82,11 +82,11 @@ Team_Dialog::Team_Dialog(Event *event, int edit, QWidget* parent) : QDialog(pare
     initData();
 }
 
-void Team_Dialog::saveWindowState() {
+void TeamDialog::saveWindowState() {
     Settings::updateFiler(chk_club->isChecked(),chk_planned->isChecked());
 }
 
-void Team_Dialog::initData() {
+void TeamDialog::initData() {
     updateClubs();
     QSqlQuery query2;
     query2.prepare("SELECT int_wettkaempfeid, var_nummer, var_name FROM tfx_wettkaempfe WHERE int_veranstaltungenid=? AND int_typ=1 ORDER BY var_nummer ASC");
@@ -131,7 +131,7 @@ void Team_Dialog::initData() {
     }
 }
 
-void Team_Dialog::save() {
+void TeamDialog::save() {
     QSqlQuery getWertungsZahl;
     getWertungsZahl.prepare("SELECT int_wertungen FROM tfx_wettkaempfe WHERE int_wettkaempfeid=?");
     getWertungsZahl.bindValue(0,cmb_wk->itemData(cmb_wk->currentIndex()));
@@ -294,7 +294,7 @@ void Team_Dialog::save() {
     done(1);
 }
 
-void Team_Dialog::addTn() {
+void TeamDialog::addTn() {
     QModelIndexList indexes = tbl_avtn->selectionModel()->selectedRows();
     for (int i=0;i<indexes.count();i++) {
         if (lst_int_ids.indexOf(QVariant(sortmodel->data(sortmodel->index(indexes.at(i).row(),3))).toInt()) == -1) {
@@ -304,7 +304,7 @@ void Team_Dialog::addTn() {
     fillTable();
 }
 
-void Team_Dialog::removeTn() {
+void TeamDialog::removeTn() {
     QModelIndexList indexes = tbl_tn->selectionModel()->selectedRows();
     std::sort(indexes.begin(), indexes.end());
     for (int i=indexes.count()-1;i>=0;i--) {
@@ -314,7 +314,7 @@ void Team_Dialog::removeTn() {
     fillTable2();
 }
 
-void Team_Dialog::fillTable() {
+void TeamDialog::fillTable() {
     QString pgExtra;
     if (_global::getDBTyp()==0) pgExtra = "::text";
     for (int i=0;i<lst_int_ids.size();i++) {
@@ -366,7 +366,7 @@ void Team_Dialog::fillTable() {
     }
 }
 
-void Team_Dialog::fillTable2() {
+void TeamDialog::fillTable2() {
     QSqlQuery query3;
     QString query;
     query = "SELECT var_nachname || ', ' || var_vorname, "+_global::date("dat_geburtstag",2)+", tfx_vereine.var_name, int_teilnehmerid FROM tfx_teilnehmer INNER JOIN tfx_vereine USING (int_vereineid) ";
@@ -401,20 +401,20 @@ void Team_Dialog::fillTable2() {
     }
 }
 
-void Team_Dialog::addAv() {
+void TeamDialog::addAv() {
     Db_Tn_Dialog *tu = new Db_Tn_Dialog(0,this);
     tu->setVerein(cmb_club->currentText());
     tu->exec();
     fillTable2();
 }
 
-void Team_Dialog::editAv() {
+void TeamDialog::editAv() {
     Db_Tn_Dialog *tu = new Db_Tn_Dialog(QVariant(sortmodel->data(sortmodel->index(tbl_avtn->currentIndex().row(),3))).toInt(),this);
     tu->exec();
     fillTable2();
 }
 
-void Team_Dialog::updateClubs() {
+void TeamDialog::updateClubs() {
     QString currtext = cmb_club->currentText();
     cmb_club->clear();
     QSqlQuery query;
@@ -426,12 +426,12 @@ void Team_Dialog::updateClubs() {
     if (currtext != "") cmb_club->setCurrentIndex(cmb_club->findText(currtext));
 }
 
-void Team_Dialog::addClub() {
+void TeamDialog::addClub() {
     Db_Club_Dialog *pe = new Db_Club_Dialog(0,this);
     if(pe->exec() == 1) { updateClubs(); }
 }
 
-bool Team_Dialog::checkJg(int jg) {
+bool TeamDialog::checkJg(int jg) {
     if (jg > 1900) {
         QSqlQuery query;
         query.prepare("SELECT yer_von, yer_bis FROM tfx_wettkaempfe WHERE int_wettkaempfeid=?");

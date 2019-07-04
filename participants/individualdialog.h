@@ -1,15 +1,19 @@
-#ifndef DLG_TN_H
-#define DLG_TN_H
+#ifndef INDIVIDUALDIALOG_H
+#define INDIVIDUALDIALOG_H
+
 #include <QDialog>
-#include "ui_dlg_tn.h"
+
+namespace Ui {
+    class IndividualDialog;
+}
 
 class Event;
 
-class Tn_Dialog : public QDialog, public Ui::Tn_Dialog_Ui {
+class IndividualDialog : public QDialog {
     Q_OBJECT
 
 public:
-    Tn_Dialog(Event *event, int edit=0, QWidget* parent = nullptr);
+    IndividualDialog(Event *event, int edit=0, QWidget* parent = nullptr);
 
 private slots:
     void initData();
@@ -23,6 +27,8 @@ private slots:
 
 private:
     Event *event;
+    Ui::IndividualDialog *ui;
     int editid;
 };
+
 #endif

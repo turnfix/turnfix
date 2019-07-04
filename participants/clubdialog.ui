@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Club_Dialog</class>
- <widget class="QDialog" name="Club_Dialog">
+ <class>ClubDialog</class>
+ <widget class="QDialog" name="ClubDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -14,14 +14,23 @@
    <string>TurnFix - Teilnehmer hinzufügen</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../../../../resources/TurnFix.qrc">
+   <iconset resource="../resources/TurnFix.qrc">
     <normaloff>:/appicons/icon.png</normaloff>:/appicons/icon.png</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
     <number>0</number>
    </property>
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item>
@@ -88,7 +97,16 @@
       <item row="2" column="0" colspan="4">
        <widget class="QWidget" name="widget" native="true">
         <layout class="QGridLayout" name="gridLayout_2">
-         <property name="margin">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
           <number>0</number>
          </property>
          <item row="0" column="2">
@@ -109,19 +127,7 @@
             <bool>false</bool>
            </attribute>
            <attribute name="verticalHeaderDefaultSectionSize">
-            <number>20</number>
-           </attribute>
-           <attribute name="verticalHeaderHighlightSections">
-            <bool>false</bool>
-           </attribute>
-           <attribute name="verticalHeaderVisible">
-            <bool>false</bool>
-           </attribute>
-           <attribute name="verticalHeaderDefaultSectionSize">
-            <number>20</number>
-           </attribute>
-           <attribute name="horizontalHeaderHighlightSections">
-            <bool>false</bool>
+            <number>21</number>
            </attribute>
            <attribute name="verticalHeaderHighlightSections">
             <bool>false</bool>
@@ -138,7 +144,16 @@
          <item row="0" column="1">
           <widget class="QWidget" name="widget_2" native="true">
            <layout class="QGridLayout" name="gridLayout_3">
-            <property name="margin">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
              <number>0</number>
             </property>
             <item row="0" column="0">
@@ -178,7 +193,7 @@
                <string>Strg+Pfeil links</string>
               </property>
               <property name="icon">
-               <iconset resource="../../../../resources/TurnFix.qrc">
+               <iconset resource="../resources/TurnFix.qrc">
                 <normaloff>:/appicons/left.png</normaloff>:/appicons/left.png</iconset>
               </property>
               <property name="iconSize">
@@ -219,7 +234,7 @@
                <string/>
               </property>
               <property name="icon">
-               <iconset resource="../../../../resources/TurnFix.qrc">
+               <iconset resource="../resources/TurnFix.qrc">
                 <normaloff>:/appicons/right.png</normaloff>:/appicons/right.png</iconset>
               </property>
               <property name="iconSize">
@@ -267,19 +282,7 @@
             <bool>false</bool>
            </attribute>
            <attribute name="verticalHeaderDefaultSectionSize">
-            <number>20</number>
-           </attribute>
-           <attribute name="verticalHeaderHighlightSections">
-            <bool>false</bool>
-           </attribute>
-           <attribute name="verticalHeaderVisible">
-            <bool>false</bool>
-           </attribute>
-           <attribute name="verticalHeaderDefaultSectionSize">
-            <number>20</number>
-           </attribute>
-           <attribute name="horizontalHeaderHighlightSections">
-            <bool>false</bool>
+            <number>21</number>
            </attribute>
            <attribute name="verticalHeaderHighlightSections">
             <bool>false</bool>
@@ -311,7 +314,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../../../../resources/TurnFix.qrc"/>
+  <include location="../resources/TurnFix.qrc"/>
  </resources>
  <connections/>
 </ui>

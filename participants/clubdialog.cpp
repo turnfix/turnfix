@@ -2,11 +2,11 @@
 #include <QSqlQueryModel>
 #include <QStandardItemModel>
 #include "model/objects/event.h"
-#include "header/dlg_club.h"
-#include "ui_dlg_club.h"
-#include "../../global/header/_global.h"
+#include "clubdialog.h"
+#include "ui_clubdialog.h"
+#include "src/global/header/_global.h"
 
-Club_Dialog::Club_Dialog(Event *event, QWidget *parent) : QDialog(parent), ui(new Ui::Club_Dialog) {
+ClubDialog::ClubDialog(Event *event, QWidget *parent) : QDialog(parent), ui(new Ui::ClubDialog) {
     ui->setupUi(this);
     setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
 
@@ -48,11 +48,11 @@ Club_Dialog::Club_Dialog(Event *event, QWidget *parent) : QDialog(parent), ui(ne
     connect(ui->but_save, SIGNAL(clicked()), this, SLOT(save()));
 }
 
-Club_Dialog::~Club_Dialog() {
+ClubDialog::~ClubDialog() {
     delete ui;
 }
 
-void Club_Dialog::fillTable() {
+void ClubDialog::fillTable() {
     for (int i=0;i<lst_int_ids.size();i++) {
         QSqlQuery query;
         query.prepare("SELECT tfx_teilnehmer.var_nachname || ', ' || tfx_teilnehmer.var_vorname, "+_global::date("dat_geburtstag",4)+", tfx_teilnehmer.int_teilnehmerid FROM tfx_teilnehmer WHERE tfx_teilnehmer.int_teilnehmerid=? LIMIT 1");
@@ -72,7 +72,7 @@ void Club_Dialog::fillTable() {
     }
 }
 
-void Club_Dialog::updateTable() {
+void ClubDialog::updateTable() {
     QSqlQuery query3;
     QString query;
     query = "SELECT var_nachname || ', ' || var_vorname, "+_global::date("dat_geburtstag",2)+", tfx_vereine.var_name, int_teilnehmerid FROM tfx_teilnehmer INNER JOIN tfx_vereine USING (int_vereineid) WHERE int_vereineid=? ";
@@ -98,7 +98,7 @@ void Club_Dialog::updateTable() {
     }
 }
 
-void Club_Dialog::addTn() {
+void ClubDialog::addTn() {
     QModelIndexList indexes = ui->tbl_list->selectionModel()->selectedRows();
     for (int i=0;i<indexes.count();i++) {
         if (lst_int_ids.indexOf(QVariant(model2->data(model2->index(indexes.at(i).row(),3))).toInt()) == -1) {
@@ -109,7 +109,7 @@ void Club_Dialog::addTn() {
     fillTable();
 }
 
-void Club_Dialog::removeTn() {
+void ClubDialog::removeTn() {
     QModelIndexList indexes = ui->tbl_tn->selectionModel()->selectedRows();
     std::sort(indexes.begin(), indexes.end());
     for (int i=indexes.count()-1;i>=0;i--) {
@@ -118,7 +118,7 @@ void Club_Dialog::removeTn() {
     }
 }
 
-void Club_Dialog::save() {
+void ClubDialog::save() {
     for (int i=0;i<lst_int_ids.size();i++) {
         QSqlQuery query20;
         query20.prepare("SELECT MAX(int_startnummer) FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) INNER JOIN tfx_teilnehmer ON tfx_teilnehmer.int_teilnehmerid = tfx_wertungen.int_teilnehmerid INNER JOIN tfx_vereine USING (int_vereineid) WHERE int_veranstaltungenid=? AND int_runde=?");

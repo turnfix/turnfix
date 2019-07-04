@@ -2,11 +2,11 @@
 #include <QLineEdit>
 #include "model/objects/event.h"
 #include "model/viewmodels/qualitablemodel.h"
-#include "header/dlg_quali.h"
+#include "qualificationstandardsdialog.h"
 #include "src/global/header/_delegates.h"
 #include "src/global/header/_global.h"
 
-Quali_Dialog::Quali_Dialog(Event *event, int edit, QWidget* parent) : QDialog(parent) {
+QualificationStandardsDialog::QualificationStandardsDialog(Event *event, int edit, QWidget* parent) : QDialog(parent) {
     setupUi(this);
     setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
 
@@ -24,7 +24,7 @@ Quali_Dialog::Quali_Dialog(Event *event, int edit, QWidget* parent) : QDialog(pa
     initData();
 }
 
-void Quali_Dialog::initData() {
+void QualificationStandardsDialog::initData() {
     QSqlQuery query2;
     query2.prepare("SELECT int_disziplinenid FROM tfx_wettkaempfe_x_disziplinen INNER JOIN tfx_disziplinen USING (int_disziplinenid) INNER JOIN tfx_wettkaempfe ON tfx_wettkaempfe.int_wettkaempfeid = tfx_wettkaempfe_x_disziplinen.int_wettkaempfeid INNER JOIN tfx_wertungen ON tfx_wertungen.int_wettkaempfeid = tfx_wettkaempfe.int_wettkaempfeid WHERE int_veranstaltungenid=? AND int_wertungenid=? AND bol_bahnen AND (int_disziplinenid IN (SELECT int_disziplinenid FROM tfx_wertungen_x_disziplinen WHERE int_disziplinenid=tfx_disziplinen.int_disziplinenid AND int_wertungenid=tfx_wertungen.int_wertungenid) OR (SELECT COUNT(*) FROM tfx_wertungen_x_disziplinen WHERE int_wertungenid=tfx_wertungen.int_wertungenid)=0) ORDER BY int_disziplinenid");
     query2.bindValue(0, this->event->getId());
@@ -55,7 +55,7 @@ void Quali_Dialog::initData() {
     lbl_wk->setText("Nr. " + query.value(4).toString() + " - " +query.value(5).toString() + " - Jahrgang " + query.value(2).toString() + to);
 }
 
-void Quali_Dialog::finishEdit() {
+void QualificationStandardsDialog::finishEdit() {
     int row = tbl_quali->currentIndex().row();
     int col = tbl_quali->currentIndex().column();
     if (model->index(row+1,col).isValid()) {
