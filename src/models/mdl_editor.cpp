@@ -48,6 +48,7 @@ QVariant QEditorModel::headerData(int section, Qt::Orientation orientation, int 
     return QVariant();
 }
 
-void QEditorModel::setTableData(QList<EditorTextItem*> lst) {
+void QEditorModel::setTableData(QList<EditorGraphicsItem *> lst)
+{
     items = lst;
 }

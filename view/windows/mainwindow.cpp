@@ -1,17 +1,17 @@
-#include <QSqlQuery>
-#include <QActionGroup>
-#include <QToolBar>
-#include <QMessageBox>
-#include <QInputDialog>
 #include "mainwindow.h"
-#include "model/settings/session.h"
+#include "export/maildialog.h"
 #include "model/objects/event.h"
+#include "model/settings/session.h"
 #include "src/dialogs/database/header/dlg_db_control.h"
 #include "src/dialogs/others/header/dlg_about.h"
-#include "view/dialogs/maildialog.h"
 #include "src/dialogs/participants/header/dlg_pass.h"
 #include "src/dialogs/wk/header/dlg_event.h"
 #include "src/global/header/settings.h"
+#include <QActionGroup>
+#include <QInputDialog>
+#include <QMessageBox>
+#include <QSqlQuery>
+#include <QToolBar>
 
 MainWindow::MainWindow() {
     event = Session::getInstance()->getEvent();
@@ -203,7 +203,8 @@ void MainWindow::changeWK() {
 
 void MainWindow::sendMLists() {
     MailDialog *vn = new MailDialog(this->event, this);
-    vn->setDetailInfo(dr_tab->cmb_detail->currentIndex());
+    // TODO check
+    // vn->setDetailInfo(dr_tab->ui->cmb_detail->currentIndex());
     vn->exec();
 }
 

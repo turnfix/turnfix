@@ -214,15 +214,15 @@ font-weight:bold;</string>
     </item>
     <item row="2" column="1">
      <widget class="QStackedWidget" name="sta_wdg">
-      <widget class="Tab_WK" name="wk_tab"/>
+      <widget class="CompetitionsWidget" name="wk_tab"/>
       <widget class="ParticipantsWidget" name="tn_tab"/>
-      <widget class="Tab_RG" name="rg_tab"/>
-      <widget class="Tab_SR" name="sr_tab"/>
-      <widget class="Tab_PE" name="pe_tab"/>
-      <widget class="Tab_ER" name="er_tab"/>
-      <widget class="Tab_DR" name="dr_tab"/>
-      <widget class="Tab_ST" name="st_tab"/>
-      <widget class="Tab_ED" name="ed_tab"/>
+      <widget class="SubdivisionsWidget" name="rg_tab"/>
+      <widget class="StartingOrderWidget" name="sr_tab"/>
+      <widget class="CaptureWidget" name="pe_tab"/>
+      <widget class="ResultsWidget" name="er_tab"/>
+      <widget class="ExportWidget" name="dr_tab"/>
+      <widget class="StatusWidget" name="st_tab"/>
+      <widget class="EditorWidget" name="ed_tab"/>
      </widget>
     </item>
     <item row="2" column="0">
@@ -266,7 +266,7 @@ font-weight:bold;</string>
      <x>0</x>
      <y>0</y>
      <width>892</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuWettkampf">
@@ -481,9 +481,9 @@ font-weight:bold;</string>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>Tab_WK</class>
+   <class>CompetitionsWidget</class>
    <extends>QWidget</extends>
-   <header>src/widgets/header/wdg_tab_wk.h</header>
+   <header>competitions/competitionswidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
@@ -493,45 +493,45 @@ font-weight:bold;</string>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>Tab_RG</class>
+   <class>SubdivisionsWidget</class>
    <extends>QWidget</extends>
-   <header>src/widgets/header/wdg_tab_rg.h</header>
+   <header>subdivisions/subdivisionswidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>Tab_PE</class>
+   <class>CaptureWidget</class>
    <extends>QWidget</extends>
-   <header>src/widgets/header/wdg_tab_pe.h</header>
+   <header>capture/capturewidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>Tab_ER</class>
+   <class>ResultsWidget</class>
    <extends>QWidget</extends>
-   <header>src/widgets/header/wdg_tab_er.h</header>
+   <header>results/resultswidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>Tab_DR</class>
+   <class>ExportWidget</class>
    <extends>QWidget</extends>
-   <header>src/widgets/header/wdg_tab_dr.h</header>
+   <header>export/exportwidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>Tab_ST</class>
+   <class>StatusWidget</class>
    <extends>QWidget</extends>
-   <header>src/widgets/header/wdg_tab_st.h</header>
+   <header>status/statuswidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>Tab_ED</class>
+   <class>EditorWidget</class>
    <extends>QWidget</extends>
-   <header>src/widgets/header/wdg_tab_ed.h</header>
+   <header>editor/editorwidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>Tab_SR</class>
+   <class>StartingOrderWidget</class>
    <extends>QWidget</extends>
-   <header>src/widgets/header/wdg_tab_sr.h</header>
+   <header>startingorder/startingorderwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

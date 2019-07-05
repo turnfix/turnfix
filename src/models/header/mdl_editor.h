@@ -1,8 +1,8 @@
 #ifndef MDL_EDITOR_H
 #define MDL_EDITOR_H
 
+#include "editor/editorgraphicsitem.h"
 #include <QAbstractTableModel>
-#include "../../misc/header/gri_editoritem.h"
 
 class QEditorModel : public QAbstractTableModel {
     Q_OBJECT
@@ -14,10 +14,10 @@ public:
     QVariant data(const QModelIndex &index, int role=Qt::DisplayRole) const;
     QVariant headerData(int section, Qt::Orientation orientation,
                         int role = Qt::DisplayRole) const;
-    void setTableData(QList<EditorTextItem*> lst);
+    void setTableData(QList<EditorGraphicsItem *> lst);
 
 private:
-    QList<EditorTextItem*> items;
+    QList<EditorGraphicsItem *> items;
 };
 
 #endif // MDL_EDITOR_H
