@@ -9,7 +9,7 @@ class ParticipantsTableModel : public QSqlQueryModel
     Q_OBJECT
 
 public:
-    enum Type { Individual, Team, Group };
+    enum Type { Individual = 0, Team = 1, Group = 2 };
 
     ParticipantsTableModel(Event *event);
 
@@ -18,6 +18,7 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
     void updateType(Type type);
+    void loadData();
 
 private:
     Event *event;

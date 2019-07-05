@@ -1,27 +1,36 @@
 #include <QSqlQuery>
 #include <QLineEdit>
+#include "qualificationstandardsdialog.h"
+#include "ui_qualificationstandardsdialog.h"
 #include "model/objects/event.h"
 #include "model/viewmodels/qualitablemodel.h"
-#include "qualificationstandardsdialog.h"
 #include "src/global/header/_delegates.h"
 #include "src/global/header/_global.h"
 
-QualificationStandardsDialog::QualificationStandardsDialog(Event *event, int edit, QWidget* parent) : QDialog(parent) {
-    setupUi(this);
+QualificationStandardsDialog::QualificationStandardsDialog(Event *event, int edit, QWidget* parent) : QDialog(parent), ui(new Ui::QualificationStandardsDialog) {
+    ui->setupUi(this);
     setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
 
     this->editid = edit;
     this->event = event;
     this->model = new QQualiTableModel();
 
-    tbl_quali->setModel(model);
     EditorDelegate *ed = new EditorDelegate;
+
+    ui->tbl_quali->setModel(model);
+    ui->tbl_quali->setItemDelegateForColumn(1,ed);
+    ui->tbl_quali->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+    ui->tbl_quali->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
+
     connect(ed, SIGNAL(closeEditor(QWidget*,QAbstractItemDelegate::EndEditHint)), this, SLOT(finishEdit()));
-    tbl_quali->setItemDelegateForColumn(1,ed);
-    tbl_quali->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
-    tbl_quali->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
-    QObject::connect(but_save, SIGNAL(clicked()), this, SLOT(close()));
+    connect(ui->but_save, SIGNAL(clicked()), this, SLOT(close()));
+
     initData();
+}
+
+QualificationStandardsDialog::~QualificationStandardsDialog()
+{
+    delete ui;
 }
 
 void QualificationStandardsDialog::initData() {
@@ -41,8 +50,8 @@ void QualificationStandardsDialog::initData() {
     query.bindValue(1, this->event->getId());
     query.exec();
     query.next();
-    lbl_name->setText(query.value(0).toString());
-    lbl_club->setText(query.value(1).toString());
+    ui->lbl_name->setText(query.value(0).toString());
+    ui->lbl_club->setText(query.value(1).toString());
     QString to;
     switch (query.value(3).toInt()) {
            case 1  : to =  QString(" und älter"); break;
@@ -52,15 +61,15 @@ void QualificationStandardsDialog::initData() {
     if ( query.value(2).toString() == query.value(3).toString() ) {
         to = QString("");
     }
-    lbl_wk->setText("Nr. " + query.value(4).toString() + " - " +query.value(5).toString() + " - Jahrgang " + query.value(2).toString() + to);
+    ui->lbl_wk->setText("Nr. " + query.value(4).toString() + " - " +query.value(5).toString() + " - Jahrgang " + query.value(2).toString() + to);
 }
 
 void QualificationStandardsDialog::finishEdit() {
-    int row = tbl_quali->currentIndex().row();
-    int col = tbl_quali->currentIndex().column();
+    int row = ui->tbl_quali->currentIndex().row();
+    int col = ui->tbl_quali->currentIndex().column();
     if (model->index(row+1,col).isValid()) {
-        tbl_quali->setCurrentIndex(model->index(row+1,col));
+        ui->tbl_quali->setCurrentIndex(model->index(row+1,col));
     } else {
-        tbl_quali->setCurrentIndex(model->index(0,col));
+        ui->tbl_quali->setCurrentIndex(model->index(0,col));
     }
 }

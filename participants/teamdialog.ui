@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>TeamDialogUi</class>
- <widget class="QDialog" name="TeamDialogUi">
+ <class>TeamDialog</class>
+ <widget class="QDialog" name="TeamDialog">
   <property name="geometry">
    <rect>
     <x>0</x>

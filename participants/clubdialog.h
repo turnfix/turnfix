@@ -16,7 +16,7 @@ class ClubDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit ClubDialog(Event *event, QWidget *parent = 0);
+    explicit ClubDialog(Event *event, QWidget *parent = nullptr);
     ~ClubDialog();
 
 private slots:

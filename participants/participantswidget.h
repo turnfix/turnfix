@@ -1,24 +1,28 @@
 #ifndef PARTICIPANTSWIDGET_H
 #define PARTICIPANTSWIDGET_H
 #include <QWidget>
-#include "ui_participantswidget.h"
+
+namespace Ui {
+    class ParticipantsWidget;
+}
 
 class Event;
 class ParticipantsTableModel;
 class QSortFilterProxyModel;
 
-class ParticipantsWidget : public QWidget, public Ui::ParticipantsWidgetUi {
+class ParticipantsWidget : public QWidget {
     Q_OBJECT
 
 public:
-    ParticipantsWidget(QWidget* parent = nullptr);
+    explicit ParticipantsWidget(QWidget* parent = nullptr);
+    ~ParticipantsWidget();
+
+    void refresh();
 
 public slots:
     void loadBestView();
-    void refresh();
 
 private slots:
-    void fillTable();
     void addTN();
     void addCL();
     void editTN();
@@ -28,9 +32,11 @@ private slots:
     void syncTN();
     void updateTNFilterColumn(int index);
     void updateTNFilterText(QString text);
+    void viewChanged(int);
 
 private:
     Event *event;
+    Ui::ParticipantsWidget *ui;
     ParticipantsTableModel *participantsModel;
     QSortFilterProxyModel *sortModel;
 };

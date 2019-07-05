@@ -14,6 +14,7 @@ class IndividualDialog : public QDialog {
 
 public:
     IndividualDialog(Event *event, int edit=0, QWidget* parent = nullptr);
+    ~IndividualDialog();
 
 private slots:
     void initData();

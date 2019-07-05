@@ -1,16 +1,20 @@
 #ifndef QUALIFICATIONSTANDARDSDIALOG_H
 #define QUALIFICATIONSTANDARDSDIALOG_H
 #include <QDialog>
-#include "ui_qualificationstandardsdialog.h"
+
+namespace Ui {
+    class QualificationStandardsDialog;
+}
 
 class QQualiTableModel;
 class Event;
 
-class QualificationStandardsDialog : public QDialog, public Ui::QualificationStandardsDialogUi {
+class QualificationStandardsDialog : public QDialog {
     Q_OBJECT
 
 public:
-    QualificationStandardsDialog(Event *event, int edit=0, QWidget* parent=0);
+    QualificationStandardsDialog(Event *event, int edit=0, QWidget* parent = nullptr);
+    ~QualificationStandardsDialog();
 
 protected slots:
     void initData();
@@ -18,6 +22,7 @@ protected slots:
 
 protected:
     Event *event;
+    Ui::QualificationStandardsDialog *ui;
     int editid;
     QQualiTableModel *model;
 };

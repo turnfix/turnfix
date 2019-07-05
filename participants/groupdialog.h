@@ -17,6 +17,7 @@ class GroupDialog : public QDialog
 
 public:
     explicit GroupDialog(Event *event, int edit=0, QWidget* parent = nullptr);
+    ~GroupDialog();
 
 private slots:
     void initData();

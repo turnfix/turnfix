@@ -1,18 +1,22 @@
 #ifndef TEAMDIALOG_H
 #define TEAMDIALOG_H
 #include <QDialog>
-#include "ui_teamdialog.h"
+
+namespace Ui {
+    class TeamDialog;
+}
 
 class Event;
 class QStandardItemModel;
 class QSortFilterProxyModel;
 class QSqlQueryModel;
 
-class TeamDialog : public QDialog, public Ui::TeamDialogUi {
+class TeamDialog : public QDialog {
     Q_OBJECT
 
 public:
     TeamDialog(Event *event, int edit=0, QWidget* parent = nullptr);
+    ~TeamDialog();
 
 private slots:
     void initData();
@@ -30,6 +34,7 @@ private slots:
 
 private:
     Event *event;
+    Ui::TeamDialog *ui;
     QStandardItemModel *model;
     QSqlQueryModel *model2;
     QSortFilterProxyModel *sortmodel;

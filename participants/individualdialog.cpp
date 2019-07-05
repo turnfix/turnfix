@@ -61,6 +61,11 @@ IndividualDialog::IndividualDialog(Event *event, int edit, QWidget* parent) : QD
     initData();
 }
 
+IndividualDialog::~IndividualDialog()
+{
+    delete ui;
+}
+
 void IndividualDialog::changeDat() {
     if (ui->chk_dat->isChecked()) {
         ui->dae_year->setDisplayFormat("dd.MM.yyyy");

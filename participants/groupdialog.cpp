@@ -82,6 +82,11 @@ GroupDialog::GroupDialog(Event *event, int edit, QWidget* parent) : QDialog(pare
     initData();
 }
 
+GroupDialog::~GroupDialog()
+{
+    delete ui;
+}
+
 void GroupDialog::saveWindowState() {
     Settings::updateFiler(ui->chk_club->isChecked(), ui->chk_planned->isChecked());
 }

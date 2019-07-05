@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ParticipantsWidgetUi</class>
- <widget class="QWidget" name="ParticipantsWidgetUi">
+ <class>ParticipantsWidget</class>
+ <widget class="QWidget" name="ParticipantsWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1031</width>
+    <width>1043</width>
     <height>378</height>
    </rect>
   </property>

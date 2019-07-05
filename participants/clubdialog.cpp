@@ -39,13 +39,13 @@ ClubDialog::ClubDialog(Event *event, QWidget *parent) : QDialog(parent), ui(new 
         ui->cmb_club->addItem(query.value(1).toString(),query.value(0).toInt());
     }
     updateTable();
-    connect(ui->cmb_club,SIGNAL(currentIndexChanged(int)),this,SLOT(updateTable()));
-    connect(ui->chk_vp,SIGNAL(stateChanged(int)),this,SLOT(updateTable()));
-    connect(ui->but_add, SIGNAL(clicked()), this, SLOT(addTn()));
-    connect(ui->but_del, SIGNAL(clicked()), this, SLOT(removeTn()));
-    connect(ui->but_add, SIGNAL(clicked()), this, SLOT(updateTable()));
-    connect(ui->but_del, SIGNAL(clicked()), this, SLOT(updateTable()));
-    connect(ui->but_save, SIGNAL(clicked()), this, SLOT(save()));
+    connect(ui->cmb_club, SIGNAL(currentIndexChanged(int)),this,SLOT(updateTable()));
+    connect(ui->chk_vp, SIGNAL(stateChanged(int)),this,SLOT(updateTable()));
+    connect(ui->but_add, &QPushButton::clicked, this, &ClubDialog::addTn);
+    connect(ui->but_del, &QPushButton::clicked, this, &ClubDialog::removeTn);
+    connect(ui->but_add, &QPushButton::clicked, this, &ClubDialog::updateTable);
+    connect(ui->but_del, &QPushButton::clicked, this, &ClubDialog::updateTable);
+    connect(ui->but_save, &QPushButton::clicked, this, &ClubDialog::save);
 }
 
 ClubDialog::~ClubDialog() {
