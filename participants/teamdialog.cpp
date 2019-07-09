@@ -1,16 +1,16 @@
+#include "teamdialog.h"
+#include "masterdata/athletedialog.h"
+#include "masterdata/clubdialog.h"
+#include "model/objects/event.h"
+#include "src/global/header/_global.h"
+#include "src/global/header/settings.h"
+#include "ui_teamdialog.h"
+#include <QMessageBox>
+#include <QSortFilterProxyModel>
 #include <QSqlQuery>
 #include <QSqlQueryModel>
 #include <QStandardItemModel>
 #include <QToolBar>
-#include <QMessageBox>
-#include <QSortFilterProxyModel>
-#include "model/objects/event.h"
-#include "teamdialog.h"
-#include "src/dialogs/database/header/dlg_db_tn.h"
-#include "src/dialogs/database/header/dlg_db_club.h"
-#include "src/global/header/_global.h"
-#include "src/global/header/settings.h"
-#include "ui_teamdialog.h"
 
 TeamDialog::TeamDialog(Event *event, int edit, QWidget* parent) : QDialog(parent), ui(new Ui::TeamDialog) {
     ui->setupUi(this);
@@ -408,14 +408,16 @@ void TeamDialog::fillTable2() {
 }
 
 void TeamDialog::addAv() {
-    Db_Tn_Dialog *tu = new Db_Tn_Dialog(0,this);
+    AthleteDialog *tu = new AthleteDialog(0, this);
     tu->setVerein(ui->cmb_club->currentText());
     tu->exec();
     fillTable2();
 }
 
 void TeamDialog::editAv() {
-    Db_Tn_Dialog *tu = new Db_Tn_Dialog(QVariant(sortmodel->data(sortmodel->index(ui->tbl_avtn->currentIndex().row(),3))).toInt(),this);
+    AthleteDialog *tu = new AthleteDialog(
+        QVariant(sortmodel->data(sortmodel->index(ui->tbl_avtn->currentIndex().row(), 3))).toInt(),
+        this);
     tu->exec();
     fillTable2();
 }
@@ -433,7 +435,7 @@ void TeamDialog::updateClubs() {
 }
 
 void TeamDialog::addClub() {
-    Db_Club_Dialog *pe = new Db_Club_Dialog(0,this);
+    ClubDialog *pe = new ClubDialog(0, this);
     if(pe->exec() == 1) { updateClubs(); }
 }
 

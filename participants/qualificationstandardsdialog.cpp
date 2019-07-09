@@ -1,11 +1,11 @@
-#include <QSqlQuery>
-#include <QLineEdit>
 #include "qualificationstandardsdialog.h"
-#include "ui_qualificationstandardsdialog.h"
 #include "model/objects/event.h"
-#include "model/viewmodels/qualitablemodel.h"
+#include "qualitablemodel.h"
 #include "src/global/header/_delegates.h"
 #include "src/global/header/_global.h"
+#include "ui_qualificationstandardsdialog.h"
+#include <QLineEdit>
+#include <QSqlQuery>
 
 QualificationStandardsDialog::QualificationStandardsDialog(Event *event, int edit, QWidget* parent) : QDialog(parent), ui(new Ui::QualificationStandardsDialog) {
     ui->setupUi(this);
@@ -13,7 +13,7 @@ QualificationStandardsDialog::QualificationStandardsDialog(Event *event, int edi
 
     this->editid = edit;
     this->event = event;
-    this->model = new QQualiTableModel();
+    this->model = new QualificationStandardsTableModel();
 
     EditorDelegate *ed = new EditorDelegate;
 

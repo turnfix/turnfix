@@ -1,7 +1,7 @@
+#include "app/logindialog.h"
+#include "app/mainwindow.h"
 #include <QApplication>
 #include <QTranslator>
-#include "view/windows/mainwindow.h"
-#include "view/dialogs/logindialog.h"
 
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);

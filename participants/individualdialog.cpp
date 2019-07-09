@@ -1,11 +1,11 @@
-#include <QSqlQuery>
-#include <QMessageBox>
-#include <QToolBar>
-#include "model/objects/event.h"
 #include "individualdialog.h"
-#include "src/dialogs/database/header/dlg_db_club.h"
+#include "masterdata/clubdialog.h"
+#include "model/objects/event.h"
 #include "src/global/header/_global.h"
 #include "ui_individualdialog.h"
+#include <QMessageBox>
+#include <QSqlQuery>
+#include <QToolBar>
 
 IndividualDialog::IndividualDialog(Event *event, int edit, QWidget* parent) : QDialog(parent), ui(new Ui::IndividualDialog) {
     editid=edit;
@@ -51,13 +51,15 @@ IndividualDialog::IndividualDialog(Event *event, int edit, QWidget* parent) : QD
         QList<int> color = _global::splitColorArray(query2.value(2).toString());
         ui->cmb_status->setItemData(ui->cmb_status->count()-1,QColor(color.at(0),color.at(1),color.at(2)),Qt::BackgroundColorRole);
     }
-    QObject::connect(ui->cmb_wk, SIGNAL(currentIndexChanged(int)), this, SLOT(checkDisziplinen()));
-    QObject::connect(ui->cmb_wk, SIGNAL(currentIndexChanged(int)), this, SLOT(checkJg()));
-    QObject::connect(ui->but_save, SIGNAL(clicked()), this, SLOT(save()));
-    QObject::connect(ui->cmb_name, SIGNAL(editTextChanged(QString)), this, SLOT(checkUpdate()));
-    QObject::connect(ui->dae_year, SIGNAL(dateChanged(QDate)), this, SLOT(checkJg()));
-    QObject::connect(ui->chk_dat, SIGNAL(stateChanged(int)), this, SLOT(changeDat()));
-    QObject::connect(ui->but_addclub, SIGNAL(clicked()), this, SLOT(addClub()));
+
+    connect(ui->cmb_wk, SIGNAL(currentIndexChanged(int)), this, SLOT(checkDisziplinen()));
+    connect(ui->cmb_wk, SIGNAL(currentIndexChanged(int)), this, SLOT(checkJg()));
+    connect(ui->but_save, SIGNAL(clicked()), this, SLOT(save()));
+    connect(ui->cmb_name, SIGNAL(editTextChanged(QString)), this, SLOT(checkUpdate()));
+    connect(ui->dae_year, SIGNAL(dateChanged(QDate)), this, SLOT(checkJg()));
+    connect(ui->chk_dat, SIGNAL(stateChanged(int)), this, SLOT(changeDat()));
+    connect(ui->but_addclub, SIGNAL(clicked()), this, SLOT(addClub()));
+
     initData();
 }
 
@@ -411,6 +413,6 @@ void IndividualDialog::updateClubs() {
 }
 
 void IndividualDialog::addClub() {
-    Db_Club_Dialog *pe = new Db_Club_Dialog(0,this);
+    ClubDialog *pe = new ClubDialog(0, this);
     if(pe->exec() == 1) { updateClubs(); }
 }

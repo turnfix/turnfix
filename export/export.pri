@@ -15,6 +15,8 @@ FORMS += \
 HEADERS += \
     $$PWD/exportwidget.h \
     $$PWD/maildialog.h \
+    $$PWD/mailsender.h \
+    $$PWD/mailthread.h \
     $$PWD/print.h \
     $$PWD/selectclubdialog.h \
     $$PWD/selectcompetitiondialog.h \
@@ -26,6 +28,8 @@ HEADERS += \
 SOURCES += \
     $$PWD/exportwidget.cpp \
     $$PWD/maildialog.cpp \
+    $$PWD/mailsender.cpp \
+    $$PWD/mailthread.cpp \
     $$PWD/print.cpp \
     $$PWD/selectclubdialog.cpp \
     $$PWD/selectcompetitiondialog.cpp \

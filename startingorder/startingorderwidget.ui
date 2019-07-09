@@ -183,7 +183,7 @@
   <customwidget>
    <class>ExtendedListWidget</class>
    <extends>QListWidget</extends>
-   <header>src/widgets/subclasses/header/extendedlistwidget.h</header>
+   <header>controls/extendedlistwidget.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

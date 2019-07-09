@@ -1,17 +1,17 @@
+#include "participantswidget.h"
+#include "groupdialog.h"
+#include "individualdialog.h"
+#include "model/objects/event.h"
+#include "model/settings/session.h"
+#include "multiparticipantsdialog.h"
+#include "participantstablemodel.h"
+#include "qualificationstandardsdialog.h"
+#include "src/global/header/_global.h"
+#include "teamdialog.h"
+#include "ui_participantswidget.h"
 #include <QMessageBox>
 #include <QSortFilterProxyModel>
 #include <QSqlQuery>
-#include "clubdialog.h"
-#include "groupdialog.h"
-#include "individualdialog.h"
-#include "participantstablemodel.h"
-#include "participantswidget.h"
-#include "qualificationstandardsdialog.h"
-#include "teamdialog.h"
-#include "ui_participantswidget.h"
-#include "model/settings/session.h"
-#include "model/objects/event.h"
-#include "src/global/header/_global.h"
 
 ParticipantsWidget::ParticipantsWidget(QWidget* parent) : QWidget(parent), ui(new Ui::ParticipantsWidget) {
     ui->setupUi(this);
@@ -141,7 +141,7 @@ void ParticipantsWidget::addTN() {
 }
 
 void ParticipantsWidget::addCL() {
-    ClubDialog *cl = new ClubDialog(this->event, this);
+    MultiParticipantsDialog *cl = new MultiParticipantsDialog(this->event, this);
     if(cl->exec() == 1) {
         this->participantsModel->loadData();
     }

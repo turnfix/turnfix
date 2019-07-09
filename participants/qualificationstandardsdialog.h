@@ -6,7 +6,7 @@ namespace Ui {
     class QualificationStandardsDialog;
 }
 
-class QQualiTableModel;
+class QualificationStandardsTableModel;
 class Event;
 
 class QualificationStandardsDialog : public QDialog {
@@ -24,7 +24,7 @@ protected:
     Event *event;
     Ui::QualificationStandardsDialog *ui;
     int editid;
-    QQualiTableModel *model;
+    QualificationStandardsTableModel *model;
 };
 
 #endif

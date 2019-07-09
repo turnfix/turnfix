@@ -1,9 +1,9 @@
 #include "maildialog.h"
+#include "mailthread.h"
 #include "model/objects/event.h"
 #include "selectclubdialog.h"
 #include "src/global/header/_global.h"
 #include "src/global/header/settings.h"
-#include "src/misc/header/trd_progress.h"
 #include <QMessageBox>
 #include <QProgressDialog>
 #include <QSettings>
@@ -53,7 +53,7 @@ void MailDialog::sendMails() {
             checked.append(false);
         }
     }
-    Progress_Thread *progress = new Progress_Thread(this->event);
+    MailThread *progress = new MailThread(this->event);
     dlg = new QProgressDialog("PDF-Dateien werden erzeugt...", nullptr, 0, 0, this);
     dlg->setLabelText("PDF-Dateien werden erzeugt...");
     QObject::connect(progress, SIGNAL(textChanged(QString)), this, SLOT(updateDialogLabel(QString)));

@@ -1,14 +1,14 @@
+#include "groupdialog.h"
+#include "masterdata/athletedialog.h"
+#include "masterdata/clubdialog.h"
+#include "model/objects/event.h"
+#include "src/global/header/_global.h"
+#include "src/global/header/settings.h"
+#include "ui_groupdialog.h"
 #include <QSqlQuery>
 #include <QSqlQueryModel>
 #include <QStandardItemModel>
 #include <QToolBar>
-#include "model/objects/event.h"
-#include "groupdialog.h"
-#include "ui_groupdialog.h"
-#include "src/dialogs/database/header/dlg_db_tn.h"
-#include "src/dialogs/database/header/dlg_db_club.h"
-#include "src/global/header/_global.h"
-#include "src/global/header/settings.h"
 
 GroupDialog::GroupDialog(Event *event, int edit, QWidget* parent) : QDialog(parent), ui(new Ui::GroupDialog) {
     ui->setupUi(this);
@@ -393,14 +393,15 @@ void GroupDialog::fillTable2() {
 }
 
 void GroupDialog::addAv() {
-    Db_Tn_Dialog *tu = new Db_Tn_Dialog(0,this);
+    AthleteDialog *tu = new AthleteDialog(0, this);
     tu->setVerein(ui->cmb_club->currentText());
     tu->exec();
     fillTable2();
 }
 
 void GroupDialog::editAv() {
-    Db_Tn_Dialog *tu = new Db_Tn_Dialog(QVariant(model2->data(model2->index(ui->tbl_avtn->currentIndex().row(),3))).toInt(),this);
+    AthleteDialog *tu = new AthleteDialog(
+        QVariant(model2->data(model2->index(ui->tbl_avtn->currentIndex().row(), 3))).toInt(), this);
     tu->setVerein(ui->cmb_club->currentText());
     tu->exec();
     fillTable2();
@@ -455,7 +456,7 @@ void GroupDialog::updateClubs() {
 }
 
 void GroupDialog::addClub() {
-    Db_Club_Dialog *pe = new Db_Club_Dialog(0,this);
+    ClubDialog *pe = new ClubDialog(0, this);
     if(pe->exec() == 1) { updateClubs(); }
 }
 

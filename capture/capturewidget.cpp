@@ -3,9 +3,9 @@
 #include "model/objects/event.h"
 #include "model/settings/session.h"
 #include "resultssheetdialog.h"
+#include "scorecarddialog.h"
 #include "src/global/header/_global.h"
 #include "ui_capturewidget.h"
-#include "view/dialogs/scorecarddialog.h"
 #include <QKeyEvent>
 #include <QSqlQuery>
 
