@@ -1,16 +1,18 @@
 #include "logindialog.h"
 #include "checkdatabasedialog.h"
+#include "connectionmodel.h"
 #include "eventdialog.h"
 #include "eventtablemodel.h"
 #include "model/database/db.h"
+#include "model/entitymanager.h"
 #include "model/objects/event.h"
 #include "model/settings/session.h"
 #include "ui_logindialog.h"
 #include <QMessageBox>
 
-LoginDialog::LoginDialog(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::LoginDialog)
+LoginDialog::LoginDialog(EntityManager *em, QWidget *parent)
+    : QDialog(parent)
+    , ui(new Ui::LoginDialog)
 {
     ui->setupUi(this);
 
@@ -18,6 +20,9 @@ LoginDialog::LoginDialog(QWidget *parent) :
     ui->selectionBarWidget->addButton(ui->settingsAction);
 
     ui->selectionBarWidget->selectFirstButton();
+
+    auto connectionModel = new ConnectionModel(em, this);
+    ui->connectionComboBox->setModel(connectionModel);
 
     eventTableModel = new EventTableModel();
 

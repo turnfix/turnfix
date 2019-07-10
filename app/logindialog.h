@@ -7,6 +7,7 @@ namespace Ui {
     class LoginDialog;
 }
 
+class EntityManager;
 class EventTableModel;
 
 class LoginDialog : public QDialog
@@ -14,7 +15,7 @@ class LoginDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit LoginDialog(QWidget *parent = 0);
+    explicit LoginDialog(EntityManager *em, QWidget *parent = nullptr);
     ~LoginDialog();
 
 private:

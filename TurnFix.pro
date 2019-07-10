@@ -31,6 +31,7 @@ win32 {
     TARGET = TurnFix
 }
 
+include(model/model.pri)
 include(app/app.pri)
 include(masterdata/masterdata.pri)
 include(competitions/competitions.pri)

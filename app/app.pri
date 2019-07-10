@@ -10,6 +10,7 @@ FORMS += \
 HEADERS += \
     $$PWD/aboutdialog.h \
     $$PWD/checkdatabasedialog.h \
+    $$PWD/connectionmodel.h \
     $$PWD/dbchecker.h \
     $$PWD/dbcolumn.h \
     $$PWD/dbconstraint.h \
@@ -24,6 +25,7 @@ HEADERS += \
 
 SOURCES += \
     $$PWD/checkdatabasedialog.cpp \
+    $$PWD/connectionmodel.cpp \
     $$PWD/dbchecker.cpp \
     $$PWD/dbcolumn.cpp \
     $$PWD/dbconstraint.cpp \
