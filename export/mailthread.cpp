@@ -8,7 +8,7 @@
 #include "export/results/individual.h"
 #include "export/results/round.h"
 #include "mailsender.h"
-#include "model/objects/event.h"
+#include "model/entity/event.h"
 #include "src/global/header/_global.h"
 #include "src/global/header/settings.h"
 #include <QFile>

@@ -14,7 +14,7 @@ void RegistrationMatrix::print(QPrinter *printer) {
 void RegistrationMatrix::printContent() {
     QSqlQuery query;
     query.prepare("SELECT int_wettkaempfeid, var_nummer FROM tfx_wettkaempfe WHERE int_veranstaltungenid=? ORDER BY var_nummer");
-    query.bindValue(0, this->event->getMainEventId());
+    query.bindValue(0, this->event->mainEventId());
     query.exec();
     int count = _global::querySize(query);
     QList<int> ges;
@@ -60,8 +60,8 @@ void RegistrationMatrix::printContent() {
         }
         QSqlQuery query2;
         query2.prepare(querystring);
-        query2.bindValue(0, this->event->getMainEventId());
-        if (!teamMode) query2.bindValue(1, this->event->getRound());
+        query2.bindValue(0, this->event->mainEventId());
+        if (!teamMode) query2.bindValue(1, this->event->round());
         query2.exec();
         while(query2.next()) {
             if (yco+mmToPixel(5.3) > max_yco) {

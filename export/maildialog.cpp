@@ -1,6 +1,6 @@
 #include "maildialog.h"
 #include "mailthread.h"
-#include "model/objects/event.h"
+#include "model/entity/event.h"
 #include "selectclubdialog.h"
 #include "src/global/header/_global.h"
 #include "src/global/header/settings.h"

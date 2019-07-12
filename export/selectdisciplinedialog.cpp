@@ -1,6 +1,6 @@
-#include <QSqlQuery>
 #include "selectdisciplinedialog.h"
-#include "model/objects/event.h"
+#include "model/entity/event.h"
+#include <QSqlQuery>
 
 SelectDisciplineDialog::SelectDisciplineDialog(Event *event, QWidget* parent) : QDialog(parent) {
     setupUi(this);
@@ -15,7 +15,7 @@ SelectDisciplineDialog::SelectDisciplineDialog(Event *event, QWidget* parent) : 
 void SelectDisciplineDialog::initData() {
     QSqlQuery query2;
     query2.prepare("SELECT DISTINCT int_disziplinenid, tfx_disziplinen.var_name, var_icon, CASE WHEN tfx_wettkaempfe.bol_kp='true' OR tfx_wettkaempfe_x_disziplinen.bol_kp='true' THEN 1 ELSE 0 END as kp FROM tfx_disziplinen INNER JOIN tfx_wettkaempfe_x_disziplinen USING (int_disziplinenid) INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) WHERE int_veranstaltungenid=? GROUP BY int_disziplinenid, tfx_wettkaempfe.bol_kp, tfx_wettkaempfe_x_disziplinen.bol_kp, tfx_disziplinen.var_name, var_icon ORDER BY tfx_disziplinen.var_name, kp");
-    query2.bindValue(0, this->event->getMainEventId());
+    query2.bindValue(0, this->event->mainEventId());
     query2.exec();
     while (query2.next()) {
         QString name = query2.value(1).toString();

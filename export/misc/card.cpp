@@ -1,5 +1,5 @@
 #include "card.h"
-#include "model/objects/competition.h"
+#include "model/entity/competition.h"
 #include "src/global/header/_global.h"
 #include "src/global/header/settings.h"
 
@@ -63,7 +63,7 @@ void Card::printContent() {
                 QString name = query2.value(1).toString();
                 QSqlQuery checkKuer;
                 checkKuer.prepare("SELECT int_wettkaempfeid FROM tfx_wettkaempfe INNER JOIN tfx_wettkaempfe_x_disziplinen USING (int_wettkaempfeid) INNER JOIN tfx_veranstaltungen USING (int_veranstaltungenid) WHERE int_veranstaltungenid=? AND tfx_wettkaempfe.var_nummer=? AND (tfx_wettkaempfe.bol_kp='true' OR tfx_wettkaempfe_x_disziplinen.bol_kp='true')");
-                checkKuer.bindValue(0, this->event->getMainEventId());
+                checkKuer.bindValue(0, this->event->mainEventId());
                 checkKuer.bindValue(1,query.value(0).toString());
                 checkKuer.exec();
                 if (_global::querySize(checkKuer)>0) {

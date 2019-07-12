@@ -3,8 +3,7 @@
 #include "eventdialog.h"
 #include "export/maildialog.h"
 #include "masterdata/masterdatadialog.h"
-#include "model/objects/event.h"
-#include "model/settings/session.h"
+#include "model/entity/event.h"
 #include "participants/licensenumberdialog.h"
 #include "src/global/header/settings.h"
 #include <QActionGroup>
@@ -13,8 +12,11 @@
 #include <QSqlQuery>
 #include <QToolBar>
 
-MainWindow::MainWindow() {
-    event = Session::getInstance()->getEvent();
+MainWindow::MainWindow(EntityManager *em, Event *event)
+    : QMainWindow()
+    , m_em(em)
+{
+    m_event = event;
 
     _global::initFields();
     setupUi(this);
@@ -104,7 +106,7 @@ MainWindow::MainWindow() {
 void MainWindow::initTabs() {
     QSqlQuery query;
     query.prepare("SELECT int_runde, int_hauptwettkampf, bol_rundenwettkampf, tfx_veranstaltungen.var_name, tfx_wettkampforte.var_name, var_ort FROM tfx_veranstaltungen INNER JOIN tfx_wettkampforte USING (int_wettkampforteid) WHERE int_veranstaltungenid=? LIMIT 1");
-    query.bindValue(0, event->getId());
+    query.bindValue(0, m_event->id());
     query.exec();
     query.next();
 
@@ -131,7 +133,7 @@ void MainWindow::showAbout() {
 }
 
 void MainWindow::showWKConf() {
-    EventDialog *nwkw = new EventDialog(this->event, this->event->getId(), this);
+    EventDialog *nwkw = new EventDialog(m_em, m_event, this);
     nwkw->exec();
 }
 
@@ -143,8 +145,8 @@ void MainWindow::newNumbers() {
     if (!ok) return;
     QSqlQuery query;
     query.prepare("SELECT int_wertungenid, var_nummer FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) LEFT JOIN tfx_teilnehmer USING (int_teilnehmerid) LEFT JOIN tfx_gruppen USING (int_gruppenid) INNER JOIN tfx_vereine ON tfx_vereine.int_vereineid = tfx_gruppen.int_vereineid OR tfx_vereine.int_vereineid = tfx_teilnehmer.int_vereineid WHERE int_veranstaltungenid=? AND int_runde=? ORDER BY "+_global::substring("tfx_vereine.var_name","int_start_ort+1")+", tfx_vereine.var_name, var_nummer, int_mannschaftenid, int_wertungenid");
-    query.bindValue(0, this->event->getMainEventId());
-    query.bindValue(1, this->event->getRound());
+    query.bindValue(0, m_event->mainEventId());
+    query.bindValue(1, m_event->round());
     query.exec();
     int stnr=firstNumber;
     int mstnr=1;
@@ -158,7 +160,7 @@ void MainWindow::newNumbers() {
     }
     QSqlQuery query4;
     query4.prepare("SELECT int_mannschaftenid FROM tfx_mannschaften INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) INNER JOIN tfx_vereine USING (int_vereineid) WHERE int_veranstaltungenid=? ORDER BY "+_global::substring("tfx_vereine.var_name","int_start_ort+1")+", tfx_wettkaempfe.var_nummer, tfx_mannschaften.int_nummer");
-    query4.bindValue(0, this->event->getMainEventId());
+    query4.bindValue(0, m_event->mainEventId());
     query4.exec();
     while (query4.next()) {
         QSqlQuery query3;
@@ -187,7 +189,7 @@ void MainWindow::showDisDB() {
 }
 
 void MainWindow::editPass() {
-    LicenseNumberDialog *pass = new LicenseNumberDialog(this->event, this);
+    LicenseNumberDialog *pass = new LicenseNumberDialog(m_event, this);
     pass->exec();
 }
 
@@ -202,7 +204,7 @@ void MainWindow::changeWK() {
 }
 
 void MainWindow::sendMLists() {
-    MailDialog *vn = new MailDialog(this->event, this);
+    MailDialog *vn = new MailDialog(m_event, this);
     // TODO check
     // vn->setDetailInfo(dr_tab->ui->cmb_detail->currentIndex());
     vn->exec();

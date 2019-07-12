@@ -8,7 +8,7 @@
 #include "misc/registrationmatrix.h"
 #include "misc/summary.h"
 #include "misc/timetable.h"
-#include "model/objects/competition.h"
+#include "model/entity/competition.h"
 #include "model/settings/session.h"
 #include "participants/itchecklist.h"
 #include "participants/judgessheet.h"
@@ -252,7 +252,7 @@ void ExportWidget::createCSV(int mode)
         QTextStream stream(&file);
         QSqlQuery query5;
         query5.prepare("SELECT var_nummer, var_name FROM tfx_wettkaempfe WHERE int_veranstaltungenid=?  AND (SELECT COUNT(*) FROM tfx_wertungen WHERE int_wettkaempfeid=tfx_wettkaempfe.int_wettkaempfeid) > 0 ORDER BY var_nummer");
-        query5.bindValue(0, this->event->getMainEventId());
+        query5.bindValue(0, this->event->mainEventId());
         query5.exec();
         while (query5.next()) {
             stream << "Platz;";
@@ -267,7 +267,7 @@ void ExportWidget::createCSV(int mode)
                 rlist = Result_Calc::resultArrayNew(competition);
                 QSqlQuery dis;
                 dis.prepare("SELECT tfx_disziplinen.var_name, CASE WHEN tfx_wettkaempfe.bol_kp='true' OR tfx_wettkaempfe_x_disziplinen.bol_kp='true' THEN generate_series(0,1) ELSE 0 END as kp FROM tfx_wettkaempfe_x_disziplinen INNER JOIN tfx_disziplinen USING (int_disziplinenid) INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) WHERE int_veranstaltungenid=? AND var_nummer=? ORDER BY int_sortierung, kp");
-                dis.bindValue(0, this->event->getMainEventId());
+                dis.bindValue(0, this->event->mainEventId());
                 dis.bindValue(1, query5.value(0).toString());
                 dis.exec();
                 while (dis.next()) {

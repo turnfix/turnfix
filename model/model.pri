@@ -1,15 +1,17 @@
 HEADERS += \
-    $$PWD/abstractconnection.h \
-    $$PWD/abstractrepository.h \
-    $$PWD/connectionrepository.h \
+    $$PWD/dbchecker.h \
+    $$PWD/dbcolumn.h \
+    $$PWD/dbconstraint.h \
+    $$PWD/dbtable.h \
     $$PWD/entitymanager.h \
-    $$PWD/postgresqlconnection.h \
-    $$PWD/sqliteconnection.h
+    $$PWD/enums.h
 
 SOURCES += \
-    $$PWD/abstractconnection.cpp \
-    $$PWD/abstractrepository.cpp \
-    $$PWD/connectionrepository.cpp \
-    $$PWD/entitymanager.cpp \
-    $$PWD/postgresqlconnection.cpp \
-    $$PWD/sqliteconnection.cpp
+    $$PWD/dbchecker.cpp \
+    $$PWD/dbcolumn.cpp \
+    $$PWD/dbconstraint.cpp \
+    $$PWD/dbtable.cpp \
+    $$PWD/entitymanager.cpp
+
+include(entity/entity.pri)
+include(repository/repository.pri)

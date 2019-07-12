@@ -224,7 +224,7 @@ Weiter Informationen zu PostgreSQL finden Sie unter http://www.postgresql.org</s
        </size>
       </property>
       <property name="pixmap">
-       <pixmap resource="../../assets/icons/icons.qrc">:/icons/hourglass.png</pixmap>
+       <pixmap resource="../assets/icons/icons.qrc">:/icons/hourglass.png</pixmap>
       </property>
      </widget>
     </item>
@@ -260,7 +260,7 @@ Weiter Informationen zu PostgreSQL finden Sie unter http://www.postgresql.org</s
        </size>
       </property>
       <property name="pixmap">
-       <pixmap resource="../../assets/icons/icons.qrc">:/icons/hourglass.png</pixmap>
+       <pixmap resource="../assets/icons/icons.qrc">:/icons/hourglass.png</pixmap>
       </property>
      </widget>
     </item>
@@ -286,7 +286,7 @@ Weiter Informationen zu PostgreSQL finden Sie unter http://www.postgresql.org</s
        </size>
       </property>
       <property name="pixmap">
-       <pixmap resource="../../assets/icons/icons.qrc">:/icons/hourglass.png</pixmap>
+       <pixmap resource="../assets/icons/icons.qrc">:/icons/hourglass.png</pixmap>
       </property>
      </widget>
     </item>
@@ -312,7 +312,7 @@ Weiter Informationen zu PostgreSQL finden Sie unter http://www.postgresql.org</s
        </size>
       </property>
       <property name="pixmap">
-       <pixmap resource="../../assets/icons/icons.qrc">:/icons/hourglass.png</pixmap>
+       <pixmap resource="../assets/icons/icons.qrc">:/icons/hourglass.png</pixmap>
       </property>
      </widget>
     </item>
@@ -327,7 +327,7 @@ Weiter Informationen zu PostgreSQL finden Sie unter http://www.postgresql.org</s
   </widget>
  </widget>
  <resources>
-  <include location="../../assets/icons/icons.qrc"/>
+  <include location="../assets/icons/icons.qrc"/>
  </resources>
  <connections/>
 </ui>

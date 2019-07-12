@@ -50,14 +50,14 @@ void PostgresSetupWizard::updateStatus(int stage, bool successful, QString messa
         {
             settings = TFSettings::getInstance();
             settings->setDbTyp(0);
-            settings->setDbServer(ui->serverText->text());
-            settings->setDbUser(ui->turnfixUserText->text());
-            settings->setDbPass(ui->turnfixPassText->text());
-            settings->setDbDatabase(ui->databaseNameText->text());
+            //settings->setDbServer(ui->serverText->text());
+            //settings->setDbUser(ui->turnfixUserText->text());
+            //settings->setDbPass(ui->turnfixPassText->text());
+            //settings->setDbDatabase(ui->databaseNameText->text());
             settings->saveData();
 
-            CheckDatabaseDialog dialog;
-            dialog.exec();
+            //CheckDatabaseDialog dialog;
+            //dialog.exec();
 
             this->button(QWizard::FinishButton)->setEnabled(true);
         }

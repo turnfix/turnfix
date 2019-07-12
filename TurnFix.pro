@@ -46,23 +46,13 @@ include(editor/editor.pri)
 include(controls/controls.pri)
 include(libs/libs.pri)
 
-HEADERS += model/objects/competition.h \
-    src/global/header/_delegates.h \
+HEADERS += src/global/header/_delegates.h \
     src/global/header/_global.h \
     src/global/header/settings.h \
     src/global/header/result_calc.h \
-    model/database/db.h \
     model/settings/tfsettings.h \
-    model/objects/event.h \
-    model/database/tfsqlquery.h \
-    model/objects/location.h \
     model/settings/session.h
 SOURCES += main.cpp \
-    model/database/db.cpp \
-    model/database/tfsqlquery.cpp \
-    model/objects/competition.cpp \
-    model/objects/event.cpp \
-    model/objects/location.cpp \
     model/settings/session.cpp \
     model/settings/tfsettings.cpp \
     src/global/_delegates.cpp \

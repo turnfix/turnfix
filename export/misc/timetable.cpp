@@ -12,7 +12,7 @@ void Timetable::print(QPrinter *printer) {
 void Timetable::printContent() {
     QSqlQuery query;
     query.prepare("SELECT int_durchgang, int_bahn, var_nummer, tim_einturnen, tim_startzeit, var_name FROM tfx_wettkaempfe WHERE int_veranstaltungenid=? ORDER BY int_durchgang,int_bahn,var_nummer");
-    query.bindValue(0, this->event->getMainEventId());
+    query.bindValue(0, this->event->mainEventId());
     query.exec();
     int max_y;
     int start_y;

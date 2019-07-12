@@ -1,8 +1,8 @@
 #ifndef PARTICIPANTSTABLEMODEL_H
 #define PARTICIPANTSTABLEMODEL_H
 
+#include "model/entity/event.h"
 #include <QSqlQueryModel>
-#include "model/objects/event.h"
 
 class ParticipantsTableModel : public QSqlQueryModel
 {

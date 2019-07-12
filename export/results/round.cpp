@@ -1,5 +1,5 @@
 #include "round.h"
-#include "model/objects/competition.h"
+#include "model/entity/competition.h"
 #include "src/global/header/_global.h"
 #include "src/global/header/result_calc.h"
 
@@ -79,8 +79,8 @@ void Round::printSubHeader() {
     }
     QSqlQuery rnd;
     rnd.prepare("SELECT "+_global::date("dat_von",10)+" FROM tfx_veranstaltungen INNER JOIN tfx_wettkampforte USING (int_wettkampforteid) WHERE int_veranstaltungenid=? OR int_hauptwettkampf=? AND bol_rundenwettkampf='true' ORDER BY int_runde");
-    rnd.bindValue(0, this->event->getMainEventId());
-    rnd.bindValue(1, this->event->getMainEventId());
+    rnd.bindValue(0, this->event->mainEventId());
+    rnd.bindValue(1, this->event->mainEventId());
     rnd.exec();
     setPrinterFont(7);
     while (rnd.next()) {

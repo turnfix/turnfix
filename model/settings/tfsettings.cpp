@@ -90,31 +90,6 @@ QString TFSettings::getOnlinePass()
     return this->toaPass;
 }
 
-QString TFSettings::getDbServer()
-{
-    return this->dbServer;
-}
-
-QString TFSettings::getDbUser()
-{
-    return this->dbUser;
-}
-
-QString TFSettings::getDbPass()
-{
-    return this->dbPass;
-}
-
-QString TFSettings::getDbDatabase()
-{
-    return this->dbDatabase;
-}
-
-QString TFSettings::getDbFilename()
-{
-    return this->dbFilename;
-}
-
 QString TFSettings::getVersion()
 {
     return this->version;
@@ -190,31 +165,6 @@ void TFSettings::setOnlinePass(QString toaPass)
     this->toaPass = toaPass;
 }
 
-void TFSettings::setDbServer(QString dbServer)
-{
-    this->dbServer = dbServer;
-}
-
-void TFSettings::setDbUser(QString dbUser)
-{
-    this->dbUser = dbUser;
-}
-
-void TFSettings::setDbPass(QString dbPass)
-{
-    this->dbPass = dbPass;
-}
-
-void TFSettings::setDbDatabase(QString dbDatabase)
-{
-    this->dbDatabase = dbDatabase;
-}
-
-void TFSettings::setDbFilename(QString dbFilename)
-{
-    this->dbFilename = dbFilename;
-}
-
 void TFSettings::setCreator(QString creator)
 {
     this->creator = creator;
@@ -237,12 +187,6 @@ void TFSettings::readData()
     barcodeFont = QFont(settings.value("Misc/BarcodeFont").toString());
     nameFormat = settings.value("Misc/ListNameFormat").toInt();
     juryRound = settings.value("Misc/JuryRound").toInt();
-    dbUser = settings.value("Database/Username").toString();
-    dbPass = settings.value("Database/Password").toString();
-    dbDatabase = settings.value("Database/Database").toString();
-    dbServer = settings.value("Database/Server").toString();
-    dbTyp = settings.value("Database/DBTyp").toInt();
-    dbFilename = settings.value("Database/Filename").toString();
     version = settings.value("Misc/Version").toString();
     juryResults = settings.value("Application/JuryResults").toBool();
     clubFilter = settings.value("Application/ClubFilter").toBool();
@@ -266,12 +210,6 @@ void TFSettings::saveData()
     settings.setValue("Misc/BarcodeFont",barcodeFont.family());
     settings.setValue("Misc/ListNameFormat",nameFormat);
     settings.setValue("Misc/JuryRound",juryRound);
-    settings.setValue("Database/DBTyp", dbTyp);
-    settings.setValue("Database/Username", dbUser);
-    settings.setValue("Database/Password", dbPass);
-    settings.setValue("Database/Database", dbDatabase);
-    settings.setValue("Database/Server", dbServer);
-    settings.setValue("Database/Filename", dbFilename);
     settings.setValue("Misc/Version", version);
     settings.setValue("Application/JuryResults", juryResults);
     settings.setValue("Application/ClubFilter", clubFilter);

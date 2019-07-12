@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
     if (dialog.exec() != 1) {
         return 0;
     } else {
-        MainWindow mw;
+        MainWindow mw(&em, dialog.selectedEvent());
         mw.show();
         return app.exec();
     }

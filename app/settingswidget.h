@@ -23,10 +23,7 @@ private:
     void saveData();
 
 private slots:
-    void buttonController(QAbstractButton* button);
-    void openDatabaseFile();
-    void createDatabaseFile();
-    void setupPostgresDatabase();
+    void buttonController(QAbstractButton *button);
 };
 
 #endif // SETTINGSWIDGET_H

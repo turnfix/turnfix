@@ -1,5 +1,5 @@
 #include "competitiondialog.h"
-#include "model/objects/event.h"
+#include "model/entity/event.h"
 #include "src/global/header/_delegates.h"
 #include "src/global/header/_global.h"
 #include "src/global/header/settings.h"
@@ -239,7 +239,7 @@ void CompetitionDialog::save()
             "int_wettkaempfeid=?");
         query.bindValue(22, editid);
     }
-    query.bindValue(0, this->event->getMainEventId());
+    query.bindValue(0, this->event->mainEventId());
     query.bindValue(1, ui->cmb_bereich->itemData(ui->cmb_bereich->currentIndex()));
     query.bindValue(2, ui->cmb_typ->currentIndex());
     query.bindValue(3, ui->txt_wknr->text());

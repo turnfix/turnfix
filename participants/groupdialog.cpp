@@ -1,7 +1,7 @@
 #include "groupdialog.h"
 #include "masterdata/athletedialog.h"
 #include "masterdata/clubdialog.h"
-#include "model/objects/event.h"
+#include "model/entity/event.h"
 #include "src/global/header/_global.h"
 #include "src/global/header/settings.h"
 #include "ui_groupdialog.h"
@@ -95,7 +95,7 @@ void GroupDialog::initData() {
     updateClubs();
     QSqlQuery query2;
     query2.prepare("SELECT int_wettkaempfeid, var_nummer, var_name FROM tfx_wettkaempfe WHERE int_veranstaltungenid=? AND int_typ=2 ORDER BY var_nummer ASC");
-    query2.bindValue(0, this->event->getMainEventId());
+    query2.bindValue(0, this->event->mainEventId());
     query2.exec();
     while (query2.next()) {
         ui->cmb_wk->addItem(query2.value(1).toString() + " " + query2.value(2).toString(),query2.value(0).toInt());
@@ -180,12 +180,12 @@ void GroupDialog::save() {
     query6.bindValue(0, ui->cmb_wk->itemData(ui->cmb_wk->currentIndex()));
     query6.bindValue(1, group);
     query6.bindValue(2, ui->cmb_status->itemData(ui->cmb_status->currentIndex()));
-    query6.bindValue(3, this->event->getRound());
+    query6.bindValue(3, this->event->round());
     if (editid == 0) {
         QSqlQuery query2;
         query2.prepare("SELECT MAX(int_startnummer) FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) INNER JOIN tfx_teilnehmer ON tfx_teilnehmer.int_teilnehmerid = tfx_wertungen.int_teilnehmerid INNER JOIN tfx_vereine USING (int_vereineid) WHERE int_veranstaltungenid=? AND int_runde=?");
-        query2.bindValue(0, this->event->getId());
-        query2.bindValue(1, this->event->getRound());
+        query2.bindValue(0, this->event->id());
+        query2.bindValue(1, this->event->round());
         query2.exec();
         query2.next();
         query6.bindValue(4,query2.value(0).toInt()+1);
@@ -373,12 +373,12 @@ void GroupDialog::fillTable2() {
     if (ui->chk_club->isChecked() && ui->chk_planned->isChecked()) {
         query2.next();
         query3.bindValue(0,query2.value(0).toInt());
-        query3.bindValue(1,this->event->getMainEventId());
+        query3.bindValue(1,this->event->mainEventId());
     } else if (ui->chk_club->isChecked() ) {
         query2.next();
         query3.bindValue(0,query2.value(0).toInt());
     } else {
-        query3.bindValue(0,this->event->getMainEventId());
+        query3.bindValue(0,this->event->mainEventId());
     }
     query3.exec();
     model2->setQuery(query3);

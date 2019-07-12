@@ -1,5 +1,5 @@
 #include "registration.h"
-#include "model/objects/competition.h"
+#include "model/entity/competition.h"
 #include "src/global/header/_global.h"
 
 void Registration::printContent() {
@@ -30,7 +30,7 @@ void Registration::printContent() {
                     "WHERE int_veranstaltungenid=? "
                     "AND tfx_vereine.int_vereineid IN ("+_global::intListToString(vereinNumbers)+") "
                     "ORDER BY "+sortstring);
-    query2.bindValue(0,  this->event->getMainEventId());
+    query2.bindValue(0,  this->event->mainEventId());
     query2.exec();
     int pre=0;
     QString lastWK="";
@@ -54,7 +54,7 @@ void Registration::printContent() {
             QSqlQuery teamq;
             teamq.prepare("SELECT " + _global::nameFormat() + " || CASE WHEN bol_ak='true' THEN ' (AK)' ELSE '' END FROM tfx_wertungen INNER JOIN tfx_teilnehmer USING (int_teilnehmerid) WHERE int_mannschaftenid=? AND int_runde=? ORDER BY int_mannschaftenid");
             teamq.bindValue(0, query2.value(4).toInt());
-            teamq.bindValue(1, this->event->getRound());
+            teamq.bindValue(1, this->event->round());
             teamq.exec();
             skip += ((_global::querySize(teamq)/4)+1)*3.4+4.8;
         }
@@ -77,7 +77,7 @@ void Registration::printContent() {
             switch (competition->getType()) {
             case 1: {
                     teamq2.prepare("SELECT " + _global::nameFormat() + " || ' (' || "+_global::date("dat_geburtstag",2)+" || ')' || CASE WHEN bol_ak='true' THEN ' (AK)' ELSE '' END || CASE WHEN bol_startet_nicht THEN ' (fehlt)' ELSE '' END FROM tfx_wertungen INNER JOIN tfx_teilnehmer USING (int_teilnehmerid) WHERE int_mannschaftenid=? AND int_runde=? ORDER BY bol_ak, var_nachname, var_vorname");
-                    teamq2.bindValue(1, this->event->getRound());
+                    teamq2.bindValue(1, this->event->round());
                 } break;
             case 2: teamq2.prepare("SELECT " + _global::nameFormat() + " || ' (' || "+_global::date("dat_geburtstag",2)+" || ')' FROM tfx_gruppen_x_teilnehmer INNER JOIN tfx_teilnehmer USING (int_teilnehmerid) WHERE int_gruppenid=? ORDER BY var_nachname, var_vorname"); break;
             }

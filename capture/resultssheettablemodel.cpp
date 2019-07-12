@@ -1,6 +1,6 @@
 #include "resultssheettablemodel.h"
 #include "libs/fparser/fparser.hh"
-#include "model/objects/event.h"
+#include "model/entity/event.h"
 #include "src/global/header/_global.h"
 #include <math.h>
 #include <QColor>
@@ -49,7 +49,7 @@ QVariant ResultsSheetTableModel::data(const QModelIndex &index, int role) const
             QSqlQuery check;
             check.prepare("SELECT rel_max, var_formel FROM tfx_wettkaempfe_x_disziplinen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) INNER JOIN tfx_disziplinen ON tfx_wettkaempfe_x_disziplinen.int_disziplinenid = tfx_disziplinen.int_disziplinenid WHERE tfx_disziplinen.int_disziplinenid=? AND int_veranstaltungenid=? AND var_nummer=?");
             check.bindValue(0,geraet);
-            check.bindValue(1,event->getMainEventId());
+            check.bindValue(1,event->mainEventId());
             check.bindValue(2,starter.at(row).at(3));
             check.exec();
             check.next();
@@ -201,9 +201,9 @@ void ResultsSheetTableModel::setTableData(QString rg, int g, int v, bool k, bool
     query4.prepare("SELECT tfx_wertungen.int_startnummer, CASE WHEN tfx_gruppen.int_gruppenid IS NULL THEN var_vorname || ' ' || var_nachname ELSE tfx_gruppen.var_name END, tfx_vereine.var_name, tfx_wettkaempfe.var_nummer, tfx_wertungen.int_wertungenid, tfx_wertungen.int_wettkaempfeid, int_pos FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) LEFT JOIN tfx_teilnehmer ON tfx_teilnehmer.int_teilnehmerid = tfx_wertungen.int_teilnehmerid LEFT JOIN tfx_gruppen ON tfx_gruppen.int_gruppenid = tfx_wertungen.int_gruppenid LEFT JOIN tfx_mannschaften ON tfx_mannschaften.int_mannschaftenid = tfx_wertungen.int_mannschaftenid INNER JOIN tfx_vereine ON tfx_vereine.int_vereineid = tfx_teilnehmer.int_vereineid OR tfx_vereine.int_vereineid = tfx_gruppen.int_vereineid LEFT JOIN tfx_startreihenfolge ON tfx_startreihenfolge.int_wertungenid=tfx_wertungen.int_wertungenid AND tfx_startreihenfolge.int_disziplinenid=? AND tfx_startreihenfolge.int_kp=? WHERE int_veranstaltungenid=? AND tfx_wertungen.var_riege=? AND int_runde=? AND bol_startet_nicht='false' AND ((SELECT COUNT(*) FROM tfx_wettkaempfe_x_disziplinen WHERE int_disziplinenid=? AND int_wettkaempfeid=tfx_wettkaempfe.int_wettkaempfeid)>0 AND (NOT EXISTS (SELECT int_wertungen_x_disziplinenid FROM tfx_wertungen_x_disziplinen WHERE int_wertungenid=tfx_wertungen.int_wertungenid) OR EXISTS (SELECT int_wertungen_x_disziplinenid FROM tfx_wertungen_x_disziplinen WHERE tfx_wertungen_x_disziplinen.int_wertungenid=tfx_wertungen.int_wertungenid AND tfx_wertungen_x_disziplinen.int_disziplinenid=?))) AND (tfx_wettkaempfe.bol_kp='true' OR ?='true' OR (SELECT bol_kp FROM tfx_wettkaempfe_x_disziplinen WHERE int_wettkaempfeid=tfx_wettkaempfe.int_wettkaempfeid AND int_disziplinenid=?)='true') ORDER BY int_pos, tfx_wettkaempfe.var_nummer, tfx_mannschaften.int_nummer, tfx_mannschaften.int_mannschaftenid, tfx_wertungen.int_startnummer");
     query4.bindValue(0, geraet);
     query4.bindValue(1, static_cast<int>(kuer));
-    query4.bindValue(2, event->getMainEventId());
+    query4.bindValue(2, event->mainEventId());
     query4.bindValue(3, riege);
-    query4.bindValue(4, event->getRound());
+    query4.bindValue(4, event->round());
     query4.bindValue(5, geraet);
     query4.bindValue(6, geraet);
     query4.bindValue(7, !kuer);
@@ -250,7 +250,7 @@ void ResultsSheetTableModel::setTableData(QString rg, int g, int v, bool k, bool
     endwerte.clear();
     QSqlQuery endwerteQuery;
     endwerteQuery.prepare("SELECT rel_leistung, int_wertungenid, int_versuch FROM tfx_wertungen_details INNER JOIN tfx_wertungen USING (int_wertungenid) INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) WHERE int_veranstaltungenid=? AND int_disziplinenid=? AND var_riege=? AND int_kp=?");
-    endwerteQuery.bindValue(0, event->getMainEventId());
+    endwerteQuery.bindValue(0, event->mainEventId());
     endwerteQuery.bindValue(1,geraet);
     endwerteQuery.bindValue(2,riege);
     endwerteQuery.bindValue(3,kp);
@@ -263,7 +263,7 @@ void ResultsSheetTableModel::setTableData(QString rg, int g, int v, bool k, bool
     if (j) {
         QSqlQuery detailwerteQuery;
         detailwerteQuery.prepare("SELECT rel_leistung, int_disziplinen_felderid, tfx_wertungen.int_wertungenid, int_versuch FROM tfx_jury_results INNER JOIN tfx_disziplinen_felder USING (int_disziplinen_felderid) INNER JOIN tfx_wertungen ON tfx_jury_results.int_wertungenid = tfx_wertungen.int_wertungenid INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) WHERE int_veranstaltungenid=? AND int_disziplinenid=? AND var_riege=? AND int_kp=? AND bol_enabled='true'");
-        detailwerteQuery.bindValue(0,event->getMainEventId());
+        detailwerteQuery.bindValue(0,event->mainEventId());
         detailwerteQuery.bindValue(1,geraet);
         detailwerteQuery.bindValue(2,riege);
         detailwerteQuery.bindValue(3,kp);

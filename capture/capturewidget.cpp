@@ -1,6 +1,6 @@
 #include "capturewidget.h"
 #include "barcodedialog.h"
-#include "model/objects/event.h"
+#include "model/entity/event.h"
 #include "model/settings/session.h"
 #include "resultssheetdialog.h"
 #include "scorecarddialog.h"
@@ -38,8 +38,8 @@ void CaptureWidget::init()
     ui->cmb_squadno->clear();
     QSqlQuery query2;
     query2.prepare("SELECT DISTINCT(var_riege) FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) WHERE int_veranstaltungenid=? AND int_runde=? ORDER BY var_riege");
-    query2.bindValue(0, this->event->getMainEventId());
-    query2.bindValue(1, this->event->getRound());
+    query2.bindValue(0, this->event->mainEventId());
+    query2.bindValue(1, this->event->round());
     query2.exec();
     while (query2.next()) {
         ui->cmb_squadno->addItem(query2.value(0).toString(), query2.value(0).toString());
@@ -66,8 +66,8 @@ void CaptureWidget::startKarte()
     QSqlQuery query9;
     query9.prepare("SELECT int_disziplinenid FROM tfx_wertungen_x_disziplinen INNER JOIN tfx_wertungen USING (int_wertungenid) INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) WHERE int_startnummer=? AND int_veranstaltungenid=? AND int_runde=?");
     query9.bindValue(0, ui->sbx_squadno_2->value());
-    query9.bindValue(1, this->event->getMainEventId());
-    query9.bindValue(2, this->event->getRound());
+    query9.bindValue(1, this->event->mainEventId());
+    query9.bindValue(2, this->event->round());
     query9.exec();
     QSqlQuery query2;
     if (_global::querySize(query9) == 0) {
@@ -75,9 +75,9 @@ void CaptureWidget::startKarte()
     } else {
         query2.prepare("SELECT tfx_disziplinen.int_disziplinenid, int_wertungenid, CASE WHEN tfx_wettkaempfe.bol_kp='true' OR tfx_wettkaempfe_x_disziplinen.bol_kp='true' THEN 1 ELSE 0 END as kp FROM tfx_wettkaempfe_x_disziplinen INNER JOIN tfx_disziplinen ON tfx_disziplinen.int_disziplinenid = tfx_wettkaempfe_x_disziplinen.int_disziplinenid INNER JOIN tfx_wettkaempfe ON tfx_wettkaempfe_x_disziplinen.int_wettkaempfeid = tfx_wettkaempfe.int_wettkaempfeid INNER JOIN tfx_wertungen ON tfx_wertungen.int_wettkaempfeid = tfx_wettkaempfe.int_wettkaempfeid WHERE int_veranstaltungenid=? AND tfx_wertungen.int_startnummer=? AND tfx_wertungen.int_runde=? AND tfx_disziplinen.int_disziplinenid IN (SELECT int_disziplinenid FROM tfx_wertungen_x_disziplinen WHERE int_wertungenid=tfx_wertungen.int_wertungenid) ORDER BY int_sortierung, kp");
     }
-    query2.bindValue(0, this->event->getMainEventId());
+    query2.bindValue(0, this->event->mainEventId());
     query2.bindValue(1, ui->sbx_squadno_2->value());
-    query2.bindValue(2, this->event->getRound());
+    query2.bindValue(2, this->event->round());
     query2.exec();
     int wertid;
     while (query2.next()) {
@@ -98,7 +98,7 @@ void CaptureWidget::squadChange(QString squadno)
     ui->cmb_apparatus->clear();
     QSqlQuery query;
     query.prepare("SELECT DISTINCT int_disziplinenid, tfx_disziplinen.var_name, var_icon, CASE WHEN tfx_wettkaempfe.bol_kp='true' OR tfx_wettkaempfe_x_disziplinen.bol_kp='true' THEN 1 ELSE 0 END as kp FROM tfx_disziplinen INNER JOIN tfx_wettkaempfe_x_disziplinen USING (int_disziplinenid) INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) INNER JOIN tfx_wertungen USING (int_wettkaempfeid) WHERE int_veranstaltungenid=? AND var_riege=? ORDER BY tfx_disziplinen.var_name, kp");
-    query.bindValue(0, this->event->getMainEventId());
+    query.bindValue(0, this->event->mainEventId());
     query.bindValue(1, squadno);
     query.exec();
     while (query.next()) {

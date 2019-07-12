@@ -1,5 +1,5 @@
 #include "medalcount.h"
-#include "model/objects/competition.h"
+#include "model/entity/competition.h"
 #include "src/global/header/_global.h"
 #include "src/global/header/result_calc.h"
 
@@ -12,8 +12,8 @@ void MedalCount::print(QPrinter *printer) {
     namen.clear();
     QSqlQuery query2;
     query2.prepare("SELECT tfx_vereine.int_vereineid, tfx_vereine.var_name, (SELECT COUNT(*) FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) LEFT JOIN tfx_mannschaften ON tfx_mannschaften.int_mannschaftenid = tfx_wertungen.int_mannschaftenid LEFT JOIN tfx_gruppen ON tfx_gruppen.int_gruppenid = tfx_wertungen.int_gruppenid LEFT JOIN tfx_teilnehmer ON tfx_teilnehmer.int_teilnehmerid = tfx_wertungen.int_teilnehmerid WHERE (tfx_teilnehmer.int_vereineid=tfx_vereine.int_vereineid OR tfx_gruppen.int_vereineid=tfx_vereine.int_vereineid OR tfx_mannschaften.int_vereineid=tfx_vereine.int_vereineid) AND int_veranstaltungenid=? AND bol_startet_nicht='false') FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) LEFT JOIN tfx_teilnehmer ON tfx_wertungen.int_teilnehmerid = tfx_teilnehmer.int_teilnehmerid LEFT JOIN tfx_gruppen ON tfx_wertungen.int_gruppenid = tfx_gruppen.int_gruppenid LEFT JOIN tfx_mannschaften ON tfx_wertungen.int_mannschaftenid = tfx_mannschaften.int_mannschaftenid INNER JOIN tfx_vereine ON tfx_teilnehmer.int_vereineid = tfx_vereine.int_vereineid OR tfx_gruppen.int_vereineid = tfx_vereine.int_vereineid OR tfx_mannschaften.int_vereineid = tfx_vereine.int_vereineid WHERE int_veranstaltungenid=? GROUP BY tfx_vereine.int_vereineid, tfx_vereine.var_name, tfx_vereine.int_start_ort ORDER BY "+_global::substring("tfx_vereine.var_name","int_start_ort+1")+", tfx_vereine.var_name");
-    query2.bindValue(0, this->event->getMainEventId());
-    query2.bindValue(1, this->event->getMainEventId());
+    query2.bindValue(0, this->event->mainEventId());
+    query2.bindValue(1, this->event->mainEventId());
     query2.exec();
     while (query2.next()) {
         ids.append(query2.value(0).toInt());

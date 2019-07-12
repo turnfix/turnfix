@@ -1,9 +1,9 @@
-#include <QSqlQuery>
-#include <QKeyEvent>
 #include "qualitablemodel.h"
+#include "model/entity/event.h"
 #include "model/settings/session.h"
-#include "model/objects/event.h"
 #include "src/global/header/_global.h"
+#include <QKeyEvent>
+#include <QSqlQuery>
 
 int QualificationStandardsTableModel::rowCount(const QModelIndex &) const
 {
@@ -85,7 +85,7 @@ bool QualificationStandardsTableModel::setData(const QModelIndex &index,
     if (index.isValid() && role == Qt::EditRole) {
         QSqlQuery query;
         query.prepare("SELECT tfx_disziplinen.int_disziplinenid, tfx_wertungen.int_wertungenid, tfx_disziplinen.var_maske, tfx_disziplinen.int_versuche FROM tfx_wettkaempfe_x_disziplinen INNER JOIN tfx_disziplinen ON tfx_disziplinen.int_disziplinenid = tfx_wettkaempfe_x_disziplinen.int_disziplinenid INNER JOIN tfx_wettkaempfe ON tfx_wettkaempfe_x_disziplinen.int_wettkaempfeid = tfx_wettkaempfe.int_wettkaempfeid INNER JOIN tfx_wertungen ON tfx_wertungen.int_wettkaempfeid = tfx_wettkaempfe.int_wettkaempfeid WHERE int_veranstaltungenid=? AND tfx_wertungen.int_wertungenid=? AND tfx_disziplinen.int_disziplinenid=? ORDER BY int_sortierung");
-        query.bindValue(0,event->getId());
+        query.bindValue(0,event->id());
         query.bindValue(1,wertid);
         query.bindValue(2,disids.at(index.row()));
         query.exec();

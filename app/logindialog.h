@@ -8,7 +8,11 @@ namespace Ui {
 }
 
 class EntityManager;
-class EventTableModel;
+class ConnectionModel;
+class EventModel;
+class QDataWidgetMapper;
+class QItemSelection;
+class Event;
 
 class LoginDialog : public QDialog
 {
@@ -16,18 +20,29 @@ class LoginDialog : public QDialog
 
 public:
     explicit LoginDialog(EntityManager *em, QWidget *parent = nullptr);
-    ~LoginDialog();
+    ~LoginDialog() override;
+
+    Event *selectedEvent();
 
 private:
     Ui::LoginDialog *ui;
-    EventTableModel *eventTableModel;
+    ConnectionModel *connectionModel;
+    EntityManager *em;
+    EventModel *eventModel;
+    QDataWidgetMapper *mapper;
+    Event *m_selectedEvent;
 
 private slots:
     void doLogin();
-    void errorHandler(QString errorText);
+    void errorHandler(const QString &errorText);
     void checkDatabase();
     void createEvent();
     void selectCurrentEvent();
+    void openDatabaseFile();
+    void createDatabaseFile();
+    void setupPostgresDatabase();
+    void connectionListSelectionChanged(const QItemSelection &selected,
+                                        const QItemSelection &deselected);
 };
 
 #endif // LOGINDIALOG_H

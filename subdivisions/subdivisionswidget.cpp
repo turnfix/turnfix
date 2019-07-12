@@ -1,6 +1,6 @@
 #include "subdivisionswidget.h"
 #include "assignmenttablemodel.h"
-#include "model/objects/event.h"
+#include "model/entity/event.h"
 #include "model/settings/session.h"
 #include "src/global/header/_delegates.h"
 #include "src/global/header/_global.h"
@@ -71,13 +71,13 @@ void SubdivisionsWidget::fillRETable2()
         "(int_wettkaempfeid) WHERE int_veranstaltungenid=? AND tfx_wertungen.int_runde=? AND "
         "var_riege != '' GROUP BY var_riege, int_runde, int_veranstaltungenid");
 
-    query.bindValue(0, this->event->getMainEventId());
-    query.bindValue(1, this->event->getRound());
-    query.bindValue(2, this->event->getId());
-    query.bindValue(3, this->event->getMainEventId());
-    query.bindValue(4, this->event->getRound());
-    query.bindValue(5, this->event->getMainEventId());
-    query.bindValue(6, this->event->getRound());
+    query.bindValue(0, this->event->mainEventId());
+    query.bindValue(1, this->event->round());
+    query.bindValue(2, this->event->id());
+    query.bindValue(3, this->event->mainEventId());
+    query.bindValue(4, this->event->round());
+    query.bindValue(5, this->event->mainEventId());
+    query.bindValue(6, this->event->round());
     query.exec();
     while (query.next()) {
         ui->tbl_list->setEnabled(true);
@@ -210,9 +210,9 @@ void SubdivisionsWidget::setRiegenData()
         "tfx_mannschaften.var_riege=tfx_wertungen.var_riege) FROM tfx_wertungen INNER JOIN "
         "tfx_wettkaempfe USING (int_wettkaempfeid) WHERE int_veranstaltungenid=? AND "
         "tfx_wertungen.int_runde=? AND var_riege=? GROUP BY var_riege");
-    query.bindValue(0, this->event->getId());
-    query.bindValue(1, this->event->getMainEventId());
-    query.bindValue(2, this->event->getRound());
+    query.bindValue(0, this->event->id());
+    query.bindValue(1, this->event->mainEventId());
+    query.bindValue(2, this->event->round());
     query.bindValue(3,
                     rg_model->item(ui->lst_all->selectionModel()->currentIndex().row(), 0)->text());
     query.exec();

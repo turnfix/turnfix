@@ -253,13 +253,6 @@ font-weight:bold;</string>
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="checkDatabaseButton">
-              <property name="text">
-               <string>Datenbank überprüfen</string>
-              </property>
-             </widget>
-            </item>
-            <item>
              <widget class="QPushButton" name="removeEventButton">
               <property name="text">
                <string>Veranstaltung löschen</string>
@@ -302,7 +295,221 @@ font-weight:bold;</string>
        </item>
       </layout>
      </widget>
-     <widget class="SettingsWidget" name="settingsPage"/>
+     <widget class="QWidget" name="settingsPage">
+      <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,2">
+       <item>
+        <layout class="QGridLayout" name="gridLayout">
+         <property name="topMargin">
+          <number>5</number>
+         </property>
+         <property name="rightMargin">
+          <number>5</number>
+         </property>
+         <property name="bottomMargin">
+          <number>5</number>
+         </property>
+         <item row="1" column="0" colspan="4">
+          <widget class="QListView" name="connectionListView"/>
+         </item>
+         <item row="0" column="1">
+          <widget class="QPushButton" name="removeConnectionButton">
+           <property name="icon">
+            <iconset resource="../resources/TurnFix.qrc">
+             <normaloff>:/appicons/minus.png</normaloff>:/appicons/minus.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QPushButton" name="addConnectionButton">
+           <property name="icon">
+            <iconset resource="../resources/TurnFix.qrc">
+             <normaloff>:/appicons/plus.png</normaloff>:/appicons/plus.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="3">
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="0" column="2">
+          <widget class="QPushButton" name="checkDatabaseButton">
+           <property name="icon">
+            <iconset resource="../resources/TurnFix.qrc">
+             <normaloff>:/appicons/database.png</normaloff>:/appicons/database.png</iconset>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QStackedWidget" name="connectionStackedWidget">
+         <widget class="QWidget" name="unknownPage"/>
+         <widget class="QWidget" name="sqlitePage">
+          <layout class="QGridLayout" name="gridLayout_2">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item row="1" column="0">
+            <widget class="QLabel" name="databaseFileLabel">
+             <property name="text">
+              <string>Dateiname:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QLineEdit" name="databaseFileText"/>
+           </item>
+           <item row="2" column="0" colspan="4">
+            <spacer name="verticalSpacer">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="sqliteNameLabel">
+             <property name="text">
+              <string>Name:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1" colspan="3">
+            <widget class="QLineEdit" name="sqliteNameText"/>
+           </item>
+           <item row="1" column="2">
+            <widget class="QToolButton" name="databaseFileButton">
+             <property name="text">
+              <string>...</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="3">
+            <widget class="QToolButton" name="databaseCreateButton">
+             <property name="text">
+              <string>Neu</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="postgresPage">
+          <layout class="QGridLayout" name="gridLayout_3">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item row="0" column="0">
+            <widget class="QLabel" name="postgresNameLabel">
+             <property name="text">
+              <string>Name:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <widget class="QLineEdit" name="postgresNameText"/>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="databaseServerLabel">
+             <property name="text">
+              <string>Server:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="QLineEdit" name="databaseServerText"/>
+           </item>
+           <item row="2" column="0" colspan="2">
+            <widget class="QLabel" name="databaseUserLabel">
+             <property name="text">
+              <string>Benutzername:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="2">
+            <widget class="QLineEdit" name="databaseUserText"/>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="databasePasswordLabel">
+             <property name="text">
+              <string>Passwort:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="2">
+            <widget class="QLineEdit" name="databasePasswordText">
+             <property name="echoMode">
+              <enum>QLineEdit::Password</enum>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="0">
+            <widget class="QLabel" name="databaseLabel">
+             <property name="text">
+              <string>Datenbank:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="2">
+            <widget class="QLineEdit" name="databaseText"/>
+           </item>
+           <item row="5" column="0" colspan="3">
+            <widget class="QPushButton" name="databaseAssistantButton">
+             <property name="text">
+              <string>Einrichtungs-Assistent</string>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="1" colspan="2">
+            <spacer name="verticalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
   </layout>
@@ -332,12 +539,6 @@ font-weight:bold;</string>
   </action>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>SettingsWidget</class>
-   <extends>QWidget</extends>
-   <header>app/settingswidget.h</header>
-   <container>1</container>
-  </customwidget>
   <customwidget>
    <class>TFSelectionBar</class>
    <extends>QWidget</extends>

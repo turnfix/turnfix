@@ -11,13 +11,9 @@ HEADERS += \
     $$PWD/aboutdialog.h \
     $$PWD/checkdatabasedialog.h \
     $$PWD/connectionmodel.h \
-    $$PWD/dbchecker.h \
-    $$PWD/dbcolumn.h \
-    $$PWD/dbconstraint.h \
     $$PWD/dbinitializerpostgres.h \
-    $$PWD/dbtable.h \
     $$PWD/eventdialog.h \
-    $$PWD/eventtablemodel.h \
+    $$PWD/eventmodel.h \
     $$PWD/logindialog.h \
     $$PWD/mainwindow.h \
     $$PWD/postgressetupwizard.h \
@@ -26,13 +22,9 @@ HEADERS += \
 SOURCES += \
     $$PWD/checkdatabasedialog.cpp \
     $$PWD/connectionmodel.cpp \
-    $$PWD/dbchecker.cpp \
-    $$PWD/dbcolumn.cpp \
-    $$PWD/dbconstraint.cpp \
     $$PWD/dbinitializerpostgres.cpp \
-    $$PWD/dbtable.cpp \
     $$PWD/eventdialog.cpp \
-    $$PWD/eventtablemodel.cpp \
+    $$PWD/eventmodel.cpp \
     $$PWD/logindialog.cpp \
     $$PWD/mainwindow.cpp \
     $$PWD/postgressetupwizard.cpp \

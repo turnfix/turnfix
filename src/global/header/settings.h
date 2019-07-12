@@ -39,14 +39,8 @@ public:
     static QString toaUser;
     static QString toaPass;
 
-    static QString dbServer;
-    static QString dbUser;
-    static QString dbPass;
-    static QString dbDatabase;
-
     static void updatePrefs(int dbTyp, QString dbServer, QString dbUser, QString dbPass, QString dbDatabase, QString toaUser, QString toaPass, QString smtpServer, QString smtpUser, QString smtpPass, QString smtpFrom, QString smtpMail, QString creator, QFont barCodeFont, int nameFormat, int barCodes, int iconMode, int juryRound);
     static void updateJuryResults(bool set);
-    static void updateDatabase(QString dbServer, QString dbUser, QString dbPass, QString dbDatabase);
     static void updateFiler(bool clubFilter, bool usedFilter);
 
 };

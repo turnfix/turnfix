@@ -1,12 +1,12 @@
 #ifndef DRUCKEN_H
 #define DRUCKEN_H
 
-#include <QThread>
-#include <QPrinter>
-#include <QPainter>
-#include <QSqlQuery>
+#include "model/entity/event.h"
 #include <QMap>
-#include "model/objects/event.h"
+#include <QPainter>
+#include <QPrinter>
+#include <QSqlQuery>
+#include <QThread>
 
 class QFont;
 class QRect;

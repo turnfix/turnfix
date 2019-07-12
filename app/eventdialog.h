@@ -8,17 +8,15 @@ class EventDialog;
 }
 
 class Event;
+class EntityManager;
 
 class EventDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    EventDialog(Event *event, int editid = 0, QWidget *parent = nullptr);
+    EventDialog(EntityManager *em, Event *event, QWidget *parent = nullptr);
     ~EventDialog();
-
-public slots:
-    int getWknr();
 
 private slots:
     void initData();
@@ -32,8 +30,7 @@ private slots:
 
 private:
     Ui::EventDialog *ui;
-    Event *event;
-    int wknr;
-    int editid;
+    Event *m_event;
+    EntityManager *m_em;
 };
 #endif

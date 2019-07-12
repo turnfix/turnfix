@@ -1,6 +1,6 @@
 #include "individualdialog.h"
 #include "masterdata/clubdialog.h"
-#include "model/objects/event.h"
+#include "model/entity/event.h"
 #include "src/global/header/_global.h"
 #include "ui_individualdialog.h"
 #include <QMessageBox>
@@ -81,7 +81,7 @@ void IndividualDialog::changeDat() {
 void IndividualDialog::initData() {
     QSqlQuery query2;
     query2.prepare("SELECT int_wettkaempfeid, var_nummer, var_name, int_typ FROM tfx_wettkaempfe WHERE int_veranstaltungenid=? AND int_typ=0 ORDER BY var_nummer ASC");
-    query2.bindValue(0, this->event->getId());
+    query2.bindValue(0, this->event->id());
     query2.exec();
     while (query2.next()) {
         ui->cmb_wk->addItem(query2.value(1).toString() + " " + query2.value(2).toString(),query2.value(0).toInt());
@@ -145,7 +145,7 @@ void IndividualDialog::save() {
         }
         QSqlQuery query10;
         query10.prepare("SELECT tfx_teilnehmer.int_teilnehmerid FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) INNER JOIN tfx_veranstaltungen USING (int_veranstaltungenid) INNER JOIN tfx_teilnehmer ON tfx_teilnehmer.int_teilnehmerid = tfx_wertungen.int_teilnehmerid WHERE int_veranstaltungenid=? AND tfx_teilnehmer.int_teilnehmerid=?");
-        query10.bindValue(0, this->event->getId());
+        query10.bindValue(0, this->event->id());
         query10.bindValue(1, tnid);
         query10.exec();
         bool cont = true;
@@ -157,8 +157,8 @@ void IndividualDialog::save() {
         if (cont) {
             QSqlQuery query2;
             query2.prepare("SELECT MAX(int_startnummer) FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) WHERE int_veranstaltungenid=? AND int_runde=?");
-            query2.bindValue(0, this->event->getMainEventId());
-            query2.bindValue(1, this->event->getRound());
+            query2.bindValue(0, this->event->mainEventId());
+            query2.bindValue(1, this->event->round());
             query2.exec();
             query2.next();
             QSqlQuery query;
@@ -169,7 +169,7 @@ void IndividualDialog::save() {
             query.bindValue( 3, ui->chk_ak->isChecked() );
             query.bindValue( 4, (query2.value(0).toInt()+1) );
             query.bindValue( 5, ui->chk_nostart->isChecked());
-            query.bindValue( 6, this->event->getRound());
+            query.bindValue( 6, this->event->round());
             query.bindValue( 7, ui->cmb_status->itemData(ui->cmb_status->currentIndex()));
             query.bindValue( 8, ui->txt_comment->text());
             query.exec();

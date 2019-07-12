@@ -1,5 +1,5 @@
 #include "list.h"
-#include "model/objects/competition.h"
+#include "model/entity/competition.h"
 #include "src/global/header/_global.h"
 
 void List::print(QPrinter *printer) {

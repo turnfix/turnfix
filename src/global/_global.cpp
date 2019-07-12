@@ -1,11 +1,11 @@
-#include <QSqlQuery>
-#include <QSqlRecord>
-#include <QVariant>
-#include <QStringList>
-#include <math.h>
-#include "model/objects/event.h"
 #include "header/_global.h"
 #include "header/settings.h"
+#include "model/entity/event.h"
+#include <math.h>
+#include <QSqlQuery>
+#include <QSqlRecord>
+#include <QStringList>
+#include <QVariant>
 
 int _global::dbtyp = 0;
 
@@ -38,7 +38,7 @@ QStringList _global::getFields() {
 QString _global::wkBez(Event *event, QString swknr) {
     QSqlQuery query;
     query.prepare("SELECT bol_ak_anzeigen, yer_von, yer_bis, dat_von FROM tfx_wettkaempfe INNER JOIN tfx_veranstaltungen USING (int_veranstaltungenid) WHERE int_veranstaltungenid=? AND var_nummer=? ORDER BY var_nummer LIMIT 1");
-    query.bindValue(0,event->getMainEventId());
+    query.bindValue(0,event->mainEventId());
     query.bindValue(1,swknr);
     query.exec();
     query.next();
@@ -70,22 +70,22 @@ QString _global::wkBez(Event *event, QString swknr) {
 void _global::updateRgDis(Event *event) {
     QSqlQuery query;
     query.prepare("SELECT var_riege FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) WHERE int_veranstaltungenid=? AND int_runde=? GROUP BY var_riege");
-    query.bindValue(0, event->getMainEventId());
-    query.bindValue(1, event->getRound());
+    query.bindValue(0, event->mainEventId());
+    query.bindValue(1, event->round());
     query.exec();
     QSqlQuery query2;
     query2.prepare("SELECT int_disziplinenid FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) INNER JOIN tfx_wettkaempfe_x_disziplinen USING (int_wettkaempfeid) WHERE int_veranstaltungenid=? AND int_runde=? AND var_riege=? GROUP BY int_disziplinenid ORDER BY int_disziplinenid");
-    query2.bindValue(0, event->getMainEventId());
-    query2.bindValue(1, event->getRound());
+    query2.bindValue(0, event->mainEventId());
+    query2.bindValue(1, event->round());
     query2.exec();
     QSqlQuery query3;
     query3.prepare("SELECT int_riegen_x_disziplinenid FROM tfx_riegen_x_disziplinen WHERE int_veranstaltungenid=? AND int_runde=? AND int_disziplinenid=? AND var_riege=?");
-    query3.bindValue(0, event->getMainEventId());
-    query3.bindValue(1, event->getRound());
+    query3.bindValue(0, event->mainEventId());
+    query3.bindValue(1, event->round());
     QSqlQuery query4;
     query4.prepare("INSERT INTO tfx_riegen_x_disziplinen (int_veranstaltungenid,int_disziplinenid,var_riege,int_runde,int_statusid,bol_erstes_geraet) VALUES (?,?,?,?,?,?)");
-    query4.bindValue(0, event->getMainEventId());
-    query4.bindValue(3, event->getRound());
+    query4.bindValue(0, event->mainEventId());
+    query4.bindValue(3, event->round());
     query4.bindValue(4, 1);
     query4.bindValue(5, false);
     while(query.next()) {
@@ -104,11 +104,11 @@ void _global::updateRgDis(Event *event) {
     }
     QSqlQuery query5;
     query5.prepare("DELETE FROM tfx_riegen_x_disziplinen WHERE int_veranstaltungenid=? AND var_riege NOT IN (SELECT var_riege FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) WHERE int_veranstaltungenid=? AND int_runde=? GROUP BY var_riege) AND int_disziplinenid NOT IN (SELECT int_disziplinenid FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) INNER JOIN tfx_wettkaempfe_x_disziplinen USING (int_wettkaempfeid) WHERE int_veranstaltungenid=? AND int_runde=? AND var_riege=tfx_riegen_x_disziplinen.var_riege GROUP BY int_disziplinenid ORDER BY int_disziplinenid)");
-    query5.bindValue(0, event->getMainEventId());
-    query5.bindValue(1, event->getMainEventId());
-    query5.bindValue(2, event->getRound());
-    query5.bindValue(3, event->getMainEventId());
-    query5.bindValue(4, event->getRound());
+    query5.bindValue(0, event->mainEventId());
+    query5.bindValue(1, event->mainEventId());
+    query5.bindValue(2, event->round());
+    query5.bindValue(3, event->mainEventId());
+    query5.bindValue(4, event->round());
     query5.exec();
 }
 

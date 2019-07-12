@@ -1,5 +1,5 @@
 #include "selectcompetitiondialog.h"
-#include "model/objects/event.h"
+#include "model/entity/event.h"
 #include "src/global/header/_global.h"
 #include "ui_selectcompetitiondialog.h"
 #include <QSqlQuery>
@@ -26,7 +26,7 @@ void SelectCompetitionDialog::initData()
 {
     QSqlQuery query2;
     query2.prepare("SELECT var_nummer || ' ' || var_name, var_nummer FROM tfx_wettkaempfe WHERE int_veranstaltungenid=? ORDER BY var_nummer");
-    query2.bindValue(0, this->event->getMainEventId());
+    query2.bindValue(0, this->event->mainEventId());
     query2.exec();
     while (query2.next()) {
         ui->cmb_dis->addItem(query2.value(0).toString(), query2.value(1).toString());

@@ -1,16 +1,26 @@
 #include "entitymanager.h"
+#include "repository/connectionrepository.h"
+#include "repository/eventrepository.h"
 
-EntityManager::EntityManager()
+EntityManager::EntityManager(QObject *parent)
+    : QObject(parent)
 {
-    connectionRepository = new ConnectionRepository();
+    m_connectionRepository = new ConnectionRepository();
+    m_eventRepository = new EventRepository();
 }
 
 EntityManager::~EntityManager()
 {
-    delete connectionRepository;
+    delete m_connectionRepository;
+    delete m_eventRepository;
 }
 
-ConnectionRepository *EntityManager::getConnectionRepository() const
+ConnectionRepository *EntityManager::connectionRepository() const
 {
-    return connectionRepository;
+    return m_connectionRepository;
+}
+
+EventRepository *EntityManager::eventRepository() const
+{
+    return m_eventRepository;
 }

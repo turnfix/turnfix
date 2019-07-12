@@ -1,5 +1,5 @@
 #include "table.h"
-#include "model/objects/competition.h"
+#include "model/entity/competition.h"
 #include "src/global/header/_global.h"
 #include "src/global/header/result_calc.h"
 
@@ -54,8 +54,8 @@ void Table::printSubHeader() {
 
     QSqlQuery rnd;
     rnd.prepare("SELECT "+_global::date("dat_von",10)+" FROM tfx_veranstaltungen INNER JOIN tfx_wettkampforte USING (int_wettkampforteid) WHERE int_veranstaltungenid=? OR int_hauptwettkampf=? ORDER BY int_runde");
-    rnd.bindValue(0, this->event->getMainEventId());
-    rnd.bindValue(1, this->event->getMainEventId());
+    rnd.bindValue(0, this->event->mainEventId());
+    rnd.bindValue(1, this->event->mainEventId());
     rnd.exec();
     while (rnd.next()) {
         painter.drawText(QRectF(pr.x()+mmToPixel(55.0)+(rnd.at())*mmToPixel(34.0), yco, mmToPixel(34.0), fontHeight),rnd.value(0).toString(),QTextOption(Qt::AlignVCenter | Qt::AlignHCenter));

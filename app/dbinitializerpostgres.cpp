@@ -1,7 +1,6 @@
 #include "dbinitializerpostgres.h"
-#include "model/database/db.h"
-#include "model/database/tfsqlquery.h"
 #include <QSqlError>
+#include <QSqlQuery>
 
 DBInitializerPostgres::DBInitializerPostgres(QObject *parent) : QThread(parent) {}
 
@@ -19,7 +18,7 @@ void DBInitializerPostgres::run()
         return;
     }
 
-    TFSqlQuery query;
+    QSqlQuery query;
 
     emit statusUpdate(0,true);
 

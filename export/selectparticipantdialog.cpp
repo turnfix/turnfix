@@ -1,5 +1,5 @@
 #include "selectparticipantdialog.h"
-#include "model/objects/competition.h"
+#include "model/entity/competition.h"
 #include "results/resultstablemodel.h"
 #include "src/global/header/_delegates.h"
 #include "src/global/header/_global.h"
@@ -43,7 +43,7 @@ void SelectParticipantDialog::initData()
 {
     QSqlQuery query2;
     query2.prepare("SELECT var_nummer, var_name FROM tfx_wettkaempfe WHERE int_veranstaltungenid=? ORDER BY var_nummer ASC");
-    query2.bindValue(0, this->event->getMainEventId());
+    query2.bindValue(0, this->event->mainEventId());
     query2.exec();
     while (query2.next()) {
         ui->cmb_wk->addItem(query2.value(0).toString() + " " + query2.value(1).toString(),
@@ -60,7 +60,7 @@ void SelectParticipantDialog::updateList()
                                        ui->cmb_wk->itemData(ui->cmb_wk->currentIndex()).toString());
         QList<QStringList> list = Result_Calc::resultArrayNew(competition);
         int wktyp = competition->getType();
-        int hwk = this->event->getMainEventId();
+        int hwk = this->event->mainEventId();
         QString nr = ui->cmb_wk->itemData(ui->cmb_wk->currentIndex()).toString();
         er_model->setList(list,nr,hwk,wktyp,false);
         if (list.size() > 0) {

@@ -15,11 +15,6 @@ QString Settings::version = "";
 QString Settings::license = "";
 QString Settings::organisation = "";
 
-QString Settings::dbServer = "";
-QString Settings::dbUser = "";
-QString Settings::dbPass = "";
-QString Settings::dbDatabase = "";
-
 QFont Settings::barCodeFont = QFont();
 
 int Settings::nameFormat = 0;
@@ -50,10 +45,6 @@ void Settings::loadAllSettings() {
     barCodeFont = QFont(settings.value("Misc/BarcodeFont").toString());
     nameFormat = settings.value("Misc/ListNameFormat").toInt();
     juryRound = settings.value("Misc/JuryRound").toInt();
-    dbUser = settings.value("Database/Username").toString();
-    dbPass = settings.value("Database/Password").toString();
-    dbDatabase = settings.value("Database/Database").toString();
-    dbServer = settings.value("Database/Server").toString();
     dbTyp = settings.value("Database/DBTyp").toInt();
     version = settings.value("Misc/Version").toString();
     license = settings2.value("License/Type").toString();
@@ -80,10 +71,6 @@ void Settings::saveAllSettings() {
     settings.setValue("Misc/ListNameFormat",nameFormat);
     settings.setValue("Misc/JuryRound",juryRound);
     settings.setValue("Database/DBTyp", dbTyp);
-    settings.setValue("Database/Username", dbUser);
-    settings.setValue("Database/Password", dbPass);
-    settings.setValue("Database/Database", dbDatabase);
-    settings.setValue("Database/Server", dbServer);
     settings.setValue("Misc/Version", version);
     settings.setValue("Application/JuryResults", juryResults);
     settings.setValue("Application/ClubFilter", clubFilter);
@@ -97,10 +84,6 @@ void Settings::updatePrefs(int i_dbTyp, QString i_dbServer, QString i_dbUser, QS
                            QFont i_barCodeFont, int i_nameFormat, int i_barCodes, int i_iconMode,
                            int i_juryRound) {
     dbTyp = i_dbTyp;
-    dbServer = i_dbServer;
-    dbUser = i_dbUser;
-    dbPass = i_dbPass;
-    dbDatabase = i_dbDatabase;
     toaUser = i_toaUser;
     toaPass = i_toaPass;
     smtpServer = i_smtpServer;
@@ -118,13 +101,6 @@ void Settings::updatePrefs(int i_dbTyp, QString i_dbServer, QString i_dbUser, QS
 
 void Settings::updateJuryResults(bool set) {
     juryResults = set;
-}
-
-void Settings::updateDatabase(QString i_dbServer, QString i_dbUser, QString i_dbPass, QString i_dbDatabase) {
-    dbServer = i_dbServer;
-    dbUser = i_dbUser;
-    dbPass = i_dbPass;
-    dbDatabase = i_dbDatabase;
 }
 
 void Settings::updateFiler(bool i_clubFilter, bool i_usedFilter) {

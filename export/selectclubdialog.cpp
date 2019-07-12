@@ -1,10 +1,10 @@
-#include <QGridLayout>
-#include <QPushButton>
-#include <QListWidget>
-#include <QSqlQuery>
 #include "selectclubdialog.h"
-#include "model/objects/event.h"
+#include "model/entity/event.h"
 #include "src/global/header/_global.h"
+#include <QGridLayout>
+#include <QListWidget>
+#include <QPushButton>
+#include <QSqlQuery>
 
 SelectClubDialog::SelectClubDialog(Event *event, QWidget* parent) : QDialog(parent) {
     setupUi(this);
@@ -23,7 +23,7 @@ QStringList SelectClubDialog::returnVereine() {
 void SelectClubDialog::initData() {
     QSqlQuery query2;
     query2.prepare("SELECT tfx_vereine.int_vereineid, tfx_vereine.var_name FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) LEFT JOIN tfx_teilnehmer ON tfx_teilnehmer.int_teilnehmerid = tfx_wertungen.int_teilnehmerid LEFT JOIN tfx_gruppen ON tfx_gruppen.int_gruppenid = tfx_wertungen.int_gruppenid INNER JOIN tfx_vereine ON tfx_vereine.int_vereineid = tfx_teilnehmer.int_vereineid OR tfx_vereine.int_vereineid = tfx_gruppen.int_vereineid WHERE int_veranstaltungenid=? GROUP BY tfx_vereine.int_vereineid, tfx_vereine.var_name, tfx_vereine.int_start_ort, tfx_gruppen.int_gruppenid ORDER BY "+_global::substring("tfx_vereine.var_name","int_start_ort+1")+", tfx_vereine.var_name");
-    query2.bindValue(0, this->event->getMainEventId());
+    query2.bindValue(0, this->event->mainEventId());
     query2.exec();
     while (query2.next()) {
         if (clubList->findItems(query2.value(1).toString(),Qt::MatchExactly).count() == 0) {

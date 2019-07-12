@@ -1,8 +1,8 @@
-#include <QMutex>
 #include "session.h"
-#include "model/objects/event.h"
+#include "model/entity/event.h"
+#include <QMutex>
 
-Session* Session::instance = 0;
+Session *Session::instance = nullptr;
 
 void Session::setEvent(Event *event)
 {
@@ -36,8 +36,6 @@ void Session::dropInstance()
     static QMutex mutex;
     mutex.lock();
     delete instance;
-    instance = 0;
+    instance = nullptr;
     mutex.unlock();
 }
-
-

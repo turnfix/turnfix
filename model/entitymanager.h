@@ -1,18 +1,25 @@
 #ifndef ENTITYMANAGER_H
 #define ENTITYMANAGER_H
 
-#include "connectionrepository.h"
+#include <QObject>
 
-class EntityManager
+class ConnectionRepository;
+class EventRepository;
+
+class EntityManager : public QObject
 {
-public:
-    EntityManager();
-    ~EntityManager();
+    Q_OBJECT
 
-    ConnectionRepository *getConnectionRepository() const;
+public:
+    EntityManager(QObject *parent = nullptr);
+    ~EntityManager() override;
+
+    ConnectionRepository *connectionRepository() const;
+    EventRepository *eventRepository() const;
 
 private:
-    ConnectionRepository *connectionRepository;
+    ConnectionRepository *m_connectionRepository;
+    EventRepository *m_eventRepository;
 };
 
 #endif // ENTITYMANAGER_H

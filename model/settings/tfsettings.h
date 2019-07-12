@@ -31,12 +31,6 @@ public:
     QString getOnlineUser();
     QString getOnlinePass();
 
-    QString getDbServer();
-    QString getDbUser();
-    QString getDbPass();
-    QString getDbDatabase();
-    QString getDbFilename();
-
     QString getVersion();
     QString getCreator();
 
@@ -57,12 +51,6 @@ public:
 
     void setOnlineUser(QString toaUser);
     void setOnlinePass(QString toaPass);
-
-    void setDbServer(QString dbServer);
-    void setDbUser(QString dbUser);
-    void setDbPass(QString dbPass);
-    void setDbDatabase(QString dbDatabase);
-    void setDbFilename(QString dbFilename);
 
     void setCreator(QString creator);
 
@@ -93,12 +81,6 @@ private:
 
     QString toaUser;
     QString toaPass;
-
-    QString dbServer;
-    QString dbUser;
-    QString dbPass;
-    QString dbDatabase;
-    QString dbFilename;
 
     QString version;
     QString creator;

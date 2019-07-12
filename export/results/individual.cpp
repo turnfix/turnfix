@@ -1,5 +1,5 @@
 #include "individual.h"
-#include "model/objects/competition.h"
+#include "model/entity/competition.h"
 #include "src/global/header/_global.h"
 #include "src/global/header/result_calc.h"
 
@@ -30,7 +30,7 @@ void Individual::printContent() {
             QSqlQuery disCountQuery;
             disCountQuery.prepare("SELECT int_disziplinenid, tfx_disziplinen.var_name, int_berechnung, var_einheit, var_kurz1, var_maske, CASE WHEN tfx_wettkaempfe.bol_kp='true' OR tfx_wettkaempfe_x_disziplinen.bol_kp='true' THEN generate_series(0,1) ELSE 0 END as kp FROM tfx_wettkaempfe_x_disziplinen INNER JOIN tfx_disziplinen USING (int_disziplinenid) INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) WHERE var_nummer=? AND int_veranstaltungenid=?");
             disCountQuery.bindValue(0,currWK);
-            disCountQuery.bindValue(1, this->event->getMainEventId());
+            disCountQuery.bindValue(1, this->event->mainEventId());
             disCountQuery.exec();
             QString res;
             if (_global::querySize(disCountQuery) == 1) {

@@ -7,17 +7,18 @@ namespace Ui {
     class CheckDatabaseDialog;
 }
 
+class AbstractConnection;
+
 class CheckDatabaseDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit CheckDatabaseDialog(QWidget *parent = 0);
-    ~CheckDatabaseDialog();
+    explicit CheckDatabaseDialog(AbstractConnection *connection, QWidget *parent = nullptr);
+    ~CheckDatabaseDialog() override;
 
 private:
     Ui::CheckDatabaseDialog *ui;
-    void check();
 
 private slots:
     void enableCloseButton();

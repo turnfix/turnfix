@@ -1,10 +1,11 @@
 #include "checkdatabasedialog.h"
-#include "dbchecker.h"
+#include "model/dbchecker.h"
+#include "model/entity/abstractconnection.h"
 #include "ui_checkdatabasedialog.h"
 
-CheckDatabaseDialog::CheckDatabaseDialog(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::CheckDatabaseDialog)
+CheckDatabaseDialog::CheckDatabaseDialog(AbstractConnection *connection, QWidget *parent)
+    : QDialog(parent)
+    , ui(new Ui::CheckDatabaseDialog)
 {
     ui->setupUi(this);
     ui->headerWidget->setHeaderText(this->windowTitle());
@@ -13,30 +14,24 @@ CheckDatabaseDialog::CheckDatabaseDialog(QWidget *parent) :
 
     connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(close()));
 
-    check();
+    DBChecker *checker = new DBChecker(connection);
+
+    ui->tableProgressBar->setValue(0);
+    ui->columnProgressBar->setValue(0);
+
+    connect(checker, &DBChecker::tableCount, ui->tableProgressBar, &QProgressBar::setMaximum);
+    connect(checker, &DBChecker::columnFKCount, ui->columnProgressBar, &QProgressBar::setMaximum);
+    connect(checker, &DBChecker::tablesChecked, ui->tableProgressBar, &QProgressBar::setValue);
+    connect(checker, &DBChecker::columnsChecked, ui->columnProgressBar, &QProgressBar::setValue);
+    connect(checker, &DBChecker::currentTable, ui->currentTableLabel, &QLabel::setText);
+    connect(checker, &DBChecker::finished, this, &CheckDatabaseDialog::enableCloseButton);
+
+    checker->start();
 }
 
 CheckDatabaseDialog::~CheckDatabaseDialog()
 {
     delete ui;
-}
-
-void CheckDatabaseDialog::check()
-{
-    DBChecker *checker;
-
-    checker = new DBChecker();
-
-    ui->tableProgressBar->setValue(0);
-    ui->columnProgressBar->setValue(0);
-
-    connect(checker,SIGNAL(tableCount(int)), ui->tableProgressBar, SLOT(setMaximum(int)));
-    connect(checker,SIGNAL(currentTable(QString)), ui->currentTableLabel, SLOT(setText(QString)));
-    connect(checker, SIGNAL(tablesChecked(int)), ui->tableProgressBar, SLOT(setValue(int)));
-    connect(checker, SIGNAL(columnFKCount(int)), ui->columnProgressBar, SLOT(setMaximum(int)));
-    connect(checker, SIGNAL(columnsChecked(int)), ui->columnProgressBar, SLOT(setValue(int)));
-    connect(checker, SIGNAL(finished()), this, SLOT(enableCloseButton()));
-    checker->start();
 }
 
 void CheckDatabaseDialog::enableCloseButton()

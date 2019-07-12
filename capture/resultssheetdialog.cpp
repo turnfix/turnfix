@@ -1,6 +1,6 @@
 #include "resultssheetdialog.h"
 #include "libs/fparser/fparser.hh"
-#include "model/objects/event.h"
+#include "model/entity/event.h"
 #include "resultssheettablemodel.h"
 #include "src/global/header/_delegates.h"
 #include "src/global/header/_global.h"
@@ -59,10 +59,10 @@ void ResultsSheetDialog::init(QString r, int g, bool k)
     }
     QSqlQuery query2;
     query2.prepare("SELECT int_statusid FROM tfx_riegen_x_disziplinen WHERE int_veranstaltungenid=? AND int_disziplinenid=? AND var_riege=? AND int_runde=?");
-    query2.bindValue(0, this->event->getMainEventId());
+    query2.bindValue(0, this->event->mainEventId());
     query2.bindValue(1, geraet);
     query2.bindValue(2, riege);
-    query2.bindValue(3, this->event->getRound());
+    query2.bindValue(3, this->event->round());
     query2.exec();
     query2.next();
     ui->cmb_status1->setCurrentIndex(ui->cmb_status1->findData(query2.value(0).toInt()));
@@ -136,10 +136,10 @@ void ResultsSheetDialog::statusChange1()
     QSqlQuery query;
     query.prepare("UPDATE tfx_riegen_x_disziplinen SET int_statusid=? WHERE int_veranstaltungenid=? AND int_disziplinenid=? AND var_riege=? AND int_runde=?");
     query.bindValue(0, ui->cmb_status1->itemData(ui->cmb_status1->currentIndex()).toInt());
-    query.bindValue(1, this->event->getMainEventId());
+    query.bindValue(1, this->event->mainEventId());
     query.bindValue(2, geraet);
     query.bindValue(3, riege);
-    query.bindValue(4, this->event->getRound());
+    query.bindValue(4, this->event->round());
     query.exec();
 }
 

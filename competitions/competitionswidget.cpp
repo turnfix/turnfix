@@ -1,6 +1,6 @@
 #include "competitionswidget.h"
 #include "competitiondialog.h"
-#include "model/objects/event.h"
+#include "model/entity/event.h"
 #include "model/settings/session.h"
 #include "src/global/header/_global.h"
 #include "ui_competitionswidget.h"
@@ -51,8 +51,8 @@ void CompetitionsWidget::fillWKTable()
         "int_wettkaempfeid=tfx_wettkaempfe.int_wettkaempfeid AND int_runde=?) AS starter, "
         "int_wettkaempfeid FROM tfx_wettkaempfe INNER JOIN tfx_bereiche USING (int_bereicheid) "
         "WHERE int_veranstaltungenid=? ORDER BY var_nummer ASC");
-    query.bindValue(0, this->event->getRound());
-    query.bindValue(1, this->event->getMainEventId());
+    query.bindValue(0, this->event->round());
+    query.bindValue(1, this->event->mainEventId());
     query.exec();
     wk_model->setQuery(query);
     ui->cmb_filterWK->clear();

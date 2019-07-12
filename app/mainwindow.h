@@ -5,12 +5,13 @@
 #include "ui_mainwindow.h"
 
 class Event;
+class EntityManager;
 
 class MainWindow : public QMainWindow, public Ui::MainWindow {
     Q_OBJECT
 
 public:
-    MainWindow();
+    MainWindow(EntityManager *em, Event *event);
 
 protected slots:
     void updateTables(int init=0);
@@ -24,10 +25,13 @@ protected slots:
     void changeWK();
     void initTabs();
     void sendMLists();
+
 protected:
     virtual void closeEvent(QCloseEvent * e);
+
 private:
-    Event *event;
+    Event *m_event;
+    EntityManager *m_em;
 };
 
 #endif

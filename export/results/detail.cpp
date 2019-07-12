@@ -1,8 +1,8 @@
 #include "detail.h"
-#include "model/objects/competition.h"
+#include "model/entity/competition.h"
 #include "src/global/header/_global.h"
-#include "src/global/header/settings.h"
 #include "src/global/header/result_calc.h"
+#include "src/global/header/settings.h"
 
 bool Detail::printAW = false;
 
@@ -49,7 +49,7 @@ void Detail::printContent() {
                 QSqlQuery query4;
                 query4.prepare("SELECT int_wertungenid FROM tfx_wertungen WHERE int_mannschaftenid=? AND int_runde=?");
                 query4.bindValue(0,rlist.at(ll).last());
-                query4.bindValue(1, this->event->getRound());
+                query4.bindValue(1, this->event->round());
                 query4.exec();
                 skip=skip+(_global::querySize(query4))*mmToPixel(5.8);
                 if (currKP) skip += (_global::querySize(query4))*mmToPixel(5.8);
@@ -74,7 +74,7 @@ void Detail::printContent() {
             QSqlQuery query3;
             query3.prepare("SELECT int_disziplinenid, tfx_disziplinen.var_name, int_berechnung, var_einheit, var_kurz1, var_maske, CASE WHEN tfx_wettkaempfe.bol_kp='true' OR tfx_wettkaempfe_x_disziplinen.bol_kp='true' THEN 1 ELSE 0 END as kp, bol_mansort, int_wettkaempfe_x_disziplinenid FROM tfx_disziplinen INNER JOIN tfx_wettkaempfe_x_disziplinen USING (int_disziplinenid) INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) WHERE var_nummer=? AND int_veranstaltungenid=? ORDER BY int_sortierung");
             query3.bindValue(0, currWK);
-            query3.bindValue(1, this->event->getMainEventId());
+            query3.bindValue(1, this->event->mainEventId());
             query3.exec();
 
 
@@ -117,7 +117,7 @@ void Detail::printContent() {
                 QSqlQuery dres;
                 dres.prepare("SELECT tfx_wertungen.int_wertungenid FROM tfx_wertungen INNER JOIN tfx_teilnehmer USING (int_teilnehmerid) WHERE int_mannschaftenid=? AND int_runde=? AND bol_startet_nicht='false' ORDER BY bol_ak, var_nachname, var_vorname");
                 dres.bindValue(0, rlist.at(ll).last());
-                dres.bindValue(1, this->event->getRound());
+                dres.bindValue(1, this->event->round());
                 dres.exec();
                 while (dres.next()) {
                     int j=0;
@@ -326,7 +326,7 @@ void Detail::printSubHeader() {
         } else {
             columns.prepare("SELECT var_kurz1, var_icon, CASE WHEN tfx_wettkaempfe_x_disziplinen.bol_kp='true' OR tfx_wettkaempfe.bol_kp='true' THEN 1 ELSE 0 END, bol_mansort, int_wettkaempfe_x_disziplinenid FROM tfx_disziplinen INNER JOIN tfx_wettkaempfe_x_disziplinen USING (int_disziplinenid) INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) WHERE int_veranstaltungenid=? AND var_nummer=? ORDER BY int_sortierung");
         }
-        columns.bindValue(0, this->event->getMainEventId());
+        columns.bindValue(0, this->event->mainEventId());
         columns.bindValue(1, currWK);
         columns.exec();
         double x;

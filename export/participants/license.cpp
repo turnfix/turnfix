@@ -4,8 +4,8 @@
 void License::printContent() {
     QSqlQuery query2;
     query2.prepare("SELECT int_startnummer, " + _global::nameFormat() + " || CASE WHEN bol_ak='true' THEN ' (AK)' ELSE '' END, tfx_vereine.var_name, var_nummer, "+_global::date("dat_geburtstag",2)+", int_startpassnummer FROM tfx_wertungen INNER JOIN tfx_teilnehmer USING (int_teilnehmerid) INNER JOIN tfx_vereine USING (int_vereineid) INNER JOIN tfx_wettkaempfe ON tfx_wertungen.int_wettkaempfeid = tfx_wettkaempfe.int_wettkaempfeid WHERE int_veranstaltungenid=? AND int_runde=? AND int_vereineid IN ("+_global::intListToString(vereinNumbers)+") ORDER BY "+_global::substring("tfx_vereine.var_name","int_start_ort+1")+", tfx_vereine.var_name, var_nummer, var_nachname, var_vorname");
-    query2.bindValue(0, this->event->getMainEventId());
-    query2.bindValue(1, this->event->getRound());
+    query2.bindValue(0, this->event->mainEventId());
+    query2.bindValue(1, this->event->round());
     query2.exec();
 
     QString lastWK="";

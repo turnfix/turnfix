@@ -1,5 +1,5 @@
 #include "certificate.h"
-#include "model/objects/competition.h"
+#include "model/entity/competition.h"
 #include "src/global/header/_global.h"
 #include "src/global/header/result_calc.h"
 
@@ -20,7 +20,7 @@ void Certificate::printContent() {
     QList<QStringList> rlist;
     QSqlQuery wkdata;
     wkdata.prepare("SELECT tfx_veranstaltungen.var_name, to_char(dat_von, 'dd.mm.yyyy'), to_char(dat_bis, 'dd.mm.yyyy'), tfx_wettkampforte.var_name, var_ort, tfx_wettkaempfe.var_name, tfx_wettkaempfe.var_nummer, tfx_gaue.var_name, tfx_verbaende.var_name, tfx_laender.var_name FROM tfx_veranstaltungen INNER JOIN tfx_wettkampforte USING (int_wettkampforteid) INNER JOIN tfx_wettkaempfe USING (int_veranstaltungenid)WHERE tfx_veranstaltungen.int_veranstaltungenid=? AND tfx_wettkaempfe.var_nummer=?");
-    wkdata.bindValue(0, this->event->getMainEventId());
+    wkdata.bindValue(0, this->event->mainEventId());
     wkdata.bindValue(1, competition->getNumber());
     wkdata.exec();
     wkdata.next();
@@ -44,7 +44,7 @@ void Certificate::printContent() {
             QSqlQuery teamCount;
             teamCount.prepare("SELECT COUNT(*) FROM tfx_man_x_teilnehmer WHERE int_mannschaftenid=? AND int_runde=?");
             teamCount.bindValue(0,rlist.at(r).last().toInt());
-            teamCount.bindValue(1, this->event->getRound());
+            teamCount.bindValue(1, this->event->round());
             teamCount.exec();
             teamCount.next();
             numOfUrkunden = teamCount.value(0).toInt();
