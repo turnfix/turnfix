@@ -94,6 +94,9 @@ void LoginDialog::doLogin()
     ui->eventsWidget->setEnabled(false);
     eventModel->clear();
 
+    if (ui->connectionComboBox->currentIndex()==-1)
+       return;
+
     AbstractConnection *connection = connectionModel->connectionAt(
         ui->connectionComboBox->currentIndex());
 
