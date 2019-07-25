@@ -17,8 +17,8 @@ public:
     static int getDBTyp();
     static void initFields();
     static QStringList getFields();
-    static QString wkBez(Event *event, QString swknr);
-    static void updateRgDis(Event *event);
+    static QString wkBez(Event *m_event, QString swknr);
+    static void updateRgDis(Event *m_event);
     static QString nameFormat();
     static double calcLeistung(QString value);
     static QList<QVariant> nameSplit(QString name);

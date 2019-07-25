@@ -6,12 +6,12 @@ Session *Session::instance = nullptr;
 
 void Session::setEvent(Event *event)
 {
-    this->event = event;
+    this->m_event = event;
 }
 
 Event* Session::getEvent()
 {
-    return this->event;
+    return this->m_event;
 }
 
 Session* Session::getInstance()

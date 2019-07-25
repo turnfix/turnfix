@@ -7,7 +7,8 @@ class CompetitionsWidget;
 }
 
 class Event;
-class QSqlQueryModel;
+class EntityManager;
+class CompetitionModel;
 class QSortFilterProxyModel;
 
 class CompetitionsWidget : public QWidget
@@ -19,19 +20,20 @@ public:
     ~CompetitionsWidget() override;
 
 private slots:
-    void addWK();
-    void editWK();
-    void delWK();
-    void updateWKFilterColumn(int index);
-    void updateWKFilterText(const QString &text);
+    void addCompetition();
+    void editCompetition();
+    void removeCompetition();
+    void updateFilterColumn(int index);
+    void updateFilterText(const QString &text);
 
 public:
-    void fillWKTable();
+    void setup(Event *event, EntityManager *em);
 
 private:
-    Event *event;
+    Event *m_event;
+    EntityManager *m_em;
     Ui::CompetitionsWidget *ui;
-    QSqlQueryModel *wk_model;
-    QSortFilterProxyModel *wk_sort_model;
+    CompetitionModel *m_model;
+    QSortFilterProxyModel *m_sortModel;
 };
 #endif

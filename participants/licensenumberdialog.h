@@ -15,7 +15,7 @@ class LicenseNumberDialog : public QDialog
     Q_OBJECT
 
 public:
-    LicenseNumberDialog(Event *event, QWidget *parent = nullptr);
+    LicenseNumberDialog(Event *m_event, QWidget *parent = nullptr);
     ~LicenseNumberDialog();
 
 private slots:
@@ -27,7 +27,7 @@ private slots:
 
 private:
     Ui::LicenseNumberDialog *ui;
-    Event *event;
+    Event *m_event;
     bool eventFilter(QObject *obj, QEvent *ev);
     QSqlQueryModel *model;
 };

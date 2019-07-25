@@ -13,7 +13,7 @@ MultiParticipantsDialog::MultiParticipantsDialog(Event *event, QWidget *parent)
     ui->setupUi(this);
     setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
 
-    this->event = event;
+    this->m_event = event;
     this->model = new QStandardItemModel();
     this->model->setColumnCount(5);
     this->model2 = new QSqlQueryModel();
@@ -30,7 +30,7 @@ MultiParticipantsDialog::MultiParticipantsDialog(Event *event, QWidget *parent)
 
     QSqlQuery query2;
     query2.prepare("SELECT int_wettkaempfeid, var_nummer, var_name, int_typ FROM tfx_wettkaempfe WHERE int_veranstaltungenid=? AND int_typ=0 ORDER BY var_nummer ASC");
-    query2.bindValue( 0, this->event->id());
+    query2.bindValue( 0, this->m_event->id());
     query2.exec();
     while (query2.next()) {
         ui->cmb_wk->addItem(query2.value(1).toString() + " " + query2.value(2).toString(),query2.value(0).toInt());
@@ -90,7 +90,7 @@ void MultiParticipantsDialog::updateTable()
     query3.prepare(query);
     query3.bindValue(0,ui->cmb_club->itemData(ui->cmb_club->currentIndex()));
     if (ui->chk_vp->isChecked()) {
-        query3.bindValue(1, this->event->mainEventId());
+        query3.bindValue(1, this->m_event->mainEvent()->id());
     }
     query3.exec();
     model2->setQuery(query3);
@@ -131,8 +131,8 @@ void MultiParticipantsDialog::save()
     for (int i=0;i<lst_int_ids.size();i++) {
         QSqlQuery query20;
         query20.prepare("SELECT MAX(int_startnummer) FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) INNER JOIN tfx_teilnehmer ON tfx_teilnehmer.int_teilnehmerid = tfx_wertungen.int_teilnehmerid INNER JOIN tfx_vereine USING (int_vereineid) WHERE int_veranstaltungenid=? AND int_runde=?");
-        query20.bindValue(0, this->event->id());
-        query20.bindValue(1, this->event->round());
+        query20.bindValue(0, this->m_event->id());
+        query20.bindValue(1, this->m_event->round());
         query20.exec();
         query20.next();
         QSqlQuery query7;
@@ -144,7 +144,7 @@ void MultiParticipantsDialog::save()
         } else {
             query7.bindValue(2,false);
         }
-        query7.bindValue( 3, this->event->round() );
+        query7.bindValue( 3, this->m_event->round() );
         query7.bindValue( 4, (query20.value(0).toInt()+1) );
         if (model->item(i,3)->checkState() == Qt::Checked) {
             query7.bindValue(5,true);

@@ -1,11 +1,12 @@
 #include "itchecklist.h"
+#include "model/entity/event.h"
 #include "src/global/header/_global.h"
 
 void ITCheckList::printContent() {
     QSqlQuery query2;
     query2.prepare("SELECT int_startnummer, CASE WHEN tfx_gruppen.int_gruppenid IS NULL THEN " + _global::nameFormat() + " || CASE WHEN bol_ak='true' THEN ' (AK)' ELSE '' END ELSE tfx_gruppen.var_name END, tfx_vereine.var_name, var_nummer, "+_global::date("dat_geburtstag",2)+" FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) LEFT JOIN tfx_teilnehmer ON tfx_wertungen.int_teilnehmerid = tfx_teilnehmer.int_teilnehmerid LEFT JOIN tfx_gruppen ON tfx_wertungen.int_gruppenid = tfx_gruppen.int_gruppenid INNER JOIN tfx_vereine ON tfx_vereine.int_vereineid = tfx_teilnehmer.int_vereineid OR tfx_vereine.int_vereineid = tfx_gruppen.int_vereineid WHERE int_veranstaltungenid=? AND int_runde=? AND bol_startet_nicht='false' ORDER BY var_nummer, "+_global::substring("tfx_vereine.var_name","int_start_ort+1")+", tfx_vereine.var_name, var_nachname, var_vorname");
-    query2.bindValue(0, this->event->mainEventId());
-    query2.bindValue(1, this->event->round());
+    query2.bindValue(0, this->m_event->mainEvent()->id());
+    query2.bindValue(1, this->m_event->round());
     query2.exec();
     QString lastWK="";
     while (query2.next()) {

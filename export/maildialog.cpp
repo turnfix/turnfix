@@ -13,7 +13,7 @@ MailDialog::MailDialog(Event *event, QWidget* parent) : QDialog(parent) {
     setupUi(this);
     setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
 
-    this->event = event;
+    this->m_event = event;
 
     if (Settings::smtpFrom.length() == 0 ||
         Settings::smtpMail.length() == 0 ||
@@ -29,7 +29,7 @@ MailDialog::MailDialog(Event *event, QWidget* parent) : QDialog(parent) {
 }
 
 void MailDialog::selClubs() {
-    SelectClubDialog *vn = new SelectClubDialog(this->event, this);
+    SelectClubDialog *vn = new SelectClubDialog(this->m_event, this);
     vn->exec();
     vereine = vn->returnVereine();
     QString to;
@@ -53,7 +53,7 @@ void MailDialog::sendMails() {
             checked.append(false);
         }
     }
-    MailThread *progress = new MailThread(this->event);
+    MailThread *progress = new MailThread(this->m_event);
     dlg = new QProgressDialog("PDF-Dateien werden erzeugt...", nullptr, 0, 0, this);
     dlg->setLabelText("PDF-Dateien werden erzeugt...");
     QObject::connect(progress, SIGNAL(textChanged(QString)), this, SLOT(updateDialogLabel(QString)));

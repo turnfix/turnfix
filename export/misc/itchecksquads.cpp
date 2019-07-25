@@ -1,4 +1,5 @@
 #include "itchecksquads.h"
+#include "model/entity/event.h"
 #include "src/global/header/_global.h"
 
 void ITCheckSquads::print(QPrinter *printer) {
@@ -11,8 +12,8 @@ void ITCheckSquads::print(QPrinter *printer) {
 void ITCheckSquads::printContent() {
     QSqlQuery query;
     query.prepare("SELECT int_durchgang, var_riege FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) WHERE int_veranstaltungenid=? AND int_runde=? GROUP BY var_riege, int_durchgang ORDER BY int_durchgang, var_riege");
-    query.bindValue(0, this->event->mainEventId());
-    query.bindValue(1, this->event->round());
+    query.bindValue(0, this->m_event->mainEvent()->id());
+    query.bindValue(1, this->m_event->round());
     query.exec();
     int lastdurchgang;
     QList<int> lastdis;
@@ -31,8 +32,8 @@ void ITCheckSquads::printContent() {
         }
         QSqlQuery query2;
         query2.prepare("SELECT int_disziplinenid, var_kurz1 FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) INNER JOIN tfx_wettkaempfe_x_disziplinen USING (int_wettkaempfeid) INNER JOIN tfx_disziplinen USING (int_disziplinenid) WHERE int_veranstaltungenid=? AND int_runde=? AND var_riege=? GROUP BY var_kurz1, int_disziplinenid");
-        query2.bindValue(0, this->event->mainEventId());
-        query2.bindValue(1, this->event->round());
+        query2.bindValue(0, this->m_event->mainEvent()->id());
+        query2.bindValue(1, this->m_event->round());
         query2.bindValue(2,query.value(1).toString());
         query2.exec();
         int rowcount = _global::querySize(query2);
@@ -68,8 +69,8 @@ void ITCheckSquads::printContent() {
         painter.drawText(QRectF(pr.x()+mmToPixel(1.3), yco, mmToPixel(35), QFontMetricsF(painter.font()).height()),"Riege " + query.value(1).toString(),QTextOption(Qt::AlignVCenter));
         QSqlQuery query3;
         query3.prepare("SELECT var_nummer FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) WHERE int_veranstaltungenid=? AND int_runde=? AND var_riege=? GROUP BY var_nummer ORDER BY var_nummer");
-        query3.bindValue(0, this->event->mainEventId());
-        query3.bindValue(1, this->event->round());
+        query3.bindValue(0, this->m_event->mainEvent()->id());
+        query3.bindValue(1, this->m_event->round());
         query3.bindValue(2,query.value(1).toString());
         query3.exec();
         QString wks;

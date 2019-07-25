@@ -1,5 +1,7 @@
 #include "resultswidget.h"
 #include "model/entity/competition.h"
+#include "model/entitymanager.h"
+#include "model/repository/competitionrepository.h"
 #include "model/settings/session.h"
 #include "resultstablemodel.h"
 #include "src/global/header/_delegates.h"
@@ -14,7 +16,7 @@ ResultsWidget::ResultsWidget(QWidget *parent)
 {
     ui->setupUi(this);
 
-    this->event = Session::getInstance()->getEvent();
+    this->m_event = Session::getInstance()->getEvent();
     this->er_model = new ResultsTableModel();
 
     ui->er_table->setModel(er_model);
@@ -29,11 +31,11 @@ ResultsWidget::~ResultsWidget()
 void ResultsWidget::fillERTable()
 {
     if (ui->cmb_selectwk->count() > 0) {
-        Competition *competition = Competition::getByNumber(
-            this->event, ui->cmb_selectwk->itemData(ui->cmb_selectwk->currentIndex()).toString());
+        Competition *competition = m_em->competitionRepository()->fetchByNumber(
+            m_event, ui->cmb_selectwk->itemData(ui->cmb_selectwk->currentIndex()).toString());
         QList<QStringList> list = Result_Calc::resultArrayNew(competition);
-        int wktyp = competition->getType();
-        int hwk = competition->getEvent()->mainEventId();
+        int wktyp = competition->type();
+        int hwk = competition->event()->mainEvent()->id();
         QString nr = ui->cmb_selectwk->itemData(ui->cmb_selectwk->currentIndex()).toString();
         er_model->setList(list,nr,hwk,wktyp);
         if (list.size() > 0) {
@@ -66,7 +68,7 @@ void ResultsWidget::updateERList()
     ui->cmb_selectwk->clear();
     QSqlQuery query2;
     query2.prepare("SELECT var_nummer, var_name FROM tfx_wettkaempfe WHERE int_veranstaltungenid=? ORDER BY var_nummer ASC");
-    query2.bindValue(0, this->event->mainEventId());
+    query2.bindValue(0, this->m_event->mainEvent()->id());
     query2.exec();
     while (query2.next()) {
         ui->cmb_selectwk->addItem("WkNr. " + query2.value(0).toString() + " "

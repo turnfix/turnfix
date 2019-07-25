@@ -29,7 +29,7 @@ private slots:
 
 private:
     Ui::CaptureWidget *ui;
-    Event *event;
+    Event *m_event;
     bool eventFilter(QObject *obj, QEvent *ev);
 };
 #endif

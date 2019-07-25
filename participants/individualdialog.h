@@ -13,7 +13,7 @@ class IndividualDialog : public QDialog {
     Q_OBJECT
 
 public:
-    IndividualDialog(Event *event, int edit=0, QWidget* parent = nullptr);
+    IndividualDialog(Event *m_event, int edit=0, QWidget* parent = nullptr);
     ~IndividualDialog();
 
 private slots:
@@ -27,7 +27,7 @@ private slots:
     void updateClubs();
 
 private:
-    Event *event;
+    Event *m_event;
     Ui::IndividualDialog *ui;
     int editid;
 };

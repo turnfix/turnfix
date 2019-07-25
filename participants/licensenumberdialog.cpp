@@ -13,7 +13,7 @@ LicenseNumberDialog::LicenseNumberDialog(Event *event, QWidget *parent)
     ui->setupUi(this);
     setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
 
-    this->event = event;
+    this->m_event = event;
     this->model = new QSqlQueryModel();
 
     ui->tbl_pass->setModel(model);
@@ -28,7 +28,7 @@ LicenseNumberDialog::LicenseNumberDialog(Event *event, QWidget *parent)
     ui->txt_number->installEventFilter(this);
     QSqlQuery query;
     query.prepare("SELECT int_vereineid, tfx_vereine.var_name FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) INNER JOIN tfx_teilnehmer ON tfx_teilnehmer.int_teilnehmerid = tfx_wertungen.int_teilnehmerid INNER JOIN tfx_vereine USING (int_vereineid) WHERE int_veranstaltungenid=? GROUP BY int_vereineid, tfx_vereine.var_name, int_start_ort ORDER BY "+_global::substring("tfx_vereine.var_name","int_start_ort+1")+", tfx_vereine.var_name");
-    query.bindValue(0, this->event->mainEventId());
+    query.bindValue(0, this->m_event->mainEvent()->id());
     query.exec();
     while (query.next()) {
         ui->cmb_club->addItem(query.value(1).toString(), query.value(0).toInt());
@@ -45,9 +45,9 @@ void LicenseNumberDialog::fillTable(int row)
 {
     QSqlQuery query;
     query.prepare("SELECT var_nachname || ', ' || var_vorname, int_startpassnummer, int_teilnehmerid FROM tfx_wertungen INNER JOIN tfx_teilnehmer USING (int_teilnehmerid) INNER JOIN tfx_vereine USING (int_vereineid) INNER JOIN tfx_wettkaempfe ON tfx_wettkaempfe.int_wettkaempfeid = tfx_wertungen.int_wettkaempfeid WHERE int_veranstaltungenid=? AND int_vereineid=? AND int_runde=? ORDER BY tfx_wettkaempfe.var_nummer, "+_global::substring("tfx_vereine.var_name","int_start_ort+1")+", var_nachname, var_vorname");
-    query.bindValue(0, this->event->mainEventId());
+    query.bindValue(0, this->m_event->mainEvent()->id());
     query.bindValue(1, QVariant(ui->cmb_club->itemData(ui->cmb_club->currentIndex())).toInt());
-    query.bindValue(2, this->event->round());
+    query.bindValue(2, this->m_event->round());
     query.exec();
     model->setQuery(query);
     ui->tbl_pass->setFocus();

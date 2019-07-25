@@ -13,7 +13,7 @@ ScoreCardDialog::ScoreCardDialog(Event *event, QWidget *parent)
     ui->setupUi(this);
     setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint | Qt::WindowMaximizeButtonHint);
 
-    this->event = event;
+    this->m_event = event;
 
     pe_model = new ScoreCardTableModel();
     ui->pe_table->setModel(pe_model);
@@ -31,9 +31,9 @@ void ScoreCardDialog::init(int s, int we, QList< QList<int> > d) {
     wertid = we;
     QSqlQuery query;
     query.prepare("SELECT 'StNr.: ' || tfx_wertungen.int_startnummer || '\n' ||var_vorname || ' ' || var_nachname || ' - ' || tfx_vereine.var_name FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) LEFT JOIN tfx_mannschaften ON tfx_mannschaften.int_mannschaftenid = tfx_wertungen.int_mannschaftenid LEFT JOIN tfx_gruppen ON tfx_gruppen.int_gruppenid = tfx_wertungen.int_gruppenid LEFT JOIN tfx_teilnehmer ON tfx_teilnehmer.int_teilnehmerid = tfx_wertungen.int_teilnehmerid INNER JOIN tfx_vereine ON tfx_vereine.int_vereineid = tfx_mannschaften.int_vereineid OR tfx_vereine.int_vereineid = tfx_gruppen.int_vereineid OR tfx_vereine.int_vereineid = tfx_teilnehmer.int_vereineid WHERE int_veranstaltungenid=? AND tfx_wertungen.int_startnummer=? AND int_runde=?");
-    query.bindValue(0, this->event->mainEventId());
+    query.bindValue(0, this->m_event->mainEvent()->id());
     query.bindValue(1, stnr);
-    query.bindValue(2, this->event->round());
+    query.bindValue(2, this->m_event->round());
     query.exec();
     query.next();
     ui->lbl_tn->setText(query.value(0).toString());
@@ -49,9 +49,9 @@ void ScoreCardDialog::init(int s, int we, QList< QList<int> > d) {
     }
     QSqlQuery query2;
     query2.prepare("SELECT int_statusid FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) WHERE int_veranstaltungenid=? AND int_startnummer=? AND int_runde=?");
-    query2.bindValue(0, this->event->mainEventId());
+    query2.bindValue(0, this->m_event->mainEvent()->id());
     query2.bindValue(1, stnr);
-    query2.bindValue(2, this->event->round());
+    query2.bindValue(2, this->m_event->round());
     query2.exec();
     query2.next();
     ui->cmb_status->setCurrentIndex(ui->cmb_status->findData(query2.value(0).toInt()));
@@ -85,9 +85,9 @@ void ScoreCardDialog::statusChange1() {
     QSqlQuery query;
     query.prepare("UPDATE tfx_wertungen SET int_statusid=? WHERE int_wettkaempfeid IN (SELECT int_wettkaempfeid FROM tfx_wettkaempfe WHERE int_veranstaltungenid=?) AND int_startnummer=? AND int_runde=?");
     query.bindValue(0, ui->cmb_status->itemData(ui->cmb_status->currentIndex()).toInt());
-    query.bindValue(1, this->event->mainEventId());
+    query.bindValue(1, this->m_event->mainEvent()->id());
     query.bindValue(2, stnr);
-    query.bindValue(3, this->event->round());
+    query.bindValue(3, this->m_event->round());
     query.exec();
 }
 

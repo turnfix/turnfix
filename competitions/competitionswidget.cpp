@@ -1,7 +1,7 @@
 #include "competitionswidget.h"
 #include "competitiondialog.h"
 #include "model/entity/event.h"
-#include "model/settings/session.h"
+#include "model/view/competitionmodel.h"
 #include "src/global/header/_global.h"
 #include "ui_competitionswidget.h"
 #include <QMessageBox>
@@ -15,23 +15,18 @@ CompetitionsWidget::CompetitionsWidget(QWidget *parent)
 {
     ui->setupUi(this);
 
-    this->event = Session::getInstance()->getEvent();
-    this->wk_model = new QSqlQueryModel();
-    this->wk_sort_model = new QSortFilterProxyModel();
-    //wk_sort_model->setFilterCaseSensitivity(Qt::CaseInsensitive);
-    this->wk_sort_model->setSourceModel(wk_model);
-
-    ui->competitionsTable->setModel(wk_sort_model);
-
-    connect(ui->but_addWK, SIGNAL(clicked()), this, SLOT(addWK()));
-    connect(ui->but_editWK, SIGNAL(clicked()), this, SLOT(editWK()));
-    connect(ui->but_delWK, SIGNAL(clicked()), this, SLOT(delWK()));
+    connect(ui->but_addWK, &QPushButton::clicked, this, &CompetitionsWidget::addCompetition);
+    connect(ui->but_editWK, &QPushButton::clicked, this, &CompetitionsWidget::editCompetition);
+    connect(ui->but_delWK, &QPushButton::clicked, this, &CompetitionsWidget::removeCompetition);
     connect(ui->cmb_filterWK,
-            SIGNAL(currentIndexChanged(int)),
+            QOverload<int>::of(&QComboBox::currentIndexChanged),
             this,
-            SLOT(updateWKFilterColumn(int)));
-    connect(ui->txt_filterWK, SIGNAL(textChanged(QString)), this, SLOT(updateWKFilterText(QString)));
-    connect(ui->competitionsTable, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(editWK()));
+            &CompetitionsWidget::updateFilterColumn);
+    connect(ui->txt_filterWK, &QLineEdit::textChanged, this, &CompetitionsWidget::updateFilterText);
+    connect(ui->competitionsTable,
+            &QTableView::doubleClicked,
+            this,
+            &CompetitionsWidget::editCompetition);
 }
 
 CompetitionsWidget::~CompetitionsWidget()
@@ -39,70 +34,36 @@ CompetitionsWidget::~CompetitionsWidget()
     delete ui;
 }
 
-void CompetitionsWidget::fillWKTable()
+void CompetitionsWidget::addCompetition()
 {
-    int idx = ui->cmb_filterWK->currentIndex();
-    QSqlQuery query;
-    query.prepare(
-        "SELECT var_nummer, tfx_wettkaempfe.var_name, tfx_bereiche.var_name, CASE WHEN yer_bis = 3 "
-        "THEN 'offen' ELSE CAST(yer_von AS text) END, CASE WHEN yer_bis=1 THEN 'und älter' WHEN "
-        "yer_bis=2 THEN 'und jünger' WHEN yer_bis=3 THEN 'offen' ELSE CAST(yer_bis AS text) END , "
-        "int_qualifikation, (SELECT COUNT(*) FROM tfx_wertungen WHERE "
-        "int_wettkaempfeid=tfx_wettkaempfe.int_wettkaempfeid AND int_runde=?) AS starter, "
-        "int_wettkaempfeid FROM tfx_wettkaempfe INNER JOIN tfx_bereiche USING (int_bereicheid) "
-        "WHERE int_veranstaltungenid=? ORDER BY var_nummer ASC");
-    query.bindValue(0, this->event->round());
-    query.bindValue(1, this->event->mainEventId());
-    query.exec();
-    wk_model->setQuery(query);
-    ui->cmb_filterWK->clear();
-    QHeaderView::ResizeMode resizeModeWK[] = {QHeaderView::ResizeToContents,
-                                              QHeaderView::Stretch,
-                                              QHeaderView::ResizeToContents,
-                                              QHeaderView::ResizeToContents,
-                                              QHeaderView::ResizeToContents,
-                                              QHeaderView::ResizeToContents,
-                                              QHeaderView::ResizeToContents};
-    QString headersWK[7] = {"#", "Bezeichnung", "Bereich", "von Jahr", "bis Jahr", "Q", "Starter"};
-    for (int i = 0; i < 7; i++) {
-        ui->cmb_filterWK->addItem(headersWK[i]);
-        wk_model->setHeaderData(i, Qt::Horizontal, headersWK[i]);
-        ui->competitionsTable->horizontalHeader()->setSectionResizeMode(i, resizeModeWK[i]);
+    CompetitionDialog *sw = new CompetitionDialog(m_event, 0, this);
+    if (sw->exec() == 1) {
+        m_model->fetchCompetitions();
     }
-    ui->competitionsTable->hideColumn(7);
-    ui->cmb_filterWK->setCurrentIndex(idx);
-    if (ui->cmb_filterWK->currentIndex() == -1)
-        ui->cmb_filterWK->setCurrentIndex(0);
-}
-
-void CompetitionsWidget::addWK()
-{
-    CompetitionDialog *sw = new CompetitionDialog(this->event, 0, this);
-    if (sw->exec() == 1)
-        fillWKTable();
-    _global::updateRgDis(this->event);
+    _global::updateRgDis(m_event);
     ui->competitionsTable->setFocus();
 }
 
-void CompetitionsWidget::editWK()
+void CompetitionsWidget::editCompetition()
 {
     if (ui->competitionsTable->currentIndex().isValid()) {
         QModelIndex idx = ui->competitionsTable->currentIndex();
         CompetitionDialog *sw = new CompetitionDialog(
-            this->event,
-            QVariant(wk_sort_model->data(
-                         wk_sort_model->index(ui->competitionsTable->currentIndex().row(), 7)))
+            m_event,
+            QVariant(m_sortModel->data(
+                         m_sortModel->index(ui->competitionsTable->currentIndex().row(), 7)))
                 .toInt(),
             this);
-        if (sw->exec() == 1)
-            fillWKTable();
-        _global::updateRgDis(this->event);
+        if (sw->exec() == 1) {
+            m_model->fetchCompetitions();
+        }
+        _global::updateRgDis(m_event);
         ui->competitionsTable->setCurrentIndex(idx);
         ui->competitionsTable->setFocus();
     }
 }
 
-void CompetitionsWidget::delWK()
+void CompetitionsWidget::removeCompetition()
 {
     if (ui->competitionsTable->currentIndex().isValid()) {
         QMessageBox msg(QMessageBox::Question,
@@ -114,24 +75,51 @@ void CompetitionsWidget::delWK()
             query.prepare("DELETE FROM tfx_wettkaempfe WHERE int_wettkaempfeid=?");
             query.bindValue(0,
                             QVariant(
-                                wk_sort_model->data(
-                                    wk_sort_model->index(ui->competitionsTable->currentIndex().row(),
-                                                         7)))
+                                m_sortModel->data(
+                                    m_sortModel->index(ui->competitionsTable->currentIndex().row(),
+                                                       7)))
                                 .toInt());
             query.exec();
-            fillWKTable();
+            m_model->fetchCompetitions();
         }
-        _global::updateRgDis(this->event);
+        _global::updateRgDis(m_event);
         ui->competitionsTable->setFocus();
     }
 }
 
-void CompetitionsWidget::updateWKFilterColumn(int index)
+void CompetitionsWidget::updateFilterColumn(int index)
 {
-    wk_sort_model->setFilterKeyColumn(index);
+    m_sortModel->setFilterKeyColumn(index);
 }
 
-void CompetitionsWidget::updateWKFilterText(const QString &text)
+void CompetitionsWidget::updateFilterText(const QString &text)
 {
-    wk_sort_model->setFilterRegExp(QRegExp(text, Qt::CaseInsensitive, QRegExp::Wildcard));
+    m_sortModel->setFilterRegExp(QRegExp(text, Qt::CaseInsensitive, QRegExp::Wildcard));
+}
+
+void CompetitionsWidget::setup(Event *event, EntityManager *em)
+{
+    m_em = em;
+    m_event = event;
+    m_model = new CompetitionModel(event, em);
+    m_model->fetchCompetitions();
+    m_sortModel = new QSortFilterProxyModel();
+    m_sortModel->setSourceModel(m_model);
+
+    ui->competitionsTable->setModel(m_sortModel);
+
+    QList<QHeaderView::ResizeMode> resizeModes = {QHeaderView::ResizeToContents,
+                                                  QHeaderView::Stretch,
+                                                  QHeaderView::ResizeToContents,
+                                                  QHeaderView::ResizeToContents,
+                                                  QHeaderView::ResizeToContents,
+                                                  QHeaderView::ResizeToContents,
+                                                  QHeaderView::ResizeToContents};
+
+    ui->cmb_filterWK->clear();
+
+    for (int i = 0; i < 7; i++) {
+        ui->cmb_filterWK->addItem(m_model->headerData(i, Qt::Horizontal).toString());
+        ui->competitionsTable->horizontalHeader()->setSectionResizeMode(i, resizeModes.at(i));
+    }
 }

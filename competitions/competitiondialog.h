@@ -14,7 +14,7 @@ class CompetitionDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit CompetitionDialog(Event *event, int edit = 0, QWidget *parent = nullptr);
+    explicit CompetitionDialog(Event *m_event, int edit = 0, QWidget *parent = nullptr);
     ~CompetitionDialog() override;
 
 private slots:
@@ -33,7 +33,7 @@ private slots:
     void orderMoveRight();
 
 private:
-    Event *event;
+    Event *m_event;
     Ui::CompetitionDialog *ui;
     int editid;
     QStandardItemModel *model;

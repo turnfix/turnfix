@@ -1,20 +1,29 @@
 #include "clubdialog.h"
+#include "model/entity/club.h"
+#include "model/entity/person.h"
+#include "model/entitymanager.h"
+#include "model/repository/clubrepository.h"
+#include "model/view/personmodel.h"
 #include "persondialog.h"
 #include "regiondialog.h"
-#include "src/global/header/_global.h"
 #include "ui_clubdialog.h"
 #include <QSqlQuery>
 
-ClubDialog::ClubDialog(int tid, QWidget *parent)
+ClubDialog::ClubDialog(Club *club, EntityManager *em, QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::ClubDialog)
+    , m_em(em)
+    , m_club(club)
 {
-    vnid = tid;
     ui->setupUi(this);
     setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
-    readPersons();
     readGaue();
     ui->cmb_gau->setCurrentIndex(0);
+
+    m_personModel = new PersonModel(em, this);
+    m_personModel->fetchPersons();
+    ui->cmb_ansprech->setModel(m_personModel);
+    ui->cmb_ansprech->setModelColumn(8);
 
     connect(ui->but_save, SIGNAL(clicked()), this, SLOT(save()));
     connect(ui->sli_ort, SIGNAL(valueChanged(int)), this, SLOT(updateOrt()));
@@ -23,18 +32,15 @@ ClubDialog::ClubDialog(int tid, QWidget *parent)
     connect(ui->but_addg, SIGNAL(clicked()), this, SLOT(addGau()));
     connect(ui->cmb_gau, SIGNAL(currentIndexChanged(int)), this, SLOT(updateGauInfo()));
 
-    if (tid != 0) {
-        QSqlQuery query;
-        query.prepare("SELECT int_personenid, var_name, int_start_ort, var_website, int_gaueid FROM tfx_vereine WHERE int_vereineid=?");
-        query.bindValue(0,tid);
-        query.exec();
-        query.next();
-        ui->cmb_ansprech->setCurrentIndex(ui->cmb_ansprech->findData(query.value(0).toInt()));
-        ui->txt_name->setText(query.value(1).toString());
-        ui->txt_web->setText(query.value(3).toString());
-        ui->sli_ort->setValue(query.value(2).toInt());
-        ui->cmb_gau->setCurrentIndex(ui->cmb_gau->findData(query.value(4).toInt()));
+    if (m_club == nullptr) {
+        m_club = new Club();
     }
+
+    ui->cmb_ansprech->setCurrentIndex(ui->cmb_ansprech->findData(m_club->contactPersonId()));
+    ui->txt_name->setText(m_club->name());
+    ui->txt_web->setText(m_club->website());
+    ui->sli_ort->setValue(m_club->posCity());
+    ui->cmb_gau->setCurrentIndex(ui->cmb_gau->findData(m_club->regionId()));
 }
 
 ClubDialog::~ClubDialog()
@@ -42,22 +48,13 @@ ClubDialog::~ClubDialog()
     delete ui;
 }
 
-void ClubDialog::readPersons()
-{
-    QString currtext = ui->cmb_ansprech->currentText();
-    ui->cmb_ansprech->clear();
-    ui->cmb_ansprech->addItem("");
-    QSqlQuery query("SELECT int_personenid, var_nachname || ', ' || var_vorname FROM tfx_personen ORDER BY var_nachname, var_vorname");
-    while (query.next()) {
-        ui->cmb_ansprech->addItem(query.value(1).toString(), query.value(0).toInt());
-    }
-    ui->cmb_ansprech->setCurrentIndex(ui->cmb_ansprech->findText(currtext));
-}
-
 void ClubDialog::addPerson()
 {
-    PersonDialog *pe = new PersonDialog(0, this);
-    if(pe->exec() == 1) { readPersons(); }
+    PersonDialog *personDialog = new PersonDialog(nullptr, m_em, this);
+    if (personDialog->exec() == 1) {
+        m_personModel->fetchPersons();
+        ui->cmb_ansprech->setCurrentIndex(ui->cmb_ansprech->findData(personDialog->person()->id()));
+    }
 }
 
 void ClubDialog::readGaue()
@@ -79,19 +76,13 @@ void ClubDialog::addGau()
 
 void ClubDialog::save()
 {
-    QSqlQuery query6;
-    if (vnid == 0) {
-        query6.prepare("INSERT INTO tfx_vereine (int_personenid,var_name,int_start_ort,var_website,int_gaueid) VALUES (?,?,?,?,?)");
-    } else {
-        query6.prepare("UPDATE tfx_vereine SET int_personenid=?,var_name=?,int_start_ort=?,var_website=?,int_gaueid=? WHERE int_vereineid=?");
-        query6.bindValue(5,vnid);
-    }
-    query6.bindValue(0, ui->cmb_ansprech->itemData(ui->cmb_ansprech->currentIndex()));
-    query6.bindValue(1, ui->txt_name->text());
-    query6.bindValue(2, ui->sli_ort->value());
-    query6.bindValue(3, ui->txt_web->text());
-    query6.bindValue(4, ui->cmb_gau->itemData(ui->cmb_gau->currentIndex()));
-    query6.exec();
+    m_club->setContactPersonId(ui->cmb_ansprech->itemData(ui->cmb_ansprech->currentIndex()).toInt());
+    m_club->setName(ui->txt_name->text());
+    m_club->setPosCity(ui->sli_ort->value());
+    m_club->setWebsite(ui->txt_web->text());
+    m_club->setRegionId(ui->cmb_gau->itemData(ui->cmb_gau->currentIndex()).toInt());
+
+    m_em->clubRepository()->persist(m_club);
     done(1);
 }
 
@@ -118,4 +109,9 @@ void ClubDialog::updateGauInfo()
         ui->lbl_verband->setText(query.value(0).toString());
         ui->lbl_land->setText(query.value(1).toString());
     }
+}
+
+Club *ClubDialog::club()
+{
+    return m_club;
 }

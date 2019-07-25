@@ -1,6 +1,8 @@
 #include "teamdialog.h"
 #include "masterdata/athletedialog.h"
 #include "masterdata/clubdialog.h"
+#include "model/entity/athlete.h"
+#include "model/entity/club.h"
 #include "model/entity/event.h"
 #include "src/global/header/_global.h"
 #include "src/global/header/settings.h"
@@ -12,11 +14,15 @@
 #include <QStandardItemModel>
 #include <QToolBar>
 
-TeamDialog::TeamDialog(Event *event, int edit, QWidget* parent) : QDialog(parent), ui(new Ui::TeamDialog) {
+TeamDialog::TeamDialog(Event *event, EntityManager *em, int edit, QWidget *parent)
+    : QDialog(parent)
+    , m_em(em)
+    , ui(new Ui::TeamDialog)
+{
     ui->setupUi(this);
     setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
 
-    this->event = event;
+    this->m_event = event;
     editid=edit;
 
     QToolBar *tb = new QToolBar();
@@ -96,7 +102,7 @@ void TeamDialog::initData() {
     updateClubs();
     QSqlQuery query2;
     query2.prepare("SELECT int_wettkaempfeid, var_nummer, var_name FROM tfx_wettkaempfe WHERE int_veranstaltungenid=? AND int_typ=1 ORDER BY var_nummer ASC");
-    query2.bindValue(0, this->event->mainEventId());
+    query2.bindValue(0, this->m_event->mainEvent()->id());
     query2.exec();
     while (query2.next()) {
         ui->cmb_wk->addItem(query2.value(1).toString() + " " + query2.value(2).toString(),query2.value(0).toInt());
@@ -114,7 +120,7 @@ void TeamDialog::initData() {
         QSqlQuery query8;
         query8.prepare("SELECT int_teilnehmerid FROM tfx_wertungen WHERE int_mannschaftenid=? AND int_runde=? ORDER BY int_startnummer");
         query8.bindValue(0, editid);
-        query8.bindValue(1, this->event->round());
+        query8.bindValue(1, this->m_event->round());
         query8.exec();
         while (query8.next()) {
             lst_int_ids.append(query8.value(0).toInt());
@@ -129,7 +135,7 @@ void TeamDialog::initData() {
     }
     fillTable();
     fillTable2();
-    if (this->event->round() > 1) {
+    if (this->m_event->round() > 1) {
         ui->cmb_club->setEnabled(false);
         ui->sbx_tno->setEnabled(false);
         ui->cmb_wk->setEnabled(false);
@@ -153,7 +159,7 @@ void TeamDialog::save() {
         query4.prepare("INSERT INTO tfx_mannschaften (int_vereineid,int_nummer,int_wettkaempfeid,var_riege,int_startnummer) VALUES(?,?,?,?,?)");
         QSqlQuery query0;
         query0.prepare("SELECT MAX(int_startnummer) FROM tfx_mannschaften INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) WHERE int_veranstaltungenid=?");
-        query0.bindValue(0, this->event->id());
+        query0.bindValue(0, this->m_event->id());
         query0.exec();
         query0.next();
         query4.bindValue( 4, (query0.value(0).toInt()+1));
@@ -216,19 +222,19 @@ void TeamDialog::save() {
         query5.prepare("SELECT int_mannschaftenid,int_teilnehmerid FROM tfx_man_x_teilnehmer WHERE int_mannschaftenid=? AND int_teilnehmerid=? AND int_runde=?");
         query5.bindValue(0, editid);
         query5.bindValue(1, lst_int_ids.at(i));
-        query5.bindValue(2, this->event->round());
+        query5.bindValue(2, this->m_event->round());
         query5.exec();
         if (_global::querySize(query5) == 0) {
             QSqlQuery query6;
             query6.prepare("INSERT INTO tfx_man_x_teilnehmer (int_mannschaftenid,int_teilnehmerid, int_runde) VALUES (?,?,?)");
             query6.bindValue(0, editid);
             query6.bindValue(1, lst_int_ids.at(i));
-            query6.bindValue(2, this->event->round());
+            query6.bindValue(2, this->m_event->round());
             query6.exec();
             QSqlQuery query20;
             query20.prepare("SELECT MAX(int_startnummer) FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) INNER JOIN tfx_teilnehmer ON tfx_teilnehmer.int_teilnehmerid = tfx_wertungen.int_teilnehmerid INNER JOIN tfx_vereine USING (int_vereineid) WHERE int_veranstaltungenid=? AND int_runde=?");
-            query20.bindValue(0, this->event->mainEventId());
-            query20.bindValue(1, this->event->round());
+            query20.bindValue(0, this->m_event->mainEvent()->id());
+            query20.bindValue(1, this->m_event->round());
             query20.exec();
             query20.next();
             QSqlQuery query7;
@@ -242,7 +248,7 @@ void TeamDialog::save() {
                 query7.bindValue(3,false);
             }
             query7.bindValue(4, editid );
-            query7.bindValue(5, this->event->round());
+            query7.bindValue(5, this->m_event->round());
             query7.bindValue(6, (query20.value(0).toInt()+1) );
             if (model->item(i,4)->checkState() == Qt::Checked) {
                 query7.bindValue(7,true);
@@ -256,7 +262,7 @@ void TeamDialog::save() {
             query6.prepare("SELECT int_wertungenid FROM tfx_wertungen WHERE int_mannschaftenid=? AND int_teilnehmerid=? AND int_runde=?");
             query6.bindValue(0, editid);
             query6.bindValue(1, lst_int_ids.at(i));
-            query6.bindValue(2, this->event->round());
+            query6.bindValue(2, this->m_event->round());
             query6.exec();
             query6.next();
             QSqlQuery query7;
@@ -287,13 +293,13 @@ void TeamDialog::save() {
             QSqlQuery query9;
             query9.prepare("DELETE FROM tfx_man_x_teilnehmer WHERE int_man_x_teilnehmerid=? AND int_runde=?");
             query9.bindValue(0, query8.value(0).toInt());
-            query9.bindValue(1, this->event->round());
+            query9.bindValue(1, this->m_event->round());
             query9.exec();
             QSqlQuery query10;
             query10.prepare("DELETE FROM tfx_wertungen WHERE int_mannschaftenid=? AND int_teilnehmerid=? AND int_runde=?");
             query10.bindValue(0, query8.value(2).toInt());
             query10.bindValue(1, query8.value(1).toInt());
-            query10.bindValue(2, this->event->round());
+            query10.bindValue(2, this->m_event->round());
             query10.exec();
         }
     }
@@ -326,10 +332,10 @@ void TeamDialog::fillTable() {
     for (int i=0;i<lst_int_ids.size();i++) {
         QSqlQuery query;
         query.prepare("SELECT (CASE WHEN (SELECT COUNT(*) FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) WHERE int_mannschaftenid IS NOT NULL AND int_veranstaltungenid=? AND int_runde=? AND int_teilnehmerid=tfx_teilnehmer.int_teilnehmerid) >0 THEN (SELECT int_startnummer"+pgExtra+" FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) WHERE int_mannschaftenid IS NOT NULL AND int_veranstaltungenid=? AND int_runde=? AND int_teilnehmerid=tfx_teilnehmer.int_teilnehmerid) ELSE 'nA' END) AS stnr, tfx_teilnehmer.var_nachname || ', ' || tfx_teilnehmer.var_vorname, "+_global::date("dat_geburtstag",4)+", tfx_teilnehmer.int_teilnehmerid FROM tfx_teilnehmer WHERE tfx_teilnehmer.int_teilnehmerid=? LIMIT 1");
-        query.bindValue(0, this->event->mainEventId());
-        query.bindValue(1, this->event->round());
-        query.bindValue(2, this->event->mainEventId());
-        query.bindValue(3, this->event->round());
+        query.bindValue(0, this->m_event->mainEvent()->id());
+        query.bindValue(1, this->m_event->round());
+        query.bindValue(2, this->m_event->mainEvent()->id());
+        query.bindValue(3, this->m_event->round());
         query.bindValue(4, lst_int_ids.at(i) );
         query.exec();
         query.next();
@@ -343,7 +349,7 @@ void TeamDialog::fillTable() {
             query2.prepare("SELECT bol_ak, bol_startet_nicht FROM tfx_wertungen INNER JOIN tfx_teilnehmer USING (int_teilnehmerid) WHERE int_mannschaftenid=? AND int_teilnehmerid=? AND int_runde=? LIMIT 1");
             query2.bindValue(0, editid);
             query2.bindValue(1, query.value(3).toInt());
-            query2.bindValue(2, this->event->round());
+            query2.bindValue(2, this->m_event->round());
             query2.exec();
             query2.next();
             if (query2.value(0).toBool()) {
@@ -389,11 +395,11 @@ void TeamDialog::fillTable2() {
     query3.prepare(query);
     if (ui->chk_club->isChecked() && ui->chk_planned->isChecked()) {
         query3.bindValue(0,ui->cmb_club->itemData(ui->cmb_club->currentIndex()));
-        query3.bindValue(1, this->event->mainEventId());
+        query3.bindValue(1, this->m_event->mainEvent()->id());
     } else if (ui->chk_club->isChecked() ) {
         query3.bindValue(0,ui->cmb_club->itemData(ui->cmb_club->currentIndex()));
     } else {
-        query3.bindValue(0, this->event->mainEventId());
+        query3.bindValue(0, this->m_event->mainEvent()->id());
     }
     query3.exec();
     model2->setQuery(query3);
@@ -408,16 +414,19 @@ void TeamDialog::fillTable2() {
 }
 
 void TeamDialog::addAv() {
-    AthleteDialog *tu = new AthleteDialog(0, this);
-    tu->setVerein(ui->cmb_club->currentText());
+    AthleteDialog *tu = new AthleteDialog(nullptr,
+                                          qvariant_cast<Club *>(ui->cmb_club->currentData()),
+                                          m_em,
+                                          this);
     tu->exec();
     fillTable2();
 }
 
 void TeamDialog::editAv() {
-    AthleteDialog *tu = new AthleteDialog(
-        QVariant(sortmodel->data(sortmodel->index(ui->tbl_avtn->currentIndex().row(), 3))).toInt(),
-        this);
+    AthleteDialog *tu = new AthleteDialog(qvariant_cast<Athlete *>(
+                                              sortmodel->data(ui->tbl_avtn->currentIndex())),
+                                          m_em,
+                                          this);
     tu->exec();
     fillTable2();
 }
@@ -435,8 +444,9 @@ void TeamDialog::updateClubs() {
 }
 
 void TeamDialog::addClub() {
-    ClubDialog *pe = new ClubDialog(0, this);
-    if(pe->exec() == 1) { updateClubs(); }
+    //TODO reenable
+    //ClubDialog *pe = new ClubDialog(0, this);
+    //if(pe->exec() == 1) { updateClubs(); }
 }
 
 bool TeamDialog::checkJg(int jg) {

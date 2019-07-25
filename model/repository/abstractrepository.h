@@ -1,16 +1,37 @@
 #ifndef ABSTRACTREPOSITORY_H
 #define ABSTRACTREPOSITORY_H
 
+#include "model/entitymanager.h"
+#include "model/querybuilder.h"
 #include <QList>
 
-template<typename T>
+class EntityManager;
+
+template<class T>
 class AbstractRepository
 {
 public:
-    virtual ~AbstractRepository() {}
-    virtual QList<T> loadAll() = 0;
-    virtual void persist(T object) = 0;
-    virtual void remove(T object) = 0;
+    explicit AbstractRepository(EntityManager *em) { m_em = em; }
+    virtual ~AbstractRepository() = default;
+    virtual void persist(T *object)
+    {
+        QSqlDatabase db = QSqlDatabase::database(m_em->connectionName());
+        QueryBuilder<T> qb;
+        qb.persist(db, T::staticMetaObject, T::mapping(), object);
+    }
+
+    virtual void remove(T *object)
+    {
+        QSqlDatabase db = QSqlDatabase::database(m_em->connectionName());
+        QueryBuilder<T> qb;
+        qb.remove(db, T::staticMetaObject, T::mapping(), object);
+    }
+
+protected:
+    EntityManager *entityManager() { return m_em; }
+
+private:
+    EntityManager *m_em;
 };
 
 #endif // ABSTRACTREPOSITORY_H

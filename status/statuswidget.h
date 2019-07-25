@@ -23,7 +23,7 @@ public slots:
 
 private:
     Ui::StatusWidget *ui;
-    Event *event;
+    Event *m_event;
     StatusTableModel *mdl_status1;
     StatusTableModel *mdl_status2;
     QSortFilterProxyModel *mdl_sort_status1;

@@ -7,19 +7,25 @@ namespace Ui {
 class BankAccountDialog;
 }
 
+class BankAccount;
+class EntityManager;
+
 class BankAccountDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    BankAccountDialog(int tid = 0, QWidget *parent = nullptr);
+    BankAccountDialog(BankAccount *account, EntityManager *em, QWidget *parent = nullptr);
     ~BankAccountDialog();
+
+    BankAccount *account() const;
 
 private slots:
     void save();
 
 private:
     Ui::BankAccountDialog *ui;
-    int acid;
+    EntityManager *m_em;
+    BankAccount *m_account;
 };
 #endif

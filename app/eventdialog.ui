@@ -568,8 +568,8 @@ QPushButton:pressed, QPushButton:hover {
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>313</width>
-            <height>285</height>
+            <width>468</width>
+            <height>331</height>
            </rect>
           </property>
           <attribute name="label">
@@ -776,8 +776,8 @@ QPushButton:pressed, QPushButton:hover {
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>86</width>
-            <height>80</height>
+            <width>468</width>
+            <height>331</height>
            </rect>
           </property>
           <attribute name="label">

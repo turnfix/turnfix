@@ -1,5 +1,7 @@
 #include "list.h"
 #include "model/entity/competition.h"
+#include "model/entitymanager.h"
+#include "model/repository/competitionrepository.h"
 #include "src/global/header/_global.h"
 
 void List::print(QPrinter *printer) {
@@ -9,14 +11,15 @@ void List::print(QPrinter *printer) {
 }
 
 void List::printSubHeader() {
-    Competition *competition = Competition::getByNumber(this->event, currWK);
+    Competition *competition = m_em->competitionRepository()->fetchByNumber(this->m_event, currWK);
 
     setPrinterFont(10);
     QString jg = "";
 
-    if (competition->getType() == 0) jg = "Jg.";
+    if (competition->type() == 0)
+        jg = "Jg.";
 
-    if (competition->getType() == 0 || competition->getType() == 2) {
+    if (competition->type() == 0 || competition->type() == 2) {
         drawStandardRow("StNr.","Name",jg,"Verein","",readDetailInfo(true));
     } else {
         drawStandardRow("StNr.","Name","Jg.","Mannschaft","",readDetailInfo(true));

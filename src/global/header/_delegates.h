@@ -14,21 +14,21 @@ public:
     void setEditorData(QWidget *editor, const QModelIndex &index) const override;
     void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const override;
     void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
-    bool eventFilter(QObject *editor, QEvent *event) override;
+    bool eventFilter(QObject *editor, QEvent *m_event) override;
 };
 
 class CmbDelegate : public QItemDelegate {
     Q_OBJECT
 
 public:
-    CmbDelegate(Event *event, QObject *parent = nullptr);
+    CmbDelegate(Event *m_event, QObject *parent = nullptr);
     QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
     void setEditorData(QWidget *editor, const QModelIndex &index) const override;
     void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const override;
     void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 
 private:
-    Event *event;
+    Event *m_event;
 };
 
 class AlignItemDelegate : public QItemDelegate {

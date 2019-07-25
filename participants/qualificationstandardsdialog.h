@@ -13,7 +13,7 @@ class QualificationStandardsDialog : public QDialog {
     Q_OBJECT
 
 public:
-    QualificationStandardsDialog(Event *event, int edit=0, QWidget* parent = nullptr);
+    QualificationStandardsDialog(Event *m_event, int edit=0, QWidget* parent = nullptr);
     ~QualificationStandardsDialog();
 
 protected slots:
@@ -21,7 +21,7 @@ protected slots:
     void finishEdit();
 
 protected:
-    Event *event;
+    Event *m_event;
     Ui::QualificationStandardsDialog *ui;
     int editid;
     QualificationStandardsTableModel *model;

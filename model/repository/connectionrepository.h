@@ -2,16 +2,17 @@
 #define CONNECTIONREPOSITORY_H
 
 #include "abstractrepository.h"
+#include "model/entity/abstractconnection.h"
 
-class AbstractConnection;
 class QSettings;
+class EntityManager;
 
-class ConnectionRepository : public AbstractRepository<AbstractConnection *>
+class ConnectionRepository : public AbstractRepository<AbstractConnection>
 {
 public:
-    explicit ConnectionRepository();
+    explicit ConnectionRepository(EntityManager *em);
 
-    QList<AbstractConnection *> loadAll() override;
+    QList<AbstractConnection *> loadAll();
     void persist(AbstractConnection *connection) override;
     void remove(AbstractConnection *connection) override;
 };

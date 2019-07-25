@@ -1,4 +1,5 @@
 #include "judgessheet.h"
+#include "model/entity/event.h"
 #include "src/global/header/_global.h"
 #include "src/global/header/settings.h"
 
@@ -14,8 +15,8 @@ void JudgesSheet::printContent() {
 
         QSqlQuery erstesGeraet;
         erstesGeraet.prepare("SELECT int_disziplinenid FROM tfx_riegen_x_disziplinen WHERE int_veranstaltungenid=? AND int_runde=? AND var_riege=? AND bol_erstes_geraet='true'");
-        erstesGeraet.bindValue(0, this->event->mainEventId());
-        erstesGeraet.bindValue(1, this->event->round());
+        erstesGeraet.bindValue(0, this->m_event->mainEvent()->id());
+        erstesGeraet.bindValue(1, this->m_event->round());
         erstesGeraet.bindValue(2, currRiege);
         erstesGeraet.exec();
 
@@ -36,9 +37,9 @@ void JudgesSheet::printContent() {
         query2.prepare("SELECT tfx_wertungen.int_startnummer, CASE WHEN tfx_wertungen.int_gruppenid IS NOT NULL THEN tfx_gruppen.var_name ELSE " + _global::nameFormat() + " || CASE WHEN tfx_wertungen.bol_ak='true' THEN ' (AK)' ELSE '' END END, CASE WHEN tfx_wertungen.int_mannschaftenid IS NOT NULL THEN v1.var_name || ' - ' || tfx_mannschaften.int_nummer || '. M.' ELSE CASE WHEN tfx_wertungen.int_gruppenid IS NOT NULL THEN v2.var_name ELSE v3.var_name END END, tfx_wettkaempfe.var_nummer, "+_global::date("dat_geburtstag",2)+", s1.int_pos FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) INNER JOIN tfx_wettkaempfe_x_disziplinen USING (int_wettkaempfeid) LEFT JOIN tfx_teilnehmer ON tfx_teilnehmer.int_teilnehmerid = tfx_wertungen.int_teilnehmerid LEFT JOIN tfx_vereine AS v3 ON tfx_teilnehmer.int_vereineid = v3.int_vereineid LEFT JOIN tfx_mannschaften ON tfx_mannschaften.int_mannschaftenid = tfx_wertungen.int_mannschaftenid LEFT JOIN tfx_vereine AS v1 ON tfx_mannschaften.int_vereineid = v1.int_vereineid LEFT JOIN tfx_gruppen ON tfx_gruppen.int_gruppenid = tfx_wertungen.int_gruppenid LEFT JOIN tfx_vereine AS v2 ON tfx_gruppen.int_vereineid = v2.int_vereineid LEFT JOIN tfx_startreihenfolge AS s1 ON s1.int_wertungenid=tfx_wertungen.int_wertungenid AND s1.int_disziplinenid=? AND s1.int_kp=? WHERE tfx_wettkaempfe.int_veranstaltungenid=? AND tfx_wertungen.var_riege=? AND tfx_wertungen.int_runde=? AND tfx_wettkaempfe_x_disziplinen.int_disziplinenid=? AND (NOT EXISTS (SELECT int_wertungen_x_disziplinenid FROM tfx_wertungen_x_disziplinen WHERE int_wertungenid=tfx_wertungen.int_wertungenid) OR EXISTS (SELECT int_wertungen_x_disziplinenid FROM tfx_wertungen_x_disziplinen WHERE tfx_wertungen_x_disziplinen.int_wertungenid=tfx_wertungen.int_wertungenid AND tfx_wertungen_x_disziplinen.int_disziplinenid=?)) AND tfx_wertungen.bol_startet_nicht='false' ORDER BY int_pos, tfx_wettkaempfe.var_nummer, tfx_mannschaften.int_nummer, tfx_mannschaften.int_mannschaftenid, tfx_wertungen.int_startnummer");
 
         query2.bindValue(1,0);
-        query2.bindValue(2, this->event->mainEventId());
+        query2.bindValue(2, this->m_event->mainEvent()->id());
         query2.bindValue(3, currRiege);
-        query2.bindValue(4, this->event->round());
+        query2.bindValue(4, this->m_event->round());
         for (int j=0;j<disziplinenIDs.size();j++) {
 
             currDis = disziplinenIDs.at(position).at(0);
@@ -62,7 +63,7 @@ void JudgesSheet::printContent() {
             QString name = disinfo.value(0).toString();
             QSqlQuery checkKuer;
             checkKuer.prepare("SELECT int_wettkaempfeid FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) INNER JOIN tfx_veranstaltungen USING (int_veranstaltungenid) INNER JOIN tfx_wettkaempfe_x_disziplinen USING (int_wettkaempfeid) INNER JOIN tfx_disziplinen USING (int_disziplinenid) WHERE int_veranstaltungenid=? AND int_disziplinenid=? AND (tfx_wettkaempfe.bol_kp='true' OR tfx_wettkaempfe_x_disziplinen.bol_kp='true')");
-            checkKuer.bindValue(0, this->event->mainEventId());
+            checkKuer.bindValue(0, this->m_event->mainEvent()->id());
             checkKuer.bindValue(1,disziplinenIDs.at(j).at(0));
             checkKuer.exec();
             if (_global::querySize(checkKuer)>0) {
@@ -98,7 +99,7 @@ void JudgesSheet::printContent() {
                 if (query2.value(5).toInt()==0 && skipSR) continue;
                 currWK = query2.value(3).toString();
                 checkKuer.prepare("SELECT int_wettkaempfeid FROM tfx_wettkaempfe INNER JOIN tfx_wettkaempfe_x_disziplinen USING (int_wettkaempfeid) INNER JOIN tfx_veranstaltungen USING (int_veranstaltungenid) WHERE int_veranstaltungenid=? AND tfx_wettkaempfe.var_nummer=? AND (tfx_wettkaempfe.bol_kp='true' OR tfx_wettkaempfe_x_disziplinen.bol_kp='true')");
-                checkKuer.bindValue(0, this->event->mainEventId());
+                checkKuer.bindValue(0, this->m_event->mainEvent()->id());
                 checkKuer.bindValue(1,currWK);
                 checkKuer.exec();
                 if (_global::querySize(checkKuer)==0 && name.right(3) == "(K)") {

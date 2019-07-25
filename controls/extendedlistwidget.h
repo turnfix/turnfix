@@ -8,7 +8,7 @@ class ExtendedListWidget : public QListWidget
     Q_OBJECT
 public:
     explicit ExtendedListWidget(QWidget *parent = 0);
-    void dropEvent ( QDropEvent * event );
+    void dropEvent ( QDropEvent * m_event );
 
 signals:
     void itemDropped();

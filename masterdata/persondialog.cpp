@@ -1,32 +1,34 @@
 #include "persondialog.h"
-#include "src/global/header/_global.h"
+#include "model/entity/person.h"
+#include "model/entitymanager.h"
+#include "model/repository/personrepository.h"
 #include "ui_persondialog.h"
 #include <QSqlQuery>
 
-PersonDialog::PersonDialog(int tid, QWidget *parent)
+PersonDialog::PersonDialog(Person *person, EntityManager *em, QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::PersonDialog)
+    , m_em(em)
+    , m_person(person)
 {
-    tnid = tid;
     ui->setupUi(this);
-    setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
+    setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint
+                   | Qt::WindowCloseButtonHint);
 
-    connect(ui->but_save, SIGNAL(clicked()), this, SLOT(save()));
+    connect(ui->but_save, &QPushButton::clicked, this, &PersonDialog::save);
 
-    if (tid != 0) {
-        QSqlQuery query;
-        query.prepare("SELECT var_nachname || ', ' || var_vorname, var_adresse, var_plz, var_ort, var_telefon, var_fax, var_email FROM tfx_personen WHERE int_personenid=?");
-        query.bindValue(0,tid);
-        query.exec();
-        query.next();
-        ui->txt_name->setText(query.value(0).toString());
-        ui->txt_adress->setText(query.value(1).toString());
-        ui->txt_plz->setText(query.value(2).toString());
-        ui->txt_ort->setText(query.value(3).toString());
-        ui->txt_phone->setText(query.value(4).toString());
-        ui->txt_fax->setText(query.value(5).toString());
-        ui->txt_mail->setText(query.value(6).toString());
+    if (m_person == nullptr) {
+        m_person = new Person();
     }
+
+    ui->firstNameText->setText(m_person->firstName());
+    ui->lastNameText->setText(m_person->lastName());
+    ui->addressText->setText(m_person->address());
+    ui->zipText->setText(m_person->zip());
+    ui->cityText->setText(m_person->city());
+    ui->phoneNumberText->setText(m_person->phoneNumber());
+    ui->faxText->setText(m_person->lastName());
+    ui->emailText->setText(m_person->email());
 }
 
 PersonDialog::~PersonDialog()
@@ -36,21 +38,20 @@ PersonDialog::~PersonDialog()
 
 void PersonDialog::save()
 {
-    QSqlQuery query6;
-    if (tnid == 0) {
-        query6.prepare("INSERT INTO tfx_personen (var_vorname,var_nachname,var_adresse,var_plz,var_ort,var_telefon,var_fax,var_email) VALUES (?,?,?,?,?,?,?,?)");
-    } else {
-        query6.prepare("UPDATE tfx_personen SET var_vorname=?, var_nachname=?, var_adresse=?, var_plz=?, var_ort=?, var_telefon=?, var_fax=?, var_email=? WHERE int_personenid=?");
-        query6.bindValue(8,tnid);
-    }
-    query6.bindValue(0, _global::nameSplit(ui->txt_name->text()).at(0));
-    query6.bindValue(1, _global::nameSplit(ui->txt_name->text()).at(1));
-    query6.bindValue(2, ui->txt_adress->text());
-    query6.bindValue(3, ui->txt_plz->text());
-    query6.bindValue(4, ui->txt_ort->text());
-    query6.bindValue(5, ui->txt_phone->text());
-    query6.bindValue(6, ui->txt_fax->text());
-    query6.bindValue(7, ui->txt_mail->text());
-    query6.exec();
+    m_person->setFirstName(ui->firstNameText->text());
+    m_person->setLastName(ui->lastNameText->text());
+    m_person->setAddress(ui->addressText->text());
+    m_person->setZip(ui->zipText->text());
+    m_person->setCity(ui->cityText->text());
+    m_person->setPhoneNumber(ui->phoneNumberText->text());
+    m_person->setFaxNumber(ui->faxText->text());
+    m_person->setEmail(ui->emailText->text());
+
+    m_em->personRepository()->persist(m_person);
     done(1);
+}
+
+Person *PersonDialog::person()
+{
+    return m_person;
 }

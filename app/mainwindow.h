@@ -1,35 +1,39 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
+
 #include <QMainWindow>
-#include <QCloseEvent>
-#include "ui_mainwindow.h"
+
+namespace Ui {
+class MainWindow;
+}
 
 class Event;
 class EntityManager;
 
-class MainWindow : public QMainWindow, public Ui::MainWindow {
+class MainWindow : public QMainWindow
+{
     Q_OBJECT
 
 public:
-    MainWindow(EntityManager *em, Event *event);
+    MainWindow(EntityManager *em, Event *m_event);
+    ~MainWindow();
 
-protected slots:
+private slots:
     void updateTables(int init=0);
     void showAbout();
-    void showWKConf();
+    void showEventDialog();
     void newNumbers();
     void showTNDB();
     void showVNDB();
     void showDisDB();
     void editPass();
     void changeWK();
-    void initTabs();
     void sendMLists();
 
-protected:
-    virtual void closeEvent(QCloseEvent * e);
-
 private:
+    void initEvent();
+
+    Ui::MainWindow *ui;
     Event *m_event;
     EntityManager *m_em;
 };

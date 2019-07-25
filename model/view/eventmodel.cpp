@@ -1,6 +1,6 @@
 #include "eventmodel.h"
 #include "model/entity/event.h"
-#include "model/entity/location.h"
+#include "model/entity/venue.h"
 #include "model/entitymanager.h"
 #include "model/repository/eventrepository.h"
 
@@ -36,17 +36,19 @@ QVariant EventModel::headerData(int section, Qt::Orientation orientation, int ro
 
 QVariant EventModel::data(const QModelIndex &index, int role) const
 {
-    Event *event;
-
     if (role == Qt::DisplayRole)
     {
-        event = m_events.at(index.row());
+        Event *event = m_events.at(index.row());
 
         switch (index.column())
         {
         case 0: return event->startDate();
         case 1: return event->name();
-        case 2: return event->location()->getNameAndCity();
+        case 2:
+            if (event->venue() != nullptr) {
+                return event->venue()->nameAndCity();
+            }
+            return tr("<information missing>");
         }
     }
     return QVariant();

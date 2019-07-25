@@ -4,7 +4,8 @@ HEADERS += \
     $$PWD/dbconstraint.h \
     $$PWD/dbtable.h \
     $$PWD/entitymanager.h \
-    $$PWD/enums.h
+    $$PWD/enums.h \
+    $$PWD/querybuilder.h
 
 SOURCES += \
     $$PWD/dbchecker.cpp \
@@ -15,3 +16,4 @@ SOURCES += \
 
 include(entity/entity.pri)
 include(repository/repository.pri)
+include(view/view.pri)

@@ -11,7 +11,7 @@ class ParticipantsTableModel : public QSqlQueryModel
 public:
     enum Type { Individual = 0, Team = 1, Group = 2 };
 
-    ParticipantsTableModel(Event *event);
+    ParticipantsTableModel(Event *m_event);
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
@@ -21,8 +21,8 @@ public:
     void loadData();
 
 private:
-    Event *event;
-    Type type;
+    Event *m_event;
+    Type m_type;
 };
 
 #endif // PARTICIPANTSTABLEMODEL_H

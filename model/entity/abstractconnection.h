@@ -7,6 +7,7 @@
 #include <QUuid>
 
 class QUuid;
+class DBTable;
 
 class AbstractConnection : public QObject
 {
@@ -26,6 +27,8 @@ public:
 
     virtual bool connect(const QString &connectionName) = 0;
     void close(const QString &connectionName);
+
+    static const DBTable *mapping();
 
 protected:
     QMap<QString, QSqlDatabase> m_databases;

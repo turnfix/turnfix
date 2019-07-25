@@ -7,7 +7,8 @@ namespace Ui {
 class MasterdataDialog;
 }
 
-class QSqlQueryModel;
+class EntityManager;
+class QAbstractTableModel;
 class QSortFilterProxyModel;
 
 class MasterdataDialog : public QMainWindow
@@ -15,12 +16,28 @@ class MasterdataDialog : public QMainWindow
     Q_OBJECT
 
 public:
-    MasterdataDialog(QWidget *parent = nullptr, int type = 1);
+    enum Type {
+        AthleteData = 1,
+        ClubData = 2,
+        DisciplineData = 3,
+        SportData = 4,
+        DivisionData = 5,
+        PersonData = 6,
+        StatusData = 7,
+        BankAccountData = 8,
+        VenueData = 9,
+        RegionData = 10,
+        StateData = 11,
+        CountryData = 12,
+        PenaltyData = 13,
+        DisciplineGroupData = 14,
+        FormulaData = 15
+    };
+
+    MasterdataDialog(EntityManager *m_em, QWidget *parent = nullptr, Type type = Type::AthleteData);
     ~MasterdataDialog();
 
 private slots:
-    void loaddb();
-    void getData();
     void add();
     void edit();
     void del();
@@ -28,9 +45,12 @@ private slots:
     void updateFilterText(QString text);
 
 private:
+    void updateModel(Type type);
+
     Ui::MasterdataDialog *ui;
-    int currtype;
-    QSqlQueryModel *db_model;
-    QSortFilterProxyModel *db_sort_model;
+    int m_currentType;
+    EntityManager *m_em;
+    QAbstractTableModel *m_model;
+    QSortFilterProxyModel *m_sortModel;
 };
 #endif

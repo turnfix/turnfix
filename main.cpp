@@ -6,10 +6,10 @@
 
 int main(int argc, char *argv[])
 {
-    QCoreApplication::setOrganizationName("TurnFix");
-    QCoreApplication::setApplicationName("TurnFix");
-
     QApplication app(argc, argv);
+    app.setOrganizationName("TurnFix");
+    app.setApplicationName("TurnFix");
+
     QTranslator translator;
     translator.load("qt_de.qm", ":/translations/");
     app.installTranslator(&translator);

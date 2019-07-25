@@ -1,5 +1,7 @@
 #include "card.h"
 #include "model/entity/competition.h"
+#include "model/entitymanager.h"
+#include "model/repository/competitionrepository.h"
 #include "src/global/header/_global.h"
 #include "src/global/header/settings.h"
 
@@ -19,7 +21,8 @@ void Card::printContent() {
             newPage();
         }
 
-        Competition *competition = Competition::getByNumber(this->event, query.value(0).toString());
+        Competition *competition = m_em->competitionRepository()
+                                       ->fetchByNumber(m_event, query.value(0).toString());
 
         setPrinterFont(12,true);
         painter.drawText(QRectF(pr.x(), yco, (pr.width()-pr.x()-pr.x())/2, QFontMetricsF(painter.font()).height()),query.value(1).toString(),QTextOption(Qt::AlignVCenter));
@@ -34,7 +37,13 @@ void Card::printContent() {
         yco += mmToPixel(6.6);
         setPrinterFont(11);
         painter.drawText(QRectF(pr.x(), yco, (pr.width()-pr.x()-pr.x())/2, QFontMetricsF(painter.font()).height()),query.value(2).toString(),QTextOption(Qt::AlignVCenter));
-        if (competition->getType() != 2) painter.drawText(QRectF(pr.width()/2-mmToPixel(7.5), yco, (pr.width()-pr.x()-pr.x())/2, QFontMetricsF(painter.font()).height()),"Jahrgang: " + query.value(3).toString(),QTextOption(Qt::AlignVCenter));
+        if (competition->type() != 2)
+            painter.drawText(QRectF(pr.width() / 2 - mmToPixel(7.5),
+                                    yco,
+                                    (pr.width() - pr.x() - pr.x()) / 2,
+                                    QFontMetricsF(painter.font()).height()),
+                             "Jahrgang: " + query.value(3).toString(),
+                             QTextOption(Qt::AlignVCenter));
         yco += mmToPixel(6.6);
         printDescriptor(query.value(0).toString());
         int yco2 = yco;
@@ -63,7 +72,7 @@ void Card::printContent() {
                 QString name = query2.value(1).toString();
                 QSqlQuery checkKuer;
                 checkKuer.prepare("SELECT int_wettkaempfeid FROM tfx_wettkaempfe INNER JOIN tfx_wettkaempfe_x_disziplinen USING (int_wettkaempfeid) INNER JOIN tfx_veranstaltungen USING (int_veranstaltungenid) WHERE int_veranstaltungenid=? AND tfx_wettkaempfe.var_nummer=? AND (tfx_wettkaempfe.bol_kp='true' OR tfx_wettkaempfe_x_disziplinen.bol_kp='true')");
-                checkKuer.bindValue(0, this->event->mainEventId());
+                checkKuer.bindValue(0, this->m_event->mainEvent()->id());
                 checkKuer.bindValue(1,query.value(0).toString());
                 checkKuer.exec();
                 if (_global::querySize(checkKuer)>0) {
@@ -109,7 +118,7 @@ void Card::printContent() {
             }
         }
         int rows = 0;
-        if (competition->getType() == 2) {
+        if (competition->type() == 2) {
             setPrinterFont(8);
             QSqlQuery teamq2;
             QString teamstr;

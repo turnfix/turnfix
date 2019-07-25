@@ -8,6 +8,7 @@ class ExportWidget;
 }
 
 class Print;
+class EntityManager;
 class Event;
 class QPrintPreviewDialog;
 
@@ -34,7 +35,8 @@ private slots:
 
 private:
     Ui::ExportWidget *ui;
-    Event *event;
+    Event *m_event;
+    EntityManager *m_em;
     void createCSV(int mode);
     Print *ausdruck;
     QPrintPreviewDialog *dialog;

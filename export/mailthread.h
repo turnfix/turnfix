@@ -25,7 +25,7 @@ protected:
     void delFiles();
 
 private:
-    Event *event;
+    Event *m_event;
     QStringList vereine;
     QStringList files;
     QString subject;

@@ -23,7 +23,7 @@ public slots:
     QStringList getClubs();
 
 private:
-    Event *event;
+    Event *m_event;
     Ui::StartingOrderWidget *ui;
     QList<int> wertungenInList();
     QList<int> wertungenInList2();

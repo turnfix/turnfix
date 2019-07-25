@@ -18,7 +18,7 @@
 MailThread::MailThread(Event *event)
     : QThread()
 {
-    this->event = event;
+    this->m_event = event;
 }
 
 void MailThread::run()
@@ -68,7 +68,7 @@ void MailThread::createPDF()
                         QString send_filename = "Meldeliste_"+ query.value(0).toString().replace(" ","_").replace("ä","ae").replace("ö","oe").replace("ü","ue").replace("ß","ss").replace("Ä","Ae").replace("Ö","Oe").replace("Ü","Ue") + ".pdf";
                         files.append(send_filename);
                         emit(textChanged("PDF-Dateien werden erzeugt...\n" + send_filename));
-                        ausdruck = new Registration(this->event);
+                        ausdruck = new Registration(this->m_event);
                         ausdruck->setOutputFileName(send_filename);
                         ausdruck->setVerein(vereine.at(j).toInt());
                         ausdruck->setTypeString("Meldeliste");
@@ -77,35 +77,35 @@ void MailThread::createPDF()
             case 1: {
                     files.append("Meldeliste.pdf");
                     emit(textChanged("PDF-Dateien werden erzeugt...\nMeldeliste.pdf"));
-                    ausdruck = new Registration(this->event);
+                    ausdruck = new Registration(this->m_event);
                     ausdruck->setOutputFileName("Meldeliste.pdf");
                     ausdruck->setTypeString("Meldeliste");
                 }; break;
             case 2: {
                     files.append("Meldematrix.pdf");
                     emit(textChanged("PDF-Dateien werden erzeugt...\nMeldematrix.pdf"));
-                    ausdruck = new RegistrationMatrix(this->event);
+                    ausdruck = new RegistrationMatrix(this->m_event);
                     ausdruck->setOutputFileName("Meldematrix.pdf");
                     ausdruck->setTypeString("Meldematrix");
                 }; break;
             case 3: {
                     files.append("Riegenlisten.pdf");
                     emit(textChanged("PDF-Dateien werden erzeugt...\nRiegenlisten.pdf"));
-                    ausdruck = new Squad(this->event);
+                    ausdruck = new Squad(this->m_event);
                     ausdruck->setOutputFileName("Riegenlisten.pdf");
                     ausdruck->setTypeString("Riegen");
                 }; break;
             case 4: {
                     files.append("Ergebnisse_mit_Details.pdf");
                     emit(textChanged("PDF-Dateien werden erzeugt...\nErgebnisse_mit_Details.pdf"));
-                    ausdruck = new Detail(this->event);
+                    ausdruck = new Detail(this->m_event);
                     ausdruck->setOutputFileName("Ergebnisse_mit_Details.pdf");
                     ausdruck->setTypeString("Ergebnisse");
                 }; break;
             case 5: {
                     files.append("Ergebnisse_ohne_Details.pdf");
                     emit(textChanged("PDF-Dateien werden erzeugt...\nErgebnisse_ohne_Details.pdf"));
-                    ausdruck = new Individual(this->event);
+                    ausdruck = new Individual(this->m_event);
                     ausdruck->setOutputFileName("Ergebnisse_ohne_Details.pdf");
                     ausdruck->setTypeString("Ergebnisse");
                 }; break;
@@ -119,7 +119,7 @@ void MailThread::createPDF()
                         QString send_filename = "Vereinsergebnisse_mit_Details_"+ query.value(0).toString().replace(" ","_").replace("ä","ae").replace("ö","oe").replace("ü","ue").replace("ß","ss").replace("Ä","Ae").replace("Ö","Oe").replace("Ü","Ue") + ".pdf";
                         files.append(send_filename);
                         emit(textChanged("PDF-Dateien werden erzeugt...\n" + send_filename));
-                        ausdruck = new Detail(this->event);
+                        ausdruck = new Detail(this->m_event);
                         ausdruck->setOutputFileName(send_filename);
                         ausdruck->setVerein(vereine.at(j).toInt());
                         ausdruck->setTypeString("Ergebnisse");
@@ -135,7 +135,7 @@ void MailThread::createPDF()
                         QString send_filename = "Vereinsergebnisse_ohne_Details_"+ query.value(0).toString().replace(" ","_").replace("ä","ae").replace("ö","oe").replace("ü","ue").replace("ß","ss").replace("Ä","Ae").replace("Ö","Oe").replace("Ü","Ue") + ".pdf";
                         files.append(send_filename);
                         emit(textChanged("PDF-Dateien werden erzeugt...\n" + send_filename));
-                        ausdruck = new Individual(this->event);
+                        ausdruck = new Individual(this->m_event);
                         ausdruck->setOutputFileName(send_filename);
                         ausdruck->setVerein(vereine.at(j).toInt());
                         ausdruck->setTypeString("Ergebnisse");
@@ -144,14 +144,14 @@ void MailThread::createPDF()
             case 8: {
                     files.append("Gesamtergebnisliste.pdf");
                     emit(textChanged("PDF-Dateien werden erzeugt...\nGesamtergebnisliste.pdf"));
-                    ausdruck = new Round(this->event);
+                    ausdruck = new Round(this->m_event);
                     ausdruck->setOutputFileName("Gesamtergebnisliste.pdf");
                     ausdruck->setTypeString("Ergebnisse");
                 }; break;
             case 9: {
                     files.append("Zeitplan.pdf");
                     emit(textChanged("PDF-Dateien werden erzeugt...\nZeitplan.pdf"));
-                    ausdruck = new Timetable(this->event);
+                    ausdruck = new Timetable(this->m_event);
                     ausdruck->setOutputFileName("Zeitplan.pdf");
                     ausdruck->setTypeString("Zeitplan");
                 }; break;

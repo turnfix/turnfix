@@ -8,6 +8,7 @@ class ResultsWidget;
 
 class ResultsTableModel;
 class Event;
+class EntityManager;
 
 class ResultsWidget : public QWidget
 {
@@ -24,6 +25,7 @@ public slots:
 private:
     Ui::ResultsWidget *ui;
     ResultsTableModel *er_model;
-    Event *event;
+    Event *m_event;
+    EntityManager *m_em;
 };
 #endif

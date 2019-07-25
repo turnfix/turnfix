@@ -14,7 +14,7 @@ class ResultsSheetDialog : public QDialog
     Q_OBJECT
 
 public:
-    ResultsSheetDialog(Event *event, QWidget *parent = nullptr);
+    ResultsSheetDialog(Event *m_event, QWidget *parent = nullptr);
     void init(QString riege, int geraet, bool kuer);
 
 private slots:
@@ -27,7 +27,7 @@ private slots:
 private:
     Ui::ResultsSheetDialog *ui;
     ResultsSheetTableModel *pe_model;
-    Event *event;
+    Event *m_event;
     void calc();
     QString riege;
     int geraet;

@@ -9,28 +9,31 @@ class EventDialog;
 
 class Event;
 class EntityManager;
+class BankAccountModel;
+class PersonModel;
+class VenueModel;
 
 class EventDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    EventDialog(EntityManager *em, Event *event, QWidget *parent = nullptr);
+    EventDialog(Event *m_event, EntityManager *em, QWidget *parent = nullptr);
     ~EventDialog();
 
 private slots:
-    void initData();
     void save();
-    void addPerson();
+    void addEventContact();
+    void addRegistrationContact();
     void addLocation();
     void addAccount();
-    void readPersons();
-    void readLocations();
-    void readAccounts();
 
 private:
     Ui::EventDialog *ui;
     Event *m_event;
     EntityManager *m_em;
+    PersonModel *m_personModel;
+    VenueModel *m_venueModel;
+    BankAccountModel *m_accountModel;
 };
 #endif
