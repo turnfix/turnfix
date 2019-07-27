@@ -1,15 +1,16 @@
 #include "connectionrepository.h"
-#include "model/entity/abstractconnection.h"
 #include "model/entity/postgresqlconnection.h"
 #include "model/entity/sqliteconnection.h"
 #include <QMetaProperty>
 #include <QSettings>
 
-ConnectionRepository::ConnectionRepository() {}
+ConnectionRepository::ConnectionRepository(EntityManager *em)
+    : AbstractRepository<AbstractConnection>(em)
+{}
 
 QList<AbstractConnection *> ConnectionRepository::loadAll()
 {
-    QSettings settings("connections", QSettings::NativeFormat);
+    QSettings settings("connections", QSettings::IniFormat);
 
     QList<AbstractConnection *> connections;
     for (auto groupName : settings.childGroups()) {
@@ -46,7 +47,7 @@ QList<AbstractConnection *> ConnectionRepository::loadAll()
 
 void ConnectionRepository::persist(AbstractConnection *connection)
 {
-    QSettings settings("connections", QSettings::NativeFormat);
+    QSettings settings("connections", QSettings::IniFormat);
 
     settings.beginGroup(connection->uuid().toString());
 
@@ -62,12 +63,14 @@ void ConnectionRepository::persist(AbstractConnection *connection)
     }
 
     settings.endGroup();
+    settings.sync();
 }
 
 void ConnectionRepository::remove(AbstractConnection *connection)
 {
-    QSettings settings("connections", QSettings::NativeFormat);
+    QSettings settings("connections", QSettings::IniFormat);
     settings.beginGroup(connection->uuid().toString());
     settings.remove("");
     settings.endGroup();
+    settings.sync();
 }

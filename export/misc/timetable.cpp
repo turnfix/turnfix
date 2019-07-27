@@ -1,6 +1,7 @@
-#include <QTime>
 #include "timetable.h"
+#include "model/entity/event.h"
 #include "src/global/header/_global.h"
+#include <QTime>
 
 void Timetable::print(QPrinter *printer) {
     setTypeString("Zeitplan");
@@ -12,7 +13,7 @@ void Timetable::print(QPrinter *printer) {
 void Timetable::printContent() {
     QSqlQuery query;
     query.prepare("SELECT int_durchgang, int_bahn, var_nummer, tim_einturnen, tim_startzeit, var_name FROM tfx_wettkaempfe WHERE int_veranstaltungenid=? ORDER BY int_durchgang,int_bahn,var_nummer");
-    query.bindValue(0, this->event->mainEventId());
+    query.bindValue(0, this->m_event->mainEvent()->id());
     query.exec();
     int max_y;
     int start_y;
@@ -54,7 +55,7 @@ void Timetable::printContent() {
             yco += mmToPixel(4.2);
         }
         setPrinterFont(11);
-        painter.drawText(QRectF(pr.x()+(query.value(1).toInt()-1)*((pr.width()-pr.x()-pr.x())/3), yco, ((pr.width()-pr.x()-pr.x())/3), QFontMetricsF(painter.font()).height()),"Wk: " + query.value(2).toString() + " " + query.value(5).toString() + " " + _global::wkBez(this->event, query.value(2).toString()),QTextOption(Qt::AlignVCenter | Qt::AlignLeft));
+        painter.drawText(QRectF(pr.x()+(query.value(1).toInt()-1)*((pr.width()-pr.x()-pr.x())/3), yco, ((pr.width()-pr.x()-pr.x())/3), QFontMetricsF(painter.font()).height()),"Wk: " + query.value(2).toString() + " " + query.value(5).toString() + " " + _global::wkBez(this->m_event, query.value(2).toString()),QTextOption(Qt::AlignVCenter | Qt::AlignLeft));
         yco += mmToPixel(4.2);
         max_y = yco;
     }

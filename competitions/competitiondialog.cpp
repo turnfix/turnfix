@@ -18,7 +18,7 @@ CompetitionDialog::CompetitionDialog(Event *event, int edit, QWidget *parent)
     setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint
                    | Qt::WindowCloseButtonHint);
 
-    this->event = event;
+    this->m_event = event;
     this->editid = edit;
 
     auto *tb = new QToolBar();
@@ -239,7 +239,7 @@ void CompetitionDialog::save()
             "int_wettkaempfeid=?");
         query.bindValue(22, editid);
     }
-    query.bindValue(0, this->event->mainEventId());
+    query.bindValue(0, this->m_event->mainEvent()->id());
     query.bindValue(1, ui->cmb_bereich->itemData(ui->cmb_bereich->currentIndex()));
     query.bindValue(2, ui->cmb_typ->currentIndex());
     query.bindValue(3, ui->txt_wknr->text());

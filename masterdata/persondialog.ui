@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>338</width>
-    <height>266</height>
+    <height>295</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -36,35 +36,65 @@
       <string/>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
-      <item row="0" column="0">
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>Name:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1" colspan="2">
-       <widget class="QLineEdit" name="txt_name"/>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_2">
-        <property name="text">
-         <string>Adresse:</string>
-        </property>
-       </widget>
+      <item row="4" column="1" colspan="2">
+       <widget class="QLineEdit" name="phoneNumberText"/>
       </item>
       <item row="1" column="1" colspan="2">
-       <widget class="QLineEdit" name="txt_adress"/>
+       <widget class="QLineEdit" name="lastNameText"/>
       </item>
-      <item row="2" column="0">
+      <item row="6" column="0">
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>Email:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Nachname:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1" colspan="2">
+       <widget class="QLineEdit" name="addressText"/>
+      </item>
+      <item row="5" column="0">
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>Fax:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="1" colspan="2">
+       <widget class="QLineEdit" name="emailText"/>
+      </item>
+      <item row="3" column="0">
        <widget class="QLabel" name="label_3">
         <property name="text">
          <string>PLZ / Ort:</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="1">
-       <widget class="QLineEdit" name="txt_plz">
+      <item row="4" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>Telefon:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Adresse:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2">
+       <widget class="QLineEdit" name="cityText"/>
+      </item>
+      <item row="3" column="1">
+       <widget class="QLineEdit" name="zipText">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -88,38 +118,18 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="2">
-       <widget class="QLineEdit" name="txt_ort"/>
-      </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="label_4">
-        <property name="text">
-         <string>Telefon:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="0">
-       <widget class="QLabel" name="label_5">
-        <property name="text">
-         <string>Fax:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="0">
-       <widget class="QLabel" name="label_6">
-        <property name="text">
-         <string>Email:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1" colspan="2">
-       <widget class="QLineEdit" name="txt_phone"/>
-      </item>
-      <item row="4" column="1" colspan="2">
-       <widget class="QLineEdit" name="txt_fax"/>
-      </item>
       <item row="5" column="1" colspan="2">
-       <widget class="QLineEdit" name="txt_mail"/>
+       <widget class="QLineEdit" name="faxText"/>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_7">
+        <property name="text">
+         <string>Vorname:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" colspan="2">
+       <widget class="QLineEdit" name="firstNameText"/>
       </item>
      </layout>
     </widget>
@@ -142,6 +152,17 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>firstNameText</tabstop>
+  <tabstop>lastNameText</tabstop>
+  <tabstop>addressText</tabstop>
+  <tabstop>zipText</tabstop>
+  <tabstop>cityText</tabstop>
+  <tabstop>phoneNumberText</tabstop>
+  <tabstop>faxText</tabstop>
+  <tabstop>emailText</tabstop>
+  <tabstop>but_save</tabstop>
+ </tabstops>
  <resources>
   <include location="../resources/TurnFix.qrc"/>
  </resources>

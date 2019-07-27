@@ -9,14 +9,14 @@ class Session : public QObject
 {
     Q_OBJECT
 public:
-    void setEvent(Event* event);
+    void setEvent(Event* m_event);
     Event* getEvent();
 
     static Session* getInstance();
     static void dropInstance();
 
 private:
-    Event* event;
+    Event* m_event;
 
     static Session* instance;
 

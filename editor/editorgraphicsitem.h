@@ -19,9 +19,9 @@ public:
     void setNewFont(QFont font);
     void setNewAlign(int align);
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-    virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
-    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
-    virtual void hoverMoveEvent(QGraphicsSceneHoverEvent *event);
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent *m_event);
+    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *m_event);
+    virtual void hoverMoveEvent(QGraphicsSceneHoverEvent *m_event);
     _global::itemdata getItemData();
     void updateItemData(_global::itemdata);
 

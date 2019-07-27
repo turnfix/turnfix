@@ -2,6 +2,7 @@
 #define DBTABLE_H
 
 #include "enums.h"
+#include <QMap>
 #include <QObject>
 
 class DBConstraint;
@@ -12,9 +13,10 @@ class DBTable : public QObject
     Q_OBJECT
 
 public:
-    explicit DBTable(QString m_name, QObject *parent = nullptr);
+    explicit DBTable(QString name, QObject *parent = nullptr);
 
-    void addColumn(QString name,
+    void addColumn(QString property,
+                   QString name,
                    ColumnType type,
                    int length = 0,
                    bool null = true,
@@ -27,8 +29,9 @@ public:
                       QString toField,
                       QString onUpdate,
                       QString onDelete);
-    QString name();
+    QString name() const;
     int columnFKCount();
+    DBColumn *columnByProperty(const QString &propertName) const;
 
     void check(const QString &connectionName);
 
@@ -39,7 +42,7 @@ private:
     QList<DBConstraint *> existingConstraints(const QString &connectionName);
 
     QString m_name;
-    QList<DBColumn *> m_columns;
+    QMap<QString, DBColumn *> m_columns;
     QList<DBConstraint *> m_constraints;
 
 signals:

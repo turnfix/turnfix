@@ -6,26 +6,33 @@ namespace Ui {
 class ClubDialog;
 }
 
+class Club;
+class EntityManager;
+class PersonModel;
+
 class ClubDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    ClubDialog(int tid = 0, QWidget *parent = nullptr);
+    ClubDialog(Club *club, EntityManager *em, QWidget *parent = nullptr);
     ~ClubDialog();
+
+    Club *club();
 
 private slots:
     void save();
     void updateSlider();
     void updateOrt();
     void addPerson();
-    void readPersons();
     void addGau();
     void readGaue();
     void updateGauInfo();
 
 private:
     Ui::ClubDialog *ui;
-    int vnid;
+    EntityManager *m_em;
+    Club *m_club;
+    PersonModel *m_personModel;
 };
 #endif

@@ -1,5 +1,7 @@
 #include "round.h"
 #include "model/entity/competition.h"
+#include "model/entitymanager.h"
+#include "model/repository/competitionrepository.h"
 #include "src/global/header/_global.h"
 #include "src/global/header/result_calc.h"
 
@@ -13,7 +15,8 @@ void Round::printContent() {
     for (int i=0;i<wkNumbers.size();i++) {
         currWK = wkNumbers.at(i);
 
-        Competition *competition = Competition::getByNumber(this->event, currWK);
+        Competition *competition = m_em->competitionRepository()->fetchByNumber(this->m_event,
+                                                                                currWK);
 
         if (newPageWK && i > 0) {
             newPage();
@@ -30,7 +33,7 @@ void Round::printContent() {
             QString verein;
             QString jg="";
             int add=0;
-            if (competition->getType() == 1) {
+            if (competition->type() == 1) {
                 verein = rlist.at(i).at(1);
             } else {
                 verein = rlist.at(i).at(2);
@@ -66,21 +69,22 @@ void Round::printContent() {
 }
 
 void Round::printSubHeader() {
-    Competition *competition = Competition::getByNumber(this->event, currWK);
+    Competition *competition = m_em->competitionRepository()->fetchByNumber(this->m_event, currWK);
 
     setPrinterFont(10);
     QString jg;
 
-    if (competition->getType() == 0) jg = "Jg.";
-    if (competition->getType() == 0 || competition->getType() == 2) {
+    if (competition->type() == 0)
+        jg = "Jg.";
+    if (competition->type() == 0 || competition->type() == 2) {
         drawStandardRow("Platz","Name",jg,"Verein","Punkte",readDetailInfo(true));
     } else {
         drawStandardRow("Platz","Verein","","Mannschaft","Punkte",readDetailInfo(true));
     }
     QSqlQuery rnd;
     rnd.prepare("SELECT "+_global::date("dat_von",10)+" FROM tfx_veranstaltungen INNER JOIN tfx_wettkampforte USING (int_wettkampforteid) WHERE int_veranstaltungenid=? OR int_hauptwettkampf=? AND bol_rundenwettkampf='true' ORDER BY int_runde");
-    rnd.bindValue(0, this->event->mainEventId());
-    rnd.bindValue(1, this->event->mainEventId());
+    rnd.bindValue(0, this->m_event->mainEvent()->id());
+    rnd.bindValue(1, this->m_event->mainEvent()->id());
     rnd.exec();
     setPrinterFont(7);
     while (rnd.next()) {

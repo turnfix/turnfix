@@ -1,7 +1,6 @@
 #ifndef DRUCKEN_H
 #define DRUCKEN_H
 
-#include "model/entity/event.h"
 #include <QMap>
 #include <QPainter>
 #include <QPrinter>
@@ -10,6 +9,8 @@
 
 class QFont;
 class QRect;
+class Event;
+class EntityManager;
 
 class Print : public QThread {
     Q_OBJECT
@@ -59,7 +60,8 @@ protected:
     QFont font;
     QString typeString;
 
-    Event *event;
+    Event *m_event;
+    EntityManager *m_em;
 
     static int detailinfo;
     bool korr;

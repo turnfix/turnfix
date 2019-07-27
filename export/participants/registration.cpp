@@ -1,5 +1,7 @@
 #include "registration.h"
 #include "model/entity/competition.h"
+#include "model/entitymanager.h"
+#include "model/repository/competitionrepository.h"
 #include "src/global/header/_global.h"
 
 void Registration::printContent() {
@@ -30,7 +32,7 @@ void Registration::printContent() {
                     "WHERE int_veranstaltungenid=? "
                     "AND tfx_vereine.int_vereineid IN ("+_global::intListToString(vereinNumbers)+") "
                     "ORDER BY "+sortstring);
-    query2.bindValue(0,  this->event->mainEventId());
+    query2.bindValue(0, this->m_event->mainEvent()->id());
     query2.exec();
     int pre=0;
     QString lastWK="";
@@ -39,12 +41,12 @@ void Registration::printContent() {
         if (lastTN == query2.value(0).toString()) continue;
         currWK = query2.value(3).toString();
 
-        Competition *competition = Competition::getByNumber(this->event, currWK);
+        Competition *competition = m_em->competitionRepository()->fetchByNumber(m_event, currWK);
 
         double skip=0.0;
-        if (competition->getType() == 0) {
+        if (competition->type() == 0) {
             skip += 4.7;
-        } else if (competition->getType() == 2) {
+        } else if (competition->type() == 2) {
             QSqlQuery groupq;
             groupq.prepare("SELECT int_teilnehmerid FROM tfx_gruppen_x_teilnehmer WHERE int_gruppenid=?");
             groupq.bindValue(0,query2.value(4).toInt());
@@ -54,7 +56,7 @@ void Registration::printContent() {
             QSqlQuery teamq;
             teamq.prepare("SELECT " + _global::nameFormat() + " || CASE WHEN bol_ak='true' THEN ' (AK)' ELSE '' END FROM tfx_wertungen INNER JOIN tfx_teilnehmer USING (int_teilnehmerid) WHERE int_mannschaftenid=? AND int_runde=? ORDER BY int_mannschaftenid");
             teamq.bindValue(0, query2.value(4).toInt());
-            teamq.bindValue(1, this->event->round());
+            teamq.bindValue(1, this->m_event->round());
             teamq.exec();
             skip += ((_global::querySize(teamq)/4)+1)*3.4+4.8;
         }
@@ -66,18 +68,22 @@ void Registration::printContent() {
         checkWKChange(currWK,lastWK,skip,newPageCreated);
         setPrinterFont(10);
         QString jg;
-        if (competition->getType() == 0) jg = query2.value(4).toString();
+        if (competition->type() == 0)
+            jg = query2.value(4).toString();
         QString verein;
-        if (competition->getType() == 1) verein = query2.value(1).toString(); else verein = query2.value(2).toString();
+        if (competition->type() == 1)
+            verein = query2.value(1).toString();
+        else
+            verein = query2.value(2).toString();
         drawStandardRow(query2.value(0).toString() + "  ",query2.value(1).toString(),jg,query2.value(2).toString(),"",readDetailInfo(false,verein));
-        if (competition->getType() == 1 || competition->getType() == 2) {
+        if (competition->type() == 1 || competition->type() == 2) {
             yco -= mmToPixel(0.8);
             setPrinterFont(8);
             QSqlQuery teamq2;
-            switch (competition->getType()) {
+            switch (competition->type()) {
             case 1: {
                     teamq2.prepare("SELECT " + _global::nameFormat() + " || ' (' || "+_global::date("dat_geburtstag",2)+" || ')' || CASE WHEN bol_ak='true' THEN ' (AK)' ELSE '' END || CASE WHEN bol_startet_nicht THEN ' (fehlt)' ELSE '' END FROM tfx_wertungen INNER JOIN tfx_teilnehmer USING (int_teilnehmerid) WHERE int_mannschaftenid=? AND int_runde=? ORDER BY bol_ak, var_nachname, var_vorname");
-                    teamq2.bindValue(1, this->event->round());
+                    teamq2.bindValue(1, this->m_event->round());
                 } break;
             case 2: teamq2.prepare("SELECT " + _global::nameFormat() + " || ' (' || "+_global::date("dat_geburtstag",2)+" || ')' FROM tfx_gruppen_x_teilnehmer INNER JOIN tfx_teilnehmer USING (int_teilnehmerid) WHERE int_gruppenid=? ORDER BY var_nachname, var_vorname"); break;
             }

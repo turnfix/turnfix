@@ -1,5 +1,7 @@
 #include "table.h"
 #include "model/entity/competition.h"
+#include "model/entitymanager.h"
+#include "model/repository/competitionrepository.h"
 #include "src/global/header/_global.h"
 #include "src/global/header/result_calc.h"
 
@@ -7,9 +9,10 @@ void Table::printContent() {
     for (int i=0;i<wkNumbers.size();i++) {
         currWK = wkNumbers.at(i);
 
-        Competition *competition = Competition::getByNumber(this->event, currWK);
+        Competition *competition = m_em->competitionRepository()->fetchByNumber(this->m_event,
+                                                                                currWK);
 
-        if (competition->getType() != 1) {
+        if (competition->type() != 1) {
             continue;
         }
         if (newPageWK && i > 0) {
@@ -54,8 +57,8 @@ void Table::printSubHeader() {
 
     QSqlQuery rnd;
     rnd.prepare("SELECT "+_global::date("dat_von",10)+" FROM tfx_veranstaltungen INNER JOIN tfx_wettkampforte USING (int_wettkampforteid) WHERE int_veranstaltungenid=? OR int_hauptwettkampf=? ORDER BY int_runde");
-    rnd.bindValue(0, this->event->mainEventId());
-    rnd.bindValue(1, this->event->mainEventId());
+    rnd.bindValue(0, this->m_event->mainEvent()->id());
+    rnd.bindValue(1, this->m_event->mainEvent()->id());
     rnd.exec();
     while (rnd.next()) {
         painter.drawText(QRectF(pr.x()+mmToPixel(55.0)+(rnd.at())*mmToPixel(34.0), yco, mmToPixel(34.0), fontHeight),rnd.value(0).toString(),QTextOption(Qt::AlignVCenter | Qt::AlignHCenter));

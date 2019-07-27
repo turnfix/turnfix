@@ -22,6 +22,10 @@
 TFHeaderWidget {
 	background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 rgba(255, 131, 0, 255), stop:1 rgba(255, 223, 100, 255)); 
 	border-bottom:1px solid rgba(57, 57, 57, 255); 
+}
+
+QLabel#headTextLabel {
+    color: rgba(0, 0, 0, 255);
 }</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">

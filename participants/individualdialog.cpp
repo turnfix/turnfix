@@ -12,7 +12,7 @@ IndividualDialog::IndividualDialog(Event *event, int edit, QWidget* parent) : QD
     ui->setupUi(this);
     setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
 
-    this->event = event;
+    this->m_event = event;
 
     QToolBar *tb = new QToolBar();
     QActionGroup *ag = new QActionGroup(this);
@@ -81,7 +81,7 @@ void IndividualDialog::changeDat() {
 void IndividualDialog::initData() {
     QSqlQuery query2;
     query2.prepare("SELECT int_wettkaempfeid, var_nummer, var_name, int_typ FROM tfx_wettkaempfe WHERE int_veranstaltungenid=? AND int_typ=0 ORDER BY var_nummer ASC");
-    query2.bindValue(0, this->event->id());
+    query2.bindValue(0, this->m_event->id());
     query2.exec();
     while (query2.next()) {
         ui->cmb_wk->addItem(query2.value(1).toString() + " " + query2.value(2).toString(),query2.value(0).toInt());
@@ -145,7 +145,7 @@ void IndividualDialog::save() {
         }
         QSqlQuery query10;
         query10.prepare("SELECT tfx_teilnehmer.int_teilnehmerid FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) INNER JOIN tfx_veranstaltungen USING (int_veranstaltungenid) INNER JOIN tfx_teilnehmer ON tfx_teilnehmer.int_teilnehmerid = tfx_wertungen.int_teilnehmerid WHERE int_veranstaltungenid=? AND tfx_teilnehmer.int_teilnehmerid=?");
-        query10.bindValue(0, this->event->id());
+        query10.bindValue(0, this->m_event->id());
         query10.bindValue(1, tnid);
         query10.exec();
         bool cont = true;
@@ -157,8 +157,8 @@ void IndividualDialog::save() {
         if (cont) {
             QSqlQuery query2;
             query2.prepare("SELECT MAX(int_startnummer) FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) WHERE int_veranstaltungenid=? AND int_runde=?");
-            query2.bindValue(0, this->event->mainEventId());
-            query2.bindValue(1, this->event->round());
+            query2.bindValue(0, this->m_event->mainEvent()->id());
+            query2.bindValue(1, this->m_event->round());
             query2.exec();
             query2.next();
             QSqlQuery query;
@@ -169,7 +169,7 @@ void IndividualDialog::save() {
             query.bindValue( 3, ui->chk_ak->isChecked() );
             query.bindValue( 4, (query2.value(0).toInt()+1) );
             query.bindValue( 5, ui->chk_nostart->isChecked());
-            query.bindValue( 6, this->event->round());
+            query.bindValue( 6, this->m_event->round());
             query.bindValue( 7, ui->cmb_status->itemData(ui->cmb_status->currentIndex()));
             query.bindValue( 8, ui->txt_comment->text());
             query.exec();
@@ -413,6 +413,7 @@ void IndividualDialog::updateClubs() {
 }
 
 void IndividualDialog::addClub() {
-    ClubDialog *pe = new ClubDialog(0, this);
-    if(pe->exec() == 1) { updateClubs(); }
+    //TODO reenable
+    //ClubDialog *pe = new ClubDialog(0, this);
+    //if(pe->exec() == 1) { updateClubs(); }
 }

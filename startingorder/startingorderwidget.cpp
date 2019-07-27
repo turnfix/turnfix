@@ -14,7 +14,7 @@ StartingOrderWidget::StartingOrderWidget(QWidget *parent)
     ui->setupUi(this);
     ui->listWidget_2->installEventFilter(this);
 
-    this->event = Session::getInstance()->getEvent();
+    this->m_event = Session::getInstance()->getEvent();
 
     connect(ui->cmb_riege, SIGNAL(currentIndexChanged(QString)), this, SLOT(squadChange(QString)));
     connect(ui->cmb_dis, SIGNAL(currentIndexChanged(int)), this, SLOT(load()));
@@ -36,8 +36,8 @@ void StartingOrderWidget::init()
     query2.prepare(
         "SELECT DISTINCT(var_riege) FROM tfx_wertungen INNER JOIN tfx_wettkaempfe USING "
         "(int_wettkaempfeid) WHERE int_veranstaltungenid=? AND int_runde=? ORDER BY var_riege");
-    query2.bindValue(0, this->event->mainEventId());
-    query2.bindValue(1, this->event->round());
+    query2.bindValue(0, this->m_event->mainEvent()->id());
+    query2.bindValue(1, this->m_event->round());
     query2.exec();
     while (query2.next()) {
         ui->cmb_riege->addItem(query2.value(0).toString(), query2.value(0).toString());
@@ -55,7 +55,7 @@ void StartingOrderWidget::squadChange(QString squadno)
         "(int_disziplinenid) INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) INNER JOIN "
         "tfx_wertungen USING (int_wettkaempfeid) WHERE int_veranstaltungenid=? AND var_riege=? "
         "ORDER BY tfx_disziplinen.var_name, kp");
-    query.bindValue(0, this->event->mainEventId());
+    query.bindValue(0, this->m_event->mainEvent()->id());
     query.bindValue(1, squadno);
     query.exec();
     while (query.next()) {
@@ -112,9 +112,9 @@ void StartingOrderWidget::load()
     query4.bindValue(0, ui->cmb_dis->itemData(ui->cmb_dis->currentIndex()));
     query4.bindValue(1, (int) kuer);
     query4.bindValue(2, ui->cmb_dis->itemData(ui->cmb_dis->currentIndex()));
-    query4.bindValue(3, this->event->mainEventId());
+    query4.bindValue(3, this->m_event->mainEvent()->id());
     query4.bindValue(4, ui->cmb_riege->currentText());
-    query4.bindValue(5, this->event->round());
+    query4.bindValue(5, this->m_event->round());
     query4.bindValue(6, ui->cmb_dis->itemData(ui->cmb_dis->currentIndex()));
     query4.bindValue(7, ui->cmb_dis->itemData(ui->cmb_dis->currentIndex()));
     query4.bindValue(8, !kuer);

@@ -8,6 +8,7 @@ namespace Ui {
 }
 
 class Event;
+class EntityManager;
 class QStandardItemModel;
 class QSqlQueryModel;
 
@@ -16,7 +17,7 @@ class GroupDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit GroupDialog(Event *event, int edit=0, QWidget* parent = nullptr);
+    explicit GroupDialog(Event *m_event, EntityManager *em, int edit = 0, QWidget *parent = nullptr);
     ~GroupDialog();
 
 private slots:
@@ -34,7 +35,8 @@ private slots:
     void updateClubs();
 
 private:
-    Event *event;
+    Event *m_event;
+    EntityManager *m_em;
     Ui::GroupDialog *ui;
     QStandardItemModel *model;
     QSqlQueryModel *model2;

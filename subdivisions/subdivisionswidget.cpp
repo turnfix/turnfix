@@ -16,9 +16,9 @@ SubdivisionsWidget::SubdivisionsWidget(QWidget *parent)
 {
     ui->setupUi(this);
 
-    this->event = Session::getInstance()->getEvent();
-    this->re_model = new AssignmentTableModel(this->event);
-    this->re_model2 = new AssignmentTableModel(this->event);
+    this->m_event = Session::getInstance()->getEvent();
+    this->re_model = new AssignmentTableModel(this->m_event);
+    this->re_model2 = new AssignmentTableModel(this->m_event);
     this->rg_model = new QStandardItemModel();
     this->rg_model->setColumnCount(4);
 
@@ -71,13 +71,13 @@ void SubdivisionsWidget::fillRETable2()
         "(int_wettkaempfeid) WHERE int_veranstaltungenid=? AND tfx_wertungen.int_runde=? AND "
         "var_riege != '' GROUP BY var_riege, int_runde, int_veranstaltungenid");
 
-    query.bindValue(0, this->event->mainEventId());
-    query.bindValue(1, this->event->round());
-    query.bindValue(2, this->event->id());
-    query.bindValue(3, this->event->mainEventId());
-    query.bindValue(4, this->event->round());
-    query.bindValue(5, this->event->mainEventId());
-    query.bindValue(6, this->event->round());
+    query.bindValue(0, this->m_event->mainEvent()->id());
+    query.bindValue(1, this->m_event->round());
+    query.bindValue(2, this->m_event->id());
+    query.bindValue(3, this->m_event->mainEvent()->id());
+    query.bindValue(4, this->m_event->round());
+    query.bindValue(5, this->m_event->mainEvent()->id());
+    query.bindValue(6, this->m_event->round());
     query.exec();
     while (query.next()) {
         ui->tbl_list->setEnabled(true);
@@ -114,7 +114,7 @@ void SubdivisionsWidget::fillRETable2()
     ui->lst_all->horizontalHeader()->resizeSection(2, 45);
     ui->lst_all->horizontalHeader()->resizeSection(3, 45);
     ui->lst_all->horizontalHeader()->resizeSection(4, 90);
-    ui->lst_all->setItemDelegateForColumn(4, new CmbDelegate(this->event));
+    ui->lst_all->setItemDelegateForColumn(4, new CmbDelegate(this->m_event));
     ui->lst_all->selectRow(0);
 }
 
@@ -124,7 +124,7 @@ void SubdivisionsWidget::sendData()
     for (int i = list.size() - 1; i >= 0; i--) {
         re_model->insertRow(re_model2->takeRow(list.at(i).row()));
     }
-    _global::updateRgDis(this->event);
+    _global::updateRgDis(this->m_event);
     re_model->setTableData();
     re_model2->setTableData();
     setRiegenData();
@@ -136,7 +136,7 @@ void SubdivisionsWidget::getData()
     for (int i = list.size() - 1; i >= 0; i--) {
         re_model2->insertRow(re_model->takeRow(list.at(i).row()));
     }
-    _global::updateRgDis(this->event);
+    _global::updateRgDis(this->m_event);
     re_model->setTableData();
     re_model2->setTableData();
     setRiegenData();
@@ -210,9 +210,9 @@ void SubdivisionsWidget::setRiegenData()
         "tfx_mannschaften.var_riege=tfx_wertungen.var_riege) FROM tfx_wertungen INNER JOIN "
         "tfx_wettkaempfe USING (int_wettkaempfeid) WHERE int_veranstaltungenid=? AND "
         "tfx_wertungen.int_runde=? AND var_riege=? GROUP BY var_riege");
-    query.bindValue(0, this->event->id());
-    query.bindValue(1, this->event->mainEventId());
-    query.bindValue(2, this->event->round());
+    query.bindValue(0, this->m_event->id());
+    query.bindValue(1, this->m_event->mainEvent()->id());
+    query.bindValue(2, this->m_event->round());
     query.bindValue(3,
                     rg_model->item(ui->lst_all->selectionModel()->currentIndex().row(), 0)->text());
     query.exec();

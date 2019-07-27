@@ -2,13 +2,14 @@
 #define EVENTREPOSITORY_H
 
 #include "abstractrepository.h"
+#include "model/entity/event.h"
 
-class Event;
-
-class EventRepository : public AbstractRepository<Event *>
+class EventRepository : public AbstractRepository<Event>
 {
 public:
-    QList<Event *> loadAll() override;
+    explicit EventRepository(EntityManager *em);
+
+    QList<Event *> loadAll();
     void persist(Event *event) override;
     void remove(Event *event) override;
 };

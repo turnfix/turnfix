@@ -13,7 +13,7 @@ class AssignmentTableModel : public QAbstractTableModel
     Q_OBJECT
 
 public:
-    AssignmentTableModel(Event *event, QObject *parent = nullptr);
+    AssignmentTableModel(Event *m_event, QObject *parent = nullptr);
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
@@ -33,6 +33,6 @@ public slots:
 private:
     QList<QStringList> tabledata;
     QString riege;
-    Event *event;
+    Event *m_event;
 };
 #endif

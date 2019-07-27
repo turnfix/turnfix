@@ -3,35 +3,37 @@
 #include <QSqlQuery>
 
 ParticipantsTableModel::ParticipantsTableModel(Event *event)
+    : QSqlQueryModel()
+    , m_event(event)
 {
-    this->event = event;
+
 }
 
 void ParticipantsTableModel::updateType(Type type)
 {
-    this->type = type;
-    this->loadData();
+    m_type = type;
+    loadData();
 }
 
 void ParticipantsTableModel::loadData()
 {
     QSqlQuery query;
-    if (type == Individual) {
+    if (m_type == Individual) {
         query.prepare("SELECT tfx_wertungen.int_startnummer, tfx_teilnehmer.var_nachname || ', ' || tfx_teilnehmer.var_vorname || CASE WHEN tfx_wertungen.bol_ak THEN ' (AK)' ELSE '' END, "+_global::date("dat_geburtstag",2)+", CASE WHEN tfx_teilnehmer.int_geschlecht=0 THEN 'w' ELSE 'm' END, tfx_vereine.var_name, tfx_wettkaempfe.var_nummer, tfx_wertungen.var_riege, tfx_wertungen.int_wertungenid FROM tfx_wertungen INNER JOIN tfx_teilnehmer USING (int_teilnehmerid) INNER JOIN tfx_vereine USING (int_vereineid) INNER JOIN tfx_wettkaempfe ON tfx_wettkaempfe.int_wettkaempfeid = tfx_wertungen.int_wettkaempfeid WHERE tfx_wettkaempfe.int_veranstaltungenid=? AND int_runde=? AND tfx_wertungen.int_gruppenid IS NULL AND tfx_wertungen.int_mannschaftenid IS NULL ORDER BY tfx_wettkaempfe.var_nummer, "+_global::substring("tfx_vereine.var_name","int_start_ort+1")+", tfx_vereine.var_name, tfx_teilnehmer.var_nachname, tfx_teilnehmer.var_vorname");
-        query.bindValue(0, this->event->mainEventId());
-        query.bindValue(1, this->event->round());
+        query.bindValue(0, m_event->mainEvent()->id());
+        query.bindValue(1, m_event->round());
         query.exec();
-    } else if (type == Team) {
+    } else if (m_type == Team) {
         query.prepare("SELECT tfx_mannschaften.int_startnummer, tfx_vereine.var_name, tfx_mannschaften.int_nummer || '. Mannschaft', tfx_wettkaempfe.var_nummer, tfx_mannschaften.var_riege, tfx_mannschaften.int_mannschaftenid FROM tfx_mannschaften INNER JOIN tfx_vereine USING (int_vereineid) INNER JOIN tfx_wettkaempfe ON tfx_wettkaempfe.int_wettkaempfeid = tfx_mannschaften.int_wettkaempfeid WHERE tfx_wettkaempfe.int_veranstaltungenid=? ORDER BY tfx_wettkaempfe.var_nummer, "+_global::substring("tfx_vereine.var_name","int_start_ort+1")+", tfx_vereine.var_name, tfx_mannschaften.int_nummer");
-        query.bindValue(0,this->event->mainEventId());
-    } else if (type == Group) {
+        query.bindValue(0, m_event->mainEvent()->id());
+    } else if (m_type == Group) {
         query.prepare("SELECT tfx_wertungen.int_startnummer, tfx_gruppen.var_name, tfx_vereine.var_name, tfx_wettkaempfe.var_nummer, tfx_wertungen.var_riege, tfx_gruppen.int_gruppenid FROM tfx_wertungen INNER JOIN tfx_gruppen USING (int_gruppenid) INNER JOIN tfx_vereine USING (int_vereineid) INNER JOIN tfx_wettkaempfe ON tfx_wettkaempfe.int_wettkaempfeid = tfx_wertungen.int_wettkaempfeid WHERE tfx_wettkaempfe.int_veranstaltungenid=? AND int_runde=? ORDER BY tfx_wettkaempfe.var_nummer, "+_global::substring("tfx_vereine.var_name","int_start_ort+1")+", tfx_vereine.var_name, tfx_gruppen.var_name");
-        query.bindValue(0, this->event->mainEventId());
-        query.bindValue(1, this->event->round());
+        query.bindValue(0, m_event->mainEvent()->id());
+        query.bindValue(1, m_event->round());
     }
     query.exec();
 
-    this->setQuery(query);
+    setQuery(query);
 }
 
 int ParticipantsTableModel::rowCount(const QModelIndex &parent) const
@@ -41,7 +43,7 @@ int ParticipantsTableModel::rowCount(const QModelIndex &parent) const
 
 int ParticipantsTableModel::columnCount(const QModelIndex &parent) const
 {
-    if (this->type == Individual) {
+    if (m_type == Individual) {
         return 7;
     }
     return 5;
@@ -55,7 +57,7 @@ QVariant ParticipantsTableModel::headerData(int section, Qt::Orientation orienta
 
     if (role == Qt::DisplayRole && orientation == Qt::Horizontal)
     {
-        switch (this->type) {
+        switch (m_type) {
         case Individual:
             return headersIndividual[section];
         case Team:

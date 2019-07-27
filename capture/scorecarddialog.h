@@ -16,7 +16,7 @@ class ScoreCardDialog : public QDialog
     Q_OBJECT
 
 public:
-    ScoreCardDialog(Event *event, QWidget* parent = nullptr);
+    ScoreCardDialog(Event *m_event, QWidget* parent = nullptr);
     ~ScoreCardDialog();
 
     void init(int stnr, int wertid, QList<QList<int>> disids);
@@ -30,7 +30,7 @@ private slots:
 
 private:
     Ui::ScoreCardDialog *ui;
-    Event *event;
+    Event *m_event;
     QList<QList<int>> disids;
     int stnr;
     int wertid;

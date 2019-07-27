@@ -1,12 +1,14 @@
 #include "individual.h"
 #include "model/entity/competition.h"
+#include "model/entitymanager.h"
+#include "model/repository/competitionrepository.h"
 #include "src/global/header/_global.h"
 #include "src/global/header/result_calc.h"
 
 void Individual::printContent() {
     for (int i=0;i<wkNumbers.size();i++) {
         currWK = wkNumbers.at(i);
-        Competition *competition = Competition::getByNumber(this->event, currWK);
+        Competition *competition = m_em->competitionRepository()->fetchByNumber(m_event, currWK);
 
         if (newPageWK && i > 0) {
             newPage();
@@ -21,8 +23,9 @@ void Individual::printContent() {
             if (i%2 != 0) drawHighlightRect(yco);
             QString jg;
             QString verein;
-            if (competition->getType() == 0) jg = rlist.at(i).at(3);
-            if (competition->getType() == 1) {
+            if (competition->type() == 0)
+                jg = rlist.at(i).at(3);
+            if (competition->type() == 1) {
                 verein = rlist.at(i).at(1);
             } else {
                 verein = rlist.at(i).at(2);
@@ -30,7 +33,7 @@ void Individual::printContent() {
             QSqlQuery disCountQuery;
             disCountQuery.prepare("SELECT int_disziplinenid, tfx_disziplinen.var_name, int_berechnung, var_einheit, var_kurz1, var_maske, CASE WHEN tfx_wettkaempfe.bol_kp='true' OR tfx_wettkaempfe_x_disziplinen.bol_kp='true' THEN generate_series(0,1) ELSE 0 END as kp FROM tfx_wettkaempfe_x_disziplinen INNER JOIN tfx_disziplinen USING (int_disziplinenid) INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) WHERE var_nummer=? AND int_veranstaltungenid=?");
             disCountQuery.bindValue(0,currWK);
-            disCountQuery.bindValue(1, this->event->mainEventId());
+            disCountQuery.bindValue(1, this->m_event->mainEvent()->id());
             disCountQuery.exec();
             QString res;
             if (_global::querySize(disCountQuery) == 1) {
@@ -59,12 +62,13 @@ void Individual::printContent() {
 }
 
 void Individual::printSubHeader() {
-    Competition *competition = Competition::getByNumber(this->event, currWK);
+    Competition *competition = m_em->competitionRepository()->fetchByNumber(this->m_event, currWK);
 
     setPrinterFont(10);
     QString jg;
-    if (competition->getType() == 0) jg = "Jg.";
-    if (competition->getType() == 0 || competition->getType() == 2) {
+    if (competition->type() == 0)
+        jg = "Jg.";
+    if (competition->type() == 0 || competition->type() == 2) {
         drawStandardRow("Platz","Name",jg,"Verein","Punkte",readDetailInfo(true));
     } else {
         drawStandardRow("Platz","Verein","","Mannschaft","Punkte",readDetailInfo(true));

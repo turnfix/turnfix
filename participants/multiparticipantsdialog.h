@@ -16,7 +16,7 @@ class MultiParticipantsDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit MultiParticipantsDialog(Event *event, QWidget *parent = nullptr);
+    explicit MultiParticipantsDialog(Event *m_event, QWidget *parent = nullptr);
     ~MultiParticipantsDialog();
 
 private slots:
@@ -27,7 +27,7 @@ private slots:
     void save();
 
 private:
-    Event *event;
+    Event *m_event;
     Ui::MultiParticipantsDialog *ui;
     QStandardItemModel *model;
     QSqlQueryModel *model2;

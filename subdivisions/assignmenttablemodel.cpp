@@ -10,7 +10,7 @@ AssignmentTableModel::AssignmentTableModel(Event *event, QObject *parent)
     : QAbstractTableModel(parent)
 {
     this->riege = "";
-    this->event = event;
+    this->m_event = event;
 }
 int AssignmentTableModel::rowCount(const QModelIndex &) const
 {
@@ -124,8 +124,8 @@ void AssignmentTableModel::setTableData()
         + extra + ") ORDER BY tfx_wettkaempfe.var_nummer, "
         + _global::substring("tfx_vereine.var_name", "int_start_ort+1")
         + ", tfx_vereine.var_name, tfx_teilnehmer.var_nachname, tfx_teilnehmer.var_vorname");
-    query2.bindValue(0, this->event->mainEventId());
-    query2.bindValue(1, this->event->round());
+    query2.bindValue(0, this->m_event->mainEvent()->id());
+    query2.bindValue(1, this->m_event->round());
     query2.bindValue(2, riege);
     query2.exec();
     tabledata.clear();

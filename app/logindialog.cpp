@@ -1,11 +1,11 @@
 #include "logindialog.h"
 #include "checkdatabasedialog.h"
-#include "connectionmodel.h"
 #include "eventdialog.h"
-#include "eventmodel.h"
 #include "model/entity/abstractconnection.h"
 #include "model/entity/event.h"
 #include "model/entitymanager.h"
+#include "model/view/connectionmodel.h"
+#include "model/view/eventmodel.h"
 #include "postgressetupwizard.h"
 #include "ui_logindialog.h"
 #include <QDataWidgetMapper>
@@ -94,6 +94,9 @@ void LoginDialog::doLogin()
     ui->eventsWidget->setEnabled(false);
     eventModel->clear();
 
+    if (ui->connectionComboBox->currentIndex()==-1)
+       return;
+
     AbstractConnection *connection = connectionModel->connectionAt(
         ui->connectionComboBox->currentIndex());
 
@@ -102,6 +105,7 @@ void LoginDialog::doLogin()
     connectionEstablished = connection->connect("main");
 
     if (connectionEstablished) {
+        em->setConnectionName("main");
         ui->eventsWidget->setEnabled(true);
         eventModel->getEvents();
     }
@@ -129,7 +133,7 @@ void LoginDialog::checkDatabase()
 
 void LoginDialog::createEvent()
 {
-    auto *nwkw = new EventDialog(em, new Event);
+    auto *nwkw = new EventDialog(new Event, em, this);
     if (nwkw->exec() == 1) {
         eventModel->getEvents();
     }

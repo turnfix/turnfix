@@ -9,7 +9,7 @@ class SelectClubDialog : public QDialog, public Ui::SelectClubDialogUi {
     Q_OBJECT
 
 public:
-    SelectClubDialog(Event *event, QWidget* parent = nullptr);
+    SelectClubDialog(Event *m_event, QWidget* parent = nullptr);
 
     QStringList returnVereine();
 
@@ -19,7 +19,7 @@ private slots:
 private:
     void initData();
 
-    Event *event;
+    Event *m_event;
     QStringList vereine;
 };
 #endif

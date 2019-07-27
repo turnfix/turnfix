@@ -12,7 +12,7 @@ class ResultsSheetTableModel : public QAbstractTableModel
     Q_OBJECT
 
 public:
-    ResultsSheetTableModel(Event *event, QObject *parent = nullptr);
+    ResultsSheetTableModel(Event *m_event, QObject *parent = nullptr);
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant data(const QModelIndex &index, int role=Qt::DisplayRole) const;
@@ -28,7 +28,7 @@ public:
     int getLastID(const QModelIndex &index);
 
 private:
-    Event *event;
+    Event *m_event;
     QString riege;
     QList<QStringList> starter;
     QMap<int, QMap<int,double> > endwerte;

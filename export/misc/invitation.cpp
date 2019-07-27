@@ -1,7 +1,8 @@
+#include "invitation.h"
+#include "model/entity/event.h"
+#include "src/global/header/_global.h"
 #include <math.h>
 #include <QDate>
-#include "invitation.h"
-#include "src/global/header/_global.h"
 
 void Invitation::print(QPrinter *printer) {
     setTypeString("Ausschreibung");
@@ -14,7 +15,7 @@ void Invitation::printContent() {
     setPrinterFont(20,true);
     QSqlQuery query;
     query.prepare("SELECT int_veranstaltungenid, int_wettkampforteid, int_meldung_an, int_ansprechpartner, tfx_konten.int_kontenid, int_hauptwettkampf, tfx_veranstaltungen.var_name, int_runde, dat_von, dat_bis, dat_meldeschluss, bol_rundenwettkampf, var_veranstalter, int_edv, int_helfer, int_kampfrichter, var_meldung_website, var_verwendungszweck, rel_meldegeld, rel_nachmeldung, bol_faellig_nichtantritt, bol_ummeldung_moeglich, bol_nachmeldung_moeglich, txt_meldung_an, txt_startberechtigung, txt_teilnahmebedingungen, txt_siegerauszeichnung, txt_kampfrichter, txt_hinweise, tfx_wettkampforte.var_name, tfx_wettkampforte.var_adresse, tfx_wettkampforte.var_plz, tfx_wettkampforte.var_ort, int_personenid, var_vorname, var_nachname, tfx_personen.var_adresse, tfx_personen.var_plz, tfx_personen.var_ort, var_telefon, var_fax, var_email, tfx_konten.var_name, var_kontonummer, var_blz, var_bank, var_inhabe FROM tfx_veranstaltungen INNER JOIN tfx_wettkampforte USING (int_wettkampforteid) LEFT JOIN tfx_personen ON int_meldung_an = tfx_personen.int_personenid LEFT JOIN tfx_konten ON tfx_konten.int_kontenid = tfx_veranstaltungen.int_kontenid WHERE int_veranstaltungenid=?");
-    query.bindValue(0, this->event->mainEventId());
+    query.bindValue(0, this->m_event->mainEvent()->id());
     query.exec();
     query.next();
     QFontMetricsF fm(painter.font());
@@ -96,7 +97,7 @@ void Invitation::printContent() {
     drawHeader("Wettkämpfe");
     QSqlQuery query3;
     query3.prepare("SELECT int_wettkaempfeid, var_nummer, var_name FROM tfx_wettkaempfe WHERE int_veranstaltungenid=? ORDER BY var_nummer");
-    query3.bindValue(0, this->event->mainEventId());
+    query3.bindValue(0, this->m_event->mainEvent()->id());
     query3.exec();
     while (query3.next()) {
         QSqlQuery query2;
@@ -107,7 +108,7 @@ void Invitation::printContent() {
         setPrinterFont(12,true);
         painter.drawText(QRectF(pr.x(), yco, pr.width()-pr.x()-pr.x(), QFontMetricsF(painter.font()).height()),"WK Nr. " + query3.value(1).toString(),QTextOption(Qt::AlignVCenter));
         painter.drawText(QRectF(pr.x()+mmToPixel(35.0), yco, pr.width()-pr.x()-pr.x(), QFontMetricsF(painter.font()).height()),query3.value(2).toString(),QTextOption(Qt::AlignVCenter));
-        painter.drawText(QRectF(pr.width()/2, yco, pr.width()-pr.x()-pr.x(), QFontMetricsF(painter.font()).height()),_global::wkBez(this->event, query3.value(1).toString()),QTextOption(Qt::AlignVCenter));
+        painter.drawText(QRectF(pr.width()/2, yco, pr.width()-pr.x()-pr.x(), QFontMetricsF(painter.font()).height()),_global::wkBez(this->m_event, query3.value(1).toString()),QTextOption(Qt::AlignVCenter));
         yco += mmToPixel(1.3);
         int i=0;
         setPrinterFont(9, false,true);

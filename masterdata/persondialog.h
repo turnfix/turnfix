@@ -7,19 +7,25 @@ namespace Ui {
 class PersonDialog;
 }
 
+class Person;
+class EntityManager;
+
 class PersonDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    PersonDialog(int tid = 0, QWidget *parent = nullptr);
+    PersonDialog(Person *person, EntityManager *em, QWidget *parent = nullptr);
     ~PersonDialog();
+
+    Person *person();
 
 protected slots:
     void save();
 
 protected:
     Ui::PersonDialog *ui;
-    int tnid;
+    EntityManager *m_em;
+    Person *m_person;
 };
 #endif

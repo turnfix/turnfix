@@ -25,7 +25,7 @@ private slots:
 
 private:
     Ui::SelectCompetitionDialog *ui;
-    Event *event;
+    Event *m_event;
     QString wk;
 };
 #endif

@@ -9,7 +9,8 @@ DBTable::DBTable(QString name, QObject *parent) : QObject(parent) {
     m_name = name;
 }
 
-void DBTable::addColumn(QString name,
+void DBTable::addColumn(QString property,
+                        QString name,
                         ColumnType type,
                         int length,
                         bool null,
@@ -18,7 +19,7 @@ void DBTable::addColumn(QString name,
                         bool pk)
 {
     DBColumn *column = new DBColumn(name, type, length, null, defaultValue, extraQuery, pk, this);
-    m_columns.append(column);
+    m_columns.insert(property, column);
 }
 
 void DBTable::addContraint(QString name,
@@ -33,7 +34,7 @@ void DBTable::addContraint(QString name,
     m_constraints.append(constraint);
 }
 
-QString DBTable::name()
+QString DBTable::name() const
 {
     return m_name;
 }
@@ -41,6 +42,11 @@ QString DBTable::name()
 int DBTable::columnFKCount()
 {
     return m_columns.size() + m_constraints.size();
+}
+
+DBColumn *DBTable::columnByProperty(const QString &propertName) const
+{
+    return m_columns.value(propertName);
 }
 
 void DBTable::check(const QString &connectionName)
@@ -53,9 +59,10 @@ void DBTable::check(const QString &connectionName)
     QList<DBColumn *> compareColumns = existingColumns(connectionName);
     QList<DBConstraint *> compareConstraints = existingConstraints(connectionName);
 
+    QList<DBColumn *> columns = m_columns.values();
     //Check if all columns exist in database
-    for (int i = 0; i < m_columns.size(); i++) {
-        DBColumn *column = m_columns.at(i);
+    for (int i = 0; i < columns.size(); i++) {
+        DBColumn *column = columns.at(i);
         DBColumn *compareColumn = compareColumns.at(i);
 
         column->check(compareColumn, connectionName);
@@ -109,11 +116,12 @@ void DBTable::create(const QString &connectionName)
             pk = i;
         i++;
     }
-    if (pk != -1)
-    {
-        query += "CONSTRAINT pky_" + m_columns.at(pk)->name() + " PRIMARY KEY ("
-                 + m_columns.at(pk)->name() + "),";
-    }
+    // TODO reactivate
+    //    if (pk != -1)
+    //    {
+    //        query += "CONSTRAINT pky_" + m_columns.at(pk)->name() + " PRIMARY KEY ("
+    //                 + m_columns.at(pk)->name() + "),";
+    //    }
     foreach (DBConstraint *constraint, m_constraints) {
         query += "CONSTRAINT " + constraint->name() + " FOREIGN KEY (" + constraint->fromField()
                  + ") ";

@@ -6,6 +6,7 @@ namespace Ui {
     class TeamDialog;
 }
 
+class EntityManager;
 class Event;
 class QStandardItemModel;
 class QSortFilterProxyModel;
@@ -15,7 +16,7 @@ class TeamDialog : public QDialog {
     Q_OBJECT
 
 public:
-    TeamDialog(Event *event, int edit=0, QWidget* parent = nullptr);
+    TeamDialog(Event *m_event, EntityManager *em, int edit = 0, QWidget *parent = nullptr);
     ~TeamDialog();
 
 private slots:
@@ -33,7 +34,8 @@ private slots:
     bool checkJg(int jg);
 
 private:
-    Event *event;
+    Event *m_event;
+    EntityManager *m_em;
     Ui::TeamDialog *ui;
     QStandardItemModel *model;
     QSqlQueryModel *model2;

@@ -1,5 +1,7 @@
 #include "selectparticipantdialog.h"
 #include "model/entity/competition.h"
+#include "model/entitymanager.h"
+#include "model/repository/competitionrepository.h"
 #include "results/resultstablemodel.h"
 #include "src/global/header/_delegates.h"
 #include "src/global/header/_global.h"
@@ -14,7 +16,7 @@ SelectParticipantDialog::SelectParticipantDialog(Event *event, QWidget *parent)
 {
     ui->setupUi(this);
 
-    this->event = event;
+    this->m_event = event;
     this->er_model = new ResultsTableModel();
 
     ui->tbl_tn->setModel(er_model);
@@ -43,7 +45,7 @@ void SelectParticipantDialog::initData()
 {
     QSqlQuery query2;
     query2.prepare("SELECT var_nummer, var_name FROM tfx_wettkaempfe WHERE int_veranstaltungenid=? ORDER BY var_nummer ASC");
-    query2.bindValue(0, this->event->mainEventId());
+    query2.bindValue(0, this->m_event->mainEvent()->id());
     query2.exec();
     while (query2.next()) {
         ui->cmb_wk->addItem(query2.value(0).toString() + " " + query2.value(1).toString(),
@@ -55,12 +57,11 @@ void SelectParticipantDialog::initData()
 void SelectParticipantDialog::updateList()
 {
     if (ui->cmb_wk->count() > 0) {
-        Competition *competition
-            = Competition::getByNumber(this->event,
-                                       ui->cmb_wk->itemData(ui->cmb_wk->currentIndex()).toString());
+        Competition *competition = m_em->competitionRepository()->fetchByNumber(
+            this->m_event, ui->cmb_wk->itemData(ui->cmb_wk->currentIndex()).toString());
         QList<QStringList> list = Result_Calc::resultArrayNew(competition);
-        int wktyp = competition->getType();
-        int hwk = this->event->mainEventId();
+        int wktyp = competition->type();
+        int hwk = this->m_event->mainEvent()->id();
         QString nr = ui->cmb_wk->itemData(ui->cmb_wk->currentIndex()).toString();
         er_model->setList(list,nr,hwk,wktyp,false);
         if (list.size() > 0) {

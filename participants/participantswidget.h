@@ -7,6 +7,7 @@ namespace Ui {
 }
 
 class Event;
+class EntityManager;
 class ParticipantsTableModel;
 class QSortFilterProxyModel;
 
@@ -35,7 +36,8 @@ private slots:
     void viewChanged(int);
 
 private:
-    Event *event;
+    Event *m_event;
+    EntityManager *m_em;
     Ui::ParticipantsWidget *ui;
     ParticipantsTableModel *participantsModel;
     QSortFilterProxyModel *sortModel;

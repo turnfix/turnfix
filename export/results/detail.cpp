@@ -1,5 +1,7 @@
 #include "detail.h"
 #include "model/entity/competition.h"
+#include "model/entitymanager.h"
+#include "model/repository/competitionrepository.h"
 #include "src/global/header/_global.h"
 #include "src/global/header/result_calc.h"
 #include "src/global/header/settings.h"
@@ -22,7 +24,8 @@ void Detail::printContent() {
         currWahl = wkWahl.at(i);
         currKP = wkKP.at(i);
 
-        Competition *competition = Competition::getByNumber(this->event, currWK);
+        Competition *competition = m_em->competitionRepository()->fetchByNumber(this->m_event,
+                                                                                currWK);
 
         if (newPageWK && i > 0) {
             newPage();
@@ -38,18 +41,24 @@ void Detail::printContent() {
         //Liste mit Einzelergebnissen bei Mannschaftswettkämpfen
         // TODO check if working
         QList<QStringList> dlist;
-        if (competition->getType() == 1) dlist = Result_Calc::resultArrayNew(competition, QList<int>(), -1, 0, printAW, detailQuery);
+        if (competition->type() == 1)
+            dlist = Result_Calc::resultArrayNew(competition,
+                                                QList<int>(),
+                                                -1,
+                                                0,
+                                                printAW,
+                                                detailQuery);
 
         //Ausgabe
         for (int ll=0;ll<rlist.size();ll++) {
             int skip=mmToPixel(10.0);
 
-            if (competition->getType() == 1) {
+            if (competition->type() == 1) {
                 //Mannschaftswettkampf
                 QSqlQuery query4;
                 query4.prepare("SELECT int_wertungenid FROM tfx_wertungen WHERE int_mannschaftenid=? AND int_runde=?");
                 query4.bindValue(0,rlist.at(ll).last());
-                query4.bindValue(1, this->event->round());
+                query4.bindValue(1, this->m_event->round());
                 query4.exec();
                 skip=skip+(_global::querySize(query4))*mmToPixel(5.8);
                 if (currKP) skip += (_global::querySize(query4))*mmToPixel(5.8);
@@ -64,7 +73,7 @@ void Detail::printContent() {
             checkFitPage(skip,currWK,true);
 
             //Wenn Mannschafts erste Zeile Fett
-            if (competition->getType() == 1) {
+            if (competition->type() == 1) {
                 setPrinterFont(9,true);
             } else {
                 setPrinterFont(9);
@@ -74,15 +83,16 @@ void Detail::printContent() {
             QSqlQuery query3;
             query3.prepare("SELECT int_disziplinenid, tfx_disziplinen.var_name, int_berechnung, var_einheit, var_kurz1, var_maske, CASE WHEN tfx_wettkaempfe.bol_kp='true' OR tfx_wettkaempfe_x_disziplinen.bol_kp='true' THEN 1 ELSE 0 END as kp, bol_mansort, int_wettkaempfe_x_disziplinenid FROM tfx_disziplinen INNER JOIN tfx_wettkaempfe_x_disziplinen USING (int_disziplinenid) INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) WHERE var_nummer=? AND int_veranstaltungenid=? ORDER BY int_sortierung");
             query3.bindValue(0, currWK);
-            query3.bindValue(1, this->event->mainEventId());
+            query3.bindValue(1, this->m_event->mainEvent()->id());
             query3.exec();
 
 
             //Gerade Zeilen hervorheben
             if (ll%2 != 0) drawHighlightRect(yco);
             QString jg;
-            if (competition->getType() == 0) jg = rlist.at(ll).at(3);
-            if (competition->getType() == 1) {
+            if (competition->type() == 0)
+                jg = rlist.at(ll).at(3);
+            if (competition->type() == 1) {
                 QList<position> dispos;
                 QList<int> diskp;
                 int maxx=0;
@@ -117,7 +127,7 @@ void Detail::printContent() {
                 QSqlQuery dres;
                 dres.prepare("SELECT tfx_wertungen.int_wertungenid FROM tfx_wertungen INNER JOIN tfx_teilnehmer USING (int_teilnehmerid) WHERE int_mannschaftenid=? AND int_runde=? AND bol_startet_nicht='false' ORDER BY bol_ak, var_nachname, var_vorname");
                 dres.bindValue(0, rlist.at(ll).last());
-                dres.bindValue(1, this->event->round());
+                dres.bindValue(1, this->m_event->round());
                 dres.exec();
                 while (dres.next()) {
                     int j=0;
@@ -303,7 +313,7 @@ void Detail::printContent() {
 }
 
 void Detail::printSubHeader() {
-    Competition *competition = Competition::getByNumber(this->event, currWK);
+    Competition *competition = m_em->competitionRepository()->fetchByNumber(this->m_event, currWK);
 
     setPrinterFont(10);
     QString jg;
@@ -313,20 +323,21 @@ void Detail::printSubHeader() {
     } else {
         fieldWidth = mmToPixel(22.0);
     }
-    if (competition->getType() == 0) jg = "Jg.";
-    if (competition->getType() == 0 || competition->getType() == 2) {
+    if (competition->type() == 0)
+        jg = "Jg.";
+    if (competition->type() == 0 || competition->type() == 2) {
         drawStandardRow("Platz","Name",jg,"Verein","Punkte",readDetailInfo(true));
     } else {
         drawStandardRow("Platz","Verein","","Mannschaft","Punkte",readDetailInfo(true));
     }
     if (!currWahl) {
         QSqlQuery columns;
-        if (competition->getType() == 1) {
+        if (competition->type() == 1) {
             columns.prepare("SELECT var_kurz1, var_icon, CASE WHEN tfx_wettkaempfe_x_disziplinen.bol_kp='true' OR tfx_wettkaempfe.bol_kp='true' THEN 1 ELSE 0 END, bol_mansort, int_wettkaempfe_x_disziplinenid FROM tfx_disziplinen INNER JOIN tfx_wettkaempfe_x_disziplinen USING (int_disziplinenid) INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) WHERE int_veranstaltungenid=? AND var_nummer=? ORDER BY int_sortierung DESC");
         } else {
             columns.prepare("SELECT var_kurz1, var_icon, CASE WHEN tfx_wettkaempfe_x_disziplinen.bol_kp='true' OR tfx_wettkaempfe.bol_kp='true' THEN 1 ELSE 0 END, bol_mansort, int_wettkaempfe_x_disziplinenid FROM tfx_disziplinen INNER JOIN tfx_wettkaempfe_x_disziplinen USING (int_disziplinenid) INNER JOIN tfx_wettkaempfe USING (int_wettkaempfeid) WHERE int_veranstaltungenid=? AND var_nummer=? ORDER BY int_sortierung");
         }
-        columns.bindValue(0, this->event->mainEventId());
+        columns.bindValue(0, this->m_event->mainEvent()->id());
         columns.bindValue(1, currWK);
         columns.exec();
         double x;
@@ -346,7 +357,7 @@ void Detail::printSubHeader() {
                     currcol = posquery.value(0).toInt();
                     currrow = posquery.value(1).toInt();
                 }
-                if (competition->getType() == 1) {
+                if (competition->type() == 1) {
                     x = pr.width()-pr.x()-mmToPixel(13.0)-(currcol+1)*fieldWidth-(currcol+1)*mmToPixel(1.1);
                 } else {
                     x = pr.x()+mmToPixel(10.6)+currcol*fieldWidth+currcol*mmToPixel(1.1);

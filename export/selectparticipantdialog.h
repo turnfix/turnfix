@@ -6,6 +6,7 @@ namespace Ui {
 class SelectParticipantDialog;
 }
 
+class EntityManager;
 class Event;
 class ResultsTableModel;
 
@@ -14,7 +15,7 @@ class SelectParticipantDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit SelectParticipantDialog(Event *event, QWidget *parent = nullptr);
+    explicit SelectParticipantDialog(Event *m_event, QWidget *parent = nullptr);
     ~SelectParticipantDialog();
 
 public slots:
@@ -28,7 +29,8 @@ private slots:
 
 private:
     Ui::SelectParticipantDialog *ui;
-    Event *event;
+    Event *m_event;
+    EntityManager *m_em;
     QList<int> tnlist;
     QString tnwk;
     ResultsTableModel *er_model;

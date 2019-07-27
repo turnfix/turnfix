@@ -61,7 +61,7 @@
    <item row="1" column="1">
     <widget class="QStackedWidget" name="stackedWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QGridLayout" name="gridLayout_8">
@@ -312,7 +312,7 @@
           <bool>false</bool>
          </attribute>
          <attribute name="verticalHeaderDefaultSectionSize">
-          <number>20</number>
+          <number>21</number>
          </attribute>
         </widget>
        </item>
@@ -756,7 +756,7 @@
              <bool>false</bool>
             </attribute>
             <attribute name="verticalHeaderDefaultSectionSize">
-             <number>20</number>
+             <number>21</number>
             </attribute>
            </widget>
           </item>

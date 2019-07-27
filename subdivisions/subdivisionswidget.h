@@ -31,7 +31,7 @@ private slots:
     void removeRiege();
 
 private:
-    Event *event;
+    Event *m_event;
     Ui::SubdivisionsWidget *ui;
     AssignmentTableModel *re_model;
     AssignmentTableModel *re_model2;

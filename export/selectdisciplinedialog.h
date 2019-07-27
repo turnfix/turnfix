@@ -9,7 +9,7 @@ class SelectDisciplineDialog : public QDialog, public Ui::SelectDisciplineDialog
     Q_OBJECT
 
 public:
-    SelectDisciplineDialog(Event *event, QWidget* parent = nullptr);
+    SelectDisciplineDialog(Event *m_event, QWidget* parent = nullptr);
 
 public slots:
     QList< QList<int> > getDis();
@@ -19,7 +19,7 @@ protected slots:
     void select1();
 
 private:
-    Event *event;
+    Event *m_event;
     QList<QList<int>> dis;
 };
 #endif

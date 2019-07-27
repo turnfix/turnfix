@@ -33,6 +33,11 @@ void AbstractConnection::close(const QString &connectionName)
     database.close();
 }
 
+const DBTable *AbstractConnection::mapping()
+{
+    return nullptr;
+}
+
 QUuid AbstractConnection::uuid() const
 {
     return m_uuid;

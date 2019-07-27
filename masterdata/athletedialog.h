@@ -6,15 +6,19 @@ namespace Ui {
 class AthleteDialog;
 }
 
+class Athlete;
+class Club;
+class EntityManager;
+class ClubModel;
+
 class AthleteDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    AthleteDialog(int tid = 0, QWidget *parent = nullptr);
+    AthleteDialog(Athlete *athlete, EntityManager *em, QWidget *parent = nullptr);
+    AthleteDialog(Athlete *athlete, Club *club, EntityManager *em, QWidget *parent = nullptr);
     ~AthleteDialog();
-
-    void setVerein(QString verein);
 
 private slots:
     void save();
@@ -22,6 +26,8 @@ private slots:
 
 private:
     Ui::AthleteDialog *ui;
-    int tnid;
+    EntityManager *m_em;
+    Athlete *m_athlete;
+    ClubModel *m_clubModel;
 };
 #endif

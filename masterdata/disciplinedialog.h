@@ -7,14 +7,16 @@ namespace Ui {
 class DisciplineDialog;
 }
 
-class QStandardItemModel;
+class Discipline;
+class EntityManager;
+class DisciplineFieldModel;
 
 class DisciplineDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    DisciplineDialog(int tid = 0, QWidget *parent = nullptr);
+    DisciplineDialog(Discipline *discipline, EntityManager *em, QWidget *parent = nullptr);
     ~DisciplineDialog();
 
 private slots:
@@ -26,8 +28,9 @@ private slots:
 
 private:
     Ui::DisciplineDialog *ui;
-    int disid;
-    QStandardItemModel *model;
+    EntityManager *m_em;
+    Discipline *m_discipline;
+    DisciplineFieldModel *m_fieldModel;
     virtual void keyPressEvent(QKeyEvent *e);
 };
 

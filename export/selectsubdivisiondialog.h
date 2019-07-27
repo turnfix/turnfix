@@ -13,7 +13,7 @@ class SelectSubdivisionDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit SelectSubdivisionDialog(Event *event, QWidget *parent = nullptr);
+    explicit SelectSubdivisionDialog(Event *m_event, QWidget *parent = nullptr);
     ~SelectSubdivisionDialog();
 
 public slots:
@@ -26,7 +26,7 @@ private:
     void initData();
 
     Ui::SelectSubdivisionDialog *ui;
-    Event *event;
+    Event *m_event;
     QStringList rg;
 };
 #endif

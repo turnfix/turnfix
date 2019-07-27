@@ -11,7 +11,7 @@ SelectCompetitionDialog::SelectCompetitionDialog(Event *event, QWidget *parent)
     ui->setupUi(this);
     setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
 
-    this->event = event;
+    this->m_event = event;
 
     connect(ui->but_select, SIGNAL(clicked()), this, SLOT(select1()));
     initData();
@@ -26,7 +26,7 @@ void SelectCompetitionDialog::initData()
 {
     QSqlQuery query2;
     query2.prepare("SELECT var_nummer || ' ' || var_name, var_nummer FROM tfx_wettkaempfe WHERE int_veranstaltungenid=? ORDER BY var_nummer");
-    query2.bindValue(0, this->event->mainEventId());
+    query2.bindValue(0, this->m_event->mainEvent()->id());
     query2.exec();
     while (query2.next()) {
         ui->cmb_dis->addItem(query2.value(0).toString(), query2.value(1).toString());

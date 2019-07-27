@@ -50,7 +50,7 @@ bool EditorDelegate::eventFilter ( QObject *object, QEvent *event) {
 
 CmbDelegate::CmbDelegate(Event *event, QObject *parent) : QItemDelegate(parent)
 {
-    this->event = event;
+    this->m_event = event;
 }
 
 QWidget *CmbDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &, const QModelIndex &index) const {
@@ -60,8 +60,8 @@ QWidget *CmbDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &
     //fields << "Pause";
     QSqlQuery query;
     query.prepare("SELECT var_kurz2 FROM tfx_wertungen INNER JOIN tfx_wettkaempfe ON tfx_wettkaempfe.int_wettkaempfeid = tfx_wertungen.int_wettkaempfeid INNER JOIN tfx_wettkaempfe_x_disziplinen ON tfx_wettkaempfe.int_wettkaempfeid = tfx_wettkaempfe_x_disziplinen.int_wettkaempfeid INNER JOIN tfx_disziplinen USING (int_disziplinenid) WHERE int_veranstaltungenid=? AND tfx_wertungen.int_runde=? AND var_riege=? GROUP BY int_disziplinenid, var_kurz2 ORDER BY int_disziplinenid");
-    query.bindValue(0, this->event->mainEventId());
-    query.bindValue(1, this->event->round());
+    query.bindValue(0, this->m_event->mainEvent()->id());
+    query.bindValue(1, this->m_event->round());
     query.bindValue(2, index.model()->index(index.row(),0).data().toString());
     query.exec();
     while (query.next()) {
@@ -82,8 +82,8 @@ void CmbDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const
     QString value = comboBox->currentText();
     QSqlQuery query;
     query.prepare("SELECT int_riegen_x_disziplinenid FROM tfx_riegen_x_disziplinen INNER JOIN tfx_disziplinen USING (int_disziplinenid) WHERE int_veranstaltungenid=? AND int_runde=? AND var_name=? AND var_riege=?");
-    query.bindValue(0, this->event->mainEventId());
-    query.bindValue(1, this->event->round());
+    query.bindValue(0, this->m_event->mainEvent()->id());
+    query.bindValue(1, this->m_event->round());
     query.bindValue(2, value);
     query.bindValue(3, index.model()->index(index.row(),0).data().toString());
     query.exec();
@@ -97,8 +97,8 @@ void CmbDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const
     query2.bindValue(0,query.value(0).toInt());
     query2.exec();
     query2.prepare("UPDATE tfx_riegen_x_disziplinen SET bol_erstes_geraet='false' WHERE int_veranstaltungenid=? AND int_runde=? AND var_riege=? AND int_riegen_x_disziplinenid != ?");
-    query2.bindValue(0, this->event->mainEventId());
-    query2.bindValue(1, this->event->round());
+    query2.bindValue(0, this->m_event->mainEvent()->id());
+    query2.bindValue(1, this->m_event->round());
     query2.bindValue(2, index.model()->index(index.row(),0).data().toString());
     query2.bindValue(3, query.value(0).toInt());
     query2.exec();

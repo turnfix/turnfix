@@ -13,7 +13,7 @@ class MailDialog : public QDialog, public Ui::MailDialogUi {
     Q_OBJECT
 
 public:
-    MailDialog(Event *event, QWidget* parent=0);
+    MailDialog(Event *m_event, QWidget* parent=0);
 
 public slots:
     void setDetailInfo(int di);
@@ -26,7 +26,7 @@ private slots:
     void message(QString icon,QString titel, QString text);
 
 private:
-    Event *event;
+    Event *m_event;
     QStringList vereine;
     QProgressDialog *dlg;
     int detailinfo;

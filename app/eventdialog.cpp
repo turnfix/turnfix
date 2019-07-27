@@ -2,25 +2,32 @@
 #include "masterdata/bankaccountdialog.h"
 #include "masterdata/persondialog.h"
 #include "masterdata/venuedialog.h"
+#include "model/entity/bankaccount.h"
 #include "model/entity/event.h"
+#include "model/entity/person.h"
+#include "model/entity/venue.h"
 #include "model/entitymanager.h"
-#include "src/global/header/_global.h"
+#include "model/repository/eventrepository.h"
+#include "model/view/bankaccountmodel.h"
+#include "model/view/eventmodel.h"
+#include "model/view/personmodel.h"
+#include "model/view/venuemodel.h"
 #include "ui_eventdialog.h"
 #include <QMessageBox>
 #include <QSqlQuery>
 #include <QToolBar>
 
-EventDialog::EventDialog(EntityManager *em, Event *event, QWidget *parent)
+EventDialog::EventDialog(Event *event, EntityManager *em, QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::EventDialog)
-    , m_em(em)
     , m_event(event)
+    , m_em(em)
 {
     ui->setupUi(this);
     setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
 
-    QToolBar *tb = new QToolBar();
-    QActionGroup *ag = new QActionGroup(this);
+    auto *tb = new QToolBar();
+    auto *ag = new QActionGroup(this);
     tb->setAllowedAreas(Qt::LeftToolBarArea);
     tb->setMovable(false);
     tb->setFloatable(false);
@@ -42,24 +49,61 @@ EventDialog::EventDialog(EntityManager *em, Event *event, QWidget *parent)
     ui->dae_from->setDate(QDate::currentDate());
     ui->dae_to->setDate(QDate::currentDate());
     ui->dae_ms->setDate(QDate::currentDate());
-    QSqlQuery query2("SELECT int_veranstaltungenid, dat_von, var_name FROM tfx_veranstaltungen ORDER BY dat_von DESC");
-    ui->cmb_mainround->addItem(tr("Dies ist der Hauptwettkampf"), m_event->id());
-    while (query2.next()) {
-        ui->cmb_mainround->addItem(QDate().fromString(query2.value(1).toString(), "yyyy-MM-dd")
-                                           .toString("dd.MM.yyyy")
-                                       + " - " + query2.value(2).toString(),
-                                   query2.value(0).toInt());
-    }
-    ui->cmb_mainround->setCurrentIndex(0);
+
+    auto *eventModel = new EventModel(em, this);
+    ui->cmb_mainround->setModel(eventModel);
+
+    m_venueModel = new VenueModel(em, this);
+    m_venueModel->fetchVenues();
+    ui->cmb_locations->setModel(m_venueModel);
+    ui->cmb_locations->setModelColumn(3);
+
+    m_accountModel = new BankAccountModel(em, this);
+    m_accountModel->fetchAccounts();
+    ui->cmb_account->setModel(m_accountModel);
+    ui->cmb_account->setModelColumn(0);
+
+    m_personModel = new PersonModel(em, this);
+    m_personModel->fetchPersons();
+    ui->cmb_persons1->setModel(m_personModel);
+    ui->cmb_persons1->setModelColumn(8);
+    ui->cmb_persons2->setModel(m_personModel);
+    ui->cmb_persons2->setModelColumn(8);
+
     connect(ui->but_save, SIGNAL(clicked()), this, SLOT(save()));
-    connect(ui->but_addp, SIGNAL(clicked()), this, SLOT(addPerson()));
-    connect(ui->but_addp2, SIGNAL(clicked()), this, SLOT(addPerson()));
+    connect(ui->but_addp, SIGNAL(clicked()), this, SLOT(addEventContact()));
+    connect(ui->but_addp2, SIGNAL(clicked()), this, SLOT(addRegistrationContact()));
     connect(ui->but_addort, SIGNAL(clicked()), this, SLOT(addLocation()));
     connect(ui->but_addacc, SIGNAL(clicked()), this, SLOT(addAccount()));
-    readLocations();
-    readPersons();
-    readAccounts();
-    initData();
+
+    ui->txt_event->setText(m_event->name());
+    ui->dae_from->setDate(m_event->startDate());
+    ui->dae_to->setDate(m_event->endDate());
+    ui->dae_ms->setDate(m_event->registrationDeadline());
+    ui->cmb_locations->setCurrentIndex(ui->cmb_locations->findData(m_event->venueId()));
+    ui->txt_orga->setText(m_event->organizer());
+    ui->cmb_persons1->setCurrentIndex(ui->cmb_persons1->findData(m_event->eventContactId()));
+    ui->cmb_persons2->setCurrentIndex(ui->cmb_persons2->findData(m_event->registrationContactId()));
+    ui->txt_web->setText(m_event->website());
+    ui->sbx_edv->setValue(m_event->itTeamCount());
+    ui->sbx_ref->setValue(m_event->judgesCount());
+    ui->sbx_volu->setValue(m_event->volunteersCount());
+    ui->dsb_money->setValue(m_event->registrationFee());
+    ui->chk_nostart->setChecked(m_event->chargeNoShow());
+    ui->chk_rereg->setChecked(m_event->changesAllowed());
+    ui->chk_postreg->setChecked(m_event->lateRegistrationAllowed());
+    ui->dsb_postmoney->setValue(m_event->lateFee());
+    ui->txt_zweck->setText(m_event->reference());
+    ui->txt_regtext->setText(m_event->registrationNotes());
+    ui->txt_startproof->setText(m_event->licenseRequirements());
+    ui->txt_requirements->setText(m_event->entryRequirements());
+    ui->txt_certificate->setText(m_event->awards());
+    ui->txt_ref->setText(m_event->judges());
+    ui->txt_misc->setText(m_event->notes());
+    ui->cmb_account->setCurrentIndex(ui->cmb_account->findData(m_event->bankAccountId()));
+    ui->sbx_round->setValue(m_event->round());
+    ui->cmb_mainround->setCurrentIndex(ui->cmb_mainround->findData(m_event->mainEventId()));
+    ui->gbx_round->setChecked(m_event->multiRoundEvent());
 }
 
 EventDialog::~EventDialog()
@@ -67,148 +111,84 @@ EventDialog::~EventDialog()
     delete ui;
 }
 
-void EventDialog::readLocations()
-{
-    QString currtext = ui->cmb_locations->currentText();
-    ui->cmb_locations->clear();
-    QSqlQuery query("SELECT int_wettkampforteid, var_name || ', ' || var_ort FROM tfx_wettkampforte ORDER BY var_name, var_ort");
-    while (query.next()) {
-        ui->cmb_locations->addItem(query.value(1).toString(), query.value(0).toInt());
-    }
-    ui->cmb_locations->setCurrentIndex(ui->cmb_locations->findText(currtext));
-}
-
-void EventDialog::readPersons()
-{
-    QString currtext1 = ui->cmb_persons1->currentText();
-    QString currtext2 = ui->cmb_persons2->currentText();
-    ui->cmb_persons1->clear();
-    ui->cmb_persons2->clear();
-    ui->cmb_persons1->addItem("");
-    ui->cmb_persons2->addItem("");
-    QSqlQuery query("SELECT int_personenid, var_nachname || ', ' || var_vorname FROM tfx_personen ORDER BY var_nachname, var_vorname");
-    while (query.next()) {
-        ui->cmb_persons1->addItem(query.value(1).toString(), query.value(0).toInt());
-        ui->cmb_persons2->addItem(query.value(1).toString(), query.value(0).toInt());
-    }
-    ui->cmb_persons1->setCurrentIndex(ui->cmb_persons1->findText(currtext1));
-    ui->cmb_persons2->setCurrentIndex(ui->cmb_persons2->findText(currtext2));
-}
-
-void EventDialog::readAccounts()
-{
-    QString currtext = ui->cmb_account->currentText();
-    ui->cmb_account->clear();
-    ui->cmb_account->addItem("");
-    QSqlQuery query("SELECT int_kontenid, var_name FROM tfx_konten ORDER BY var_name");
-    while (query.next()) {
-        ui->cmb_account->addItem(query.value(1).toString(), query.value(0).toInt());
-    }
-    ui->cmb_account->setCurrentIndex(ui->cmb_account->findText(currtext));
-}
-
 void EventDialog::addLocation()
 {
-    VenueDialog *loc = new VenueDialog(0, this);
-    if(loc->exec() == 1) { readLocations(); }
+    VenueDialog *venueDialog = new VenueDialog(nullptr, m_em, this);
+    if (venueDialog->exec() == 1) {
+        m_venueModel->fetchVenues();
+        ui->cmb_locations->setCurrentIndex(
+            ui->cmb_locations->findData(QVariant::fromValue(venueDialog->venue())));
+    }
 }
 
-void EventDialog::addPerson()
+void EventDialog::addEventContact()
 {
-    PersonDialog *pe = new PersonDialog(0, this);
-    if(pe->exec() == 1) { readPersons(); }
+    PersonDialog *personDialog = new PersonDialog(nullptr, m_em, this);
+    if (personDialog->exec() == 1) {
+        m_personModel->fetchPersons();
+        ui->cmb_persons1->setCurrentIndex(
+            ui->cmb_persons1->findData(QVariant::fromValue(personDialog->person())));
+    }
+}
+
+void EventDialog::addRegistrationContact()
+{
+    PersonDialog *personDialog = new PersonDialog(nullptr, m_em, this);
+    if (personDialog->exec() == 1) {
+        m_personModel->fetchPersons();
+        ui->cmb_persons2->setCurrentIndex(
+            ui->cmb_persons2->findData(QVariant::fromValue(personDialog->person())));
+    }
 }
 
 void EventDialog::addAccount()
 {
-    BankAccountDialog *ac = new BankAccountDialog(0, this);
-    if(ac->exec() == 1) { readAccounts(); }
-}
-
-void EventDialog::initData()
-{
-    ui->txt_event->setText(m_event->name());
-    ui->dae_from->setDate(m_event->startDate());
-    ui->dae_to->setDate(m_event->endDate());
-    ui->dae_ms->setDate(m_event->registrationDeadline());
-    //    ui->cmb_locations->setCurrentIndex(m_event->location()->id());
-    //    ui->txt_orga->setText(query.value(5).toString());
-    //    ui->cmb_persons1->setCurrentIndex(ui->cmb_persons1->findData(query.value(6).toInt()));
-    //    ui->cmb_persons2->setCurrentIndex(ui->cmb_persons2->findData(query.value(7).toInt()));
-    //    ui->txt_web->setText(query.value(8).toString());
-    //    ui->sbx_edv->setValue(query.value(9).toInt());
-    //    ui->sbx_ref->setValue(query.value(11).toInt());
-    //    ui->sbx_volu->setValue(query.value(10).toInt());
-    //    ui->dsb_money->setValue(query.value(12).toDouble());
-    //    ui->chk_nostart->setChecked(query.value(13).toBool());
-    //    ui->chk_rereg->setChecked(query.value(14).toBool());
-    //    ui->chk_postreg->setChecked(query.value(15).toBool());
-    //    ui->dsb_postmoney->setValue(query.value(16).toDouble());
-    //    ui->txt_regtext->setText(query.value(17).toString());
-    //    ui->txt_startproof->setText(query.value(18).toString());
-    //    ui->txt_requirements->setText(query.value(19).toString());
-    //    ui->txt_certificate->setText(query.value(20).toString());
-    //    ui->txt_ref->setText(query.value(21).toString());
-    //    ui->txt_misc->setText(query.value(22).toString());
-    //    ui->cmb_account->setCurrentIndex(ui->cmb_account->findData(query.value(23).toInt()));
-    //    ui->sbx_round->setValue(query.value(24).toInt());
-    //    ui->cmb_mainround->setCurrentIndex(ui->cmb_mainround->findData(query.value(25).toInt()));
-    //    ui->gbx_round->setChecked(query.value(26).toBool());
+    BankAccountDialog *accountDialog = new BankAccountDialog(nullptr, m_em, this);
+    if (accountDialog->exec() == 1) {
+        m_accountModel->fetchAccounts();
+        ui->cmb_account->setCurrentIndex(
+            ui->cmb_account->findData(QVariant::fromValue(accountDialog->account())));
+    }
 }
 
 void EventDialog::save()
 {
-    //    if (ui->cmb_locations->currentText().length() == 0) {
-    //        QMessageBox msg(QMessageBox::Warning,tr("Keine Wettkampfort gewählt!"),tr("Bitte wählen sie einen Wettkampfort aus!"));
-    //        msg.exec();
-    //    } else {
-    //        QSqlQuery query;
-    //        if (editid == 0) {
-    //            query.prepare("INSERT INTO tfx_veranstaltungen (int_wettkampforteid,int_meldung_an,int_ansprechpartner,int_kontenid,int_hauptwettkampf,var_name,int_runde,dat_von,dat_bis,dat_meldeschluss,bol_rundenwettkampf,var_veranstalter,int_edv,int_helfer,int_kampfrichter,var_meldung_website,var_verwendungszweck,rel_meldegeld,rel_nachmeldung,bol_faellig_nichtantritt,bol_ummeldung_moeglich,bol_nachmeldung_moeglich,txt_meldung_an,txt_startberechtigung,txt_teilnahmebedingungen,txt_siegerauszeichnung,txt_kampfrichter,txt_hinweise) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-    //        } else {
-    //            query.prepare("UPDATE tfx_veranstaltungen SET int_wettkampforteid=?,int_meldung_an=?,int_ansprechpartner=?,int_kontenid=?,int_hauptwettkampf=?,var_name=?,int_runde=?,dat_von=?,dat_bis=?,dat_meldeschluss=?,bol_rundenwettkampf=?,var_veranstalter=?,int_edv=?,int_helfer=?,int_kampfrichter=?,var_meldung_website=?,var_verwendungszweck=?,rel_meldegeld=?,rel_nachmeldung=?,bol_faellig_nichtantritt=?,bol_ummeldung_moeglich=?,bol_nachmeldung_moeglich=?,txt_meldung_an=?,txt_startberechtigung=?,txt_teilnahmebedingungen=?,txt_siegerauszeichnung=?,txt_kampfrichter=?,txt_hinweise=? WHERE int_veranstaltungenid=?");
-    //            query.bindValue(28,editid);
-    //        }
-    //        query.bindValue(0, ui->cmb_locations->itemData(ui->cmb_locations->currentIndex()));
-    //        query.bindValue(1, ui->cmb_persons2->itemData(ui->cmb_persons2->currentIndex()));
-    //        query.bindValue(2, ui->cmb_persons1->itemData(ui->cmb_persons1->currentIndex()));
-    //        query.bindValue(3, ui->cmb_account->itemData(ui->cmb_account->currentIndex()));
-    //        if (ui->cmb_mainround->itemData(ui->cmb_mainround->currentIndex()).toInt() > 0) {
-    //            query.bindValue(4, ui->cmb_mainround->itemData(ui->cmb_mainround->currentIndex()));
-    //        }
-    //        query.bindValue(5, ui->txt_event->text());
-    //        query.bindValue(6, ui->sbx_round->value());
-    //        query.bindValue(7, ui->dae_from->date().toString("yyyy-MM-dd"));
-    //        query.bindValue(8, ui->dae_to->date().toString("yyyy-MM-dd"));
-    //        query.bindValue(9, ui->dae_ms->date().toString("yyyy-MM-dd"));
-    //        query.bindValue(10, ui->gbx_round->isChecked());
-    //        query.bindValue(11, ui->txt_orga->text());
-    //        query.bindValue(12, ui->sbx_edv->value());
-    //        query.bindValue(13, ui->sbx_volu->value());
-    //        query.bindValue(14, ui->sbx_ref->value());
-    //        query.bindValue(15, ui->txt_web->text());
-    //        query.bindValue(16, ui->txt_zweck->text());
-    //        query.bindValue(17, ui->dsb_money->value());
-    //        query.bindValue(18, ui->dsb_postmoney->value());
-    //        query.bindValue(19, ui->chk_nostart->isChecked());
-    //        query.bindValue(20, ui->chk_rereg->isChecked());
-    //        query.bindValue(21, ui->chk_postreg->isChecked());
-    //        query.bindValue(22, ui->txt_regtext->toPlainText());
-    //        query.bindValue(23, ui->txt_startproof->toPlainText());
-    //        query.bindValue(24, ui->txt_requirements->toPlainText());
-    //        query.bindValue(25, ui->txt_certificate->toPlainText());
-    //        query.bindValue(26, ui->txt_ref->toPlainText());
-    //        query.bindValue(27, ui->txt_misc->toPlainText());
-    //        query.exec();
-    //        if (editid==0) {
-    //            if (_global::getDBTyp() == 0) {
-    //                QSqlQuery query2("SELECT last_value FROM tfx_veranstaltungen_int_veranstaltungenid_seq");
-    //                query2.next();
-    //                wknr = query2.value(0).toInt();
-    //            } else {
-    //                wknr = query.lastInsertId().toInt();
-    //            }
-    //        }
-    //        done(1);
-    //    }
+    if (ui->cmb_locations->currentText().length() == 0) {
+        QMessageBox msg(QMessageBox::Warning,
+                        tr("Keine Wettkampfort gewählt!"),
+                        tr("Bitte wählen sie einen Wettkampfort aus!"));
+        msg.exec();
+    } else {
+        m_event->setVenue(qvariant_cast<Venue *>(ui->cmb_locations->currentData()));
+        m_event->setEventContact(qvariant_cast<Person *>(ui->cmb_persons1->currentData()));
+        m_event->setRegistrationContact(qvariant_cast<Person *>(ui->cmb_persons2->currentData()));
+        m_event->setBankAccount(qvariant_cast<BankAccount *>(ui->cmb_account->currentData()));
+        m_event->setMainEvent(qvariant_cast<Event *>(ui->cmb_mainround->currentData()));
+        m_event->setName(ui->txt_event->text());
+        m_event->setRound(ui->sbx_round->value());
+        m_event->setStartDate(ui->dae_from->date());
+        m_event->setEndDate(ui->dae_to->date());
+        m_event->setRegistrationDeadline(ui->dae_ms->date());
+        m_event->setMultiRoundEvent(ui->gbx_round->isChecked());
+        m_event->setOrganizer(ui->txt_orga->text());
+        m_event->setItTeamCount(ui->sbx_edv->value());
+        m_event->setVolunteersCount(ui->sbx_volu->value());
+        m_event->setJudgesCount(ui->sbx_ref->value());
+        m_event->setWebsite(ui->txt_web->text());
+        m_event->setReference(ui->txt_zweck->text());
+        m_event->setRegistrationFee(ui->dsb_money->value());
+        m_event->setLateFee(ui->dsb_postmoney->value());
+        m_event->setChargeNoShow(ui->chk_nostart->isChecked());
+        m_event->setChangesAllowed(ui->chk_rereg->isChecked());
+        m_event->setLateRegistrationAllowed(ui->chk_postreg->isChecked());
+        m_event->setRegistrationNotes(ui->txt_regtext->toPlainText());
+        m_event->setLicenseRequirements(ui->txt_startproof->toPlainText());
+        m_event->setEntryRequirements(ui->txt_requirements->toPlainText());
+        m_event->setAwards(ui->txt_certificate->toPlainText());
+        m_event->setJudges(ui->txt_ref->toPlainText());
+        m_event->setNotes(ui->txt_misc->toPlainText());
+
+        m_em->eventRepository()->persist(m_event);
+        done(1);
+    }
 }

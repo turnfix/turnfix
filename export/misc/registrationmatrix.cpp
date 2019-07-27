@@ -1,6 +1,7 @@
-#include <math.h>
 #include "registrationmatrix.h"
+#include "model/entity/event.h"
 #include "src/global/header/_global.h"
+#include <math.h>
 
 bool RegistrationMatrix::teamMode = false;
 
@@ -14,7 +15,7 @@ void RegistrationMatrix::print(QPrinter *printer) {
 void RegistrationMatrix::printContent() {
     QSqlQuery query;
     query.prepare("SELECT int_wettkaempfeid, var_nummer FROM tfx_wettkaempfe WHERE int_veranstaltungenid=? ORDER BY var_nummer");
-    query.bindValue(0, this->event->mainEventId());
+    query.bindValue(0, this->m_event->mainEvent()->id());
     query.exec();
     int count = _global::querySize(query);
     QList<int> ges;
@@ -60,8 +61,8 @@ void RegistrationMatrix::printContent() {
         }
         QSqlQuery query2;
         query2.prepare(querystring);
-        query2.bindValue(0, this->event->mainEventId());
-        if (!teamMode) query2.bindValue(1, this->event->round());
+        query2.bindValue(0, this->m_event->mainEvent()->id());
+        if (!teamMode) query2.bindValue(1, this->m_event->round());
         query2.exec();
         while(query2.next()) {
             if (yco+mmToPixel(5.3) > max_yco) {
