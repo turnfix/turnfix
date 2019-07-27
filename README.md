@@ -9,11 +9,15 @@ Builds with Qt5.13 and MinGW on Windows. To Build it successful https://github.c
 ## Execute 
 
 To execute the program some additional files are necesarry and must be copied to execution folder. 
-libeay32.dll
-libintl-8.dll 
-libpq.dll
-ssleay32.dll
-libiconv-2.dll 
+- Qt5Guid.dll
+- Qt5Cored.dll
+- QtNetworkd.dll 
+- QtPrintSupportd.dll
+- libeay32.dll
+- libintl-8.dll 
+- libpq.dll
+- ssleay32.dll
+- libiconv-2.dll 
 
 ## License
 
