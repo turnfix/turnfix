@@ -25,7 +25,7 @@ From PostGreSQL 11 folder:
 - libpq.dll
 - ssleay32.dll
 - libiconv-2.dll 
-- libintl-8.dll 
+- libintl-9.dll
 
 
 ## License
