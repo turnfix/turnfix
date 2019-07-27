@@ -22,6 +22,8 @@ public:
 
     QUuid uuid() const;
 
+    QString id() const;
+
     QString name() const;
     void setName(const QString &value);
 

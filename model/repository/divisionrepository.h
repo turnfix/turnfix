@@ -2,16 +2,12 @@
 #define DIVISIONREPOSITORY_H
 
 #include "abstractrepository.h"
-
-class Division;
+#include "model/entity/division.h"
 
 class DivisionRepository : public AbstractRepository<Division>
 {
 public:
     explicit DivisionRepository(EntityManager *em);
-
-    void persist(Division *division);
-    void remove(Division *division);
 };
 
 #endif // DIVISIONREPOSITORY_H

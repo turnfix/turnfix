@@ -15,6 +15,7 @@
 #include "model/entity/person.h"
 #include "model/entity/venue.h"
 #include "model/entitymanager.h"
+#include "model/repository/sportrepository.h"
 #include "model/view/disciplinemodel.h"
 #include "model/view/sportmodel.h"
 #include "penaltydialog.h"
@@ -404,6 +405,7 @@ void MasterdataDialog::edit()
 
 void MasterdataDialog::del()
 {
+    QVariant obj = m_sortModel->data(ui->db_table->currentIndex(), Qt::UserRole);
     switch (m_currentType) {
     case 1: {
         //            QMessageBox msg(QMessageBox::Question, "Teilnehmer löschen", "Wollen sie diesen Teilnehmer wirklich löschen?",QMessageBox::Ok | QMessageBox::Cancel);
@@ -485,25 +487,23 @@ void MasterdataDialog::del()
         //            }
     }; break;
     case SportData: {
-        //        QMessageBox msg(QMessageBox::Question, "Sport löschen", "Wollen sie diesen Sport wirklich löschen?",QMessageBox::Ok | QMessageBox::Cancel);
-        //        if(msg.exec() == QMessageBox::Ok) {
-        //            QSqlQuery query;
-        //            query.prepare("DELETE FROM tfx_sport WHERE int_sportid=?");
-        //            query.bindValue(0,
-        //                            QVariant(
-        //                                m_sortModel->data(
-        //                                    m_sortModel->index(ui->db_table->currentIndex().row(), 0)))
-        //                                .toInt());
-        //            query.exec();
-        //            if (query.numRowsAffected() == -1) {
-        //                QMessageBox msg(QMessageBox::Information, "Fehler!", "Dieser Sport kann nicht gelöscht werden, da er noch zugeordnet ist!",QMessageBox::Ok);
-        //                msg.exec();
-        //            } else {
-        //                QModelIndex sel = ui->db_table->currentIndex();
-        //                getData();
-        //                ui->db_table->setCurrentIndex(sel);
-        //            }
-        //        }
+        QMessageBox msg(QMessageBox::Question,
+                        tr("Sport löschen"),
+                        tr("Wollen sie diesen Sport wirklich löschen?"),
+                        QMessageBox::Ok | QMessageBox::Cancel);
+        if (msg.exec() == QMessageBox::Ok) {
+            auto sport = qvariant_cast<Sport *>(obj);
+            if (m_em->sportRepository()->remove(sport)) {
+                static_cast<SportModel *>(m_model)->fetchSports();
+            } else {
+                QMessageBox
+                    msg(QMessageBox::Information,
+                        "Fehler!",
+                        "Dieser Sport kann nicht gelöscht werden, da er noch zugeordnet ist!",
+                        QMessageBox::Ok);
+                msg.exec();
+            }
+        }
     }; break;
     case 5: {
         //            QMessageBox msg(QMessageBox::Question, "Bereich löschen", "Wollen sie diesen Bereich wirklich löschen?",QMessageBox::Ok | QMessageBox::Cancel);

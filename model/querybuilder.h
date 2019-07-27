@@ -138,7 +138,7 @@ public:
         return output;
     }
 
-    void persist(QSqlDatabase db, QMetaObject metaObject, const DBTable *mapping, T *obj)
+    bool persist(QSqlDatabase db, QMetaObject metaObject, const DBTable *mapping, T *obj)
     {
         QObject *qobj = obj;
         int id = qobj->property("id").toInt();
@@ -178,8 +178,7 @@ public:
                 query.bindValue(key, values.value(key));
             }
 
-            query.exec();
-            return;
+            return query.exec();
         }
 
         QStringList columns;
@@ -220,10 +219,22 @@ public:
         }
         query.bindValue(":id", id);
 
-        query.exec();
+        return query.exec();
     }
 
-    void remove(QSqlDatabase db, QMetaObject metaObject, const DBTable *mapping, T *obj) {}
+    bool remove(QSqlDatabase db, const DBTable *mapping, T *obj)
+    {
+        QString queryString = QString("DELETE FROM %1 WHERE %2 = :id")
+                                  .arg(mapping->name(), mapping->columnByProperty("id")->name());
+
+        qDebug() << queryString;
+
+        QSqlQuery query(db);
+        query.prepare(queryString);
+        query.bindValue(":id", obj->id());
+
+        return query.exec();
+    }
 
 private:
     QObject *convert(const QSqlQuery &query)

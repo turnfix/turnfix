@@ -10,8 +10,8 @@ public:
     explicit EventRepository(EntityManager *em);
 
     QList<Event *> loadAll();
-    void persist(Event *event) override;
-    void remove(Event *event) override;
+    bool persist(Event *event) override;
+    bool remove(Event *event) override;
 };
 
 #endif // EVENTREPOSITORY_H

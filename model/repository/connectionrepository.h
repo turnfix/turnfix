@@ -13,8 +13,8 @@ public:
     explicit ConnectionRepository(EntityManager *em);
 
     QList<AbstractConnection *> loadAll();
-    void persist(AbstractConnection *connection) override;
-    void remove(AbstractConnection *connection) override;
+    bool persist(AbstractConnection *connection) override;
+    bool remove(AbstractConnection *connection) override;
 };
 
 #endif // CONNECTIONREPOSITORY_H

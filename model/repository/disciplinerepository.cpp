@@ -1,5 +1,4 @@
 #include "disciplinerepository.h"
-#include "model/entity/discipline.h"
 #include "model/entity/sport.h"
 #include "model/entitymanager.h"
 #include "model/querybuilder.h"
@@ -21,7 +20,3 @@ QList<Discipline *> DisciplineRepository::loadAll()
 
     return output;
 }
-
-void DisciplineRepository::persist(Discipline *discipline) {}
-
-void DisciplineRepository::remove(Discipline *discipline) {}

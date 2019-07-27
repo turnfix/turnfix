@@ -42,3 +42,8 @@ QUuid AbstractConnection::uuid() const
 {
     return m_uuid;
 }
+
+QString AbstractConnection::id() const
+{
+    return m_uuid.toString();
+}

@@ -22,4 +22,7 @@ QList<Competition *> CompetitionRepository::fetchByEvent(Event *event)
     return output;
 }
 
-Competition *CompetitionRepository::fetchByNumber(Event *event, const QString &number) {}
+Competition *CompetitionRepository::fetchByNumber(Event *, const QString &)
+{
+    return nullptr;
+}
