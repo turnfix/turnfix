@@ -65,10 +65,10 @@ EventDialog::EventDialog(Event *event, EntityManager *em, QWidget *parent)
 
     m_personModel = new PersonModel(em, this);
     m_personModel->fetchPersons();
-    ui->cmb_persons1->setModel(m_personModel);
-    ui->cmb_persons1->setModelColumn(8);
-    ui->cmb_persons2->setModel(m_personModel);
-    ui->cmb_persons2->setModelColumn(8);
+    ui->cmb_eventContact->setModel(m_personModel);
+    ui->cmb_eventContact->setModelColumn(8);
+    ui->cmb_registrationContact->setModel(m_personModel);
+    ui->cmb_registrationContact->setModelColumn(8);
 
     connect(ui->but_save, SIGNAL(clicked()), this, SLOT(save()));
     connect(ui->but_addp, SIGNAL(clicked()), this, SLOT(addEventContact()));
@@ -82,8 +82,8 @@ EventDialog::EventDialog(Event *event, EntityManager *em, QWidget *parent)
     ui->dae_ms->setDate(m_event->registrationDeadline());
     ui->cmb_locations->setCurrentIndex(ui->cmb_locations->findData(m_event->venueId()));
     ui->txt_orga->setText(m_event->organizer());
-    ui->cmb_persons1->setCurrentIndex(ui->cmb_persons1->findData(m_event->eventContactId()));
-    ui->cmb_persons2->setCurrentIndex(ui->cmb_persons2->findData(m_event->registrationContactId()));
+    ui->cmb_eventContact->setCurrentIndex(ui->cmb_eventContact->findData(m_event->eventContactId()));
+    ui->cmb_registrationContact->setCurrentIndex(ui->cmb_registrationContact->findData(m_event->registrationContactId()));
     ui->txt_web->setText(m_event->website());
     ui->sbx_edv->setValue(m_event->itTeamCount());
     ui->sbx_ref->setValue(m_event->judgesCount());
@@ -126,8 +126,8 @@ void EventDialog::addEventContact()
     PersonDialog *personDialog = new PersonDialog(nullptr, m_em, this);
     if (personDialog->exec() == 1) {
         m_personModel->fetchPersons();
-        ui->cmb_persons1->setCurrentIndex(
-            ui->cmb_persons1->findData(QVariant::fromValue(personDialog->person())));
+        ui->cmb_eventContact->setCurrentIndex(
+            ui->cmb_eventContact->findData(QVariant::fromValue(personDialog->person())));
     }
 }
 
@@ -136,8 +136,8 @@ void EventDialog::addRegistrationContact()
     PersonDialog *personDialog = new PersonDialog(nullptr, m_em, this);
     if (personDialog->exec() == 1) {
         m_personModel->fetchPersons();
-        ui->cmb_persons2->setCurrentIndex(
-            ui->cmb_persons2->findData(QVariant::fromValue(personDialog->person())));
+        ui->cmb_registrationContact->setCurrentIndex(
+            ui->cmb_registrationContact->findData(QVariant::fromValue(personDialog->person())));
     }
 }
 
@@ -160,8 +160,8 @@ void EventDialog::save()
         msg.exec();
     } else {
         m_event->setVenue(qvariant_cast<Venue *>(ui->cmb_locations->currentData()));
-        m_event->setEventContact(qvariant_cast<Person *>(ui->cmb_persons1->currentData()));
-        m_event->setRegistrationContact(qvariant_cast<Person *>(ui->cmb_persons2->currentData()));
+        m_event->setEventContact(qvariant_cast<Person *>(ui->cmb_eventContact->currentData()));
+        m_event->setRegistrationContact(qvariant_cast<Person *>(ui->cmb_registrationContact->currentData()));
         m_event->setBankAccount(qvariant_cast<BankAccount *>(ui->cmb_account->currentData()));
         m_event->setMainEvent(qvariant_cast<Event *>(ui->cmb_mainround->currentData()));
         m_event->setName(ui->txt_event->text());

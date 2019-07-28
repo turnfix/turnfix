@@ -441,10 +441,10 @@ QPushButton:pressed, QPushButton:hover {
            </widget>
           </item>
           <item row="0" column="1" colspan="2">
-           <widget class="QComboBox" name="cmb_persons1"/>
+           <widget class="QComboBox" name="cmb_eventContact"/>
           </item>
           <item row="1" column="1" colspan="2">
-           <widget class="QComboBox" name="cmb_persons2"/>
+           <widget class="QComboBox" name="cmb_registrationContact"/>
           </item>
           <item row="0" column="3">
            <widget class="QPushButton" name="but_addp">
@@ -568,8 +568,8 @@ QPushButton:pressed, QPushButton:hover {
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>468</width>
-            <height>331</height>
+            <width>294</width>
+            <height>293</height>
            </rect>
           </property>
           <attribute name="label">
@@ -749,8 +749,8 @@ QPushButton:pressed, QPushButton:hover {
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>86</width>
-            <height>84</height>
+            <width>92</width>
+            <height>103</height>
            </rect>
           </property>
           <attribute name="label">
@@ -776,8 +776,8 @@ QPushButton:pressed, QPushButton:hover {
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>468</width>
-            <height>331</height>
+            <width>87</width>
+            <height>97</height>
            </rect>
           </property>
           <attribute name="label">
@@ -806,8 +806,8 @@ QPushButton:pressed, QPushButton:hover {
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>86</width>
-            <height>80</height>
+            <width>87</width>
+            <height>97</height>
            </rect>
           </property>
           <attribute name="label">
@@ -836,8 +836,8 @@ QPushButton:pressed, QPushButton:hover {
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>86</width>
-            <height>80</height>
+            <width>87</width>
+            <height>97</height>
            </rect>
           </property>
           <attribute name="label">
@@ -866,8 +866,8 @@ QPushButton:pressed, QPushButton:hover {
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>86</width>
-            <height>80</height>
+            <width>87</width>
+            <height>97</height>
            </rect>
           </property>
           <attribute name="label">
