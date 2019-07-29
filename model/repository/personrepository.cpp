@@ -18,9 +18,9 @@ QList<Person *> PersonRepository::loadAll()
     query.exec();
 
     while (query.next()) {
-        Person *person = new Person();
+        auto person = new Person();
         const QMetaObject *metaObj = person->metaObject();
-        const DBTable *mappingObj = person->mapping();
+        const DBTable *mappingObj = Person::mapping();
 
         for (int i = metaObj->propertyOffset(); i < metaObj->propertyCount(); ++i) {
             QMetaProperty property = metaObj->property(i);

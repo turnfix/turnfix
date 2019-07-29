@@ -78,9 +78,9 @@ int Competition::divisionId() const
     return m_divisionId;
 }
 
-void Competition::setDivisionId(int sectionId)
+void Competition::setDivisionId(int divisionId)
 {
-    m_divisionId = sectionId;
+    m_divisionId = divisionId;
 }
 
 int Competition::type() const

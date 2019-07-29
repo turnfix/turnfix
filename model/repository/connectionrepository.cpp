@@ -13,7 +13,7 @@ QList<AbstractConnection *> ConnectionRepository::loadAll()
     QSettings settings("connections", QSettings::IniFormat);
 
     QList<AbstractConnection *> connections;
-    for (auto groupName : settings.childGroups()) {
+    for (auto const &groupName : settings.childGroups()) {
         settings.beginGroup(groupName);
 
         QString type = settings.value("type").toString();

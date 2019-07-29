@@ -18,9 +18,9 @@ QList<BankAccount *> BankAccountRepository::loadAll()
     query.exec();
 
     while (query.next()) {
-        BankAccount *account = new BankAccount();
+        auto account = new BankAccount();
         const QMetaObject *metaObj = account->metaObject();
-        const DBTable *mappingObj = account->mapping();
+        const DBTable *mappingObj = BankAccount::mapping();
 
         for (int i = metaObj->propertyOffset(); i < metaObj->propertyCount(); ++i) {
             QMetaProperty property = metaObj->property(i);

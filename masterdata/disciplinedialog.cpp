@@ -19,11 +19,11 @@ DisciplineDialog::DisciplineDialog(Discipline *discipline, EntityManager *em, QW
     setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint
                    | Qt::WindowCloseButtonHint);
 
-    SportModel *sportModel = new SportModel(m_em, this);
+    auto sportModel = new SportModel(m_em, this);
     sportModel->fetchSports();
     ui->cmb_sport->setModel(sportModel);
 
-    FormulaModel *formulaModel = new FormulaModel(m_em, this);
+    auto formulaModel = new FormulaModel(m_em, this);
     formulaModel->fetchFormulas();
     ui->cmb_formel->setModel(formulaModel);
 

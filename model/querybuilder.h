@@ -111,7 +111,7 @@ public:
         return *this;
     }
 
-    QList<T *> query(QSqlDatabase db)
+    QList<T *> query(const QSqlDatabase &db)
     {
         QString queryString = QString("%1 %2").arg(m_select, m_from);
         if (m_where != "") {
@@ -140,7 +140,7 @@ public:
         return output;
     }
 
-    bool persist(QSqlDatabase db, QMetaObject metaObject, const DBTable *mapping, T *obj)
+    bool persist(const QSqlDatabase &db, QMetaObject metaObject, const DBTable *mapping, T *obj)
     {
         QObject *qobj = obj;
         int id = qobj->property("id").toInt();
@@ -186,7 +186,7 @@ public:
             QSqlQuery query(db);
             query.prepare(queryString);
             QStringList keys = values.keys();
-            for (auto key : keys) {
+            for (auto const &key : keys) {
                 query.bindValue(key, values.value(key));
             }
 
@@ -256,7 +256,7 @@ public:
         QSqlQuery query(db);
         query.prepare(queryString);
         QStringList keys = values.keys();
-        for (auto key : keys) {
+        for (auto const &key : keys) {
             query.bindValue(key, values.value(key));
         }
         query.bindValue(":id", id);
@@ -270,7 +270,7 @@ public:
         return result;
     }
 
-    bool remove(QSqlDatabase db, const DBTable *mapping, T *obj)
+    bool remove(const QSqlDatabase &db, const DBTable *mapping, T *obj)
     {
         QString queryString = QString("DELETE FROM %1 WHERE %2 = :id")
                                   .arg(mapping->name(), mapping->columnByProperty("id")->name());

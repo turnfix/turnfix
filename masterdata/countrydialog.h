@@ -14,7 +14,7 @@ class CountryDialog : public QDialog
     Q_OBJECT
 public:
     CountryDialog(Country *country, EntityManager *em, QWidget *parent = nullptr);
-    ~CountryDialog();
+    ~CountryDialog() override;
 
     Country *country();
 

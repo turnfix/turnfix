@@ -16,7 +16,7 @@ class FormulaDialog : public QDialog
 
 public:
     explicit FormulaDialog(Formula *formula, EntityManager *em, QWidget *parent = nullptr);
-    ~FormulaDialog();
+    ~FormulaDialog() override;
 
     Formula *formula();
 
