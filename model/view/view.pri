@@ -10,6 +10,7 @@ HEADERS += \
     $$PWD/formulamodel.h \
     $$PWD/personmodel.h \
     $$PWD/sportmodel.h \
+    $$PWD/statemodel.h \
     $$PWD/venuemodel.h
 
 SOURCES += \
@@ -24,4 +25,5 @@ SOURCES += \
     $$PWD/formulamodel.cpp \
     $$PWD/personmodel.cpp \
     $$PWD/sportmodel.cpp \
+    $$PWD/statemodel.cpp \
     $$PWD/venuemodel.cpp

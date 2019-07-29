@@ -12,6 +12,7 @@ HEADERS += \
     $$PWD/formularepository.h \
     $$PWD/personrepository.h \
     $$PWD/sportrepository.h \
+    $$PWD/staterepository.h \
     $$PWD/venuerepository.h
 
 SOURCES += \
@@ -27,4 +28,5 @@ SOURCES += \
     $$PWD/formularepository.cpp \
     $$PWD/personrepository.cpp \
     $$PWD/sportrepository.cpp \
+    $$PWD/staterepository.cpp \
     $$PWD/venuerepository.cpp

@@ -7,22 +7,27 @@ namespace Ui {
 class StateDialog;
 }
 
+class State;
+class EntityManager;
+class CountryModel;
+
 class StateDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    StateDialog(int v = 0, QWidget *parent = nullptr);
+    StateDialog(State *state, EntityManager *em, QWidget *parent = nullptr);
     ~StateDialog();
 
 private slots:
     void save();
     void addCountry();
-    void readCountries();
 
 private:
     Ui::StateDialog *ui;
-    int vid;
+    EntityManager *m_em;
+    CountryModel *m_countryModel;
+    State *m_state;
 };
 
 #endif

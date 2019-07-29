@@ -14,16 +14,19 @@
 #include "model/entity/discipline.h"
 #include "model/entity/division.h"
 #include "model/entity/person.h"
+#include "model/entity/state.h"
 #include "model/entity/venue.h"
 #include "model/entitymanager.h"
 #include "model/repository/countryrepository.h"
 #include "model/repository/formularepository.h"
 #include "model/repository/sportrepository.h"
+#include "model/repository/staterepository.h"
 #include "model/repository/venuerepository.h"
 #include "model/view/countrymodel.h"
 #include "model/view/disciplinemodel.h"
 #include "model/view/formulamodel.h"
 #include "model/view/sportmodel.h"
+#include "model/view/statemodel.h"
 #include "model/view/venuemodel.h"
 #include "penaltydialog.h"
 #include "persondialog.h"
@@ -235,6 +238,15 @@ void MasterdataDialog::updateModel(Type type)
         sizes << 200 << 60;
         break;
     }
+    case StateData: {
+        auto stateModel = new StateModel(m_em, this);
+        stateModel->fetchStates();
+        m_model = stateModel;
+        resizeModes << QHeaderView::Stretch << QHeaderView::ResizeToContents
+                    << QHeaderView::ResizeToContents;
+        sizes << 200 << 60 << 200;
+        break;
+    }
     }
 
     m_sortModel->setSourceModel(m_model);
@@ -282,10 +294,6 @@ void MasterdataDialog::updateModel(Type type)
     //    QString headers10[4] = {"ID","Turngau/-kreis","Kürzel",""};
     //    QHeaderView::ResizeMode resizeMode10[] = {QHeaderView::Fixed, QHeaderView::Stretch, QHeaderView::ResizeToContents, QHeaderView::Fixed};
     //    int resize10[] = {40,200,70,0};
-    //    //Verbände
-    //    QString headers11[4] = {"ID","Landesverband","Kürzel",""};
-    //    QHeaderView::ResizeMode resizeMode11[] = {QHeaderView::Fixed, QHeaderView::Stretch, QHeaderView::ResizeToContents, QHeaderView::Fixed};
-    //    int resize11[] = {40,200,70,0};
     //    //Strafen
     //    QString headers13[4] = {"ID","Strafe","Abzug",""};
     //    QHeaderView::ResizeMode resizeMode13[] = {QHeaderView::Fixed, QHeaderView::Stretch, QHeaderView::ResizeToContents, QHeaderView::Fixed};
@@ -366,6 +374,14 @@ void MasterdataDialog::add()
         auto model = static_cast<CountryModel *>(m_model);
         if (dialog->exec() == 1) {
             model->fetchCountries();
+        }
+        break;
+    }
+    case StateData: {
+        auto dialog = new StateDialog(nullptr, m_em, this);
+        auto model = static_cast<StateModel *>(m_model);
+        if (dialog->exec() == 1) {
+            model->fetchStates();
         }
         break;
     }
@@ -455,6 +471,15 @@ void MasterdataDialog::edit()
         auto model = static_cast<CountryModel *>(m_model);
         if (dialog->exec() == 1) {
             model->fetchCountries();
+        }
+        break;
+    }
+    case StateData: {
+        auto state = qvariant_cast<State *>(obj);
+        auto dialog = new StateDialog(state, m_em, this);
+        auto model = static_cast<StateModel *>(m_model);
+        if (dialog->exec() == 1) {
+            model->fetchStates();
         }
         break;
     }
@@ -686,26 +711,24 @@ void MasterdataDialog::del()
         //                }
         //            }
     }; break;
-    case 11: {
-        //            QMessageBox msg(QMessageBox::Question, "Landesverband löschen", "Wollen sie diesen Landesverband wirklich löschen?",QMessageBox::Ok | QMessageBox::Cancel);
-        //            if(msg.exec() == QMessageBox::Ok) {
-        //                QSqlQuery query;
-        //                query.prepare("DELETE FROM tfx_verbaende WHERE int_verbaendeid=?");
-        //                query.bindValue(0,
-        //                                QVariant(
-        //                                    m_sortModel->data(
-        //                                        m_sortModel->index(ui->db_table->currentIndex().row(), 0)))
-        //                                    .toInt());
-        //                query.exec();
-        //                if (query.numRowsAffected() == -1) {
-        //                    QMessageBox msg(QMessageBox::Information, "Fehler!", "Dieser Landesverband kann nicht gelöscht werden, da er noch einem Turnkreis/-gau zugeordnet ist!",QMessageBox::Ok);
-        //                    msg.exec();
-        //                } else {
-        //                    QModelIndex sel = ui->db_table->currentIndex();
-        //                    getData();
-        //                    ui->db_table->setCurrentIndex(sel);
-        //                }
-        //            }
+    case StateData: {
+        QMessageBox msg(QMessageBox::Question,
+                        "Landesverband löschen",
+                        "Wollen sie diesen Landesverband wirklich löschen?",
+                        QMessageBox::Ok | QMessageBox::Cancel);
+        if (msg.exec() == QMessageBox::Ok) {
+            auto state = qvariant_cast<State *>(obj);
+            if (m_em->stateRepository()->remove(state)) {
+                static_cast<StateModel *>(m_model)->fetchStates();
+            } else {
+                QMessageBox::information(
+                    this,
+                    "Fehler!",
+                    "Dieser Landesverband kann nicht gelöscht werden, da er noch einem "
+                    "Turnkreis/-gau zugeordnet ist!",
+                    QMessageBox::Ok);
+            }
+        }
     }; break;
     case CountryData: {
         QMessageBox msg(QMessageBox::Question,

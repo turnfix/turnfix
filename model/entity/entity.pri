@@ -14,6 +14,7 @@ HEADERS += \
     $$PWD/postgresqlconnection.h \
     $$PWD/sport.h \
     $$PWD/sqliteconnection.h \
+    $$PWD/state.h \
     $$PWD/venue.h
 
 SOURCES += \
@@ -32,4 +33,5 @@ SOURCES += \
     $$PWD/postgresqlconnection.cpp \
     $$PWD/sport.cpp \
     $$PWD/sqliteconnection.cpp \
+    $$PWD/state.cpp \
     $$PWD/venue.cpp

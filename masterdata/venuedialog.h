@@ -15,7 +15,7 @@ class VenueDialog : public QDialog
 
 public:
     VenueDialog(Venue *venue, EntityManager *em, QWidget *parent = nullptr);
-    ~VenueDialog();
+    ~VenueDialog() override;
 
     Venue *venue();
 

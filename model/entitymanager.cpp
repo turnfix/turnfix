@@ -11,6 +11,7 @@
 #include "repository/formularepository.h"
 #include "repository/personrepository.h"
 #include "repository/sportrepository.h"
+#include "repository/staterepository.h"
 #include "repository/venuerepository.h"
 
 EntityManager::EntityManager(QObject *parent)
@@ -28,6 +29,7 @@ EntityManager::EntityManager(QObject *parent)
     m_formulaRepository = new FormulaRepository(this);
     m_personRepository = new PersonRepository(this);
     m_sportRepository = new SportRepository(this);
+    m_stateRepository = new StateRepository(this);
     m_venueRepository = new VenueRepository(this);
 }
 
@@ -76,6 +78,11 @@ QString EntityManager::connectionName() const
 void EntityManager::setConnectionName(const QString &connectionName)
 {
     m_connectionName = connectionName;
+}
+
+StateRepository *EntityManager::stateRepository() const
+{
+    return m_stateRepository;
 }
 
 CountryRepository *EntityManager::countryRepository() const

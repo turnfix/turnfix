@@ -15,6 +15,7 @@ class EventRepository;
 class FormulaRepository;
 class PersonRepository;
 class SportRepository;
+class StateRepository;
 class VenueRepository;
 
 class EntityManager : public QObject
@@ -36,6 +37,7 @@ public:
     FormulaRepository *formulaRepository() const;
     PersonRepository *personRepository() const;
     SportRepository *sportRepository() const;
+    StateRepository *stateRepository() const;
     VenueRepository *venueRepository() const;
 
     bool startTransaction();
@@ -58,6 +60,7 @@ private:
     FormulaRepository *m_formulaRepository;
     PersonRepository *m_personRepository;
     SportRepository *m_sportRepository;
+    StateRepository *m_stateRepository;
     VenueRepository *m_venueRepository;
 };
 
