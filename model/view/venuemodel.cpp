@@ -27,7 +27,7 @@ QVariant VenueModel::headerData(int section, Qt::Orientation orientation, int ro
         case 0:
             return tr("Name");
         case 1:
-            return tr("Postleitzahl");
+            return tr("PLZ");
         case 2:
             return tr("Ort");
         }

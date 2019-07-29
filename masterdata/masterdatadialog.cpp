@@ -17,9 +17,11 @@
 #include "model/entitymanager.h"
 #include "model/repository/formularepository.h"
 #include "model/repository/sportrepository.h"
+#include "model/repository/venuerepository.h"
 #include "model/view/disciplinemodel.h"
 #include "model/view/formulamodel.h"
 #include "model/view/sportmodel.h"
+#include "model/view/venuemodel.h"
 #include "penaltydialog.h"
 #include "persondialog.h"
 #include "regiondialog.h"
@@ -214,6 +216,14 @@ void MasterdataDialog::updateModel(Type type)
         sizes << 250 << 200 << 60;
         break;
     }
+    case VenueData: {
+        auto venueModel = new VenueModel(m_em, this);
+        venueModel->fetchVenues();
+        m_model = venueModel;
+        resizeModes << QHeaderView::Stretch << QHeaderView::Fixed << QHeaderView::Stretch;
+        sizes << 200 << 60 << 200;
+        break;
+    }
     }
 
     m_sortModel->setSourceModel(m_model);
@@ -257,10 +267,6 @@ void MasterdataDialog::updateModel(Type type)
     //    QString headers8[4] = {"ID","Name","Kontonummer","BLZ"};
     //    QHeaderView::ResizeMode resizeMode8[] = {QHeaderView::Fixed, QHeaderView::Stretch, QHeaderView::Stretch, QHeaderView::Stretch};
     //    int resize8[] = {40,200,200,200};
-    //    //Wettkampforte
-    //    QString headers9[4] = {"ID","Name","PLZ","Ort"};
-    //    QHeaderView::ResizeMode resizeMode9[] = {QHeaderView::Fixed, QHeaderView::Stretch, QHeaderView::Fixed, QHeaderView::Stretch};
-    //    int resize9[] = {40,200,60,200};
     //    //Gaue
     //    QString headers10[4] = {"ID","Turngau/-kreis","Kürzel",""};
     //    QHeaderView::ResizeMode resizeMode10[] = {QHeaderView::Fixed, QHeaderView::Stretch, QHeaderView::ResizeToContents, QHeaderView::Fixed};
@@ -346,6 +352,14 @@ void MasterdataDialog::add()
         }
         break;
     }
+    case VenueData: {
+        auto dialog = new VenueDialog(nullptr, m_em, this);
+        auto model = static_cast<VenueModel *>(m_model);
+        if (dialog->exec() == 1) {
+            model->fetchVenues();
+        }
+        break;
+    }
         //    case 5:
         //        dia = new DivisionDialog(nullptr, m_em, this);
         //        break;
@@ -357,9 +371,6 @@ void MasterdataDialog::add()
         //        break;
         //    case 8:
         //        dia = new BankAccountDialog(nullptr, m_em, this);
-        //        break;
-        //    case 9:
-        //        dia = new VenueDialog(nullptr, m_em, this);
         //        break;
         //    case 10:
         //        dia = new RegionDialog(0, this);
@@ -417,6 +428,15 @@ void MasterdataDialog::edit()
         auto model = static_cast<FormulaModel *>(m_model);
         if (dialog->exec() == 1) {
             model->fetchFormulas();
+        }
+        break;
+    }
+    case VenueData: {
+        auto venue = qvariant_cast<Venue *>(obj);
+        auto dialog = new VenueDialog(venue, m_em, this);
+        auto model = static_cast<VenueModel *>(m_model);
+        if (dialog->exec() == 1) {
+            model->fetchVenues();
         }
         break;
     }
@@ -609,26 +629,24 @@ void MasterdataDialog::del()
         //                }
         //            }
     }; break;
-    case 9: {
-        //            QMessageBox msg(QMessageBox::Question, "Wettkampfort löschen", "Wollen sie diesen Wettkampfort wirklich löschen?",QMessageBox::Ok | QMessageBox::Cancel);
-        //            if(msg.exec() == QMessageBox::Ok) {
-        //                QSqlQuery query;
-        //                query.prepare("DELETE FROM tfx_wettkampforte WHERE int_wettkampforteid=?");
-        //                query.bindValue(0,
-        //                                QVariant(
-        //                                    m_sortModel->data(
-        //                                        m_sortModel->index(ui->db_table->currentIndex().row(), 0)))
-        //                                    .toInt());
-        //                query.exec();
-        //                if (query.numRowsAffected() == -1) {
-        //                    QMessageBox msg(QMessageBox::Information, "Fehler!", "Dieser Wettkampfort kann nicht gelöscht werden, da er noch einem Wettkampf zugeordnet ist!",QMessageBox::Ok);
-        //                    msg.exec();
-        //                } else {
-        //                    QModelIndex sel = ui->db_table->currentIndex();
-        //                    getData();
-        //                    ui->db_table->setCurrentIndex(sel);
-        //                }
-        //            }
+    case VenueData: {
+        QMessageBox msg(QMessageBox::Question,
+                        "Wettkampfort löschen",
+                        "Wollen sie diesen Wettkampfort wirklich löschen?",
+                        QMessageBox::Ok | QMessageBox::Cancel);
+        if (msg.exec() == QMessageBox::Ok) {
+            auto venue = qvariant_cast<Venue *>(obj);
+            if (m_em->venueRepository()->remove(venue)) {
+                static_cast<VenueModel *>(m_model)->fetchVenues();
+            } else {
+                QMessageBox::information(
+                    this,
+                    "Fehler!",
+                    "Dieser Wettkampfort kann nicht gelöscht werden, da er noch einem "
+                    "Wettkampf zugeordnet ist!",
+                    QMessageBox::Ok);
+            }
+        }
     }; break;
     case 10: {
         //            QMessageBox msg(QMessageBox::Question, "Turnkreis/-gau löschen", "Wollen sie diesen Turnkreis/-gau wirklich löschen?",QMessageBox::Ok | QMessageBox::Cancel);
