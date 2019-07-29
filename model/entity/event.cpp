@@ -7,7 +7,12 @@ DBTable *Event::initializeMapping()
 {
     DBTable *event = new DBTable("tfx_veranstaltungen");
     event->addColumn("id", "int_veranstaltungenid", ColumnType::Integer, 0, false, "", "", true);
-    event->addColumn("venueId", "int_wettkampforteid", ColumnType::Integer, 0, false);
+    event->addColumn("venueId", "int_wettkampforteid", ColumnType::Integer, 0, false)
+        ->addContraint("fky_wettkampforteid",
+                       "tfx_wettkampforte",
+                       "int_wettkampforteid",
+                       "RESTRICT",
+                       "RESTRICT");
     event->addColumn("name", "var_name", ColumnType::Varchar, 250);
     event->addColumn("startDate", "dat_von", ColumnType::Date, 0, false);
     event->addColumn("endDate", "dat_bis", ColumnType::Date, 0, false);
@@ -18,10 +23,22 @@ DBTable *Event::initializeMapping()
                      true,
                      "'false'");
     event->addColumn("round", "int_runde", ColumnType::SmallInt, 0, true, "1");
-    event->addColumn("mainEventId", "int_hauptwettkampf", ColumnType::Integer);
-    event->addColumn("registrationContactId", "int_meldung_an", ColumnType::Integer);
-    event->addColumn("eventContactId", "int_ansprechpartner", ColumnType::Integer);
-    event->addColumn("bankAccountId", "int_kontenid", ColumnType::Integer);
+    event->addColumn("mainEventId", "int_hauptwettkampf", ColumnType::Integer)
+        ->addContraint("fky_hauptwettkampf",
+                       "tfx_veranstaltungen",
+                       "int_veranstaltungenid",
+                       "RESTRICT",
+                       "RESTRICT");
+    event->addColumn("registrationContactId", "int_meldung_an", ColumnType::Integer)
+        ->addContraint("fky_meldung_an", "tfx_personen", "int_personenid", "RESTRICT", "RESTRICT");
+    event->addColumn("eventContactId", "int_ansprechpartner", ColumnType::Integer)
+        ->addContraint("fky_ansprechpartner",
+                       "tfx_personen",
+                       "int_personenid",
+                       "RESTRICT",
+                       "RESTRICT");
+    event->addColumn("bankAccountId", "int_kontenid", ColumnType::Integer)
+        ->addContraint("fky_kontenid", "tfx_konten", "int_kontenid", "RESTRICT", "RESTRICT");
     event->addColumn("registrationDeadline", "dat_meldeschluss", ColumnType::Date);
     event->addColumn("organizer", "var_veranstalter", ColumnType::Varchar, 150);
     event->addColumn("itTeamCount", "int_edv", ColumnType::SmallInt, 0, true, "0");
@@ -55,36 +72,6 @@ DBTable *Event::initializeMapping()
     event->addColumn("awards", "txt_siegerauszeichnung", ColumnType::Text);
     event->addColumn("judges", "txt_kampfrichter", ColumnType::Text);
     event->addColumn("notes", "txt_hinweise", ColumnType::Text);
-    event->addContraint("fky_ansprechpartner",
-                        "tfx_personen",
-                        "int_ansprechpartner",
-                        "int_personenid",
-                        "RESTRICT",
-                        "RESTRICT");
-    event->addContraint("fky_hauptwettkampf",
-                        "tfx_veranstaltungen",
-                        "int_hauptwettkampf",
-                        "int_veranstaltungenid",
-                        "RESTRICT",
-                        "RESTRICT");
-    event->addContraint("fky_kontenid",
-                        "tfx_konten",
-                        "int_kontenid",
-                        "int_kontenid",
-                        "RESTRICT",
-                        "RESTRICT");
-    event->addContraint("fky_meldung_an",
-                        "tfx_personen",
-                        "int_meldung_an",
-                        "int_personenid",
-                        "RESTRICT",
-                        "RESTRICT");
-    event->addContraint("fky_wettkampforteid",
-                        "tfx_wettkampforte",
-                        "int_wettkampforteid",
-                        "int_wettkampforteid",
-                        "RESTRICT",
-                        "RESTRICT");
 
     return event;
 }

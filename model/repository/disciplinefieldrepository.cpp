@@ -21,5 +21,9 @@ QList<DisciplineField *> DisciplineFieldRepository::loadByDiscipline(Discipline 
 
     QList<DisciplineField *> output = qb.query(db);
 
+    foreach (DisciplineField *field, output) {
+        field->setDiscipline(discipline);
+    }
+
     return output;
 }

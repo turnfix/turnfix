@@ -9,39 +9,24 @@ DBTable::DBTable(QString name, QObject *parent) : QObject(parent) {
     m_name = name;
 }
 
-void DBTable::addColumn(QString property,
-                        QString name,
-                        ColumnType type,
-                        int length,
-                        bool null,
-                        QString defaultValue,
-                        QString extraQuery,
-                        bool pk)
+DBColumn *DBTable::addColumn(QString property,
+                             QString name,
+                             ColumnType type,
+                             int length,
+                             bool null,
+                             QString defaultValue,
+                             QString extraQuery,
+                             bool pk)
 {
     DBColumn *column = new DBColumn(name, type, length, null, defaultValue, extraQuery, pk, this);
     m_columns.insert(property, column);
-}
 
-void DBTable::addContraint(QString name,
-                           QString referenceTable,
-                           QString fromField,
-                           QString toField,
-                           QString onUpdate,
-                           QString onDelete)
-{
-    DBConstraint *constraint
-        = new DBConstraint(name, referenceTable, fromField, toField, onUpdate, onDelete, this);
-    m_constraints.append(constraint);
+    return column;
 }
 
 QString DBTable::name() const
 {
     return m_name;
-}
-
-int DBTable::columnFKCount()
-{
-    return m_columns.size() + m_constraints.size();
 }
 
 DBColumn *DBTable::columnByProperty(const QString &propertName) const
@@ -57,7 +42,6 @@ void DBTable::check(const QString &connectionName)
     }
 
     QList<DBColumn *> compareColumns = existingColumns(connectionName);
-    QList<DBConstraint *> compareConstraints = existingConstraints(connectionName);
 
     QList<DBColumn *> columns = m_columns.values();
     //Check if all columns exist in database
@@ -68,16 +52,6 @@ void DBTable::check(const QString &connectionName)
         column->check(compareColumn, connectionName);
 
         emit columnsChecked(i + 1);
-    }
-
-    //Check contraints
-    for (int i = 0; i < m_constraints.size(); i++) {
-        DBConstraint *constraint = m_constraints.at(i);
-        DBConstraint *compareConstraint = compareConstraints.at(i);
-
-        constraint->check(compareConstraint, connectionName);
-
-        emit columnsChecked(m_columns.size() + i + 1);
     }
 }
 
@@ -94,6 +68,7 @@ void DBTable::create(const QString &connectionName)
     pk = -1;
     i = 0;
 
+    QList<DBConstraint *> constraints;
     foreach (DBColumn *column, m_columns) {
         query += column->name() + " ";
         if (column->pk()) {
@@ -115,6 +90,8 @@ void DBTable::create(const QString &connectionName)
         if (column->pk())
             pk = i;
         i++;
+
+        constraints.append(column->constraints());
     }
     // TODO reactivate
     //    if (pk != -1)
@@ -122,7 +99,7 @@ void DBTable::create(const QString &connectionName)
     //        query += "CONSTRAINT pky_" + m_columns.at(pk)->name() + " PRIMARY KEY ("
     //                 + m_columns.at(pk)->name() + "),";
     //    }
-    foreach (DBConstraint *constraint, m_constraints) {
+    foreach (DBConstraint *constraint, constraints) {
         query += "CONSTRAINT " + constraint->name() + " FOREIGN KEY (" + constraint->fromField()
                  + ") ";
         query += "REFERENCES " + constraint->referenceTable() + " (" + constraint->toField() + ") ";

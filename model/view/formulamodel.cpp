@@ -27,7 +27,7 @@ QVariant FormulaModel::headerData(int section, Qt::Orientation orientation, int 
         case 1:
             return tr("Formel");
         case 2:
-            return tr("Type");
+            return tr("Typ");
         }
     }
     return QVariant();
@@ -35,18 +35,20 @@ QVariant FormulaModel::headerData(int section, Qt::Orientation orientation, int 
 
 QVariant FormulaModel::data(const QModelIndex &index, int role) const
 {
-    Formula *formala = m_formulas.at(index.row());
+    Formula *formula = m_formulas.at(index.row());
     if (role == Qt::DisplayRole) {
         switch (index.column()) {
         case 0:
-            return formala->name();
+            return formula->name();
         case 1:
-            return formala->formula();
+            return formula->formula();
         case 2:
-            return formala->type();
+            return formula->type();
         }
-    } else if (role == Qt::UserRole) {
-        return QVariant::fromValue(formala);
+    } else if (role == TF::ItemDataRole::ObjectRole) {
+        return QVariant::fromValue(formula);
+    } else if (role == TF::ItemDataRole::IdRole) {
+        return formula->id();
     }
     return QVariant();
 }

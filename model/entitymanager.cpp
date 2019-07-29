@@ -60,6 +60,18 @@ VenueRepository *EntityManager::venueRepository() const
     return m_venueRepository;
 }
 
+bool EntityManager::startTransaction()
+{
+    QSqlDatabase db = QSqlDatabase::database(connectionName());
+    return db.transaction();
+}
+
+bool EntityManager::commitTransaction()
+{
+    QSqlDatabase db = QSqlDatabase::database(connectionName());
+    return db.commit();
+}
+
 QString EntityManager::connectionName() const
 {
     return m_connectionName;

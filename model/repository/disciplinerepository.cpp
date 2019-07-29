@@ -1,4 +1,5 @@
 #include "disciplinerepository.h"
+#include "model/entity/formula.h"
 #include "model/entity/sport.h"
 #include "model/entitymanager.h"
 #include "model/querybuilder.h"
@@ -14,6 +15,7 @@ QList<Discipline *> DisciplineRepository::loadAll()
     QueryBuilder<Discipline> qb;
     qb.select(Discipline::staticMetaObject, Discipline::mapping());
     qb.join(Sport::staticMetaObject, Sport::mapping(), "Discipline", "sport", "sportId");
+    qb.join(Formula::staticMetaObject, Formula::mapping(), "Discipline", "formula", "formulaId");
     qb.orderBy("Discipline", "name");
 
     QList<Discipline *> output = qb.query(db);

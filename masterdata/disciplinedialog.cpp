@@ -1,10 +1,13 @@
 #include "disciplinedialog.h"
 #include "model/entity/discipline.h"
+#include "model/entitymanager.h"
+#include "model/repository/disciplinerepository.h"
 #include "model/view/disciplinefieldmodel.h"
 #include "model/view/formulamodel.h"
 #include "model/view/sportmodel.h"
 #include "ui_disciplinedialog.h"
 #include <QKeyEvent>
+#include <QMessageBox>
 
 DisciplineDialog::DisciplineDialog(Discipline *discipline, EntityManager *em, QWidget *parent)
     : QDialog(parent)
@@ -49,7 +52,7 @@ DisciplineDialog::DisciplineDialog(Discipline *discipline, EntityManager *em, QW
     ui->chk_m->setChecked(m_discipline->men());
     ui->chk_w->setChecked(m_discipline->women());
     ui->cmb_sport->setCurrentIndex(
-        ui->cmb_sport->findData(QVariant::fromValue(m_discipline->sport())));
+        ui->cmb_sport->findData(m_discipline->sportId(), TF::ItemDataRole::IdRole));
     ui->sbx_try->setValue(m_discipline->attempts());
     ui->txt_icon->setText(m_discipline->icon());
     ui->txt_shortcut->setText(m_discipline->shortcut());
@@ -59,7 +62,7 @@ DisciplineDialog::DisciplineDialog(Discipline *discipline, EntityManager *em, QW
     ui->txt_short2->setText(m_discipline->shortName2());
     ui->chk_run->setChecked(m_discipline->lanes());
     ui->cmb_formel->setCurrentIndex(
-        ui->cmb_formel->findData(QVariant::fromValue(m_discipline->formula())));
+        ui->cmb_formel->findData(m_discipline->formulaId(), TF::ItemDataRole::IdRole));
     ui->gbx_berechnen->setChecked(m_discipline->calculate());
 }
 
@@ -70,30 +73,30 @@ DisciplineDialog::~DisciplineDialog()
 
 void DisciplineDialog::save()
 {
-    //    QSqlQuery query6;
-    //    if (disid == 0) {
-    //        query6.prepare("INSERT INTO tfx_disziplinen (var_name,var_formel,var_maske,int_sportid,int_versuche,var_icon,var_kuerzel,int_berechnung,var_einheit,var_kurz1,var_kurz2,bol_bahnen,bol_m,bol_w, int_formelid, bol_berechnen) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-    //    } else {
-    //        query6.prepare("UPDATE tfx_disziplinen SET var_name=?,var_formel=?,var_maske=?,int_sportid=?,int_versuche=?,var_icon=?,var_kuerzel=?,int_berechnung=?,var_einheit=?,var_kurz1=?,var_kurz2=?,bol_bahnen=?,bol_m=?,bol_w=?, int_formelid=?, bol_berechnen=? WHERE int_disziplinenid=?");
-    //        query6.bindValue(16,disid);
-    //    }
-    //    query6.bindValue(0, ui->txt_name->text());
-    //    query6.bindValue(1, ui->txt_formula->text());
-    //    query6.bindValue(2, ui->cmb_mask->currentText());
-    //    query6.bindValue(3, ui->cmb_sport->itemData(ui->cmb_sport->currentIndex()));
-    //    query6.bindValue(4, ui->sbx_try->value());
-    //    query6.bindValue(5, ui->txt_icon->text());
-    //    query6.bindValue(6, ui->txt_shortcut->text());
-    //    query6.bindValue(7, ui->sbx_comma->value());
-    //    query6.bindValue(8, ui->txt_unit->text());
-    //    query6.bindValue(9, ui->txt_short1->text());
-    //    query6.bindValue(10, ui->txt_short2->text());
-    //    query6.bindValue(11, ui->chk_run->isChecked());
-    //    query6.bindValue(12, ui->chk_m->isChecked());
-    //    query6.bindValue(13, ui->chk_w->isChecked());
-    //    query6.bindValue(14, ui->cmb_formel->itemData(ui->cmb_formel->currentIndex()));
-    //    query6.bindValue(15, ui->gbx_berechnen->isChecked());
-    //    query6.exec();
+    if (ui->cmb_sport->currentIndex() == -1) {
+        QMessageBox::warning(this, tr("Fehlender Wert"), tr("Bitte eine Sportart wählen."));
+        return;
+    }
+
+    m_discipline->setName(ui->txt_name->text());
+    m_discipline->setResultFormula(ui->txt_formula->text());
+    m_discipline->setInputMask(ui->cmb_mask->currentText());
+    m_discipline->setSport(qvariant_cast<Sport *>(ui->cmb_sport->currentData()));
+    m_discipline->setAttempts(ui->sbx_try->value());
+    m_discipline->setIcon(ui->txt_icon->text());
+    m_discipline->setDecimals(ui->sbx_comma->value());
+    m_discipline->setUnit(ui->txt_unit->text());
+    m_discipline->setShortName1(ui->txt_short1->text());
+    m_discipline->setShortName2(ui->txt_short2->text());
+    m_discipline->setLanes(ui->chk_run->isChecked());
+    m_discipline->setMen(ui->chk_m->isChecked());
+    m_discipline->setFormula(qvariant_cast<Formula *>(ui->cmb_formel->currentData()));
+    m_discipline->setCalculate(ui->gbx_berechnen->isChecked());
+
+    m_em->startTransaction();
+    m_em->disciplineRepository()->persist(m_discipline);
+    m_fieldModel->persistChanges();
+    m_em->commitTransaction();
     //    if (disid == 0) {
     //        if (_global::getDBTyp() == 0) {
     //            QSqlQuery query7("SELECT last_value FROM tfx_disziplinen_int_disziplinenid_seq");

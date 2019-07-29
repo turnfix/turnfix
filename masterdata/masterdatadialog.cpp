@@ -15,8 +15,10 @@
 #include "model/entity/person.h"
 #include "model/entity/venue.h"
 #include "model/entitymanager.h"
+#include "model/repository/formularepository.h"
 #include "model/repository/sportrepository.h"
 #include "model/view/disciplinemodel.h"
+#include "model/view/formulamodel.h"
 #include "model/view/sportmodel.h"
 #include "penaltydialog.h"
 #include "persondialog.h"
@@ -204,6 +206,14 @@ void MasterdataDialog::updateModel(Type type)
         sizes << 200;
         break;
     }
+    case FormulaData: {
+        auto formulaModel = new FormulaModel(m_em, this);
+        formulaModel->fetchFormulas();
+        m_model = formulaModel;
+        resizeModes << QHeaderView::Fixed << QHeaderView::Stretch << QHeaderView::Fixed;
+        sizes << 250 << 200 << 60;
+        break;
+    }
     }
 
     m_sortModel->setSourceModel(m_model);
@@ -271,10 +281,6 @@ void MasterdataDialog::updateModel(Type type)
     //    QString headers14[4] = {"ID","Name","Kommentar",""};
     //    QHeaderView::ResizeMode resizeMode14[] = {QHeaderView::Fixed, QHeaderView::Fixed, QHeaderView::Stretch, QHeaderView::Fixed};
     //    int resize14[] = {40,250,200,0};
-    //    //Formeln
-    //    QString headers15[4] = {"ID","Name","Formel","Typ"};
-    //    QHeaderView::ResizeMode resizeMode15[] = {QHeaderView::Fixed, QHeaderView::Fixed, QHeaderView::Stretch, QHeaderView::Fixed};
-    //    int resize15[] = {40,250,200,60};
 }
 //void MasterdataDialog::getData()
 //{
@@ -332,6 +338,14 @@ void MasterdataDialog::add()
         }
         break;
     }
+    case FormulaData: {
+        auto dialog = new FormulaDialog(nullptr, m_em, this);
+        auto model = static_cast<FormulaModel *>(m_model);
+        if (dialog->exec() == 1) {
+            model->fetchFormulas();
+        }
+        break;
+    }
         //    case 5:
         //        dia = new DivisionDialog(nullptr, m_em, this);
         //        break;
@@ -371,7 +385,6 @@ void MasterdataDialog::add()
 void MasterdataDialog::edit()
 {
     QVariant obj = m_sortModel->data(ui->db_table->currentIndex(), Qt::UserRole);
-    QModelIndex sel = ui->db_table->currentIndex();
 
     switch (m_currentType) {
         //    case 1: {
@@ -398,8 +411,15 @@ void MasterdataDialog::edit()
         }
         break;
     }
-
-        ui->db_table->setCurrentIndex(sel);
+    case FormulaData: {
+        auto formula = qvariant_cast<Formula *>(obj);
+        auto dialog = new FormulaDialog(formula, m_em, this);
+        auto model = static_cast<FormulaModel *>(m_model);
+        if (dialog->exec() == 1) {
+            model->fetchFormulas();
+        }
+        break;
+    }
     }
 }
 
@@ -710,21 +730,24 @@ void MasterdataDialog::del()
         //                ui->db_table->setCurrentIndex(sel);
         //            }
     }; break;
-    case 15: {
-        //            QMessageBox msg(QMessageBox::Question, "Formel löschen", "Wollen sie diese Formel wirklich löschen?",QMessageBox::Ok | QMessageBox::Cancel);
-        //            if(msg.exec() == QMessageBox::Ok) {
-        //                QSqlQuery query;
-        //                query.prepare("DELETE FROM tfx_formeln WHERE int_formelid=?");
-        //                query.bindValue(0,
-        //                                QVariant(
-        //                                    m_sortModel->data(
-        //                                        m_sortModel->index(ui->db_table->currentIndex().row(), 0)))
-        //                                    .toInt());
-        //                query.exec();
-        //                QModelIndex sel = ui->db_table->currentIndex();
-        //                getData();
-        //                ui->db_table->setCurrentIndex(sel);
-        //            }
+    case FormulaData: {
+        QMessageBox msg(QMessageBox::Question,
+                        "Formel löschen",
+                        "Wollen sie diese Formel wirklich löschen?",
+                        QMessageBox::Ok | QMessageBox::Cancel);
+        if (msg.exec() == QMessageBox::Ok) {
+            auto formula = qvariant_cast<Formula *>(obj);
+            if (m_em->formulaRepository()->remove(formula)) {
+                static_cast<FormulaModel *>(m_model)->fetchFormulas();
+            } else {
+                QMessageBox
+                    msg(QMessageBox::Information,
+                        "Fehler!",
+                        "Diese Formel kann nicht gelöscht werden, da sie noch zugeordnet ist!",
+                        QMessageBox::Ok);
+                msg.exec();
+            }
+        }
     }; break;
     }
 }

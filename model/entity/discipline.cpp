@@ -6,7 +6,8 @@ DBTable *Discipline::initializeMapping()
 {
     DBTable *discipline = new DBTable("tfx_disziplinen");
     discipline->addColumn("id", "int_disziplinenid", ColumnType::Integer, 0, false, "", "", true);
-    discipline->addColumn("sportId", "int_sportid", ColumnType::Integer, 0, false);
+    discipline->addColumn("sportId", "int_sportid", ColumnType::Integer, 0, false)
+        ->addContraint("fky_sportid", "tfx_sport", "int_sportid", "RESTRICT", "RESTRICT");
     discipline->addColumn("name", "var_name", ColumnType::Varchar, 100);
     discipline->addColumn("shortName1", "var_kurz1", ColumnType::Varchar, 6);
     discipline->addColumn("shortName2", "var_kurz2", ColumnType::Varchar, 20);
@@ -21,20 +22,9 @@ DBTable *Discipline::initializeMapping()
     discipline->addColumn("men", "bol_m", ColumnType::Boolean, 0, true, "'true'");
     discipline->addColumn("women", "bol_w", ColumnType::Boolean, 0, true, "'true'");
     discipline
-        ->addColumn("formulaId", "int_formelid", ColumnType::Integer, 0, true, "", " USING NULL");
+        ->addColumn("formulaId", "int_formelid", ColumnType::Integer, 0, true, "", " USING NULL")
+        ->addContraint("fky_formelid", "tfx_formeln", "int_formelid", "RESTRICT", "RESTRICT");
     discipline->addColumn("calculate", "bol_berechnen", ColumnType::Boolean, 0, true, "'true'");
-    discipline->addContraint("fky_sportid",
-                             "tfx_sport",
-                             "int_sportid",
-                             "int_sportid",
-                             "RESTRICT",
-                             "RESTRICT");
-    discipline->addContraint("fky_formelid",
-                             "tfx_formeln",
-                             "int_formelid",
-                             "int_formelid",
-                             "RESTRICT",
-                             "RESTRICT");
 
     return discipline;
 }

@@ -1,6 +1,7 @@
 #include "sportmodel.h"
 #include "model/entity/sport.h"
 #include "model/entitymanager.h"
+#include "model/enums.h"
 #include "model/repository/sportrepository.h"
 
 SportModel::SportModel(EntityManager *em, QObject *parent)
@@ -37,8 +38,10 @@ QVariant SportModel::data(const QModelIndex &index, int role) const
         case 0:
             return sport->name();
         }
-    } else if (role == Qt::UserRole) {
+    } else if (role == TF::ItemDataRole::ObjectRole) {
         return QVariant::fromValue(sport);
+    } else if (role == TF::ItemDataRole::IdRole) {
+        return sport->id();
     }
     return QVariant();
 }

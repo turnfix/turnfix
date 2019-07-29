@@ -26,7 +26,7 @@ void DBChecker::run()
         DBTable *table = tables.at(i);
         emit currentTable(
             tr("Überprüfe %1... %2 von %3").arg(table->name()).arg(i + 1).arg(tables.size()));
-        emit columnFKCount(table->columnFKCount());
+        // emit columnFKCount(table->columnFKCount());
         connect(table, SIGNAL(columnsChecked(int)), this, SLOT(columnUpdate(int)));
         table->check("checker");
         emit tablesChecked(i+1);

@@ -5,6 +5,7 @@
 #include <QObject>
 
 class DBTable;
+class DBConstraint;
 
 class DBColumn : public QObject
 {
@@ -29,12 +30,17 @@ public:
     QString extraQuery() const;
     bool pk() const;
 
+    void addContraint(
+        QString name, QString referenceTable, QString toField, QString onUpdate, QString onDelete);
+    QList<DBConstraint *> constraints() const;
+
     void check(DBColumn *compareColumn, const QString &connectionName);
 
 private:
     void add(const QString &connectionName);
     void rename(QString newName, const QString &connectionName);
     void updateType(DBColumn *compareColumn, const QString &connectionName);
+
     DBTable *parentTable();
 
     QString m_name;
@@ -44,6 +50,7 @@ private:
     QString m_defaultValue;
     QString m_extraQuery;
     bool m_pk;
+    QList<DBConstraint *> m_constraints;
 };
 
 #endif // DBCOLUMN_H

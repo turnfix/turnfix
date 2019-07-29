@@ -6,18 +6,13 @@ DBTable *Club::initializeMapping()
 {
     DBTable *club = new DBTable("tfx_vereine");
     club->addColumn("id", "int_vereineid", ColumnType::Integer, 0, false, "", "", true);
-    club->addColumn("contactPersonId", "int_personenid", ColumnType::Integer);
+    club->addColumn("contactPersonId", "int_personenid", ColumnType::Integer)
+        ->addContraint("fky_personenid", "tfx_personen", "int_personenid", "RESTRICT", "RESTRICT");
     club->addColumn("name", "var_name", ColumnType::Varchar, 150);
     club->addColumn("posCity", "int_start_ort", ColumnType::SmallInt, 0, true, "0");
     club->addColumn("website", "var_website", ColumnType::Varchar, 200);
-    club->addColumn("regionId", "int_gaueid", ColumnType::Integer, 0, false, "1");
-    club->addContraint("fky_gaueid", "tfx_gaue", "int_gaueid", "int_gaueid", "RESTRICT", "RESTRICT");
-    club->addContraint("fky_personenid",
-                       "tfx_personen",
-                       "int_personenid",
-                       "int_personenid",
-                       "RESTRICT",
-                       "RESTRICT");
+    club->addColumn("regionId", "int_gaueid", ColumnType::Integer, 0, false, "1")
+        ->addContraint("fky_gaueid", "tfx_gaue", "int_gaueid", "RESTRICT", "RESTRICT");
 
     return club;
 }

@@ -3,7 +3,7 @@
 
 #include <QObject>
 
-class DBTable;
+class DBColumn;
 
 class DBConstraint : public QObject
 {
@@ -15,7 +15,7 @@ public:
                           QString toField,
                           QString onUpdate,
                           QString onDelete,
-                          DBTable *parent = nullptr);
+                          DBColumn *parent = nullptr);
 
     QString name();
     QString referenceTable();
@@ -29,7 +29,7 @@ public:
 private:
     void create(const QString &connectionName);
 
-    DBTable *parentTable();
+    DBColumn *column();
 
     QString m_name;
     QString m_referenceTable;

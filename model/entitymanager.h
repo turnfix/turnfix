@@ -37,6 +37,9 @@ public:
     SportRepository *sportRepository() const;
     VenueRepository *venueRepository() const;
 
+    bool startTransaction();
+    bool commitTransaction();
+
     QString connectionName() const;
     void setConnectionName(const QString &connectionName);
 

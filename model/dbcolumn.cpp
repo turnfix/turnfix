@@ -1,4 +1,5 @@
 #include "dbcolumn.h"
+#include "dbconstraint.h"
 #include "dbtable.h"
 #include <QSqlDatabase>
 #include <QSqlQuery>
@@ -37,6 +38,24 @@ void DBColumn::check(DBColumn *compareColumn, const QString &connectionName)
     if (typeWithLength() != compareColumn->typeWithLength()) {
         updateType(compareColumn, connectionName);
     }
+
+    //Check contraints
+    //    QList<DBConstraint *> compareConstraints = parentTable()->existingConstraints(connectionName);
+
+    //    for (int i = 0; i < m_constraints.size(); i++) {
+    //        DBConstraint *constraint = m_constraints.at(i);
+    //        DBConstraint *compareConstraint = compareConstraints.at(i);
+
+    //        constraint->check(compareConstraint, connectionName);
+    //    }
+}
+
+void DBColumn::addContraint(
+    QString name, QString referenceTable, QString toField, QString onUpdate, QString onDelete)
+{
+    DBConstraint *constraint
+        = new DBConstraint(name, referenceTable, m_name, toField, onUpdate, onDelete, this);
+    m_constraints.append(constraint);
 }
 
 void DBColumn::add(const QString &connectionName)
@@ -85,6 +104,11 @@ void DBColumn::updateType(DBColumn *compareColumn, const QString &connectionName
 DBTable *DBColumn::parentTable()
 {
     return dynamic_cast<DBTable *>(parent());
+}
+
+QList<DBConstraint *> DBColumn::constraints() const
+{
+    return m_constraints;
 }
 
 bool DBColumn::pk() const

@@ -46,14 +46,25 @@ QVariant DisciplineFieldModel::data(const QModelIndex &index, int role) const
         case 0:
             return field->name();
         }
-    } else if (role == Qt::CheckStateRole) {
+    } else if (role == Qt::EditRole) {
         switch (index.column()) {
+        case 0:
+            return field->name();
         case 1:
             return field->finalScore();
         case 2:
             return field->baseScore();
         case 3:
             return field->enabled();
+        }
+    } else if (role == Qt::CheckStateRole) {
+        switch (index.column()) {
+        case 1:
+            return field->finalScore() ? Qt::Checked : Qt::Unchecked;
+        case 2:
+            return field->baseScore() ? Qt::Checked : Qt::Unchecked;
+        case 3:
+            return field->enabled() ? Qt::Checked : Qt::Unchecked;
         }
     } else if (role == Qt::UserRole) {
         return QVariant::fromValue(field);
@@ -64,7 +75,21 @@ QVariant DisciplineFieldModel::data(const QModelIndex &index, int role) const
 bool DisciplineFieldModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     if (data(index, role) != value) {
-        // FIXME: Implement me!
+        DisciplineField *field = m_fields.at(index.row());
+        switch (index.column()) {
+        case 0:
+            field->setName(value.toString());
+            break;
+        case 1:
+            field->setFinalScore(value.toBool());
+            break;
+        case 2:
+            field->setBaseScore(value.toBool());
+            break;
+        case 3:
+            field->setEnabled(value.toBool());
+            break;
+        }
         emit dataChanged(index, index, QVector<int>() << role);
         return true;
     }
@@ -77,14 +102,15 @@ Qt::ItemFlags DisciplineFieldModel::flags(const QModelIndex &index) const
         return Qt::NoItemFlags;
 
     if (index.column() > 0) {
-        return Qt::ItemIsEditable | Qt::ItemIsUserCheckable;
+        return Qt::ItemIsEditable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled;
     }
 
-    return Qt::ItemIsEditable;
+    return Qt::ItemIsEditable | Qt::ItemIsEnabled;
 }
 
 void DisciplineFieldModel::fetchFields(Discipline *discipline)
 {
+    m_discipline = discipline;
     beginResetModel();
     m_fields = m_em->disciplineFieldRepository()->loadByDiscipline(discipline);
     endResetModel();
@@ -92,9 +118,11 @@ void DisciplineFieldModel::fetchFields(Discipline *discipline)
 
 void DisciplineFieldModel::addField()
 {
+    auto field = new DisciplineField();
+    field->setDiscipline(m_discipline);
     int position = m_fields.size();
     beginInsertRows(QModelIndex(), position, position);
-    m_fields.append(new DisciplineField);
+    m_fields.append(field);
     endInsertRows();
 }
 
@@ -122,7 +150,19 @@ void DisciplineFieldModel::moveDown(const QModelIndex &index)
         return;
     }
 
-    beginMoveRows(QModelIndex(), index.row(), index.row(), QModelIndex(), index.row() + 1);
+    beginMoveRows(QModelIndex(), index.row(), index.row(), QModelIndex(), index.row() + 2);
     m_fields.swapItemsAt(index.row(), index.row() + 1);
     endMoveRows();
+}
+
+void DisciplineFieldModel::persistChanges()
+{
+    for (int i = 0; i < m_fields.length(); i++) {
+        auto field = m_fields.at(i);
+        field->setSort(i);
+        m_em->disciplineFieldRepository()->persist(field);
+    }
+    foreach (DisciplineField *field, m_removedFields) {
+        m_em->disciplineFieldRepository()->remove(field);
+    }
 }
