@@ -47,8 +47,10 @@ void StateDialog::readCountries()
 
 void StateDialog::addCountry()
 {
-    CountryDialog *pe = new CountryDialog(0, this);
-    if(pe->exec() == 1) { readCountries(); }
+    //    CountryDialog *pe = new CountryDialog(nullptr, m_em, this);
+    //    if (pe->exec() == 1) {
+    //        readCountries();
+    //    }
 }
 
 void StateDialog::save()

@@ -4,6 +4,7 @@ HEADERS += \
     $$PWD/bankaccount.h \
     $$PWD/club.h \
     $$PWD/competition.h \
+    $$PWD/country.h \
     $$PWD/discipline.h \
     $$PWD/disciplinefield.h \
     $$PWD/division.h \
@@ -21,6 +22,7 @@ SOURCES += \
     $$PWD/bankaccount.cpp \
     $$PWD/club.cpp \
     $$PWD/competition.cpp \
+    $$PWD/country.cpp \
     $$PWD/discipline.cpp \
     $$PWD/disciplinefield.cpp \
     $$PWD/division.cpp \

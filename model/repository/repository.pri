@@ -4,6 +4,7 @@ HEADERS += \
     $$PWD/clubrepository.h \
     $$PWD/competitionrepository.h \
     $$PWD/connectionrepository.h \
+    $$PWD/countryrepository.h \
     $$PWD/disciplinefieldrepository.h \
     $$PWD/disciplinerepository.h \
     $$PWD/divisionrepository.h \
@@ -18,6 +19,7 @@ SOURCES += \
     $$PWD/clubrepository.cpp \
     $$PWD/competitionrepository.cpp \
     $$PWD/connectionrepository.cpp \
+    $$PWD/countryrepository.cpp \
     $$PWD/disciplinefieldrepository.cpp \
     $$PWD/disciplinerepository.cpp \
     $$PWD/divisionrepository.cpp \

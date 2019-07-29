@@ -6,19 +6,25 @@ namespace Ui {
 class CountryDialog;
 }
 
+class Country;
+class EntityManager;
+
 class CountryDialog : public QDialog
 {
     Q_OBJECT
 public:
-    CountryDialog(int lid = 0, QWidget *parent = nullptr);
+    CountryDialog(Country *country, EntityManager *em, QWidget *parent = nullptr);
     ~CountryDialog();
+
+    Country *country();
 
 private slots:
     void save();
 
 private:
     Ui::CountryDialog *ui;
-    int lid;
+    EntityManager *m_em;
+    Country *m_country;
 };
 
 #endif

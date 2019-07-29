@@ -31,14 +31,14 @@
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
       <item row="0" column="0">
-       <widget class="QLabel" name="label_4">
+       <widget class="QLabel" name="nameLabel">
         <property name="text">
          <string>Name:</string>
         </property>
        </widget>
       </item>
       <item row="1" column="0">
-       <widget class="QLabel" name="label_5">
+       <widget class="QLabel" name="codeLabel">
         <property name="text">
          <string>Kürzel:</string>
         </property>
@@ -81,6 +81,11 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>txt_land</tabstop>
+  <tabstop>txt_kuerzel</tabstop>
+  <tabstop>but_save</tabstop>
+ </tabstops>
  <resources>
   <include location="../resources/TurnFix.qrc"/>
  </resources>

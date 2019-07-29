@@ -7,6 +7,7 @@ class BankAccountRepository;
 class ClubRepository;
 class CompetitionRepository;
 class ConnectionRepository;
+class CountryRepository;
 class DisciplineRepository;
 class DisciplineFieldRepository;
 class DivisionRepository;
@@ -22,12 +23,12 @@ class EntityManager : public QObject
 
 public:
     EntityManager(QObject *parent = nullptr);
-    ~EntityManager() override;
 
     BankAccountRepository *bankAccountRepository() const;
     ClubRepository *clubRepository() const;
     CompetitionRepository *competitionRepository() const;
     ConnectionRepository *connectionRepository() const;
+    CountryRepository *countryRepository() const;
     DisciplineRepository *disciplineRepository() const;
     DisciplineFieldRepository *disciplineFieldRepository() const;
     DivisionRepository *divisionRepository() const;
@@ -49,6 +50,7 @@ private:
     ClubRepository *m_clubRepository;
     CompetitionRepository *m_competitionRepository;
     ConnectionRepository *m_connectionRepository;
+    CountryRepository *m_countryRepository;
     DisciplineRepository *m_disciplineRepository;
     DisciplineFieldRepository *m_disciplineFieldRepository;
     DivisionRepository *m_divisionRepository;

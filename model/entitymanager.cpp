@@ -3,6 +3,7 @@
 #include "repository/clubrepository.h"
 #include "repository/competitionrepository.h"
 #include "repository/connectionrepository.h"
+#include "repository/countryrepository.h"
 #include "repository/disciplinefieldrepository.h"
 #include "repository/disciplinerepository.h"
 #include "repository/divisionrepository.h"
@@ -19,6 +20,7 @@ EntityManager::EntityManager(QObject *parent)
     m_clubRepository = new ClubRepository(this);
     m_competitionRepository = new CompetitionRepository(this);
     m_connectionRepository = new ConnectionRepository(this);
+    m_countryRepository = new CountryRepository(this);
     m_disciplineRepository = new DisciplineRepository(this);
     m_disciplineFieldRepository = new DisciplineFieldRepository(this);
     m_divisionRepository = new DivisionRepository(this);
@@ -27,12 +29,6 @@ EntityManager::EntityManager(QObject *parent)
     m_personRepository = new PersonRepository(this);
     m_sportRepository = new SportRepository(this);
     m_venueRepository = new VenueRepository(this);
-}
-
-EntityManager::~EntityManager()
-{
-    delete m_connectionRepository;
-    delete m_eventRepository;
 }
 
 BankAccountRepository *EntityManager::bankAccountRepository() const
@@ -80,6 +76,11 @@ QString EntityManager::connectionName() const
 void EntityManager::setConnectionName(const QString &connectionName)
 {
     m_connectionName = connectionName;
+}
+
+CountryRepository *EntityManager::countryRepository() const
+{
+    return m_countryRepository;
 }
 
 DisciplineRepository *EntityManager::disciplineRepository() const

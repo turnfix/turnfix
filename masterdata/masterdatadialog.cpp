@@ -10,14 +10,17 @@
 #include "model/entity/athlete.h"
 #include "model/entity/bankaccount.h"
 #include "model/entity/club.h"
+#include "model/entity/country.h"
 #include "model/entity/discipline.h"
 #include "model/entity/division.h"
 #include "model/entity/person.h"
 #include "model/entity/venue.h"
 #include "model/entitymanager.h"
+#include "model/repository/countryrepository.h"
 #include "model/repository/formularepository.h"
 #include "model/repository/sportrepository.h"
 #include "model/repository/venuerepository.h"
+#include "model/view/countrymodel.h"
 #include "model/view/disciplinemodel.h"
 #include "model/view/formulamodel.h"
 #include "model/view/sportmodel.h"
@@ -224,6 +227,14 @@ void MasterdataDialog::updateModel(Type type)
         sizes << 200 << 60 << 200;
         break;
     }
+    case CountryData: {
+        auto countryModel = new CountryModel(m_em, this);
+        countryModel->fetchCountries();
+        m_model = countryModel;
+        resizeModes << QHeaderView::Stretch << QHeaderView::ResizeToContents;
+        sizes << 200 << 60;
+        break;
+    }
     }
 
     m_sortModel->setSourceModel(m_model);
@@ -275,10 +286,6 @@ void MasterdataDialog::updateModel(Type type)
     //    QString headers11[4] = {"ID","Landesverband","Kürzel",""};
     //    QHeaderView::ResizeMode resizeMode11[] = {QHeaderView::Fixed, QHeaderView::Stretch, QHeaderView::ResizeToContents, QHeaderView::Fixed};
     //    int resize11[] = {40,200,70,0};
-    //    //Länder
-    //    QString headers12[4] = {"ID","Land","Kürzel",""};
-    //    QHeaderView::ResizeMode resizeMode12[] = {QHeaderView::Fixed, QHeaderView::Stretch, QHeaderView::ResizeToContents, QHeaderView::Fixed};
-    //    int resize12[] = {40,200,70,0};
     //    //Strafen
     //    QString headers13[4] = {"ID","Strafe","Abzug",""};
     //    QHeaderView::ResizeMode resizeMode13[] = {QHeaderView::Fixed, QHeaderView::Stretch, QHeaderView::ResizeToContents, QHeaderView::Fixed};
@@ -322,12 +329,6 @@ void MasterdataDialog::updateModel(Type type)
 void MasterdataDialog::add()
 {
     switch (m_currentType) {
-        //    case 1: {
-        //        dia = new AthleteDialog(nullptr, m_em, this);
-        //        break;
-        //    case 2:
-        //        dia = new ClubDialog(nullptr, m_em, this);
-        //        break;
     case DisciplineData: {
         auto dialog = new DisciplineDialog(nullptr, m_em, this);
         auto model = static_cast<DisciplineModel *>(m_model);
@@ -360,6 +361,20 @@ void MasterdataDialog::add()
         }
         break;
     }
+    case CountryData: {
+        auto dialog = new CountryDialog(nullptr, m_em, this);
+        auto model = static_cast<CountryModel *>(m_model);
+        if (dialog->exec() == 1) {
+            model->fetchCountries();
+        }
+        break;
+    }
+        //    case 1: {
+        //        dia = new AthleteDialog(nullptr, m_em, this);
+        //        break;
+        //    case 2:
+        //        dia = new ClubDialog(nullptr, m_em, this);
+        //        break;
         //    case 5:
         //        dia = new DivisionDialog(nullptr, m_em, this);
         //        break;
@@ -398,12 +413,6 @@ void MasterdataDialog::edit()
     QVariant obj = m_sortModel->data(ui->db_table->currentIndex(), Qt::UserRole);
 
     switch (m_currentType) {
-        //    case 1: {
-        //        dia = new AthleteDialog(nullptr, m_em, this);
-        //        break;
-        //    case 2:
-        //        dia = new ClubDialog(nullptr, m_em, this);
-        //        break;
     case DisciplineData: {
         auto discipline = qvariant_cast<Discipline *>(obj);
         auto dialog = new DisciplineDialog(discipline, m_em, this);
@@ -437,6 +446,15 @@ void MasterdataDialog::edit()
         auto model = static_cast<VenueModel *>(m_model);
         if (dialog->exec() == 1) {
             model->fetchVenues();
+        }
+        break;
+    }
+    case CountryData: {
+        auto country = qvariant_cast<Country *>(obj);
+        auto dialog = new CountryDialog(country, m_em, this);
+        auto model = static_cast<CountryModel *>(m_model);
+        if (dialog->exec() == 1) {
+            model->fetchCountries();
         }
         break;
     }
@@ -536,12 +554,11 @@ void MasterdataDialog::del()
             if (m_em->sportRepository()->remove(sport)) {
                 static_cast<SportModel *>(m_model)->fetchSports();
             } else {
-                QMessageBox
-                    msg(QMessageBox::Information,
-                        "Fehler!",
-                        "Dieser Sport kann nicht gelöscht werden, da er noch zugeordnet ist!",
-                        QMessageBox::Ok);
-                msg.exec();
+                QMessageBox::information(
+                    this,
+                    "Fehler!",
+                    "Dieser Sport kann nicht gelöscht werden, da er noch zugeordnet ist!",
+                    QMessageBox::Ok);
             }
         }
     }; break;
@@ -690,26 +707,23 @@ void MasterdataDialog::del()
         //                }
         //            }
     }; break;
-    case 12: {
-        //            QMessageBox msg(QMessageBox::Question, "Land löschen", "Wollen sie dieses Land wirklich löschen?",QMessageBox::Ok | QMessageBox::Cancel);
-        //            if(msg.exec() == QMessageBox::Ok) {
-        //                QSqlQuery query;
-        //                query.prepare("DELETE FROM tfx_laender WHERE int_laenderid=?");
-        //                query.bindValue(0,
-        //                                QVariant(
-        //                                    m_sortModel->data(
-        //                                        m_sortModel->index(ui->db_table->currentIndex().row(), 0)))
-        //                                    .toInt());
-        //                query.exec();
-        //                if (query.numRowsAffected() == -1) {
-        //                    QMessageBox msg(QMessageBox::Information, "Fehler!", "Dieses Land kann nicht gelöscht werden, da er noch einem Landesverband zugeordnet ist!",QMessageBox::Ok);
-        //                    msg.exec();
-        //                } else {
-        //                    QModelIndex sel = ui->db_table->currentIndex();
-        //                    getData();
-        //                    ui->db_table->setCurrentIndex(sel);
-        //                }
-        //            }
+    case CountryData: {
+        QMessageBox msg(QMessageBox::Question,
+                        "Land löschen",
+                        "Wollen sie dieses Land wirklich löschen?",
+                        QMessageBox::Ok | QMessageBox::Cancel);
+        if (msg.exec() == QMessageBox::Ok) {
+            auto country = qvariant_cast<Country *>(obj);
+            if (m_em->countryRepository()->remove(country)) {
+                static_cast<CountryModel *>(m_model)->fetchCountries();
+            } else {
+                QMessageBox::information(this,
+                                         "Fehler!",
+                                         "Dieses Land kann nicht gelöscht werden, da er noch einem "
+                                         "Landesverband zugeordnet ist!",
+                                         QMessageBox::Ok);
+            }
+        }
     }; break;
     case 13: {
         //            QMessageBox msg(QMessageBox::Question, "Strafe löschen", "Wollen sie diese Strafe wirklich löschen?",QMessageBox::Ok | QMessageBox::Cancel);
@@ -758,12 +772,11 @@ void MasterdataDialog::del()
             if (m_em->formulaRepository()->remove(formula)) {
                 static_cast<FormulaModel *>(m_model)->fetchFormulas();
             } else {
-                QMessageBox
-                    msg(QMessageBox::Information,
-                        "Fehler!",
-                        "Diese Formel kann nicht gelöscht werden, da sie noch zugeordnet ist!",
-                        QMessageBox::Ok);
-                msg.exec();
+                QMessageBox::information(
+                    this,
+                    "Fehler!",
+                    "Diese Formel kann nicht gelöscht werden, da sie noch zugeordnet ist!",
+                    QMessageBox::Ok);
             }
         }
     }; break;

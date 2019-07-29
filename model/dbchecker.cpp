@@ -44,11 +44,6 @@ void DBChecker::columnUpdate(int count)
 
 QList<DBTable *> DBChecker::tableData()
 {
-    //    DBTable *country = new DBTable("tfx_laender");
-    //    country->addColumn("int_laenderid", ColumnType::Integer, 0, false, "", "", true);
-    //    country->addColumn("var_name", ColumnType::Varchar, 150);
-    //    country->addColumn("var_kuerzel", ColumnType::Varchar, 4);
-
     //    DBTable *organisation = new DBTable("tfx_verbaende");
     //    organisation->addColumn("int_verbaendeid", ColumnType::Integer, 0, false, "", "", true);
     //    organisation->addColumn("int_laenderid", ColumnType::Integer, 0, false);
