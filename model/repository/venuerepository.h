@@ -2,6 +2,7 @@
 #define VENUEREPOSITORY_H
 
 #include "abstractrepository.h"
+#include "model/entity/venue.h"
 
 class Venue;
 
@@ -11,8 +12,6 @@ public:
     explicit VenueRepository(EntityManager *em);
 
     QList<Venue *> loadAll();
-    void persist(Venue *venue) override;
-    void remove(Venue *venue) override;
 };
 
 #endif // VENUEREPOSITORY_H

@@ -2,8 +2,8 @@
 #define COMPETITIONREPOSITORY_H
 
 #include "abstractrepository.h"
+#include "model/entity/competition.h"
 
-class Competition;
 class Event;
 
 class CompetitionRepository : public AbstractRepository<Competition>

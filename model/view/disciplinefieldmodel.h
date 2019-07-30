@@ -33,9 +33,12 @@ public:
     void moveUp(const QModelIndex &index);
     void moveDown(const QModelIndex &index);
 
+    void persistChanges();
+
 private:
     QList<DisciplineField *> m_fields;
     QList<DisciplineField *> m_removedFields;
+    Discipline *m_discipline;
     EntityManager *m_em;
 };
 

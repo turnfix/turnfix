@@ -17,7 +17,7 @@ class DisciplineDialog : public QDialog
 
 public:
     DisciplineDialog(Discipline *discipline, EntityManager *em, QWidget *parent = nullptr);
-    ~DisciplineDialog();
+    ~DisciplineDialog() override;
 
 private slots:
     void save();
@@ -31,7 +31,7 @@ private:
     EntityManager *m_em;
     Discipline *m_discipline;
     DisciplineFieldModel *m_fieldModel;
-    virtual void keyPressEvent(QKeyEvent *e);
+    virtual void keyPressEvent(QKeyEvent *e) override;
 };
 
 #endif

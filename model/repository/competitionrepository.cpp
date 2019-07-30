@@ -1,5 +1,4 @@
 #include "competitionrepository.h"
-#include "model/entity/competition.h"
 #include "model/entity/event.h"
 #include "model/entitymanager.h"
 #include "model/querybuilder.h"
@@ -22,4 +21,7 @@ QList<Competition *> CompetitionRepository::fetchByEvent(Event *event)
     return output;
 }
 
-Competition *CompetitionRepository::fetchByNumber(Event *event, const QString &number) {}
+Competition *CompetitionRepository::fetchByNumber(Event *, const QString &)
+{
+    return nullptr;
+}

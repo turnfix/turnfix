@@ -2,9 +2,9 @@
 #define DISCIPLINEFIELDREPOSITORY_H
 
 #include "abstractrepository.h"
+#include "model/entity/disciplinefield.h"
 
 class Discipline;
-class DisciplineField;
 
 class DisciplineFieldRepository : public AbstractRepository<DisciplineField>
 {

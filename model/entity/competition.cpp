@@ -6,8 +6,14 @@ DBTable *Competition::initializeMapping()
 {
     DBTable *competition = new DBTable("tfx_wettkaempfe");
     competition->addColumn("id", "int_wettkaempfeid", ColumnType::Integer, 0, false, "", "", true);
-    competition->addColumn("eventId", "int_veranstaltungenid", ColumnType::Integer, 0, false);
-    competition->addColumn("divisionId", "int_bereicheid", ColumnType::Integer, 0, false);
+    competition->addColumn("eventId", "int_veranstaltungenid", ColumnType::Integer, 0, false)
+        ->addContraint("fky_veranstaltungenid",
+                       "tfx_veranstaltungen",
+                       "int_veranstaltungenid",
+                       "RESTRICT",
+                       "CASCADE");
+    competition->addColumn("divisionId", "int_bereicheid", ColumnType::Integer, 0, false)
+        ->addContraint("fky_bereicheid", "tfx_bereiche", "int_bereicheid", "RESTRICT", "RESTRICT");
     competition->addColumn("type", "int_typ", ColumnType::SmallInt, 0, true, "0");
     competition->addColumn("number", "var_nummer", ColumnType::Varchar, 5);
     competition->addColumn("name", "var_name", ColumnType::Varchar, 150);
@@ -36,18 +42,6 @@ DBTable *Competition::initializeMapping()
     competition
         ->addColumn("extraApparatusPoints", "bol_gerpkt", ColumnType::Boolean, 0, true, "'false'");
     competition->addColumn("numDropScores", "int_anz_streich", ColumnType::SmallInt, 0, true, "0");
-    competition->addContraint("fky_bereicheid",
-                              "tfx_bereiche",
-                              "int_bereicheid",
-                              "int_bereicheid",
-                              "RESTRICT",
-                              "RESTRICT");
-    competition->addContraint("fky_veranstaltungenid",
-                              "tfx_veranstaltungen",
-                              "int_veranstaltungenid",
-                              "int_veranstaltungenid",
-                              "RESTRICT",
-                              "CASCADE");
 
     return competition;
 }
@@ -84,9 +78,9 @@ int Competition::divisionId() const
     return m_divisionId;
 }
 
-void Competition::setDivisionId(int sectionId)
+void Competition::setDivisionId(int divisionId)
 {
-    m_divisionId = sectionId;
+    m_divisionId = divisionId;
 }
 
 int Competition::type() const

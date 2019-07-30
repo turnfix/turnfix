@@ -7,13 +7,18 @@ namespace Ui {
 class FormulaDialog;
 }
 
+class Formula;
+class EntityManager;
+
 class FormulaDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit FormulaDialog(int fid = 0, QWidget *parent = nullptr);
-    ~FormulaDialog();
+    explicit FormulaDialog(Formula *formula, EntityManager *em, QWidget *parent = nullptr);
+    ~FormulaDialog() override;
+
+    Formula *formula();
 
 private slots:
     void save();
@@ -23,7 +28,8 @@ private slots:
 
 private:
     Ui::FormulaDialog *ui;
-    int formelid;
+    EntityManager *m_em;
+    Formula *m_formula;
 };
 
 #endif

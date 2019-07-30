@@ -65,7 +65,7 @@ QVariant PersonModel::data(const QModelIndex &index, int role) const
         case 7:
             return person->email();
         case 8:
-            return QString("%1 %2").arg(person->firstName()).arg(person->lastName());
+            return QString("%1 %2").arg(person->firstName(), person->lastName());
         }
     } else if (role == Qt::UserRole) {
         return QVariant::fromValue(person);

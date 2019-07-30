@@ -12,7 +12,7 @@
 #include <QDebug>
 #include <QSqlError>
 
-void EventRepository::persist(Event *event)
+bool EventRepository::persist(Event *event)
 {
     QSqlDatabase db = QSqlDatabase::database(entityManager()->connectionName());
     QSqlQuery query(db);
@@ -86,14 +86,14 @@ void EventRepository::persist(Event *event)
     query.bindValue(26, event->judges());
     query.bindValue(27, event->notes());
 
-    query.exec();
+    bool result = query.exec();
 
     if (event->id() == 0) {
         event->setId(query.lastInsertId().toInt());
     }
-}
 
-void EventRepository::remove(Event *event) {}
+    return result;
+}
 
 EventRepository::EventRepository(EntityManager *em)
     : AbstractRepository<Event>(em)

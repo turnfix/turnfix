@@ -13,7 +13,7 @@ QList<AbstractConnection *> ConnectionRepository::loadAll()
     QSettings settings("connections", QSettings::IniFormat);
 
     QList<AbstractConnection *> connections;
-    for (auto groupName : settings.childGroups()) {
+    for (auto const &groupName : settings.childGroups()) {
         settings.beginGroup(groupName);
 
         QString type = settings.value("type").toString();
@@ -45,7 +45,7 @@ QList<AbstractConnection *> ConnectionRepository::loadAll()
     return connections;
 }
 
-void ConnectionRepository::persist(AbstractConnection *connection)
+bool ConnectionRepository::persist(AbstractConnection *connection)
 {
     QSettings settings("connections", QSettings::IniFormat);
 
@@ -64,13 +64,17 @@ void ConnectionRepository::persist(AbstractConnection *connection)
 
     settings.endGroup();
     settings.sync();
+
+    return true;
 }
 
-void ConnectionRepository::remove(AbstractConnection *connection)
+bool ConnectionRepository::remove(AbstractConnection *connection)
 {
     QSettings settings("connections", QSettings::IniFormat);
     settings.beginGroup(connection->uuid().toString());
     settings.remove("");
     settings.endGroup();
     settings.sync();
+
+    return true;
 }

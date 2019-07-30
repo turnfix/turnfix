@@ -1,13 +1,19 @@
 #include "disciplinefield.h"
 #include "model/dbcolumn.h"
 #include "model/dbtable.h"
+#include "model/entity/discipline.h"
 
 DBTable *DisciplineField::initializeMapping()
 {
     DBTable *disciplineField = new DBTable("tfx_disziplinen_felder");
     disciplineField
         ->addColumn("id", "int_disziplinen_felderid", ColumnType::Integer, 0, false, "", "", true);
-    disciplineField->addColumn("disciplineId", "int_disziplinenid", ColumnType::Integer, 0, false);
+    disciplineField->addColumn("disciplineId", "int_disziplinenid", ColumnType::Integer, 0, false)
+        ->addContraint("fky_disziplinenid",
+                       "tfx_disziplinen",
+                       "int_disziplinenid",
+                       "RESTRICT",
+                       "CASCADE");
     disciplineField->addColumn("name", "var_name", ColumnType::Varchar, 15);
     disciplineField->addColumn("sort", "int_sortierung", ColumnType::SmallInt);
     disciplineField->addColumn("finalScore", "bol_endwert", ColumnType::Boolean, 0, true, "'true'");
@@ -15,12 +21,6 @@ DBTable *DisciplineField::initializeMapping()
         ->addColumn("baseScore", "bol_ausgangswert", ColumnType::Boolean, 0, true, "'true'");
     disciplineField->addColumn("group", "int_gruppe", ColumnType::SmallInt, 0, true, "1");
     disciplineField->addColumn("enabled", "bol_enabled", ColumnType::Boolean, 0, true, "'true'");
-    disciplineField->addContraint("fky_disziplinenid",
-                                  "tfx_disziplinen",
-                                  "int_disziplinenid",
-                                  "int_disziplinenid",
-                                  "RESTRICT",
-                                  "CASCADE");
 
     return disciplineField;
 }
@@ -30,6 +30,32 @@ const DBTable *DisciplineField::m_mapping = DisciplineField::initializeMapping()
 const DBTable *DisciplineField::mapping()
 {
     return m_mapping;
+}
+
+Discipline *DisciplineField::discipline() const
+{
+    return m_discipline;
+}
+
+void DisciplineField::setDiscipline(Discipline *discipline)
+{
+    m_discipline = discipline;
+    if (discipline == nullptr) {
+        m_disciplineId = 0;
+        return;
+    }
+
+    m_disciplineId = discipline->id();
+}
+
+int DisciplineField::disciplineId() const
+{
+    return m_disciplineId;
+}
+
+void DisciplineField::setDisciplineId(int disciplineId)
+{
+    m_disciplineId = disciplineId;
 }
 
 int DisciplineField::id() const

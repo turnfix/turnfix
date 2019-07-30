@@ -27,7 +27,7 @@ QVariant VenueModel::headerData(int section, Qt::Orientation orientation, int ro
         case 0:
             return tr("Name");
         case 1:
-            return tr("Postleitzahl");
+            return tr("PLZ");
         case 2:
             return tr("Ort");
         }
@@ -47,7 +47,7 @@ QVariant VenueModel::data(const QModelIndex &index, int role) const
         case 2:
             return venue->city();
         case 3:
-            return QString("%1, %2").arg(venue->name()).arg(venue->city());
+            return QString("%1, %2").arg(venue->name(), venue->city());
         }
     } else if (role == Qt::UserRole) {
         return QVariant::fromValue(venue);

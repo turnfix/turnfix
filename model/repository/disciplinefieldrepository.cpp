@@ -1,6 +1,5 @@
 #include "disciplinefieldrepository.h"
 #include "model/entity/discipline.h"
-#include "model/entity/disciplinefield.h"
 #include "model/entitymanager.h"
 #include "model/querybuilder.h"
 
@@ -20,6 +19,10 @@ QList<DisciplineField *> DisciplineFieldRepository::loadByDiscipline(Discipline 
     qb.orderBy("DisciplineField", "sort");
 
     QList<DisciplineField *> output = qb.query(db);
+
+    foreach (DisciplineField *field, output) {
+        field->setDiscipline(discipline);
+    }
 
     return output;
 }

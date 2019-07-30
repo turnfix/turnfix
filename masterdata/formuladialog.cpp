@@ -1,29 +1,33 @@
 #include "formuladialog.h"
 #include "libs/fparser/fparser.hh"
+#include "model/entity/formula.h"
+#include "model/entitymanager.h"
+#include "model/repository/formularepository.h"
 #include "ui_formuladialog.h"
 #include <QMessageBox>
 #include <QSqlQuery>
 
-FormulaDialog::FormulaDialog(int fid, QWidget *parent)
+FormulaDialog::FormulaDialog(Formula *formula, EntityManager *em, QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::FormulaDialog)
+    , m_em(em)
+    , m_formula(formula)
 {
     ui->setupUi(this);
-    setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
-    formelid = fid;
-    if (formelid>0) {
-        QSqlQuery query;
-        query.prepare("SELECT var_name, var_formel FROM tfx_formeln WHERE int_formelid=?");
-        query.bindValue(0,formelid);
-        query.exec();
-        query.next();
-        ui->txt_name->setText(query.value(0).toString());
-        ui->txt_formel->setText(query.value(1).toString());
+    setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint
+                   | Qt::WindowCloseButtonHint);
+
+    connect(ui->bbx_done, SIGNAL(accepted()), this, SLOT(save()));
+    connect(ui->bbx_done, SIGNAL(rejected()), this, SLOT(close()));
+    connect(ui->but_add, SIGNAL(clicked()), this, SLOT(addPart()));
+    connect(ui->but_check, SIGNAL(clicked()), this, SLOT(checkFormula()));
+
+    if (m_formula == nullptr) {
+        m_formula = new Formula();
     }
-    connect(ui->bbx_done,SIGNAL(accepted()),this,SLOT(save()));
-    connect(ui->bbx_done,SIGNAL(rejected()),this,SLOT(close()));
-    connect(ui->but_add,SIGNAL(clicked()),this,SLOT(addPart()));
-    connect(ui->but_check,SIGNAL(clicked()),this,SLOT(checkFormula()));
+
+    ui->txt_name->setText(m_formula->name());
+    ui->txt_formel->setText(m_formula->formula());
 }
 
 FormulaDialog::~FormulaDialog()
@@ -33,16 +37,10 @@ FormulaDialog::~FormulaDialog()
 
 void FormulaDialog::save()
 {
-    QSqlQuery save;
-    if (formelid == 0) {
-        save.prepare("INSERT INTO tfx_formeln (var_name,var_formel) VALUES(?,?)");
-    } else {
-        save.prepare("UPDATE tfx_formeln SET var_name=?, var_formel=? WHERE int_formelid=?");
-        save.bindValue(2,formelid);
-    }
-    save.bindValue(0,ui->txt_name->text());
-    save.bindValue(1,ui->txt_formel->text());
-    save.exec();
+    m_formula->setName(ui->txt_name->text());
+    m_formula->setFormula(ui->txt_formel->text());
+
+    m_em->formulaRepository()->persist(m_formula);
     done(1);
 }
 
@@ -73,4 +71,9 @@ void FormulaDialog::checkFormula()
         error = "Keine Fehler gefunden.";
     }
     QMessageBox::information(this,"Formelüberprüfung",error);
+}
+
+Formula *FormulaDialog::formula()
+{
+    return m_formula;
 }

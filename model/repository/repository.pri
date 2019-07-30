@@ -4,13 +4,17 @@ HEADERS += \
     $$PWD/clubrepository.h \
     $$PWD/competitionrepository.h \
     $$PWD/connectionrepository.h \
+    $$PWD/countryrepository.h \
     $$PWD/disciplinefieldrepository.h \
     $$PWD/disciplinerepository.h \
     $$PWD/divisionrepository.h \
     $$PWD/eventrepository.h \
     $$PWD/formularepository.h \
+    $$PWD/penaltyrepository.h \
     $$PWD/personrepository.h \
+    $$PWD/regionrepository.h \
     $$PWD/sportrepository.h \
+    $$PWD/staterepository.h \
     $$PWD/venuerepository.h
 
 SOURCES += \
@@ -18,11 +22,15 @@ SOURCES += \
     $$PWD/clubrepository.cpp \
     $$PWD/competitionrepository.cpp \
     $$PWD/connectionrepository.cpp \
+    $$PWD/countryrepository.cpp \
     $$PWD/disciplinefieldrepository.cpp \
     $$PWD/disciplinerepository.cpp \
     $$PWD/divisionrepository.cpp \
     $$PWD/eventrepository.cpp \
     $$PWD/formularepository.cpp \
+    $$PWD/penaltyrepository.cpp \
     $$PWD/personrepository.cpp \
+    $$PWD/regionrepository.cpp \
     $$PWD/sportrepository.cpp \
+    $$PWD/staterepository.cpp \
     $$PWD/venuerepository.cpp

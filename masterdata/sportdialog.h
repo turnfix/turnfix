@@ -15,7 +15,7 @@ class SportDialog : public QDialog
 
 public:
     SportDialog(Sport *sport, EntityManager *em, QWidget *parent = nullptr);
-    ~SportDialog();
+    ~SportDialog() override;
 
     Sport *sport();
 

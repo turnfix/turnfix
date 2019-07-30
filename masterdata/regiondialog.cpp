@@ -50,8 +50,8 @@ void RegionDialog::readVerbaende()
 
 void RegionDialog::addVerband()
 {
-    StateDialog *pe = new StateDialog(0, this);
-    if(pe->exec() == 1) { readVerbaende(); }
+    //    StateDialog *pe = new StateDialog(nullptr, m_em, this);
+    //    if(pe->exec() == 1) { readVerbaende(); }
 }
 
 void RegionDialog::save()

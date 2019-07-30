@@ -13,18 +13,18 @@ class AbstractRepository
 public:
     explicit AbstractRepository(EntityManager *em) { m_em = em; }
     virtual ~AbstractRepository() = default;
-    virtual void persist(T *object)
+    virtual bool persist(T *object)
     {
         QSqlDatabase db = QSqlDatabase::database(m_em->connectionName());
         QueryBuilder<T> qb;
-        qb.persist(db, T::staticMetaObject, T::mapping(), object);
+        return qb.persist(db, T::staticMetaObject, T::mapping(), object);
     }
 
-    virtual void remove(T *object)
+    virtual bool remove(T *object)
     {
         QSqlDatabase db = QSqlDatabase::database(m_em->connectionName());
         QueryBuilder<T> qb;
-        qb.remove(db, T::staticMetaObject, T::mapping(), object);
+        return qb.remove(db, T::mapping(), object);
     }
 
 protected:

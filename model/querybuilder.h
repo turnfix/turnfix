@@ -7,6 +7,7 @@
 #include <QList>
 #include <QMetaObject>
 #include <QMetaProperty>
+#include <QSqlError>
 #include <QSqlQuery>
 #include <QString>
 #include <QStringList>
@@ -57,6 +58,7 @@ public:
                            mapping->name(),
                            mapping->columnByProperty(key)->name());
         m_joinMetaObjects.insert(propertyName, metaObject);
+        m_joinTables.append(propertyName);
 
         for (int i = metaObject.propertyOffset(); i < metaObject.propertyCount(); i++) {
             QMetaProperty property = metaObject.property(i);
@@ -109,7 +111,7 @@ public:
         return *this;
     }
 
-    QList<T *> query(QSqlDatabase db)
+    QList<T *> query(const QSqlDatabase &db)
     {
         QString queryString = QString("%1 %2").arg(m_select, m_from);
         if (m_where != "") {
@@ -138,7 +140,7 @@ public:
         return output;
     }
 
-    void persist(QSqlDatabase db, QMetaObject metaObject, const DBTable *mapping, T *obj)
+    bool persist(const QSqlDatabase &db, QMetaObject metaObject, const DBTable *mapping, T *obj)
     {
         QObject *qobj = obj;
         int id = qobj->property("id").toInt();
@@ -161,7 +163,17 @@ public:
 
                 columns.append(column->name());
                 placeholders.append(QString(":%1").arg(property.name()));
-                values.insert(QString(":%1").arg(property.name()), property.read(qobj));
+
+                if (column->constraints().length() > 0) {
+                    int fk = property.read(qobj).toInt();
+                    if (fk == 0) {
+                        values.insert(QString(":%1").arg(property.name()), QVariant(QVariant::Int));
+                    } else {
+                        values.insert(QString(":%1").arg(property.name()), fk);
+                    }
+                } else {
+                    values.insert(QString(":%1").arg(property.name()), property.read(qobj));
+                }
             }
 
             QString queryString = QString("INSERT INTO %1 (%2) VALUES(%3)")
@@ -174,12 +186,31 @@ public:
             QSqlQuery query(db);
             query.prepare(queryString);
             QStringList keys = values.keys();
-            for (auto key : keys) {
+            for (auto const &key : keys) {
                 query.bindValue(key, values.value(key));
             }
 
-            query.exec();
-            return;
+            bool result = query.exec();
+
+            if (result) {
+                int id;
+                if (db.driverName() == "QPSQL") {
+                    QString queryString = QString("SELECT last_value FROM %1_%2_seq")
+                                              .arg(T::mapping()->name(),
+                                                   T::mapping()->columnByProperty("id")->name());
+                    QSqlQuery idQuery(queryString, db);
+                    idQuery.next();
+                    id = idQuery.value(0).toInt();
+                } else {
+                    id = query.lastInsertId().toInt();
+                }
+
+                obj->setProperty("id", id);
+            } else {
+                qDebug() << query.lastError();
+            }
+
+            return result;
         }
 
         QStringList columns;
@@ -204,7 +235,17 @@ public:
 
             columns.append(
                 QString("%1 = %2").arg(column->name(), QString(":%1").arg(property.name())));
-            values.insert(QString(":%1").arg(property.name()), property.read(qobj));
+
+            if (column->constraints().length() > 0) {
+                int fk = property.read(qobj).toInt();
+                if (fk == 0) {
+                    values.insert(QString(":%1").arg(property.name()), QVariant(QVariant::Int));
+                } else {
+                    values.insert(QString(":%1").arg(property.name()), fk);
+                }
+            } else {
+                values.insert(QString(":%1").arg(property.name()), property.read(qobj));
+            }
         }
 
         QString queryString = QString("UPDATE %1 SET %2 WHERE %3 = :id")
@@ -215,15 +256,33 @@ public:
         QSqlQuery query(db);
         query.prepare(queryString);
         QStringList keys = values.keys();
-        for (auto key : keys) {
+        for (auto const &key : keys) {
             query.bindValue(key, values.value(key));
         }
         query.bindValue(":id", id);
 
-        query.exec();
+        bool result = query.exec();
+
+        if (!result) {
+            qDebug() << query.lastError();
+        }
+
+        return result;
     }
 
-    void remove(QSqlDatabase db, QMetaObject metaObject, const DBTable *mapping, T *obj) {}
+    bool remove(const QSqlDatabase &db, const DBTable *mapping, T *obj)
+    {
+        QString queryString = QString("DELETE FROM %1 WHERE %2 = :id")
+                                  .arg(mapping->name(), mapping->columnByProperty("id")->name());
+
+        qDebug() << queryString;
+
+        QSqlQuery query(db);
+        query.prepare(queryString);
+        query.bindValue(":id", obj->id());
+
+        return query.exec();
+    }
 
 private:
     QObject *convert(const QSqlQuery &query)
@@ -242,8 +301,7 @@ private:
             index++;
         }
 
-        QStringList keys = m_joinMetaObjects.keys();
-        for (const QString &key : keys) {
+        for (const QString &key : m_joinTables) {
             auto joinMetaObject = m_joinMetaObjects.value(key);
             auto *joinObj = joinMetaObject.newInstance();
             auto *joinMetaObj = joinObj->metaObject();
@@ -269,6 +327,7 @@ private:
     QString m_where;
     QString m_order;
     QMetaObject m_selectMetaObject;
+    QStringList m_joinTables;
     QMap<QString, QMetaObject> m_joinMetaObjects;
     QMap<QString, const DBTable *> m_mappings;
     QList<QVariant> m_bindValues;

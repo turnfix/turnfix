@@ -1,5 +1,5 @@
 #include "dbconstraint.h"
-#include "dbtable.h"
+#include "dbcolumn.h"
 #include <QSqlDatabase>
 #include <QSqlQuery>
 
@@ -9,7 +9,7 @@ DBConstraint::DBConstraint(QString name,
                            QString toField,
                            QString onUpdate,
                            QString onDelete,
-                           DBTable *parent)
+                           DBColumn *parent)
     : QObject(parent)
 {
     this->m_name = name;
@@ -64,7 +64,7 @@ void DBConstraint::create(const QString &connectionName)
     //Create constraint
     query.exec(QString("ALTER TABLE %1 ADD CONSTRAINT %2 FOREIGN KEY (%3) REFERENCES "
                        "%4 (%5) ON UPDATE %6 ON DELETE %7")
-                   .arg(parentTable()->name(),
+                   .arg(column()->name(),
                         name(),
                         fromField(),
                         referenceTable(),
@@ -73,7 +73,7 @@ void DBConstraint::create(const QString &connectionName)
                         onDelete()));
 }
 
-DBTable *DBConstraint::parentTable()
+DBColumn *DBConstraint::column()
 {
-    return dynamic_cast<DBTable *>(parent());
+    return dynamic_cast<DBColumn *>(parent());
 }

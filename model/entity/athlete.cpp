@@ -6,19 +6,14 @@ DBTable *Athlete::initializeMapping()
 {
     DBTable *athlete = new DBTable("tfx_teilnehmer");
     athlete->addColumn("id", "int_teilnehmerid", ColumnType::Integer, 0, false, "", "", true);
-    athlete->addColumn("clubId", "int_vereineid", ColumnType::Integer, 0, false);
+    athlete->addColumn("clubId", "int_vereineid", ColumnType::Integer, 0, false)
+        ->addContraint("fky_vereineid", "tfx_vereine", "int_vereineid", "RESTRICT", "RESTRICT");
     athlete->addColumn("firstName", "var_vorname", ColumnType::Varchar, 150);
     athlete->addColumn("lastName", "var_nachname", ColumnType::Varchar, 150);
     athlete->addColumn("gender", "int_geschlecht", ColumnType::SmallInt, 0, false);
     athlete->addColumn("dateOfBirth", "dat_geburtstag", ColumnType::Date);
     athlete->addColumn("yearOfBirthOnly", "bool_nur_jahr", ColumnType::Boolean, 0, true, "'true'");
     athlete->addColumn("license", "int_startpassnummer", ColumnType::Varchar, 50);
-    athlete->addContraint("fky_vereineid",
-                          "tfx_vereine",
-                          "int_vereineid",
-                          "int_vereineid",
-                          "RESTRICT",
-                          "RESTRICT");
 
     return athlete;
 }
