@@ -1,5 +1,4 @@
 #include "competitionrepository.h"
-#include "model/entity/competition.h"
 #include "model/entity/event.h"
 #include "model/entitymanager.h"
 #include "model/querybuilder.h"

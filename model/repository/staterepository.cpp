@@ -1,6 +1,5 @@
 #include "staterepository.h"
 #include "model/entity/country.h"
-#include "model/entity/state.h"
 
 StateRepository::StateRepository(EntityManager *em)
     : AbstractRepository<State>(em)

@@ -10,7 +10,9 @@ HEADERS += \
     $$PWD/divisionrepository.h \
     $$PWD/eventrepository.h \
     $$PWD/formularepository.h \
+    $$PWD/penaltyrepository.h \
     $$PWD/personrepository.h \
+    $$PWD/regionrepository.h \
     $$PWD/sportrepository.h \
     $$PWD/staterepository.h \
     $$PWD/venuerepository.h
@@ -26,7 +28,9 @@ SOURCES += \
     $$PWD/divisionrepository.cpp \
     $$PWD/eventrepository.cpp \
     $$PWD/formularepository.cpp \
+    $$PWD/penaltyrepository.cpp \
     $$PWD/personrepository.cpp \
+    $$PWD/regionrepository.cpp \
     $$PWD/sportrepository.cpp \
     $$PWD/staterepository.cpp \
     $$PWD/venuerepository.cpp

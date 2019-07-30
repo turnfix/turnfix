@@ -1,32 +1,34 @@
-#ifndef STATE_H
-#define STATE_H
+#ifndef REGION_H
+#define REGION_H
 
-#include "country.h"
 #include <QObject>
 
 class DBTable;
+class State;
 
-class State : public QObject
+class Region : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(int id READ id WRITE setId)
-    Q_PROPERTY(int countryId READ countryId WRITE setCountryId)
+    Q_PROPERTY(int stateId READ stateId WRITE setStateId)
     Q_PROPERTY(QString name READ name WRITE setName)
     Q_PROPERTY(QString code READ code WRITE setCode)
 
-    Q_PROPERTY(Country *country READ country WRITE setCountry STORED false)
+    Q_PROPERTY(State *state READ state WRITE setState STORED false)
 
 public:
-    Q_INVOKABLE State() = default;
+    Q_INVOKABLE Region() = default;
+
+    static const DBTable *mapping();
 
     int id() const;
     void setId(int id);
 
-    int countryId() const;
-    void setCountryId(int countryId);
+    int stateId() const;
+    void setStateId(int stateId);
 
-    Country *country() const;
-    void setCountry(Country *country);
+    State *state() const;
+    void setState(State *state);
 
     QString name() const;
     void setName(const QString &name);
@@ -34,18 +36,16 @@ public:
     QString code() const;
     void setCode(const QString &code);
 
-    static const DBTable *mapping();
-
 private:
     int m_id = 0;
-    int m_countryId;
-    Country *m_country;
+    int m_stateId;
+    State *m_state;
     QString m_name;
     QString m_code;
 
     static DBTable *initializeMapping();
     static const DBTable *m_mapping;
 };
-Q_DECLARE_METATYPE(State *);
+Q_DECLARE_METATYPE(Region *);
 
-#endif // STATE_H
+#endif // REGION_H

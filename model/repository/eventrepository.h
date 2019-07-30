@@ -11,7 +11,6 @@ public:
 
     QList<Event *> loadAll();
     bool persist(Event *event) override;
-    bool remove(Event *event) override;
 };
 
 #endif // EVENTREPOSITORY_H

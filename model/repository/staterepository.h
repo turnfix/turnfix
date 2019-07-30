@@ -2,8 +2,7 @@
 #define STATEREPOSITORY_H
 
 #include "abstractrepository.h"
-
-class State;
+#include "model/entity/state.h"
 
 class StateRepository : public AbstractRepository<State>
 {

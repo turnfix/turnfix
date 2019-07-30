@@ -95,8 +95,6 @@ bool EventRepository::persist(Event *event)
     return result;
 }
 
-bool EventRepository::remove(Event *event) {}
-
 EventRepository::EventRepository(EntityManager *em)
     : AbstractRepository<Event>(em)
 {}

@@ -44,29 +44,10 @@ void DBChecker::columnUpdate(int count)
 
 QList<DBTable *> DBChecker::tableData()
 {
-    //    DBTable *district = new DBTable("tfx_gaue");
-    //    district->addColumn("int_gaueid", ColumnType::Integer, 0, false, "", "", true);
-    //    district->addColumn("int_verbaendeid", ColumnType::Integer, 0, false);
-    //    district->addColumn("var_name", ColumnType::Varchar, 150);
-    //    district->addColumn("var_kuerzel", ColumnType::Varchar, 15);
-    //    district->addContraint("fky_verbaendeid",
-    //                           "tfx_verbaende",
-    //                           "int_verbaendeid",
-    //                           "int_verbaendeid",
-    //                           "RESTRICT",
-    //                           "RESTRICT");
-
     //    DBTable *group = new DBTable("tfx_gruppen");
     //    group->addColumn("int_gruppenid", ColumnType::Integer, 0, false, "", "", true);
     //    group->addColumn("int_vereineid", ColumnType::Integer, 0, false);
     //    group->addColumn("var_name", ColumnType::Varchar, 150);
-
-    //    DBTable *status = new DBTable("tfx_status");
-    //    status->addColumn("int_statusid", ColumnType::Integer, 0, false, "", "", true);
-    //    status->addColumn("var_name", ColumnType::Varchar, 150);
-    //    status->addColumn("ary_colorcode", ColumnType::Varchar, 25);
-    //    status->addColumn("bol_bogen", ColumnType::Boolean, 0, true, "'true'");
-    //    status->addColumn("bol_karte", ColumnType::Boolean, 0, true, "'true'");
 
     //    DBTable *competitionDiscipline = new DBTable("tfx_wettkaempfe_x_disziplinen");
     //    competitionDiscipline
@@ -126,11 +107,6 @@ QList<DBTable *> DBChecker::tableData()
     //                       "int_wettkaempfeid",
     //                       "RESTRICT",
     //                       "CASCADE");
-
-    //    DBTable *penalty = new DBTable("tfx_mannschaften_abzug");
-    //    penalty->addColumn("int_mannschaften_abzugid", ColumnType::Integer, 0, false, "", "", true);
-    //    penalty->addColumn("var_name", ColumnType::Varchar, 100);
-    //    penalty->addColumn("rel_abzug", ColumnType::Real);
 
     //    DBTable *teamPenalty = new DBTable("tfx_man_x_man_ab");
     //    teamPenalty->addColumn("int_man_x_man_abid", ColumnType::Integer, 0, false, "", "", true);
@@ -338,31 +314,6 @@ QList<DBTable *> DBChecker::tableData()
     //                              "int_layoutid",
     //                              "RESTRICT",
     //                              "CASCADE");
-
-    //    DBTable *disciplinGroup = new DBTable("tfx_disziplinen_gruppen");
-    //    disciplinGroup
-    //        ->addColumn("int_disziplinen_gruppenid", ColumnType::Integer, 0, false, "", "", true);
-    //    disciplinGroup->addColumn("var_name", ColumnType::Varchar, 100);
-    //    disciplinGroup->addColumn("txt_comment", ColumnType::Text);
-
-    //    DBTable *disciplinGroupItem = new DBTable("tfx_disgrp_x_disziplinen");
-    //    disciplinGroupItem
-    //        ->addColumn("int_disgrp_x_disziplinenid", ColumnType::Integer, 0, false, "", "", true);
-    //    disciplinGroupItem->addColumn("int_disziplinen_gruppenid", ColumnType::Integer, 0, false);
-    //    disciplinGroupItem->addColumn("int_disziplinenid", ColumnType::Integer, 0, false);
-    //    disciplinGroupItem->addColumn("int_pos", ColumnType::SmallInt);
-    //    disciplinGroupItem->addContraint("fky_disziplinen_gruppenid",
-    //                                     "tfx_disziplinen_gruppen",
-    //                                     "int_disziplinen_gruppenid",
-    //                                     "int_disziplinen_gruppenid",
-    //                                     "RESTRICT",
-    //                                     "RESTRICT");
-    //    disciplinGroupItem->addContraint("fky_disziplinen",
-    //                                     "tfx_disziplinen",
-    //                                     "int_disziplinenid",
-    //                                     "int_disziplinenid",
-    //                                     "RESTRICT",
-    //                                     "CASCADE");
 
     //    DBTable *startingOrder = new DBTable("tfx_startreihenfolge");
     //    startingOrder->addColumn("int_startreihenfolgeid", ColumnType::Integer, 0, false, "", "", true);

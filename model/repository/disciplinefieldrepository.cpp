@@ -1,6 +1,5 @@
 #include "disciplinefieldrepository.h"
 #include "model/entity/discipline.h"
-#include "model/entity/disciplinefield.h"
 #include "model/entitymanager.h"
 #include "model/querybuilder.h"
 
