@@ -16,7 +16,7 @@ class DivisionDialog : public QDialog
 
 public:
     DivisionDialog(Division *division, EntityManager *em, QWidget *parent = nullptr);
-    ~DivisionDialog();
+    ~DivisionDialog() override;
 
     Division *division();
 

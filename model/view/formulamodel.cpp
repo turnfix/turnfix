@@ -35,6 +35,9 @@ QVariant FormulaModel::headerData(int section, Qt::Orientation orientation, int 
 
 QVariant FormulaModel::data(const QModelIndex &index, int role) const
 {
+    if (!index.isValid())
+        return QVariant();
+
     Formula *formula = m_formulas.at(index.row());
     if (role == Qt::DisplayRole) {
         switch (index.column()) {

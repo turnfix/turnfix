@@ -8,6 +8,8 @@ class DivisionRepository : public AbstractRepository<Division>
 {
 public:
     explicit DivisionRepository(EntityManager *em);
+
+    QList<Division *> loadAll();
 };
 
 #endif // DIVISIONREPOSITORY_H

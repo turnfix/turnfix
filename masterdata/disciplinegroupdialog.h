@@ -7,15 +7,20 @@ namespace Ui {
 class DisciplineGroupDialog;
 }
 
-class QStandardItemModel;
+class DisciplineGroup;
+class DisciplineModel;
+class DisciplineGroupItemModel;
+class EntityManager;
 
 class DisciplineGroupDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit DisciplineGroupDialog(int dgid = 0, QWidget *parent = nullptr);
-    ~DisciplineGroupDialog();
+    explicit DisciplineGroupDialog(DisciplineGroup *disciplineGroup,
+                                   EntityManager *em,
+                                   QWidget *parent = nullptr);
+    ~DisciplineGroupDialog() override;
 
 private slots:
     void addItem();
@@ -26,9 +31,10 @@ private slots:
 
 private:
     Ui::DisciplineGroupDialog *ui;
-    int dgid;
-    QStandardItemModel *model_all;
-    QStandardItemModel *model_group;
+    DisciplineGroup *m_disciplineGroup;
+    EntityManager *m_em;
+    DisciplineModel *m_disciplineModel;
+    DisciplineGroupItemModel *m_itemModel;
 };
 
 #endif

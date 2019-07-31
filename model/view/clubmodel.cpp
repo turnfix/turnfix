@@ -1,6 +1,7 @@
 #include "clubmodel.h"
 #include "model/entity/club.h"
 #include "model/entitymanager.h"
+#include "model/enums.h"
 #include "model/repository/clubrepository.h"
 
 ClubModel::ClubModel(EntityManager *em, QObject *parent)
@@ -16,11 +17,11 @@ int ClubModel::rowCount(const QModelIndex &) const
 
 int ClubModel::columnCount(const QModelIndex &) const
 {
-    return 4;
+    return 3;
 }
 
 QVariant ClubModel::headerData(int section, Qt::Orientation orientation, int role) const
-{
+{   
     if (role == Qt::DisplayRole && orientation == Qt::Horizontal) {
         switch (section) {
         case 0:
@@ -36,6 +37,9 @@ QVariant ClubModel::headerData(int section, Qt::Orientation orientation, int rol
 
 QVariant ClubModel::data(const QModelIndex &index, int role) const
 {
+    if (!index.isValid())
+        return QVariant();
+
     Club *club = m_clubs.at(index.row());
     if (role == Qt::DisplayRole) {
         switch (index.column()) {
@@ -46,8 +50,10 @@ QVariant ClubModel::data(const QModelIndex &index, int role) const
         case 2:
             return club->website();
         }
-    } else if (role == Qt::UserRole) {
+    } else if (role == TF::ObjectRole) {
         return QVariant::fromValue(club);
+    } else if (role == TF::IdRole) {
+        return club->id();
     }
     return QVariant();
 }

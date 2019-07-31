@@ -3,7 +3,6 @@
 #include "model/entitymanager.h"
 #include "model/repository/venuerepository.h"
 #include "ui_venuedialog.h"
-#include <QSqlQuery>
 
 VenueDialog::VenueDialog(Venue *venue, EntityManager *em, QWidget *parent)
     : QDialog(parent)

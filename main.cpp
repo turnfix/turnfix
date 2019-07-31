@@ -1,5 +1,6 @@
 #include "app/logindialog.h"
 #include "app/mainwindow.h"
+#include "model/entity/athlete.h"
 #include "model/entitymanager.h"
 #include <QApplication>
 #include <QTranslator>

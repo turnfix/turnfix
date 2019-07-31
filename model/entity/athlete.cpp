@@ -25,6 +25,23 @@ const DBTable *Athlete::mapping()
     return m_mapping;
 }
 
+Club *Athlete::club() const
+{
+    return m_club;
+}
+
+void Athlete::setClub(Club *value)
+{
+    m_club = value;
+
+    if (m_club == nullptr) {
+        m_clubId = 0;
+        return;
+    }
+
+    m_clubId = m_club->id();
+}
+
 int Athlete::id() const
 {
     return m_id;
@@ -65,12 +82,17 @@ void Athlete::setLastName(const QString &lastName)
     m_lastName = lastName;
 }
 
-Athlete::Gender Athlete::gender() const
+QString Athlete::fullName() const
+{
+    return QString("%1 %2").arg(m_firstName, m_lastName);
+}
+
+int Athlete::gender() const
 {
     return m_gender;
 }
 
-void Athlete::setGender(const Gender &gender)
+void Athlete::setGender(const int &gender)
 {
     m_gender = gender;
 }

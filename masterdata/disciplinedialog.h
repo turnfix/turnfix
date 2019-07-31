@@ -31,7 +31,7 @@ private:
     EntityManager *m_em;
     Discipline *m_discipline;
     DisciplineFieldModel *m_fieldModel;
-    virtual void keyPressEvent(QKeyEvent *e) override;
+    void keyPressEvent(QKeyEvent *e) override;
 };
 
 #endif

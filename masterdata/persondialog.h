@@ -16,7 +16,7 @@ class PersonDialog : public QDialog
 
 public:
     PersonDialog(Person *person, EntityManager *em, QWidget *parent = nullptr);
-    ~PersonDialog();
+    ~PersonDialog() override;
 
     Person *person();
 

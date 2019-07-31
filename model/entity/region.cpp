@@ -49,6 +49,12 @@ State *Region::state() const
 void Region::setState(State *state)
 {
     m_state = state;
+    if (state == nullptr) {
+        m_stateId = 0;
+        return;
+    }
+
+    m_stateId = state->id();
 }
 
 QString Region::name() const

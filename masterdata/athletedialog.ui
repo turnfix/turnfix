@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>295</width>
-    <height>236</height>
+    <width>538</width>
+    <height>266</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -36,55 +36,37 @@
       <string/>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
-      <item row="0" column="0">
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>Name:</string>
-        </property>
-       </widget>
+      <item row="3" column="1" colspan="2">
+       <widget class="QComboBox" name="cmb_sex"/>
       </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_2">
-        <property name="text">
-         <string>Geburtsjahr:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="label_3">
+      <item row="3" column="0">
+       <widget class="QLabel" name="genderLabel">
         <property name="text">
          <string>Geschlecht:</string>
         </property>
        </widget>
       </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="label_4">
-        <property name="text">
-         <string>Verein:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="0">
-       <widget class="QLabel" name="label_5">
-        <property name="text">
-         <string>Startpass-Nr.:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1" colspan="2">
-       <widget class="QComboBox" name="cmb_club">
+      <item row="2" column="2">
+       <widget class="QCheckBox" name="chk_dat">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <property name="editable">
-         <bool>true</bool>
+        <property name="text">
+         <string>exakt</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
+      <item row="2" column="0">
+       <widget class="QLabel" name="yobLabel">
+        <property name="text">
+         <string>Geburtsjahr:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
        <widget class="QDateEdit" name="dae_year">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -103,10 +85,7 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="1" colspan="2">
-       <widget class="QComboBox" name="cmb_sex"/>
-      </item>
-      <item row="4" column="1" colspan="2">
+      <item row="5" column="1" colspan="2">
        <widget class="QLineEdit" name="txt_id">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -119,21 +98,49 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="1" colspan="2">
-       <widget class="QLineEdit" name="txt_name"/>
+      <item row="0" column="0">
+       <widget class="QLabel" name="firstnameLabel">
+        <property name="text">
+         <string>Vorname:</string>
+        </property>
+       </widget>
       </item>
-      <item row="1" column="2">
-       <widget class="QCheckBox" name="chk_dat">
+      <item row="4" column="0">
+       <widget class="QLabel" name="clubLabel">
+        <property name="text">
+         <string>Verein:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" colspan="2">
+       <widget class="QLineEdit" name="firstNameInput"/>
+      </item>
+      <item row="4" column="1" colspan="2">
+       <widget class="QComboBox" name="cmb_club">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+       </widget>
+      </item>
+      <item row="5" column="0">
+       <widget class="QLabel" name="licenseLabel">
         <property name="text">
-         <string>exakt</string>
+         <string>Startpass-Nr.:</string>
         </property>
        </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="lastnamneLabel">
+        <property name="text">
+         <string>Nachname:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" colspan="2">
+       <widget class="QLineEdit" name="lastnameInput"/>
       </item>
      </layout>
     </widget>
@@ -157,8 +164,10 @@
   </layout>
  </widget>
  <tabstops>
-  <tabstop>txt_name</tabstop>
+  <tabstop>firstNameInput</tabstop>
+  <tabstop>lastnameInput</tabstop>
   <tabstop>dae_year</tabstop>
+  <tabstop>chk_dat</tabstop>
   <tabstop>cmb_sex</tabstop>
   <tabstop>cmb_club</tabstop>
   <tabstop>txt_id</tabstop>

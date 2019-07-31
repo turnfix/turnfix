@@ -5,7 +5,6 @@
 #include "model/repository/formularepository.h"
 #include "ui_formuladialog.h"
 #include <QMessageBox>
-#include <QSqlQuery>
 
 FormulaDialog::FormulaDialog(Formula *formula, EntityManager *em, QWidget *parent)
     : QDialog(parent)

@@ -50,6 +50,7 @@ public:
                       const QString &idName,
                       const QString &key = "id")
     {
+        m_mappings.insert(metaObject.className(), mapping);
         m_select += ", ";
         m_from += QString(" LEFT JOIN %1 ON %2.%3 = %4.%5")
                       .arg(mapping->name(),
@@ -58,6 +59,7 @@ public:
                            mapping->name(),
                            mapping->columnByProperty(key)->name());
         m_joinMetaObjects.insert(propertyName, metaObject);
+        m_joinClasses.insert(propertyName, joinClass);
         m_joinTables.append(propertyName);
 
         for (int i = metaObject.propertyOffset(); i < metaObject.propertyCount(); i++) {
@@ -287,8 +289,11 @@ public:
 private:
     QObject *convert(const QSqlQuery &query)
     {
+        QMap<QString, QObject *> objects;
         auto *obj = m_selectMetaObject.newInstance();
         auto *metaObj = obj->metaObject();
+
+        objects.insert(metaObj->className(), obj);
 
         int index = 0;
         for (int i = metaObj->propertyOffset(); i < metaObj->propertyCount(); i++) {
@@ -305,6 +310,9 @@ private:
             auto joinMetaObject = m_joinMetaObjects.value(key);
             auto *joinObj = joinMetaObject.newInstance();
             auto *joinMetaObj = joinObj->metaObject();
+
+            objects.insert(joinMetaObj->className(), joinObj);
+
             for (int i = joinMetaObj->propertyOffset(); i < joinMetaObj->propertyCount(); i++) {
                 auto property = joinMetaObj->property(i);
                 if (!property.isStored()) {
@@ -316,7 +324,8 @@ private:
                 index++;
             }
 
-            obj->setProperty(key.toUtf8(), QVariant::fromValue(joinObj));
+            objects.value(m_joinClasses.value(key))
+                ->setProperty(key.toUtf8(), QVariant::fromValue(joinObj));
         }
 
         return obj;
@@ -329,6 +338,7 @@ private:
     QMetaObject m_selectMetaObject;
     QStringList m_joinTables;
     QMap<QString, QMetaObject> m_joinMetaObjects;
+    QMap<QString, QString> m_joinClasses;
     QMap<QString, const DBTable *> m_mappings;
     QList<QVariant> m_bindValues;
 };

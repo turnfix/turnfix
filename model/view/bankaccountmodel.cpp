@@ -39,6 +39,9 @@ QVariant BankAccountModel::headerData(int section, Qt::Orientation orientation, 
 
 QVariant BankAccountModel::data(const QModelIndex &index, int role) const
 {
+    if (!index.isValid())
+        return QVariant();
+
     BankAccount *bankAccount = m_accounts.at(index.row());
     if (role == Qt::DisplayRole) {
         switch (index.column()) {

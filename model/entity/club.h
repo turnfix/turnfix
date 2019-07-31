@@ -2,6 +2,7 @@
 #define CLUB_H
 
 #include "person.h"
+#include "region.h"
 #include <QObject>
 
 class DBTable;
@@ -16,6 +17,7 @@ class Club : public QObject
     Q_PROPERTY(int posCity READ posCity WRITE setPosCity)
     Q_PROPERTY(QString website READ website WRITE setWebsite)
 
+    Q_PROPERTY(Region *region READ region WRITE setRegion STORED false)
     Q_PROPERTY(Person *contactPerson READ contactPerson WRITE setContactPerson STORED false)
 
 public:
@@ -29,6 +31,9 @@ public:
 
     int regionId() const;
     void setRegionId(int regionId);
+
+    Region *region() const;
+    void setRegion(Region *region);
 
     int contactPersonId() const;
     void setContactPersonId(int contactPersonId);
@@ -48,6 +53,7 @@ private:
     int m_id = 0;
     QString m_name;
     int m_regionId;
+    Region *m_region;
     int m_contactPersonId;
     Person *m_contactPerson;
     int m_posCity;

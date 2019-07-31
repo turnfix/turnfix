@@ -1,5 +1,5 @@
-#ifndef SECTION_H
-#define SECTION_H
+#ifndef DIVISION_H
+#define DIVISION_H
 
 #include <QObject>
 
@@ -41,4 +41,4 @@ private:
 };
 Q_DECLARE_METATYPE(Division *);
 
-#endif // SECTION_H
+#endif // DIVISION_H

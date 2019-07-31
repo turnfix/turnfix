@@ -38,6 +38,9 @@ QVariant StateModel::headerData(int section, Qt::Orientation orientation, int ro
 
 QVariant StateModel::data(const QModelIndex &index, int role) const
 {
+    if (!index.isValid())
+        return QVariant();
+
     State *state = m_states.at(index.row());
     if (role == Qt::DisplayRole) {
         switch (index.column()) {

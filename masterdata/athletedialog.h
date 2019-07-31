@@ -18,7 +18,7 @@ class AthleteDialog : public QDialog
 public:
     AthleteDialog(Athlete *athlete, EntityManager *em, QWidget *parent = nullptr);
     AthleteDialog(Athlete *athlete, Club *club, EntityManager *em, QWidget *parent = nullptr);
-    ~AthleteDialog();
+    ~AthleteDialog() override;
 
 private slots:
     void save();

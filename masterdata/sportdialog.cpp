@@ -3,7 +3,6 @@
 #include "model/entitymanager.h"
 #include "model/repository/sportrepository.h"
 #include "ui_sportdialog.h"
-#include <QSqlQuery>
 
 SportDialog::SportDialog(Sport *sport, EntityManager *em, QWidget *parent)
     : QDialog(parent)

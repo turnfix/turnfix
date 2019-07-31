@@ -321,7 +321,7 @@
          <enum>QAbstractItemView::SelectRows</enum>
         </property>
         <attribute name="horizontalHeaderVisible">
-         <bool>true</bool>
+         <bool>false</bool>
         </attribute>
         <attribute name="horizontalHeaderHighlightSections">
          <bool>false</bool>
@@ -551,6 +551,30 @@ als Endwert (EW) markiert sind.</string>
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>txt_name</tabstop>
+  <tabstop>txt_formula</tabstop>
+  <tabstop>cmb_mask</tabstop>
+  <tabstop>chk_w</tabstop>
+  <tabstop>chk_m</tabstop>
+  <tabstop>cmb_sport</tabstop>
+  <tabstop>sbx_try</tabstop>
+  <tabstop>txt_icon</tabstop>
+  <tabstop>txt_shortcut</tabstop>
+  <tabstop>sbx_comma</tabstop>
+  <tabstop>txt_unit</tabstop>
+  <tabstop>txt_short1</tabstop>
+  <tabstop>txt_short2</tabstop>
+  <tabstop>chk_run</tabstop>
+  <tabstop>tbl_fields</tabstop>
+  <tabstop>but_up</tabstop>
+  <tabstop>but_down</tabstop>
+  <tabstop>but_add</tabstop>
+  <tabstop>but_del</tabstop>
+  <tabstop>gbx_berechnen</tabstop>
+  <tabstop>cmb_formel</tabstop>
+  <tabstop>but_save</tabstop>
+ </tabstops>
  <resources>
   <include location="../resources/TurnFix.qrc"/>
  </resources>

@@ -34,6 +34,9 @@ QVariant DisciplineModel::headerData(int section, Qt::Orientation orientation, i
 
 QVariant DisciplineModel::data(const QModelIndex &index, int role) const
 {
+    if (!index.isValid())
+        return QVariant();
+
     Discipline *discipline = m_disciplines.at(index.row());
     if (role == Qt::DisplayRole) {
         switch (index.column()) {

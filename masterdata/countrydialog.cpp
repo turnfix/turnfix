@@ -3,7 +3,6 @@
 #include "model/entitymanager.h"
 #include "model/repository/countryrepository.h"
 #include "ui_countrydialog.h"
-#include <QSqlQuery>
 
 CountryDialog::CountryDialog(Country *country, EntityManager *em, QWidget *parent)
     : QDialog(parent)

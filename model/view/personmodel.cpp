@@ -1,6 +1,7 @@
 #include "personmodel.h"
 #include "model/entity/person.h"
 #include "model/entitymanager.h"
+#include "model/enums.h"
 #include "model/repository/personrepository.h"
 
 PersonModel::PersonModel(EntityManager *em, QObject *parent)
@@ -45,6 +46,9 @@ QVariant PersonModel::headerData(int section, Qt::Orientation orientation, int r
 
 QVariant PersonModel::data(const QModelIndex &index, int role) const
 {
+    if (!index.isValid())
+        return QVariant();
+
     Person *person = m_persons.at(index.row());
     if (role == Qt::DisplayRole) {
         switch (index.column()) {
@@ -67,8 +71,10 @@ QVariant PersonModel::data(const QModelIndex &index, int role) const
         case 8:
             return QString("%1 %2").arg(person->firstName(), person->lastName());
         }
-    } else if (role == Qt::UserRole) {
+    } else if (role == TF::ObjectRole) {
         return QVariant::fromValue(person);
+    } else if (role == TF::IdRole) {
+        return person->id();
     }
     return QVariant();
 }

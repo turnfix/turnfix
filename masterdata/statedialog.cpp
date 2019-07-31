@@ -42,7 +42,7 @@ StateDialog::~StateDialog()
 
 void StateDialog::addCountry()
 {
-    CountryDialog *pe = new CountryDialog(nullptr, m_em, this);
+    auto pe = new CountryDialog(nullptr, m_em, this);
     if (pe->exec() == 1) {
         m_countryModel->fetchCountries();
     }

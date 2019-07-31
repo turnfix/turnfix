@@ -16,7 +16,7 @@ class BankAccountDialog : public QDialog
 
 public:
     BankAccountDialog(BankAccount *account, EntityManager *em, QWidget *parent = nullptr);
-    ~BankAccountDialog();
+    ~BankAccountDialog() override;
 
     BankAccount *account() const;
 

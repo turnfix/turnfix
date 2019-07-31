@@ -36,6 +36,9 @@ QVariant EventModel::headerData(int section, Qt::Orientation orientation, int ro
 
 QVariant EventModel::data(const QModelIndex &index, int role) const
 {
+    if (!index.isValid())
+        return QVariant();
+
     if (role == Qt::DisplayRole)
     {
         Event *event = m_events.at(index.row());
