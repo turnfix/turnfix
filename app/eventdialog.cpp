@@ -7,6 +7,7 @@
 #include "model/entity/person.h"
 #include "model/entity/venue.h"
 #include "model/entitymanager.h"
+#include "model/enums.h"
 #include "model/repository/eventrepository.h"
 #include "model/view/bankaccountmodel.h"
 #include "model/view/eventmodel.h"
@@ -80,10 +81,12 @@ EventDialog::EventDialog(Event *event, EntityManager *em, QWidget *parent)
     ui->dae_from->setDate(m_event->startDate());
     ui->dae_to->setDate(m_event->endDate());
     ui->dae_ms->setDate(m_event->registrationDeadline());
-    ui->cmb_locations->setCurrentIndex(ui->cmb_locations->findData(m_event->venueId()));
+    ui->cmb_locations->setCurrentIndex(ui->cmb_locations->findData(m_event->venueId(), TF::IdRole));
     ui->txt_orga->setText(m_event->organizer());
-    ui->cmb_persons1->setCurrentIndex(ui->cmb_persons1->findData(m_event->eventContactId()));
-    ui->cmb_persons2->setCurrentIndex(ui->cmb_persons2->findData(m_event->registrationContactId()));
+    ui->cmb_persons1->setCurrentIndex(
+        ui->cmb_persons1->findData(m_event->eventContactId(), TF::IdRole));
+    ui->cmb_persons2->setCurrentIndex(
+        ui->cmb_persons2->findData(m_event->registrationContactId(), TF::IdRole));
     ui->txt_web->setText(m_event->website());
     ui->sbx_edv->setValue(m_event->itTeamCount());
     ui->sbx_ref->setValue(m_event->judgesCount());
@@ -100,9 +103,11 @@ EventDialog::EventDialog(Event *event, EntityManager *em, QWidget *parent)
     ui->txt_certificate->setText(m_event->awards());
     ui->txt_ref->setText(m_event->judges());
     ui->txt_misc->setText(m_event->notes());
-    ui->cmb_account->setCurrentIndex(ui->cmb_account->findData(m_event->bankAccountId()));
+    ui->cmb_account->setCurrentIndex(
+        ui->cmb_account->findData(m_event->bankAccountId(), TF::IdRole));
     ui->sbx_round->setValue(m_event->round());
-    ui->cmb_mainround->setCurrentIndex(ui->cmb_mainround->findData(m_event->mainEventId()));
+    ui->cmb_mainround->setCurrentIndex(
+        ui->cmb_mainround->findData(m_event->mainEventId(), TF::IdRole));
     ui->gbx_round->setChecked(m_event->multiRoundEvent());
 }
 
@@ -117,7 +122,7 @@ void EventDialog::addLocation()
     if (venueDialog->exec() == 1) {
         m_venueModel->fetchVenues();
         ui->cmb_locations->setCurrentIndex(
-            ui->cmb_locations->findData(QVariant::fromValue(venueDialog->venue())));
+            ui->cmb_locations->findData(venueDialog->venue()->id(), TF::IdRole));
     }
 }
 
@@ -127,7 +132,7 @@ void EventDialog::addEventContact()
     if (personDialog->exec() == 1) {
         m_personModel->fetchPersons();
         ui->cmb_persons1->setCurrentIndex(
-            ui->cmb_persons1->findData(QVariant::fromValue(personDialog->person())));
+            ui->cmb_persons1->findData(personDialog->person()->id(), TF::IdRole));
     }
 }
 
@@ -137,7 +142,7 @@ void EventDialog::addRegistrationContact()
     if (personDialog->exec() == 1) {
         m_personModel->fetchPersons();
         ui->cmb_persons2->setCurrentIndex(
-            ui->cmb_persons2->findData(QVariant::fromValue(personDialog->person())));
+            ui->cmb_persons2->findData(personDialog->person()->id(), TF::IdRole));
     }
 }
 
@@ -147,7 +152,7 @@ void EventDialog::addAccount()
     if (accountDialog->exec() == 1) {
         m_accountModel->fetchAccounts();
         ui->cmb_account->setCurrentIndex(
-            ui->cmb_account->findData(QVariant::fromValue(accountDialog->account())));
+            ui->cmb_account->findData(accountDialog->account()->id(), TF::IdRole));
     }
 }
 

@@ -67,8 +67,10 @@ QVariant CompetitionModel::data(const QModelIndex &index, int role) const
             // TODO get count
             return "-";
         }
-    } else if (role == Qt::UserRole) {
+    } else if (role == TF::ObjectRole) {
         return QVariant::fromValue(competition);
+    } else if (role == TF::IdRole) {
+        return competition->id();
     }
     return QVariant();
 }
