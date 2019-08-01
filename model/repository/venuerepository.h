@@ -4,8 +4,6 @@
 #include "abstractrepository.h"
 #include "model/entity/venue.h"
 
-class Venue;
-
 class VenueRepository : public AbstractRepository<Venue>
 {
 public:

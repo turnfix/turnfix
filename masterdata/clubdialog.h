@@ -9,6 +9,7 @@ class ClubDialog;
 class Club;
 class EntityManager;
 class PersonModel;
+class RegionModel;
 
 class ClubDialog : public QDialog
 {
@@ -16,23 +17,23 @@ class ClubDialog : public QDialog
 
 public:
     ClubDialog(Club *club, EntityManager *em, QWidget *parent = nullptr);
-    ~ClubDialog();
+    ~ClubDialog() override;
 
     Club *club();
 
 private slots:
     void save();
     void updateSlider();
-    void updateOrt();
+    void updateCity();
     void addPerson();
-    void addGau();
-    void readGaue();
-    void updateGauInfo();
+    void addRegion();
+    void updateStateAndCountry();
 
 private:
     Ui::ClubDialog *ui;
     EntityManager *m_em;
     Club *m_club;
     PersonModel *m_personModel;
+    RegionModel *m_regionModel;
 };
 #endif

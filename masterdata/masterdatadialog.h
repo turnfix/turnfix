@@ -35,14 +35,14 @@ public:
     };
 
     MasterdataDialog(EntityManager *m_em, QWidget *parent = nullptr, Type type = Type::AthleteData);
-    ~MasterdataDialog();
+    ~MasterdataDialog() override;
 
 private slots:
     void add();
     void edit();
     void del();
     void updateFilterColumn(int index);
-    void updateFilterText(QString text);
+    void updateFilterText(const QString &text);
 
 private:
     void updateModel(Type type);

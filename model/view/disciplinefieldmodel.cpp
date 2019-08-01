@@ -40,6 +40,9 @@ QVariant DisciplineFieldModel::headerData(int section, Qt::Orientation orientati
 
 QVariant DisciplineFieldModel::data(const QModelIndex &index, int role) const
 {
+    if (!index.isValid())
+        return QVariant();
+
     DisciplineField *field = m_fields.at(index.row());
     if (role == Qt::DisplayRole) {
         switch (index.column()) {

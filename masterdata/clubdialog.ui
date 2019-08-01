@@ -37,14 +37,14 @@
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
       <item row="0" column="0">
-       <widget class="QLabel" name="label">
+       <widget class="QLabel" name="nameLabel">
         <property name="text">
          <string>Vereinsname:</string>
         </property>
        </widget>
       </item>
       <item row="1" column="0">
-       <widget class="QLabel" name="label_2">
+       <widget class="QLabel" name="websiteLabel">
         <property name="text">
          <string>Website:</string>
         </property>
@@ -57,7 +57,7 @@
        <widget class="QLineEdit" name="txt_web"/>
       </item>
       <item row="2" column="0">
-       <widget class="QLabel" name="label_9">
+       <widget class="QLabel" name="cityStartPosLabel">
         <property name="text">
          <string>Anfang Ort:</string>
         </property>
@@ -200,7 +200,7 @@
        </widget>
       </item>
       <item row="1" column="0">
-       <widget class="QLabel" name="label_3">
+       <widget class="QLabel" name="stateLabel">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
           <horstretch>0</horstretch>
@@ -220,7 +220,7 @@
        </widget>
       </item>
       <item row="2" column="0">
-       <widget class="QLabel" name="label_4">
+       <widget class="QLabel" name="countryLabel">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
           <horstretch>0</horstretch>

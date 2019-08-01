@@ -17,7 +17,7 @@ class StateDialog : public QDialog
 
 public:
     StateDialog(State *state, EntityManager *em, QWidget *parent = nullptr);
-    ~StateDialog();
+    ~StateDialog() override;
 
 private slots:
     void save();

@@ -32,6 +32,9 @@ QVariant SportModel::headerData(int section, Qt::Orientation orientation, int ro
 
 QVariant SportModel::data(const QModelIndex &index, int role) const
 {
+    if (!index.isValid())
+        return QVariant();
+
     Sport *sport = m_sports.at(index.row());
     if (role == Qt::DisplayRole) {
         switch (index.column()) {

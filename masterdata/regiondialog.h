@@ -3,6 +3,10 @@
 
 #include <QDialog>
 
+class Region;
+class EntityManager;
+class StateModel;
+
 namespace Ui {
 class RegionDialog;
 }
@@ -11,17 +15,18 @@ class RegionDialog : public QDialog
 {
     Q_OBJECT
 public:
-    RegionDialog(int v = 0, QWidget *parent = nullptr);
-    ~RegionDialog();
+    RegionDialog(Region *region, EntityManager *em, QWidget *parent = nullptr);
+    ~RegionDialog() override;
 
 private slots:
     void save();
-    void addVerband();
-    void readVerbaende();
+    void addState();
 
 private:
     Ui::RegionDialog *ui;
-    int vid;
+    EntityManager *m_em;
+    StateModel *m_stateModel;
+    Region *m_region;
 };
 
 #endif

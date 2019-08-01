@@ -3,7 +3,6 @@
 #include "model/entitymanager.h"
 #include "model/repository/personrepository.h"
 #include "ui_persondialog.h"
-#include <QSqlQuery>
 
 PersonDialog::PersonDialog(Person *person, EntityManager *em, QWidget *parent)
     : QDialog(parent)
@@ -27,7 +26,7 @@ PersonDialog::PersonDialog(Person *person, EntityManager *em, QWidget *parent)
     ui->zipText->setText(m_person->zip());
     ui->cityText->setText(m_person->city());
     ui->phoneNumberText->setText(m_person->phoneNumber());
-    ui->faxText->setText(m_person->lastName());
+    ui->faxText->setText(m_person->faxNumber());
     ui->emailText->setText(m_person->email());
 }
 

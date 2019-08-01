@@ -24,6 +24,22 @@ const DBTable *Club::mapping()
     return m_mapping;
 }
 
+Region *Club::region() const
+{
+    return m_region;
+}
+
+void Club::setRegion(Region *region)
+{
+    m_region = region;
+    if (region == nullptr) {
+        m_regionId = 0;
+        return;
+    }
+
+    m_regionId = m_region->id();
+}
+
 Person *Club::contactPerson() const
 {
     return m_contactPerson;

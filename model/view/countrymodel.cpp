@@ -35,6 +35,9 @@ QVariant CountryModel::headerData(int section, Qt::Orientation orientation, int 
 
 QVariant CountryModel::data(const QModelIndex &index, int role) const
 {
+    if (!index.isValid())
+        return QVariant();
+
     Country *country = m_countries.at(index.row());
     if (role == Qt::DisplayRole) {
         switch (index.column()) {

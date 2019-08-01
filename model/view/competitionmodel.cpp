@@ -21,7 +21,7 @@ int CompetitionModel::columnCount(const QModelIndex &) const
 }
 
 QVariant CompetitionModel::headerData(int section, Qt::Orientation orientation, int role) const
-{
+{   
     if (role == Qt::DisplayRole && orientation == Qt::Horizontal) {
         switch (section) {
         case 0:
@@ -45,6 +45,9 @@ QVariant CompetitionModel::headerData(int section, Qt::Orientation orientation, 
 
 QVariant CompetitionModel::data(const QModelIndex &index, int role) const
 {
+    if (!index.isValid())
+        return QVariant();
+
     Competition *competition = m_competitions.at(index.row());
     if (role == Qt::DisplayRole) {
         switch (index.column()) {

@@ -37,6 +37,9 @@ QVariant VenueModel::headerData(int section, Qt::Orientation orientation, int ro
 
 QVariant VenueModel::data(const QModelIndex &index, int role) const
 {
+    if (!index.isValid())
+        return QVariant();
+
     Venue *venue = m_venues.at(index.row());
     if (role == Qt::DisplayRole) {
         switch (index.column()) {

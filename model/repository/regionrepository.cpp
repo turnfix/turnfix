@@ -1,4 +1,5 @@
 #include "regionrepository.h"
+#include "model/entity/country.h"
 #include "model/entity/state.h"
 
 RegionRepository::RegionRepository(EntityManager *em)
@@ -12,6 +13,7 @@ QList<Region *> RegionRepository::loadAll()
     QueryBuilder<Region> qb;
     qb.select(Region::staticMetaObject, Region::mapping());
     qb.join(State::staticMetaObject, State::mapping(), "Region", "state", "stateId");
+    qb.join(Country::staticMetaObject, Country::mapping(), "State", "country", "countryId");
     qb.orderBy("Region", "name");
 
     QList<Region *> output = qb.query(db);

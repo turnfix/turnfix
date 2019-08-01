@@ -7,7 +7,7 @@ DBTable *Status::initializeMapping()
     DBTable *status = new DBTable("tfx_status");
     status->addColumn("id", "int_statusid", ColumnType::Integer, 0, false, "", "", true);
     status->addColumn("name", "var_name", ColumnType::Varchar, 150);
-    status->addColumn("color", "ary_colorcode", ColumnType::Varchar, 25);
+    status->addColumn("colorString", "ary_colorcode", ColumnType::Varchar, 25);
     status->addColumn("scoresheet", "bol_bogen", ColumnType::Boolean, 0, true, "'true'");
     status->addColumn("scorecard", "bol_karte", ColumnType::Boolean, 0, true, "'true'");
 
@@ -41,14 +41,34 @@ void Status::setName(const QString &name)
     m_name = name;
 }
 
-QString Status::color() const
+QString Status::colorString() const
+{
+    return m_colorString;
+}
+
+void Status::setColorString(const QString &colorString)
+{
+    m_colorString = colorString;
+    QString brackets = colorString.left(colorString.length() - 1).right(colorString.length() - 2);
+
+    QStringList colors = brackets.split(",");
+    QList<int> list;
+    for (int i = 0; i < colors.size(); i++) {
+        list.append(colors.at(i).toInt());
+    }
+
+    m_color = QColor::fromRgb(colors.at(0).toInt(), colors.at(1).toInt(), colors.at(2).toInt());
+}
+
+QColor Status::color()
 {
     return m_color;
 }
 
-void Status::setColor(const QString &color)
+void Status::setColor(const QColor &color)
 {
     m_color = color;
+    m_colorString = QString("{%1,%2,%3}").arg(color.red()).arg(color.green()).arg(color.blue());
 }
 
 bool Status::scoresheet() const

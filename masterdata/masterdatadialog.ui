@@ -261,12 +261,15 @@
      <widget class="QWidget" name="headerWidget" native="true">
       <layout class="QHBoxLayout" name="horizontalLayout_3">
        <item>
-        <widget class="QLabel" name="label">
+        <widget class="QLabel" name="headerLabel">
          <property name="font">
           <font>
            <weight>75</weight>
            <bold>true</bold>
           </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: #000000;</string>
          </property>
          <property name="text">
           <string>Datenbankverwaltung</string>

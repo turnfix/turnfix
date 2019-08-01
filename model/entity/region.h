@@ -1,10 +1,10 @@
 #ifndef REGION_H
 #define REGION_H
 
+#include "state.h"
 #include <QObject>
 
 class DBTable;
-class State;
 
 class Region : public QObject
 {

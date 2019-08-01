@@ -1,6 +1,7 @@
 #ifndef ATHLETE_H
 #define ATHLETE_H
 
+#include "club.h"
 #include <QDate>
 #include <QObject>
 
@@ -13,13 +14,16 @@ class Athlete : public QObject
     Q_PROPERTY(int clubId READ clubId WRITE setClubId)
     Q_PROPERTY(QString firstName READ firstName WRITE setFirstName)
     Q_PROPERTY(QString lastName READ lastName WRITE setLastName)
-    Q_PROPERTY(Gender gender READ gender WRITE setGender)
+    Q_PROPERTY(int gender READ gender WRITE setGender)
     Q_PROPERTY(QDate dateOfBirth READ dateOfBirth WRITE setDateOfBirth)
     Q_PROPERTY(bool yearOfBirthOnly READ yearOfBirthOnly WRITE setYearOfBirthOnly)
     Q_PROPERTY(QString license READ license WRITE setLicense)
 
+    Q_PROPERTY(Club *club READ club WRITE setClub STORED false)
+
 public:
     enum Gender { Female = 0, Male = 1 };
+
     Q_INVOKABLE Athlete() = default;
 
     int id() const;
@@ -28,14 +32,19 @@ public:
     int clubId() const;
     void setClubId(int clubId);
 
+    Club *club() const;
+    void setClub(Club *value);
+
     QString firstName() const;
     void setFirstName(const QString &firstName);
 
     QString lastName() const;
     void setLastName(const QString &lastName);
 
-    Gender gender() const;
-    void setGender(const Gender &gender);
+    QString fullName() const;
+
+    int gender() const;
+    void setGender(const int &gender);
 
     QDate dateOfBirth() const;
     void setDateOfBirth(const QDate &dateOfBirth);
@@ -51,9 +60,10 @@ public:
 private:
     int m_id = 0;
     int m_clubId;
+    Club *m_club;
     QString m_firstName;
     QString m_lastName;
-    Gender m_gender;
+    int m_gender;
     QDate m_dateOfBirth;
     bool m_yearOfBirthOnly;
     QString m_license;

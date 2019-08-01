@@ -3,7 +3,6 @@
 #include "model/entitymanager.h"
 #include "model/repository/divisionrepository.h"
 #include "ui_divisiondialog.h"
-#include <QSqlQuery>
 
 DivisionDialog::DivisionDialog(Division *division, EntityManager *em, QWidget *parent)
     : QDialog(parent)

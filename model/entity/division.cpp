@@ -7,8 +7,8 @@ DBTable *Division::initializeMapping()
     DBTable *section = new DBTable("tfx_bereiche");
     section->addColumn("id", "int_bereicheid", ColumnType::Integer, 0, false, "", "", true);
     section->addColumn("name", "var_name", ColumnType::Varchar, 150, true);
-    section->addColumn("male", "bol_maennlich", ColumnType::Boolean, 0, true, "'true'");
-    section->addColumn("female", "bol_weiblich", ColumnType::Boolean, 0, true, "'true'");
+    section->addColumn("men", "bol_maennlich", ColumnType::Boolean, 0, true, "'true'");
+    section->addColumn("women", "bol_weiblich", ColumnType::Boolean, 0, true, "'true'");
 
     return section;
 }

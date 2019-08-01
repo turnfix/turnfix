@@ -7,20 +7,24 @@ namespace Ui {
 class PenaltyDialog;
 }
 
+class Penalty;
+class EntityManager;
+
 class PenaltyDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    PenaltyDialog(int tid = 0, QWidget *parent = nullptr);
-    ~PenaltyDialog();
+    PenaltyDialog(Penalty *penalty, EntityManager *em, QWidget *parent = nullptr);
+    ~PenaltyDialog() override;
 
 private slots:
     void save();
 
 private:
     Ui::PenaltyDialog *ui;
-    int pid;
+    EntityManager *m_em;
+    Penalty *m_penalty;
 };
 
 #endif

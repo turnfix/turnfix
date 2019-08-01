@@ -7,26 +7,36 @@
 #include "disciplinegroupdialog.h"
 #include "divisiondialog.h"
 #include "formuladialog.h"
-#include "model/entity/athlete.h"
-#include "model/entity/bankaccount.h"
-#include "model/entity/club.h"
-#include "model/entity/country.h"
-#include "model/entity/discipline.h"
-#include "model/entity/division.h"
-#include "model/entity/person.h"
-#include "model/entity/state.h"
-#include "model/entity/venue.h"
 #include "model/entitymanager.h"
+#include "model/repository/athleterepository.h"
+#include "model/repository/bankaccountrepository.h"
+#include "model/repository/clubrepository.h"
 #include "model/repository/countryrepository.h"
+#include "model/repository/disciplinegrouprepository.h"
+#include "model/repository/disciplinerepository.h"
+#include "model/repository/divisionrepository.h"
 #include "model/repository/formularepository.h"
+#include "model/repository/penaltyrepository.h"
+#include "model/repository/personrepository.h"
+#include "model/repository/regionrepository.h"
 #include "model/repository/sportrepository.h"
 #include "model/repository/staterepository.h"
+#include "model/repository/statusrepository.h"
 #include "model/repository/venuerepository.h"
+#include "model/view/athletemodel.h"
+#include "model/view/bankaccountmodel.h"
+#include "model/view/clubmodel.h"
 #include "model/view/countrymodel.h"
+#include "model/view/disciplinegroupmodel.h"
 #include "model/view/disciplinemodel.h"
+#include "model/view/divisionmodel.h"
 #include "model/view/formulamodel.h"
+#include "model/view/penaltymodel.h"
+#include "model/view/personmodel.h"
+#include "model/view/regionmodel.h"
 #include "model/view/sportmodel.h"
 #include "model/view/statemodel.h"
+#include "model/view/statusmodel.h"
 #include "model/view/venuemodel.h"
 #include "penaltydialog.h"
 #include "persondialog.h"
@@ -48,7 +58,7 @@ MasterdataDialog::MasterdataDialog(EntityManager *em, QWidget *parent, Type type
 {
     ui->setupUi(this);
 
-    QToolBar *tb = new QToolBar();
+    auto tb = new QToolBar();
     tb->setAllowedAreas(Qt::LeftToolBarArea);
     tb->setMovable(false);
     tb->setFloatable(false);
@@ -71,7 +81,7 @@ MasterdataDialog::MasterdataDialog(EntityManager *em, QWidget *parent, Type type
     tb->addAction(ui->act_formel);
     ui->sidebar->layout()->addWidget(tb);
 
-    QActionGroup *ag = new QActionGroup(this);
+    auto ag = new QActionGroup(this);
     ag->addAction(ui->act_sportler);
     ag->addAction(ui->act_vereine);
     ag->addAction(ui->act_disziplinen);
@@ -196,6 +206,7 @@ void MasterdataDialog::updateModel(Type type)
 
     QList<int> sizes;
     QList<QHeaderView::ResizeMode> resizeModes;
+    QList<int> hiddenColumns;
 
     switch (type) {
     case DisciplineData: {
@@ -228,6 +239,7 @@ void MasterdataDialog::updateModel(Type type)
         m_model = venueModel;
         resizeModes << QHeaderView::Stretch << QHeaderView::Fixed << QHeaderView::Stretch;
         sizes << 200 << 60 << 200;
+        hiddenColumns << 3;
         break;
     }
     case CountryData: {
@@ -247,6 +259,82 @@ void MasterdataDialog::updateModel(Type type)
         sizes << 200 << 60 << 200;
         break;
     }
+    case ClubData: {
+        auto clubModel = new ClubModel(m_em, this);
+        clubModel->fetchClubs();
+        m_model = clubModel;
+        resizeModes << QHeaderView::Stretch << QHeaderView::Stretch << QHeaderView::Stretch;
+        sizes << 200 << 200 << 200;
+        break;
+    }
+    case AthleteData: {
+        auto athleteModel = new AthleteModel(m_em, this);
+        athleteModel->fetchAthletes();
+        m_model = athleteModel;
+        resizeModes << QHeaderView::Stretch << QHeaderView::Fixed << QHeaderView::Stretch;
+        sizes << 200 << 60 << 200;
+        break;
+    }
+    case DivisionData: {
+        auto divisionModel = new DivisionModel(m_em, this);
+        divisionModel->fetchDivisions();
+        m_model = divisionModel;
+        resizeModes << QHeaderView::Stretch;
+        sizes << 200;
+        break;
+    }
+    case PersonData: {
+        auto personModel = new PersonModel(m_em, this);
+        personModel->fetchPersons();
+        m_model = personModel;
+        resizeModes << QHeaderView::Stretch << QHeaderView::Stretch << QHeaderView::Fixed
+                    << QHeaderView::Fixed << QHeaderView::Fixed << QHeaderView::ResizeToContents
+                    << QHeaderView::Fixed << QHeaderView::ResizeToContents << QHeaderView::Fixed;
+        sizes << 200 << 200 << 0 << 0 << 0 << 200 << 0 << 200 << 0;
+        hiddenColumns << 2 << 3 << 4 << 6 << 8;
+        break;
+    }
+    case StatusData: {
+        auto statusModel = new StatusModel(m_em, this);
+        statusModel->fetchStatuses();
+        m_model = statusModel;
+        resizeModes << QHeaderView::Stretch;
+        sizes << 200;
+        break;
+    }
+    case BankAccountData: {
+        auto bankAccountModel = new BankAccountModel(m_em, this);
+        bankAccountModel->fetchAccounts();
+        m_model = bankAccountModel;
+        resizeModes << QHeaderView::Stretch << QHeaderView::Stretch << QHeaderView::Stretch;
+        sizes << 200 << 200 << 200;
+        break;
+    }
+    case RegionData: {
+        auto regionModel = new RegionModel(m_em, this);
+        regionModel->fetchRegions();
+        m_model = regionModel;
+        resizeModes << QHeaderView::Stretch << QHeaderView::ResizeToContents
+                    << QHeaderView::ResizeToContents;
+        sizes << 200 << 60 << 200;
+        break;
+    }
+    case PenaltyData: {
+        auto penaltyModel = new PenaltyModel(m_em, this);
+        penaltyModel->fetchPenalties();
+        m_model = penaltyModel;
+        resizeModes << QHeaderView::Stretch << QHeaderView::ResizeToContents;
+        sizes << 200 << 60;
+        break;
+    }
+    case DisciplineGroupData: {
+        auto disciplineGroupModel = new DisciplineGroupModel(m_em, this);
+        disciplineGroupModel->fetchGroups();
+        m_model = disciplineGroupModel;
+        resizeModes << QHeaderView::Stretch << QHeaderView::Stretch;
+        sizes << 200 << 200;
+        break;
+    }
     }
 
     m_sortModel->setSourceModel(m_model);
@@ -261,166 +349,125 @@ void MasterdataDialog::updateModel(Type type)
 
     ui->cmb_filter->clear();
     for (int i = 0; i < m_sortModel->columnCount(); i++) {
+        bool hidden = hiddenColumns.contains(i);
+        ui->db_table->setColumnHidden(i, hidden);
+
+        if (hidden)
+            continue;
+
         ui->cmb_filter->addItem(m_sortModel->headerData(i, Qt::Horizontal).toString());
     }
     ui->txt_filter->setText("");
-
-    // getData();
-    //Vereine
-    //    QString headers1[4] = {"ID","Name","Geb.","Verein"};
-    //    QHeaderView::ResizeMode resizeMode1[] = {QHeaderView::Fixed, QHeaderView::Stretch, QHeaderView::Fixed, QHeaderView::Stretch};
-    //    int resize1[] = {40,200,60,200};
-    //    //Athleten
-    //    QString headers2[4] = {"ID","Verein","Ansprechpartner","Website"};
-    //    QHeaderView::ResizeMode resizeMode2[] = {QHeaderView::Fixed, QHeaderView::Stretch, QHeaderView::Stretch, QHeaderView::Stretch};
-    //    int resize2[] = {40,200,200,200};
-    //    //Bereiche
-    //    QString headers5[4] = {"ID","Name","",""};
-    //    QHeaderView::ResizeMode resizeMode5[] = {QHeaderView::Fixed, QHeaderView::Stretch, QHeaderView::Fixed, QHeaderView::Fixed};
-    //    int resize5[] = {40,200,0,0};
-    //    //Personen
-    //    QString headers6[4] = {"ID","Name","Telefon","Email"};
-    //    QHeaderView::ResizeMode resizeMode6[] = {QHeaderView::Fixed, QHeaderView::Stretch, QHeaderView::Stretch, QHeaderView::Stretch};
-    //    int resize6[] = {40,200,200,200};
-    //    //Status
-    //    QString headers7[4] = {"ID","Name","",""};
-    //    QHeaderView::ResizeMode resizeMode7[] = {QHeaderView::Fixed, QHeaderView::Stretch, QHeaderView::Fixed, QHeaderView::Fixed};
-    //    int resize7[] = {40,200,0,0};
-    //    //Konten
-    //    QString headers8[4] = {"ID","Name","Kontonummer","BLZ"};
-    //    QHeaderView::ResizeMode resizeMode8[] = {QHeaderView::Fixed, QHeaderView::Stretch, QHeaderView::Stretch, QHeaderView::Stretch};
-    //    int resize8[] = {40,200,200,200};
-    //    //Gaue
-    //    QString headers10[4] = {"ID","Turngau/-kreis","Kürzel",""};
-    //    QHeaderView::ResizeMode resizeMode10[] = {QHeaderView::Fixed, QHeaderView::Stretch, QHeaderView::ResizeToContents, QHeaderView::Fixed};
-    //    int resize10[] = {40,200,70,0};
-    //    //Strafen
-    //    QString headers13[4] = {"ID","Strafe","Abzug",""};
-    //    QHeaderView::ResizeMode resizeMode13[] = {QHeaderView::Fixed, QHeaderView::Stretch, QHeaderView::ResizeToContents, QHeaderView::Fixed};
-    //    int resize13[] = {40,200,70,0};
-    //    //Dis-Gruppen
-    //    QString headers14[4] = {"ID","Name","Kommentar",""};
-    //    QHeaderView::ResizeMode resizeMode14[] = {QHeaderView::Fixed, QHeaderView::Fixed, QHeaderView::Stretch, QHeaderView::Fixed};
-    //    int resize14[] = {40,250,200,0};
 }
-//void MasterdataDialog::getData()
-//{
-//    QSqlQuery query;
-//    switch (m_currentType) {
-//    case 1: {
-//            query.prepare("SELECT int_teilnehmerid, var_nachname || ', ' || var_vorname, "+_global::date("dat_geburtstag",4)+", var_name FROM tfx_teilnehmer INNER JOIN tfx_vereine USING (int_vereineid) ORDER BY "+_global::substring("tfx_vereine.var_name","int_start_ort+1")+", var_name, var_nachname, var_vorname");
-
-//        } break;
-//    case 2: {
-//            query.prepare("SELECT int_vereineid, tfx_vereine.var_name, var_vorname || ' ' || var_nachname, var_website FROM tfx_vereine LEFT JOIN tfx_personen USING (int_personenid) ORDER BY "+_global::substring("tfx_vereine.var_name","int_start_ort+1")+", var_name");
-
-//        } break;
-//    case 3: query.prepare("SELECT int_disziplinenid, tfx_disziplinen.var_name, tfx_sport.var_name, CASE WHEN bol_m = 'true' AND bol_w = 'true' THEN 'm/w' ELSE CASE WHEN bol_m = 'true' THEN 'm' ELSE 'w' END END FROM tfx_disziplinen INNER JOIN tfx_sport USING (int_sportid) ORDER BY tfx_sport.var_name, tfx_disziplinen.var_name"); break;
-//    case 4: query.prepare("SELECT int_sportid, var_name, '', '' FROM tfx_sport ORDER BY var_name"); break;
-//    case 5: query.prepare("SELECT int_bereicheid, var_name, '', '' FROM tfx_bereiche ORDER BY var_name"); break;
-//    case 6: query.prepare("SELECT int_personenid, var_nachname || ', ' || var_vorname, var_telefon, var_email FROM tfx_personen ORDER BY var_nachname, var_vorname"); break;
-//    case 7: query.prepare("SELECT int_statusid, var_name, '', '' FROM tfx_status ORDER BY var_name"); break;
-//    case 8: query.prepare("SELECT int_kontenid, var_name, var_kontonummer, var_blz FROM tfx_konten ORDER BY var_name"); break;
-//    case 9: query.prepare("SELECT int_wettkampforteid, var_name, var_plz, var_ort FROM tfx_wettkampforte ORDER BY var_name, var_ort"); break;
-//    case 10: query.prepare("SELECT int_gaueid, var_name, var_kuerzel, '' FROM tfx_gaue ORDER BY var_name"); break;
-//    case 11: query.prepare("SELECT int_verbaendeid, var_name, var_kuerzel, '' FROM tfx_verbaende ORDER BY var_name"); break;
-//    case 12: query.prepare("SELECT int_laenderid, var_name, var_kuerzel, '' FROM tfx_laender ORDER BY var_name"); break;
-//    case 13: query.prepare("SELECT int_mannschaften_abzugid, var_name, rel_abzug, '' FROM tfx_mannschaften_abzug ORDER BY var_name"); break;
-//    case 14: query.prepare("SELECT int_disziplinen_gruppenid, var_name, txt_comment, '' FROM tfx_disziplinen_gruppen ORDER BY var_name"); break;
-//    case 15: query.prepare("SELECT int_formelid, var_name, var_formel, int_typ FROM tfx_formeln ORDER BY var_name"); break;
-//    }
-//    query.exec();
-//    m_model->setQuery(query);
-//    ui->lbl_rowcount->setText(QString::number(m_sortModel->rowCount()));
-//}
 
 void MasterdataDialog::add()
 {
     switch (m_currentType) {
     case DisciplineData: {
         auto dialog = new DisciplineDialog(nullptr, m_em, this);
-        auto model = static_cast<DisciplineModel *>(m_model);
         if (dialog->exec() == 1) {
-            model->fetchDisciplines();
+            dynamic_cast<DisciplineModel *>(m_model)->fetchDisciplines();
         }
         break;
     }
     case SportData: {
         auto dialog = new SportDialog(nullptr, m_em, this);
-        auto model = static_cast<SportModel *>(m_model);
         if (dialog->exec() == 1) {
-            model->fetchSports();
+            dynamic_cast<SportModel *>(m_model)->fetchSports();
         }
         break;
     }
     case FormulaData: {
         auto dialog = new FormulaDialog(nullptr, m_em, this);
-        auto model = static_cast<FormulaModel *>(m_model);
         if (dialog->exec() == 1) {
-            model->fetchFormulas();
+            dynamic_cast<FormulaModel *>(m_model)->fetchFormulas();
         }
         break;
     }
     case VenueData: {
         auto dialog = new VenueDialog(nullptr, m_em, this);
-        auto model = static_cast<VenueModel *>(m_model);
         if (dialog->exec() == 1) {
-            model->fetchVenues();
+            dynamic_cast<VenueModel *>(m_model)->fetchVenues();
         }
         break;
     }
     case CountryData: {
         auto dialog = new CountryDialog(nullptr, m_em, this);
-        auto model = static_cast<CountryModel *>(m_model);
         if (dialog->exec() == 1) {
-            model->fetchCountries();
+            dynamic_cast<CountryModel *>(m_model)->fetchCountries();
         }
         break;
     }
     case StateData: {
         auto dialog = new StateDialog(nullptr, m_em, this);
-        auto model = static_cast<StateModel *>(m_model);
         if (dialog->exec() == 1) {
-            model->fetchStates();
+            dynamic_cast<StateModel *>(m_model)->fetchStates();
         }
         break;
     }
-        //    case 1: {
-        //        dia = new AthleteDialog(nullptr, m_em, this);
-        //        break;
-        //    case 2:
-        //        dia = new ClubDialog(nullptr, m_em, this);
-        //        break;
-        //    case 5:
-        //        dia = new DivisionDialog(nullptr, m_em, this);
-        //        break;
-        //    case 6:
-        //        dia = new PersonDialog(nullptr, m_em, this);
-        //        break;
-        //    case 7:
-        //        dia = new StatusDialog(0, this);
-        //        break;
-        //    case 8:
-        //        dia = new BankAccountDialog(nullptr, m_em, this);
-        //        break;
-        //    case 10:
-        //        dia = new RegionDialog(0, this);
-        //        break;
-        //    case 11:
-        //        dia = new StateDialog(0, this);
-        //        break;
-        //    case 12:
-        //        dia = new CountryDialog(0, this);
-        //        break;
-        //    case 13:
-        //        dia = new PenaltyDialog(0, this);
-        //        break;
-        //    case 14:
-        //        dia = new DisciplineGroupDialog(0, this);
-        //        break;
-        //    case 15:
-        //        dia = new FormulaDialog(0, this);
-        //        break;
+    case AthleteData: {
+        auto dialog = new AthleteDialog(nullptr, m_em, this);
+        if (dialog->exec() == 1) {
+            dynamic_cast<AthleteModel *>(m_model)->fetchAthletes();
+        }
+        break;
+    }
+    case ClubData: {
+        auto dialog = new ClubDialog(nullptr, m_em, this);
+        if (dialog->exec() == 1) {
+            dynamic_cast<ClubModel *>(m_model)->fetchClubs();
+        }
+        break;
+    }
+    case DivisionData: {
+        auto dialog = new DivisionDialog(nullptr, m_em, this);
+        if (dialog->exec() == 1) {
+            dynamic_cast<DivisionModel *>(m_model)->fetchDivisions();
+        }
+        break;
+    }
+    case PersonData: {
+        auto dialog = new PersonDialog(nullptr, m_em, this);
+        if (dialog->exec() == 1) {
+            dynamic_cast<PersonModel *>(m_model)->fetchPersons();
+        }
+        break;
+    }
+    case StatusData: {
+        auto dialog = new StatusDialog(nullptr, m_em, this);
+        if (dialog->exec() == 1) {
+            dynamic_cast<StatusModel *>(m_model)->fetchStatuses();
+        }
+        break;
+    }
+    case BankAccountData: {
+        auto dialog = new BankAccountDialog(nullptr, m_em, this);
+        if (dialog->exec() == 1) {
+            dynamic_cast<BankAccountModel *>(m_model)->fetchAccounts();
+        }
+        break;
+    }
+    case RegionData: {
+        auto dialog = new RegionDialog(nullptr, m_em, this);
+        if (dialog->exec() == 1) {
+            dynamic_cast<RegionModel *>(m_model)->fetchRegions();
+        }
+        break;
+    }
+    case PenaltyData: {
+        auto dialog = new PenaltyDialog(nullptr, m_em, this);
+        if (dialog->exec() == 1) {
+            dynamic_cast<PenaltyModel *>(m_model)->fetchPenalties();
+        }
+        break;
+    }
+    case DisciplineGroupData: {
+        auto dialog = new DisciplineGroupDialog(nullptr, m_em, this);
+        if (dialog->exec() == 1) {
+            dynamic_cast<DisciplineGroupModel *>(m_model)->fetchGroups();
+        }
+        break;
+    }
     }
 }
 
@@ -430,56 +477,107 @@ void MasterdataDialog::edit()
 
     switch (m_currentType) {
     case DisciplineData: {
-        auto discipline = qvariant_cast<Discipline *>(obj);
-        auto dialog = new DisciplineDialog(discipline, m_em, this);
-        auto model = static_cast<DisciplineModel *>(m_model);
+        auto dialog = new DisciplineDialog(qvariant_cast<Discipline *>(obj), m_em, this);
         if (dialog->exec() == 1) {
-            model->fetchDisciplines();
+            dynamic_cast<DisciplineModel *>(m_model)->fetchDisciplines();
         }
         break;
     }
     case SportData: {
-        auto sport = qvariant_cast<Sport *>(obj);
-        auto dialog = new SportDialog(sport, m_em, this);
-        auto model = static_cast<SportModel *>(m_model);
+        auto dialog = new SportDialog(qvariant_cast<Sport *>(obj), m_em, this);
         if (dialog->exec() == 1) {
-            model->fetchSports();
+            dynamic_cast<SportModel *>(m_model)->fetchSports();
         }
         break;
     }
     case FormulaData: {
-        auto formula = qvariant_cast<Formula *>(obj);
-        auto dialog = new FormulaDialog(formula, m_em, this);
-        auto model = static_cast<FormulaModel *>(m_model);
+        auto dialog = new FormulaDialog(qvariant_cast<Formula *>(obj), m_em, this);
         if (dialog->exec() == 1) {
-            model->fetchFormulas();
+            dynamic_cast<FormulaModel *>(m_model)->fetchFormulas();
         }
         break;
     }
     case VenueData: {
-        auto venue = qvariant_cast<Venue *>(obj);
-        auto dialog = new VenueDialog(venue, m_em, this);
-        auto model = static_cast<VenueModel *>(m_model);
+        auto dialog = new VenueDialog(qvariant_cast<Venue *>(obj), m_em, this);
         if (dialog->exec() == 1) {
-            model->fetchVenues();
+            dynamic_cast<VenueModel *>(m_model)->fetchVenues();
         }
         break;
     }
     case CountryData: {
-        auto country = qvariant_cast<Country *>(obj);
-        auto dialog = new CountryDialog(country, m_em, this);
-        auto model = static_cast<CountryModel *>(m_model);
+        auto dialog = new CountryDialog(qvariant_cast<Country *>(obj), m_em, this);
         if (dialog->exec() == 1) {
-            model->fetchCountries();
+            dynamic_cast<CountryModel *>(m_model)->fetchCountries();
         }
         break;
     }
     case StateData: {
-        auto state = qvariant_cast<State *>(obj);
-        auto dialog = new StateDialog(state, m_em, this);
-        auto model = static_cast<StateModel *>(m_model);
+        auto dialog = new StateDialog(qvariant_cast<State *>(obj), m_em, this);
         if (dialog->exec() == 1) {
-            model->fetchStates();
+            dynamic_cast<StateModel *>(m_model)->fetchStates();
+        }
+        break;
+    }
+    case AthleteData: {
+        auto dialog = new AthleteDialog(qvariant_cast<Athlete *>(obj), m_em, this);
+        if (dialog->exec() == 1) {
+            dynamic_cast<AthleteModel *>(m_model)->fetchAthletes();
+        }
+        break;
+    }
+    case ClubData: {
+        auto dialog = new ClubDialog(qvariant_cast<Club *>(obj), m_em, this);
+        if (dialog->exec() == 1) {
+            dynamic_cast<ClubModel *>(m_model)->fetchClubs();
+        }
+        break;
+    }
+    case DivisionData: {
+        auto dialog = new DivisionDialog(qvariant_cast<Division *>(obj), m_em, this);
+        if (dialog->exec() == 1) {
+            dynamic_cast<DivisionModel *>(m_model)->fetchDivisions();
+        }
+        break;
+    }
+    case PersonData: {
+        auto dialog = new PersonDialog(qvariant_cast<Person *>(obj), m_em, this);
+        if (dialog->exec() == 1) {
+            dynamic_cast<PersonModel *>(m_model)->fetchPersons();
+        }
+        break;
+    }
+    case StatusData: {
+        auto dialog = new StatusDialog(qvariant_cast<Status *>(obj), m_em, this);
+        if (dialog->exec() == 1) {
+            dynamic_cast<StatusModel *>(m_model)->fetchStatuses();
+        }
+        break;
+    }
+    case BankAccountData: {
+        auto dialog = new BankAccountDialog(qvariant_cast<BankAccount *>(obj), m_em, this);
+        if (dialog->exec() == 1) {
+            dynamic_cast<BankAccountModel *>(m_model)->fetchAccounts();
+        }
+        break;
+    }
+    case RegionData: {
+        auto dialog = new RegionDialog(qvariant_cast<Region *>(obj), m_em, this);
+        if (dialog->exec() == 1) {
+            dynamic_cast<RegionModel *>(m_model)->fetchRegions();
+        }
+        break;
+    }
+    case PenaltyData: {
+        auto dialog = new PenaltyDialog(qvariant_cast<Penalty *>(obj), m_em, this);
+        if (dialog->exec() == 1) {
+            dynamic_cast<PenaltyModel *>(m_model)->fetchPenalties();
+        }
+        break;
+    }
+    case DisciplineGroupData: {
+        auto dialog = new DisciplineGroupDialog(qvariant_cast<DisciplineGroup *>(obj), m_em, this);
+        if (dialog->exec() == 1) {
+            dynamic_cast<DisciplineGroupModel *>(m_model)->fetchGroups();
         }
         break;
     }
@@ -490,84 +588,56 @@ void MasterdataDialog::del()
 {
     QVariant obj = m_sortModel->data(ui->db_table->currentIndex(), Qt::UserRole);
     switch (m_currentType) {
-    case 1: {
-        //            QMessageBox msg(QMessageBox::Question, "Teilnehmer löschen", "Wollen sie diesen Teilnehmer wirklich löschen?",QMessageBox::Ok | QMessageBox::Cancel);
-        //            if(msg.exec() == QMessageBox::Ok) {
-        //                QSqlQuery query;
-        //                query.prepare("DELETE FROM tfx_teilnehmer WHERE int_teilnehmerid=?");
-        //                query.bindValue(0,
-        //                                QVariant(
-        //                                    m_sortModel->data(
-        //                                        m_sortModel->index(ui->db_table->currentIndex().row(), 0)))
-        //                                    .toInt());
-        //                query.exec();
-        //                if (query.numRowsAffected() == -1) {
-        //                    QMessageBox msg(QMessageBox::Information, "Fehler!", "Dieser Teilnehmer kann nicht gelöscht werden, da er noch einem Wettkampf zugeordnet ist!",QMessageBox::Ok);
-        //                    msg.exec();
-        //                } else {
-        //                    QModelIndex sel = ui->db_table->currentIndex();
-        //                    getData();
-        //                    ui->db_table->setCurrentIndex(sel);
-        //                }
-        //            }
+    case AthleteData: {
+        QMessageBox msg(QMessageBox::Question,
+                        "Teilnehmer löschen",
+                        "Wollen sie diesen Teilnehmer wirklich löschen?",
+                        QMessageBox::Ok | QMessageBox::Cancel);
+        if (msg.exec() == QMessageBox::Ok) {
+            if (m_em->athleteRepository()->remove(qvariant_cast<Athlete *>(obj))) {
+                static_cast<AthleteModel *>(m_model)->fetchAthletes();
+            } else {
+                QMessageBox::information(this,
+                                         "Fehler!",
+                                         "Dieser Teilnehmer kann nicht gelöscht werden, da er noch "
+                                         "einem Wettkampf zugeordnet ist!",
+                                         QMessageBox::Ok);
+            }
+        }
     }; break;
-    case 2: {
-        //            QMessageBox msg(QMessageBox::Question, "Verein löschen", "Wollen sie diesen Verein wirklich löschen?",QMessageBox::Ok | QMessageBox::Cancel);
-        //            if(msg.exec() == QMessageBox::Ok) {
-        //                QSqlQuery query;
-        //                query.prepare("DELETE FROM tfx_vereine WHERE int_vereineid=?");
-        //                query.bindValue(0,
-        //                                QVariant(
-        //                                    m_sortModel->data(
-        //                                        m_sortModel->index(ui->db_table->currentIndex().row(), 0)))
-        //                                    .toInt());
-        //                query.exec();
-        //                if (query.numRowsAffected() == -1) {
-        //                    QMessageBox msg(QMessageBox::Information, "Fehler!", "Dieser Verein kann nicht gelöscht werden, da er noch einem Teilnehmer zugeordnet ist!",QMessageBox::Ok);
-        //                    msg.exec();
-        //                } else {
-        //                    QModelIndex sel = ui->db_table->currentIndex();
-        //                    getData();
-        //                    ui->db_table->setCurrentIndex(sel);
-        //                }
-        //            }
+    case ClubData: {
+        QMessageBox msg(QMessageBox::Question,
+                        "Verein löschen",
+                        "Wollen sie diesen Verein wirklich löschen?",
+                        QMessageBox::Ok | QMessageBox::Cancel);
+        if (msg.exec() == QMessageBox::Ok) {
+            if (m_em->clubRepository()->remove(qvariant_cast<Club *>(obj))) {
+                static_cast<ClubModel *>(m_model)->fetchClubs();
+            } else {
+                QMessageBox::information(this,
+                                         "Fehler!",
+                                         "Dieser Verein kann nicht gelöscht werden, da er noch "
+                                         "einem Teilnehmer zugeordnet ist!",
+                                         QMessageBox::Ok);
+            }
+        }
     }; break;
-    case 3: {
-        //            QMessageBox msg(QMessageBox::Question, "Disziplin löschen", "Wollen sie diese Disziplin wirklich löschen?",QMessageBox::Ok | QMessageBox::Cancel);
-        //            if(msg.exec() == QMessageBox::Ok) {
-        //                QSqlQuery query;
-        //                query.prepare("SELECT * FROM tfx_wettkaempfe_x_disziplinen WHERE int_disziplinenid=?");
-        //                query.bindValue(0,
-        //                                QVariant(
-        //                                    m_sortModel->data(
-        //                                        m_sortModel->index(ui->db_table->currentIndex().row(), 0)))
-        //                                    .toInt());
-        //                query.exec();
-        //                if (_global::querySize(query) == 0) {
-        //                    query.prepare("DELETE FROM tfx_disziplinen_felder WHERE int_disziplinenid=?");
-        //                    query.bindValue(0,
-        //                                    QVariant(
-        //                                        m_sortModel->data(
-        //                                            m_sortModel->index(ui->db_table->currentIndex().row(),
-        //                                                               0)))
-        //                                        .toInt());
-        //                    query.exec();
-        //                    query.prepare("DELETE FROM tfx_disziplinen WHERE int_disziplinenid=?");
-        //                    query.bindValue(0,
-        //                                    QVariant(
-        //                                        m_sortModel->data(
-        //                                            m_sortModel->index(ui->db_table->currentIndex().row(),
-        //                                                               0)))
-        //                                        .toInt());
-        //                    query.exec();
-        //                    QModelIndex sel = ui->db_table->currentIndex();
-        //                    getData();
-        //                    ui->db_table->setCurrentIndex(sel);
-        //                } else {
-        //                    QMessageBox msg(QMessageBox::Information, "Fehler!", "Diese Disziplin kann nicht gelöscht werden, da sie noch in einem Wettkampf verwendet wird!",QMessageBox::Ok);
-        //                    msg.exec();
-        //                }
-        //            }
+    case DisciplineData: {
+        QMessageBox msg(QMessageBox::Question,
+                        "Disziplin löschen",
+                        "Wollen sie diese Disziplin wirklich löschen?",
+                        QMessageBox::Ok | QMessageBox::Cancel);
+        if (msg.exec() == QMessageBox::Ok) {
+            if (m_em->disciplineRepository()->remove(qvariant_cast<Discipline *>(obj))) {
+                static_cast<DisciplineModel *>(m_model)->fetchDisciplines();
+            } else {
+                QMessageBox::information(
+                    this,
+                    "Fehler!",
+                    "Diese Disziplin kann nicht gelöscht werden, da sie noch zugeordnet ist!",
+                    QMessageBox::Ok);
+            }
+        }
     }; break;
     case SportData: {
         QMessageBox msg(QMessageBox::Question,
@@ -575,8 +645,7 @@ void MasterdataDialog::del()
                         tr("Wollen sie diesen Sport wirklich löschen?"),
                         QMessageBox::Ok | QMessageBox::Cancel);
         if (msg.exec() == QMessageBox::Ok) {
-            auto sport = qvariant_cast<Sport *>(obj);
-            if (m_em->sportRepository()->remove(sport)) {
+            if (m_em->sportRepository()->remove(qvariant_cast<Sport *>(obj))) {
                 static_cast<SportModel *>(m_model)->fetchSports();
             } else {
                 QMessageBox::information(
@@ -587,89 +656,73 @@ void MasterdataDialog::del()
             }
         }
     }; break;
-    case 5: {
-        //            QMessageBox msg(QMessageBox::Question, "Bereich löschen", "Wollen sie diesen Bereich wirklich löschen?",QMessageBox::Ok | QMessageBox::Cancel);
-        //            if(msg.exec() == QMessageBox::Ok) {
-        //                QSqlQuery query;
-        //                query.prepare("DELETE FROM tfx_bereiche WHERE int_bereicheid=?");
-        //                query.bindValue(0,
-        //                                QVariant(
-        //                                    m_sortModel->data(
-        //                                        m_sortModel->index(ui->db_table->currentIndex().row(), 0)))
-        //                                    .toInt());
-        //                query.exec();
-        //                if (query.numRowsAffected() == -1) {
-        //                    QMessageBox msg(QMessageBox::Information, "Fehler!", "Dieser Bereich kann nicht gelöscht werden, da er noch zugeordnet ist!",QMessageBox::Ok);
-        //                    msg.exec();
-        //                } else {
-        //                    QModelIndex sel = ui->db_table->currentIndex();
-        //                    getData();
-        //                    ui->db_table->setCurrentIndex(sel);
-        //                }
-        //            }
+    case DivisionData: {
+        QMessageBox msg(QMessageBox::Question,
+                        "Bereich löschen",
+                        "Wollen sie diesen Bereich wirklich löschen?",
+                        QMessageBox::Ok | QMessageBox::Cancel);
+        if (msg.exec() == QMessageBox::Ok) {
+            if (m_em->divisionRepository()->remove(qvariant_cast<Division *>(obj))) {
+                static_cast<DivisionModel *>(m_model)->fetchDivisions();
+            } else {
+                QMessageBox::information(
+                    this,
+                    "Fehler!",
+                    "Dieser Bereich kann nicht gelöscht werden, da er noch zugeordnet ist!",
+                    QMessageBox::Ok);
+            }
+        }
     }; break;
-    case 6: {
-        //            QMessageBox msg(QMessageBox::Question, "Person löschen", "Wollen sie diese Person wirklich löschen?",QMessageBox::Ok | QMessageBox::Cancel);
-        //            if(msg.exec() == QMessageBox::Ok) {
-        //                QSqlQuery query;
-        //                query.prepare("DELETE FROM tfx_personen WHERE int_personenid=?");
-        //                query.bindValue(0,
-        //                                QVariant(
-        //                                    m_sortModel->data(
-        //                                        m_sortModel->index(ui->db_table->currentIndex().row(), 0)))
-        //                                    .toInt());
-        //                query.exec();
-        //                if (query.numRowsAffected() == -1) {
-        //                    QMessageBox msg(QMessageBox::Information, "Fehler!", "Diese Person kann nicht gelöscht werden, da sie noch zugeordnet ist!",QMessageBox::Ok);
-        //                    msg.exec();
-        //                } else {
-        //                    QModelIndex sel = ui->db_table->currentIndex();
-        //                    getData();
-        //                    ui->db_table->setCurrentIndex(sel);
-        //                }
-        //            }
+    case PersonData: {
+        QMessageBox msg(QMessageBox::Question,
+                        "Person löschen",
+                        "Wollen sie diese Person wirklich löschen?",
+                        QMessageBox::Ok | QMessageBox::Cancel);
+        if (msg.exec() == QMessageBox::Ok) {
+            if (m_em->personRepository()->remove(qvariant_cast<Person *>(obj))) {
+                static_cast<PersonModel *>(m_model)->fetchPersons();
+            } else {
+                QMessageBox::information(
+                    this,
+                    "Fehler!",
+                    "Dieser Person kann nicht gelöscht werden, da er noch zugeordnet ist!",
+                    QMessageBox::Ok);
+            }
+        }
     }; break;
-    case 7: {
-        //            QMessageBox msg(QMessageBox::Question, "Status löschen", "Wollen sie diesen Status wirklich löschen?",QMessageBox::Ok | QMessageBox::Cancel);
-        //            if(msg.exec() == QMessageBox::Ok) {
-        //                QSqlQuery query;
-        //                query.prepare("DELETE FROM tfx_status WHERE int_statusid=?");
-        //                query.bindValue(0,
-        //                                QVariant(
-        //                                    m_sortModel->data(
-        //                                        m_sortModel->index(ui->db_table->currentIndex().row(), 0)))
-        //                                    .toInt());
-        //                query.exec();
-        //                if (query.numRowsAffected() == -1) {
-        //                    QMessageBox msg(QMessageBox::Information, "Fehler!", "Dieser Status kann nicht gelöscht werden, da er noch zugeordnet ist!",QMessageBox::Ok);
-        //                    msg.exec();
-        //                } else {
-        //                    QModelIndex sel = ui->db_table->currentIndex();
-        //                    getData();
-        //                    ui->db_table->setCurrentIndex(sel);
-        //                }
-        //            }
+    case StatusData: {
+        QMessageBox msg(QMessageBox::Question,
+                        "Status löschen",
+                        "Wollen sie diesen Status wirklich löschen?",
+                        QMessageBox::Ok | QMessageBox::Cancel);
+        if (msg.exec() == QMessageBox::Ok) {
+            if (m_em->statusRepository()->remove(qvariant_cast<Status *>(obj))) {
+                static_cast<StatusModel *>(m_model)->fetchStatuses();
+            } else {
+                QMessageBox::information(
+                    this,
+                    "Fehler!",
+                    "Dieser Status kann nicht gelöscht werden, da er noch zugeordnet ist!",
+                    QMessageBox::Ok);
+            }
+        }
     }; break;
-    case 8: {
-        //            QMessageBox msg(QMessageBox::Question, "Konto löschen", "Wollen sie dieses Konto wirklich löschen?",QMessageBox::Ok | QMessageBox::Cancel);
-        //            if(msg.exec() == QMessageBox::Ok) {
-        //                QSqlQuery query;
-        //                query.prepare("DELETE FROM tfx_konten WHERE int_kontenid=?");
-        //                query.bindValue(0,
-        //                                QVariant(
-        //                                    m_sortModel->data(
-        //                                        m_sortModel->index(ui->db_table->currentIndex().row(), 0)))
-        //                                    .toInt());
-        //                query.exec();
-        //                if (query.numRowsAffected() == -1) {
-        //                    QMessageBox msg(QMessageBox::Information, "Fehler!", "Dieses Konto kann nicht gelöscht werden, da es noch einem Wettkampf zugeordnet ist!",QMessageBox::Ok);
-        //                    msg.exec();
-        //                } else {
-        //                    QModelIndex sel = ui->db_table->currentIndex();
-        //                    getData();
-        //                    ui->db_table->setCurrentIndex(sel);
-        //                }
-        //            }
+    case BankAccountData: {
+        QMessageBox msg(QMessageBox::Question,
+                        "Konto löschen",
+                        "Wollen sie dieses Konto wirklich löschen?",
+                        QMessageBox::Ok | QMessageBox::Cancel);
+        if (msg.exec() == QMessageBox::Ok) {
+            if (m_em->bankAccountRepository()->remove(qvariant_cast<BankAccount *>(obj))) {
+                static_cast<BankAccountModel *>(m_model)->fetchAccounts();
+            } else {
+                QMessageBox::information(
+                    this,
+                    "Fehler!",
+                    "Dieses Konto kann nicht gelöscht werden, da es noch zugeordnet ist!",
+                    QMessageBox::Ok);
+            }
+        }
     }; break;
     case VenueData: {
         QMessageBox msg(QMessageBox::Question,
@@ -677,8 +730,7 @@ void MasterdataDialog::del()
                         "Wollen sie diesen Wettkampfort wirklich löschen?",
                         QMessageBox::Ok | QMessageBox::Cancel);
         if (msg.exec() == QMessageBox::Ok) {
-            auto venue = qvariant_cast<Venue *>(obj);
-            if (m_em->venueRepository()->remove(venue)) {
+            if (m_em->venueRepository()->remove(qvariant_cast<Venue *>(obj))) {
                 static_cast<VenueModel *>(m_model)->fetchVenues();
             } else {
                 QMessageBox::information(
@@ -690,26 +742,22 @@ void MasterdataDialog::del()
             }
         }
     }; break;
-    case 10: {
-        //            QMessageBox msg(QMessageBox::Question, "Turnkreis/-gau löschen", "Wollen sie diesen Turnkreis/-gau wirklich löschen?",QMessageBox::Ok | QMessageBox::Cancel);
-        //            if(msg.exec() == QMessageBox::Ok) {
-        //                QSqlQuery query;
-        //                query.prepare("DELETE FROM tfx_gaue WHERE int_gaueid=?");
-        //                query.bindValue(0,
-        //                                QVariant(
-        //                                    m_sortModel->data(
-        //                                        m_sortModel->index(ui->db_table->currentIndex().row(), 0)))
-        //                                    .toInt());
-        //                query.exec();
-        //                if (query.numRowsAffected() == -1) {
-        //                    QMessageBox msg(QMessageBox::Information, "Fehler!", "Dieser Turnkreis/-gau kann nicht gelöscht werden, da er noch einem Verein zugeordnet ist!",QMessageBox::Ok);
-        //                    msg.exec();
-        //                } else {
-        //                    QModelIndex sel = ui->db_table->currentIndex();
-        //                    getData();
-        //                    ui->db_table->setCurrentIndex(sel);
-        //                }
-        //            }
+    case RegionData: {
+        QMessageBox msg(QMessageBox::Question,
+                        "Turnkreis/-gau löschen",
+                        "Wollen sie diesen Turnkreis/-gau wirklich löschen?",
+                        QMessageBox::Ok | QMessageBox::Cancel);
+        if (msg.exec() == QMessageBox::Ok) {
+            if (m_em->regionRepository()->remove(qvariant_cast<Region *>(obj))) {
+                static_cast<RegionModel *>(m_model)->fetchRegions();
+            } else {
+                QMessageBox::information(this,
+                                         "Fehler!",
+                                         "Dieser Turnkreis/-gau kann nicht gelöscht werden, da er "
+                                         "noch einem Verein zugeordnet ist!",
+                                         QMessageBox::Ok);
+            }
+        }
     }; break;
     case StateData: {
         QMessageBox msg(QMessageBox::Question,
@@ -717,8 +765,7 @@ void MasterdataDialog::del()
                         "Wollen sie diesen Landesverband wirklich löschen?",
                         QMessageBox::Ok | QMessageBox::Cancel);
         if (msg.exec() == QMessageBox::Ok) {
-            auto state = qvariant_cast<State *>(obj);
-            if (m_em->stateRepository()->remove(state)) {
+            if (m_em->stateRepository()->remove(qvariant_cast<State *>(obj))) {
                 static_cast<StateModel *>(m_model)->fetchStates();
             } else {
                 QMessageBox::information(
@@ -736,8 +783,7 @@ void MasterdataDialog::del()
                         "Wollen sie dieses Land wirklich löschen?",
                         QMessageBox::Ok | QMessageBox::Cancel);
         if (msg.exec() == QMessageBox::Ok) {
-            auto country = qvariant_cast<Country *>(obj);
-            if (m_em->countryRepository()->remove(country)) {
+            if (m_em->countryRepository()->remove(qvariant_cast<Country *>(obj))) {
                 static_cast<CountryModel *>(m_model)->fetchCountries();
             } else {
                 QMessageBox::information(this,
@@ -748,42 +794,39 @@ void MasterdataDialog::del()
             }
         }
     }; break;
-    case 13: {
-        //            QMessageBox msg(QMessageBox::Question, "Strafe löschen", "Wollen sie diese Strafe wirklich löschen?",QMessageBox::Ok | QMessageBox::Cancel);
-        //            if(msg.exec() == QMessageBox::Ok) {
-        //                QSqlQuery query;
-        //                query.prepare("DELETE FROM tfx_mannschaften_abzug WHERE int_mannschaften_abzugid=?");
-        //                query.bindValue(0,
-        //                                QVariant(
-        //                                    m_sortModel->data(
-        //                                        m_sortModel->index(ui->db_table->currentIndex().row(), 0)))
-        //                                    .toInt());
-        //                query.exec();
-        //                if (query.numRowsAffected() == -1) {
-        //                    QMessageBox msg(QMessageBox::Information, "Fehler!", "Dieser Abzug kann nicht gelöscht werden, da er noch in Verwendung ist!",QMessageBox::Ok);
-        //                    msg.exec();
-        //                } else {
-        //                    QModelIndex sel = ui->db_table->currentIndex();
-        //                    getData();
-        //                    ui->db_table->setCurrentIndex(sel);
-        //                }
-        //            }
+    case PenaltyData: {
+        QMessageBox msg(QMessageBox::Question,
+                        "Strafe löschen",
+                        "Wollen sie diese Strafe wirklich löschen?",
+                        QMessageBox::Ok | QMessageBox::Cancel);
+        if (msg.exec() == QMessageBox::Ok) {
+            if (m_em->penaltyRepository()->remove(qvariant_cast<Penalty *>(obj))) {
+                static_cast<PenaltyModel *>(m_model)->fetchPenalties();
+            } else {
+                QMessageBox::information(
+                    this,
+                    "Fehler!",
+                    "Diese Strafe kann nicht gelöscht werden, da sie noch zugeordnet ist!",
+                    QMessageBox::Ok);
+            }
+        }
     }; break;
-    case 14: {
-        //            QMessageBox msg(QMessageBox::Question, "Disziplinengruppe löschen", "Wollen sie diese Disziplinengruppe wirklich löschen?",QMessageBox::Ok | QMessageBox::Cancel);
-        //            if(msg.exec() == QMessageBox::Ok) {
-        //                QSqlQuery query;
-        //                query.prepare("DELETE FROM tfx_disziplinen_gruppen WHERE int_disziplinen_gruppenid=?");
-        //                query.bindValue(0,
-        //                                QVariant(
-        //                                    m_sortModel->data(
-        //                                        m_sortModel->index(ui->db_table->currentIndex().row(), 0)))
-        //                                    .toInt());
-        //                query.exec();
-        //                QModelIndex sel = ui->db_table->currentIndex();
-        //                getData();
-        //                ui->db_table->setCurrentIndex(sel);
-        //            }
+    case DisciplineGroupData: {
+        QMessageBox msg(QMessageBox::Question,
+                        "Disziplinengruppe löschen",
+                        "Wollen sie diese Disziplinengruppe wirklich löschen?",
+                        QMessageBox::Ok | QMessageBox::Cancel);
+        if (msg.exec() == QMessageBox::Ok) {
+            if (m_em->disciplineGroupRepository()->remove(qvariant_cast<DisciplineGroup *>(obj))) {
+                static_cast<DisciplineGroupModel *>(m_model)->fetchGroups();
+            } else {
+                QMessageBox::information(
+                    this,
+                    "Fehler!",
+                    "Diese Gruppe kann nicht gelöscht werden, da sie noch zugeordnet ist!",
+                    QMessageBox::Ok);
+            }
+        }
     }; break;
     case FormulaData: {
         QMessageBox msg(QMessageBox::Question,
@@ -791,8 +834,7 @@ void MasterdataDialog::del()
                         "Wollen sie diese Formel wirklich löschen?",
                         QMessageBox::Ok | QMessageBox::Cancel);
         if (msg.exec() == QMessageBox::Ok) {
-            auto formula = qvariant_cast<Formula *>(obj);
-            if (m_em->formulaRepository()->remove(formula)) {
+            if (m_em->formulaRepository()->remove(qvariant_cast<Formula *>(obj))) {
                 static_cast<FormulaModel *>(m_model)->fetchFormulas();
             } else {
                 QMessageBox::information(
@@ -812,7 +854,7 @@ void MasterdataDialog::updateFilterColumn(int index)
     ui->lbl_rowcount->setText(QString::number(m_sortModel->rowCount()));
 }
 
-void MasterdataDialog::updateFilterText(QString text)
+void MasterdataDialog::updateFilterText(const QString &text)
 {
     m_sortModel->setFilterRegExp(text);
     ui->lbl_rowcount->setText(QString::number(m_sortModel->rowCount()));

@@ -7,13 +7,17 @@ namespace Ui {
 class StatusDialog;
 }
 
+class Status;
+class EntityManager;
+class CountryModel;
+
 class StatusDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    StatusDialog(int tid = 0, QWidget *parent = nullptr);
-    ~StatusDialog();
+    StatusDialog(Status *status, EntityManager *em, QWidget *parent = nullptr);
+    ~StatusDialog() override;
 
 private slots:
     void save();
@@ -21,7 +25,8 @@ private slots:
 
 private:
     Ui::StatusDialog *ui;
-    int tnid;
-    QColor col;
+    EntityManager *m_em;
+    Status *m_status;
+    QColor m_color;
 };
 #endif

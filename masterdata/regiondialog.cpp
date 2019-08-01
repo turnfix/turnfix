@@ -1,35 +1,38 @@
 #include "regiondialog.h"
-#include "src/global/header/_global.h"
+#include "model/entity/region.h"
+#include "model/entity/state.h"
+#include "model/entitymanager.h"
+#include "model/enums.h"
+#include "model/repository/regionrepository.h"
+#include "model/view/statemodel.h"
 #include "statedialog.h"
 #include "ui_regiondialog.h"
-#include <QSqlQuery>
+#include <QMessageBox>
 
-RegionDialog::RegionDialog(int im_vid, QWidget *parent)
+RegionDialog::RegionDialog(Region *region, EntityManager *em, QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::RegionDialog)
+    , m_em(em)
+    , m_region(region)
 {
-    vid = im_vid;
     ui->setupUi(this);
-
     setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint
                    | Qt::WindowCloseButtonHint);
-    readVerbaende();
-
-    ui->cmb_verband->setCurrentIndex(0);
 
     connect(ui->but_save, SIGNAL(clicked()), this, SLOT(save()));
-    connect(ui->but_addl, SIGNAL(clicked()), this, SLOT(addVerband()));
+    connect(ui->but_addl, SIGNAL(clicked()), this, SLOT(addState()));
 
-    if (vid != 0) {
-        QSqlQuery query;
-        query.prepare("SELECT int_verbaendeid, var_name, var_kuerzel FROM tfx_gaue WHERE int_gaueid=?");
-        query.bindValue(0,vid);
-        query.exec();
-        query.next();
-        ui->cmb_verband->setCurrentIndex(ui->cmb_verband->findData(query.value(0).toInt()));
-        ui->txt_name->setText(query.value(1).toString());
-        ui->txt_kuerzel->setText(query.value(2).toString());
+    if (m_region == nullptr) {
+        m_region = new Region();
     }
+
+    auto stateModel = new StateModel(m_em, this);
+    stateModel->fetchStates();
+    ui->cmb_verband->setModel(stateModel);
+
+    ui->cmb_verband->setCurrentIndex(ui->cmb_verband->findData(m_region->stateId(), TF::IdRole));
+    ui->txt_name->setText(m_region->name());
+    ui->txt_kuerzel->setText(m_region->code());
 }
 
 RegionDialog::~RegionDialog()
@@ -37,35 +40,25 @@ RegionDialog::~RegionDialog()
     delete ui;
 }
 
-void RegionDialog::readVerbaende()
+void RegionDialog::addState()
 {
-    QString currtext = ui->cmb_verband->currentText();
-    ui->cmb_verband->clear();
-    QSqlQuery query("SELECT int_verbaendeid, var_name FROM tfx_verbaende ORDER BY var_name");
-    while (query.next()) {
-        ui->cmb_verband->addItem(query.value(1).toString(), query.value(0).toInt());
+    auto pe = new StateDialog(nullptr, m_em, this);
+    if (pe->exec() == 1) {
+        m_stateModel->fetchStates();
     }
-    ui->cmb_verband->setCurrentIndex(ui->cmb_verband->findText(currtext));
-}
-
-void RegionDialog::addVerband()
-{
-    //    StateDialog *pe = new StateDialog(nullptr, m_em, this);
-    //    if(pe->exec() == 1) { readVerbaende(); }
 }
 
 void RegionDialog::save()
 {
-    QSqlQuery query6;
-    if (vid == 0) {
-        query6.prepare("INSERT INTO tfx_gaue (int_verbaendeid,var_name,var_kuerzel) VALUES (?,?,?)");
-    } else {
-        query6.prepare("UPDATE tfx_gaue SET int_verbaendeid=?,var_name=?,var_kuerzel=? WHERE int_gaueid=?");
-        query6.bindValue(3,vid);
+    if (ui->cmb_verband->currentIndex() == -1) {
+        QMessageBox::warning(this, tr("Fehlender Wert"), tr("Bitte einen Verband wählen."));
+        return;
     }
-    query6.bindValue(0, ui->cmb_verband->itemData(ui->cmb_verband->currentIndex()));
-    query6.bindValue(1, ui->txt_name->text());
-    query6.bindValue(2, ui->txt_kuerzel->text());
-    query6.exec();
+
+    m_region->setState(qvariant_cast<State *>(ui->cmb_verband->currentData()));
+    m_region->setName(ui->txt_name->text());
+    m_region->setCode(ui->txt_kuerzel->text());
+
+    m_em->regionRepository()->persist(m_region);
     done(1);
 }

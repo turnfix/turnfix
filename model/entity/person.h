@@ -19,6 +19,8 @@ class Person : public QObject
     Q_PROPERTY(QString email READ email WRITE setEmail)
 
 public:
+    Q_INVOKABLE Person() = default;
+
     int id() const;
     void setId(int id);
 
