@@ -1,11 +1,11 @@
 #include "logindialog.h"
 #include "checkdatabasedialog.h"
+#include "connectionmodel.h"
 #include "eventdialog.h"
+#include "eventmodel.h"
 #include "model/entity/abstractconnection.h"
 #include "model/entity/event.h"
 #include "model/entitymanager.h"
-#include "model/view/connectionmodel.h"
-#include "model/view/eventmodel.h"
 #include "postgressetupwizard.h"
 #include "ui_logindialog.h"
 #include <QDataWidgetMapper>

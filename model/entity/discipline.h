@@ -81,6 +81,8 @@ public:
     bool women() const;
     void setWomen(bool women);
 
+    QString genderText() const;
+
     int formulaId() const;
     void setFormulaId(int formulaId);
 

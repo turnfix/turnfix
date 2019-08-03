@@ -1,10 +1,10 @@
 #include "disciplinedialog.h"
+#include "disciplinefieldmodel.h"
+#include "formulamodel.h"
 #include "model/entity/discipline.h"
 #include "model/entitymanager.h"
 #include "model/repository/disciplinerepository.h"
-#include "model/view/disciplinefieldmodel.h"
-#include "model/view/formulamodel.h"
-#include "model/view/sportmodel.h"
+#include "sportmodel.h"
 #include "ui_disciplinedialog.h"
 #include <QKeyEvent>
 #include <QMessageBox>
@@ -89,6 +89,7 @@ void DisciplineDialog::save()
     m_discipline->setShortName1(ui->txt_short1->text());
     m_discipline->setShortName2(ui->txt_short2->text());
     m_discipline->setLanes(ui->chk_run->isChecked());
+    m_discipline->setWomen(ui->chk_w->isChecked());
     m_discipline->setMen(ui->chk_m->isChecked());
     m_discipline->setFormula(qvariant_cast<Formula *>(ui->cmb_formel->currentData()));
     m_discipline->setCalculate(ui->gbx_berechnen->isChecked());

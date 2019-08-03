@@ -1,10 +1,10 @@
 #include "disciplinegroupdialog.h"
+#include "disciplinegroupitemmodel.h"
+#include "disciplinemodel.h"
 #include "model/entity/discipline.h"
 #include "model/entity/disciplinegroup.h"
 #include "model/entitymanager.h"
 #include "model/repository/disciplinegrouprepository.h"
-#include "model/view/disciplinegroupitemmodel.h"
-#include "model/view/disciplinemodel.h"
 #include "ui_disciplinegroupdialog.h"
 
 DisciplineGroupDialog::DisciplineGroupDialog(DisciplineGroup *disciplineGroup,

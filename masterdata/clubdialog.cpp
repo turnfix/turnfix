@@ -3,10 +3,10 @@
 #include "model/entity/person.h"
 #include "model/entitymanager.h"
 #include "model/repository/clubrepository.h"
-#include "model/view/personmodel.h"
-#include "model/view/regionmodel.h"
 #include "persondialog.h"
+#include "personmodel.h"
 #include "regiondialog.h"
+#include "regionmodel.h"
 #include "ui_clubdialog.h"
 #include <QMessageBox>
 

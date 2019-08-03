@@ -1,11 +1,11 @@
 #include "athletedialog.h"
+#include "clubmodel.h"
 #include "model/entity/athlete.h"
 #include "model/entity/club.h"
 #include "model/entitymanager.h"
 #include "model/enums.h"
 #include "model/repository/athleterepository.h"
 #include "model/repository/clubrepository.h"
-#include "model/view/clubmodel.h"
 #include "ui_athletedialog.h"
 #include <QMessageBox>
 

@@ -1,7 +1,11 @@
 #include "eventdialog.h"
+#include "eventmodel.h"
 #include "masterdata/bankaccountdialog.h"
+#include "masterdata/bankaccountmodel.h"
 #include "masterdata/persondialog.h"
+#include "masterdata/personmodel.h"
 #include "masterdata/venuedialog.h"
+#include "masterdata/venuemodel.h"
 #include "model/entity/bankaccount.h"
 #include "model/entity/event.h"
 #include "model/entity/person.h"
@@ -9,13 +13,8 @@
 #include "model/entitymanager.h"
 #include "model/enums.h"
 #include "model/repository/eventrepository.h"
-#include "model/view/bankaccountmodel.h"
-#include "model/view/eventmodel.h"
-#include "model/view/personmodel.h"
-#include "model/view/venuemodel.h"
 #include "ui_eventdialog.h"
 #include <QMessageBox>
-#include <QSqlQuery>
 #include <QToolBar>
 
 EventDialog::EventDialog(Event *event, EntityManager *em, QWidget *parent)

@@ -2,6 +2,7 @@
 #include "repository/athleterepository.h"
 #include "repository/bankaccountrepository.h"
 #include "repository/clubrepository.h"
+#include "repository/competitiondisciplinerepository.h"
 #include "repository/competitionrepository.h"
 #include "repository/connectionrepository.h"
 #include "repository/countryrepository.h"
@@ -27,6 +28,7 @@ EntityManager::EntityManager(QObject *parent)
     m_bankAccountRepository = new BankAccountRepository(this);
     m_clubRepository = new ClubRepository(this);
     m_competitionRepository = new CompetitionRepository(this);
+    m_competitionDisciplineRepository = new CompetitionDisciplineRepository(this);
     m_connectionRepository = new ConnectionRepository(this);
     m_countryRepository = new CountryRepository(this);
     m_disciplineRepository = new DisciplineRepository(this);
@@ -90,6 +92,11 @@ QString EntityManager::connectionName() const
 void EntityManager::setConnectionName(const QString &connectionName)
 {
     m_connectionName = connectionName;
+}
+
+CompetitionDisciplineRepository *EntityManager::competitionDisciplineRepository() const
+{
+    return m_competitionDisciplineRepository;
 }
 
 AthleteRepository *EntityManager::athleteRepository() const

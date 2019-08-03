@@ -7,6 +7,7 @@ class AthleteRepository;
 class BankAccountRepository;
 class ClubRepository;
 class CompetitionRepository;
+class CompetitionDisciplineRepository;
 class ConnectionRepository;
 class CountryRepository;
 class DisciplineRepository;
@@ -35,6 +36,7 @@ public:
     BankAccountRepository *bankAccountRepository() const;
     ClubRepository *clubRepository() const;
     CompetitionRepository *competitionRepository() const;
+    CompetitionDisciplineRepository *competitionDisciplineRepository() const;
     ConnectionRepository *connectionRepository() const;
     CountryRepository *countryRepository() const;
     DisciplineRepository *disciplineRepository() const;
@@ -64,6 +66,7 @@ private:
     BankAccountRepository *m_bankAccountRepository;
     ClubRepository *m_clubRepository;
     CompetitionRepository *m_competitionRepository;
+    CompetitionDisciplineRepository *m_competitionDisciplineRepository;
     ConnectionRepository *m_connectionRepository;
     CountryRepository *m_countryRepository;
     DisciplineRepository *m_disciplineRepository;

@@ -6,7 +6,9 @@ namespace Ui {
 class CompetitionDialog;
 }
 
-class Event;
+class Competition;
+class EntityManager;
+class CompetitionDisciplineModel;
 class QStandardItemModel;
 
 class CompetitionDialog : public QDialog
@@ -14,11 +16,12 @@ class CompetitionDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit CompetitionDialog(Event *m_event, int edit = 0, QWidget *parent = nullptr);
+    explicit CompetitionDialog(Competition *competition,
+                               EntityManager *em,
+                               QWidget *parent = nullptr);
     ~CompetitionDialog() override;
 
 private slots:
-    void initData();
     void save();
     void fillTable();
     void fillTable2();
@@ -33,10 +36,10 @@ private slots:
     void orderMoveRight();
 
 private:
-    Event *m_event;
+    Competition *m_competition;
+    EntityManager *m_em;
     Ui::CompetitionDialog *ui;
-    int editid;
-    QStandardItemModel *model;
+    CompetitionDisciplineModel *m_competitionDisciplineModel;
     QStandardItemModel *model2;
 };
 #endif
