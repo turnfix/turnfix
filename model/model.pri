@@ -16,4 +16,3 @@ SOURCES += \
 
 include(entity/entity.pri)
 include(repository/repository.pri)
-include(view/view.pri)

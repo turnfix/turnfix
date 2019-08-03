@@ -33,6 +33,9 @@ private:
 
     static DBTable *initializeMapping();
     static const DBTable *m_mapping;
+
+signals:
+    void idChanged(int id);
 };
 Q_DECLARE_METATYPE(DisciplineGroup *);
 

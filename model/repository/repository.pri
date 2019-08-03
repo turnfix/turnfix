@@ -3,12 +3,14 @@ HEADERS += \
     $$PWD/athleterepository.h \
     $$PWD/bankaccountrepository.h \
     $$PWD/clubrepository.h \
+    $$PWD/competitiondisciplinerepository.h \
     $$PWD/competitionrepository.h \
     $$PWD/connectionrepository.h \
     $$PWD/countryrepository.h \
     $$PWD/disciplinefieldrepository.h \
     $$PWD/disciplinegroupitemrepository.h \
     $$PWD/disciplinegrouprepository.h \
+    $$PWD/disciplinepositionrepository.h \
     $$PWD/disciplinerepository.h \
     $$PWD/divisionrepository.h \
     $$PWD/eventrepository.h \
@@ -25,12 +27,14 @@ SOURCES += \
     $$PWD/athleterepository.cpp \
     $$PWD/bankaccountrepository.cpp \
     $$PWD/clubrepository.cpp \
+    $$PWD/competitiondisciplinerepository.cpp \
     $$PWD/competitionrepository.cpp \
     $$PWD/connectionrepository.cpp \
     $$PWD/countryrepository.cpp \
     $$PWD/disciplinefieldrepository.cpp \
     $$PWD/disciplinegroupitemrepository.cpp \
     $$PWD/disciplinegrouprepository.cpp \
+    $$PWD/disciplinepositionrepository.cpp \
     $$PWD/disciplinerepository.cpp \
     $$PWD/divisionrepository.cpp \
     $$PWD/eventrepository.cpp \

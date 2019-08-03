@@ -61,7 +61,7 @@
    <item row="1" column="1">
     <widget class="QStackedWidget" name="stackedWidget">
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QGridLayout" name="gridLayout_8">
@@ -437,7 +437,7 @@
      <widget class="QWidget" name="page_3">
       <layout class="QGridLayout" name="gridLayout_10">
        <item row="0" column="0">
-        <widget class="QLabel" name="label_2">
+        <widget class="QLabel" name="qualifiersLabel">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -743,9 +743,6 @@
             <property name="selectionMode">
              <enum>QAbstractItemView::SingleSelection</enum>
             </property>
-            <property name="showGrid">
-             <bool>false</bool>
-            </property>
             <attribute name="horizontalHeaderVisible">
              <bool>false</bool>
             </attribute>
@@ -1027,8 +1024,8 @@
   </action>
  </widget>
  <resources>
-  <include location="../resources/TurnFix.qrc"/>
   <include location="../resources/TF_GeraeteIcons.qrc"/>
+  <include location="../resources/TurnFix.qrc"/>
  </resources>
  <connections/>
 </ui>

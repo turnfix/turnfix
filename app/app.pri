@@ -10,8 +10,10 @@ FORMS += \
 HEADERS += \
     $$PWD/aboutdialog.h \
     $$PWD/checkdatabasedialog.h \
+    $$PWD/connectionmodel.h \
     $$PWD/dbinitializerpostgres.h \
     $$PWD/eventdialog.h \
+    $$PWD/eventmodel.h \
     $$PWD/logindialog.h \
     $$PWD/mainwindow.h \
     $$PWD/postgressetupwizard.h \
@@ -19,8 +21,10 @@ HEADERS += \
 
 SOURCES += \
     $$PWD/checkdatabasedialog.cpp \
+    $$PWD/connectionmodel.cpp \
     $$PWD/dbinitializerpostgres.cpp \
     $$PWD/eventdialog.cpp \
+    $$PWD/eventmodel.cpp \
     $$PWD/logindialog.cpp \
     $$PWD/mainwindow.cpp \
     $$PWD/postgressetupwizard.cpp \

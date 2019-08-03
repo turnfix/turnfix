@@ -225,12 +225,12 @@ void Competition::setGroup(int group)
     m_group = group;
 }
 
-QTime Competition::startTme() const
+QTime Competition::startTime() const
 {
     return m_startTme;
 }
 
-void Competition::setStartTme(const QTime &startTme)
+void Competition::setStartTime(const QTime &startTme)
 {
     m_startTme = startTme;
 }

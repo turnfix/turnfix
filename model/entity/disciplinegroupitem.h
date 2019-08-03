@@ -28,7 +28,6 @@ public:
     void setId(int id);
 
     int disciplineGroupId() const;
-    void setDisciplineGroupId(int disciplineGroupId);
 
     DisciplineGroup *disciplineGroup() const;
     void setDisciplineGroup(DisciplineGroup *disciplineGroup);
@@ -41,6 +40,9 @@ public:
 
     int sort() const;
     void setSort(int sort);
+
+public slots:
+    void setDisciplineGroupId(int disciplineGroupId);
 
 private:
     int m_id = 0;

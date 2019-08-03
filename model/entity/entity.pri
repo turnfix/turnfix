@@ -4,11 +4,13 @@ HEADERS += \
     $$PWD/bankaccount.h \
     $$PWD/club.h \
     $$PWD/competition.h \
+    $$PWD/competitiondiscipline.h \
     $$PWD/country.h \
     $$PWD/discipline.h \
     $$PWD/disciplinefield.h \
     $$PWD/disciplinegroup.h \
     $$PWD/disciplinegroupitem.h \
+    $$PWD/disciplineposition.h \
     $$PWD/division.h \
     $$PWD/event.h \
     $$PWD/formula.h \
@@ -28,11 +30,13 @@ SOURCES += \
     $$PWD/bankaccount.cpp \
     $$PWD/club.cpp \
     $$PWD/competition.cpp \
+    $$PWD/competitiondiscipline.cpp \
     $$PWD/country.cpp \
     $$PWD/discipline.cpp \
     $$PWD/disciplinefield.cpp \
     $$PWD/disciplinegroup.cpp \
     $$PWD/disciplinegroupitem.cpp \
+    $$PWD/disciplineposition.cpp \
     $$PWD/division.cpp \
     $$PWD/event.cpp \
     $$PWD/formula.cpp \

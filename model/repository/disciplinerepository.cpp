@@ -22,3 +22,18 @@ QList<Discipline *> DisciplineRepository::loadAll()
 
     return output;
 }
+
+QList<Discipline *> DisciplineRepository::loadByGender(bool women, bool men)
+{
+    QSqlDatabase db = QSqlDatabase::database(entityManager()->connectionName());
+
+    QueryBuilder<Discipline> qb;
+    qb.select(Discipline::staticMetaObject, Discipline::mapping());
+    qb.join(Sport::staticMetaObject, Sport::mapping(), "Discipline", "sport", "sportId");
+    qb.where(qb.orx("Discipline", "women", women, "Discipline", "men", men));
+    qb.orderBy("Discipline", "name");
+
+    QList<Discipline *> output = qb.query(db);
+
+    return output;
+}

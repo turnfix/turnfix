@@ -1,13 +1,15 @@
 #include "competitionswidget.h"
 #include "competitiondialog.h"
+#include "competitionmodel.h"
+#include "model/entity/competition.h"
 #include "model/entity/event.h"
-#include "model/view/competitionmodel.h"
+#include "model/entitymanager.h"
+#include "model/enums.h"
+#include "model/repository/competitionrepository.h"
 #include "src/global/header/_global.h"
 #include "ui_competitionswidget.h"
 #include <QMessageBox>
 #include <QSortFilterProxyModel>
-#include <QSqlQuery>
-#include <QSqlQueryModel>
 
 CompetitionsWidget::CompetitionsWidget(QWidget *parent)
     : QWidget(parent)
@@ -36,8 +38,11 @@ CompetitionsWidget::~CompetitionsWidget()
 
 void CompetitionsWidget::addCompetition()
 {
-    CompetitionDialog *sw = new CompetitionDialog(m_event, 0, this);
-    if (sw->exec() == 1) {
+    auto competition = new Competition();
+    competition->setEvent(m_event);
+
+    auto competitionDialog = new CompetitionDialog(competition, m_em, this);
+    if (competitionDialog->exec() == 1) {
         m_model->fetchCompetitions();
     }
     _global::updateRgDis(m_event);
@@ -47,14 +52,11 @@ void CompetitionsWidget::addCompetition()
 void CompetitionsWidget::editCompetition()
 {
     if (ui->competitionsTable->currentIndex().isValid()) {
-        QModelIndex idx = ui->competitionsTable->currentIndex();
-        CompetitionDialog *sw = new CompetitionDialog(
-            m_event,
-            QVariant(m_sortModel->data(
-                         m_sortModel->index(ui->competitionsTable->currentIndex().row(), 7)))
-                .toInt(),
-            this);
-        if (sw->exec() == 1) {
+        auto idx = ui->competitionsTable->currentIndex();
+        auto competition = qvariant_cast<Competition *>(
+            m_sortModel->data(ui->competitionsTable->currentIndex(), TF::ObjectRole));
+        auto competitionDialog = new CompetitionDialog(competition, m_em, this);
+        if (competitionDialog->exec() == 1) {
             m_model->fetchCompetitions();
         }
         _global::updateRgDis(m_event);
@@ -71,15 +73,9 @@ void CompetitionsWidget::removeCompetition()
                         "Wollen sie diesen Wettkampf wirklich löschen?",
                         QMessageBox::Ok | QMessageBox::Cancel);
         if (msg.exec() == QMessageBox::Ok) {
-            QSqlQuery query;
-            query.prepare("DELETE FROM tfx_wettkaempfe WHERE int_wettkaempfeid=?");
-            query.bindValue(0,
-                            QVariant(
-                                m_sortModel->data(
-                                    m_sortModel->index(ui->competitionsTable->currentIndex().row(),
-                                                       7)))
-                                .toInt());
-            query.exec();
+            auto competition = qvariant_cast<Competition *>(
+                m_sortModel->data(ui->competitionsTable->currentIndex(), TF::ObjectRole));
+            m_em->competitionRepository()->remove(competition);
             m_model->fetchCompetitions();
         }
         _global::updateRgDis(m_event);

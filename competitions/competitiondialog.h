@@ -6,26 +6,28 @@ namespace Ui {
 class CompetitionDialog;
 }
 
-class Event;
-class QStandardItemModel;
+class Competition;
+class EntityManager;
+class CompetitionDisciplineModel;
+class DisciplineOrderModel;
 
 class CompetitionDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit CompetitionDialog(Event *m_event, int edit = 0, QWidget *parent = nullptr);
+    explicit CompetitionDialog(Competition *competition,
+                               EntityManager *em,
+                               QWidget *parent = nullptr);
     ~CompetitionDialog() override;
 
 private slots:
-    void initData();
     void save();
-    void fillTable();
-    void fillTable2();
     void enableOptions(int typ);
     void moveUp();
     void moveDown();
     void markGroup();
+    void loadDisciplines();
 
     void orderMoveUp();
     void orderMoveDown();
@@ -33,10 +35,10 @@ private slots:
     void orderMoveRight();
 
 private:
-    Event *m_event;
+    Competition *m_competition;
+    EntityManager *m_em;
     Ui::CompetitionDialog *ui;
-    int editid;
-    QStandardItemModel *model;
-    QStandardItemModel *model2;
+    CompetitionDisciplineModel *m_competitionDisciplineModel;
+    DisciplineOrderModel *m_orderModel;
 };
 #endif
