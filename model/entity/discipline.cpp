@@ -218,6 +218,16 @@ void Discipline::setWomen(bool women)
     m_women = women;
 }
 
+QString Discipline::genderText() const
+{
+    if (m_men && m_women) {
+        return tr("m/w");
+    } else if (m_men) {
+        return tr("m");
+    }
+    return tr("w");
+}
+
 int Discipline::formulaId() const
 {
     return m_formulaId;

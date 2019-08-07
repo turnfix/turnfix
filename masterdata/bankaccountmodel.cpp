@@ -56,8 +56,10 @@ QVariant BankAccountModel::data(const QModelIndex &index, int role) const
         case 4:
             return bankAccount->accountHolder();
         }
-    } else if (role == Qt::UserRole) {
+    } else if (role == TF::ObjectRole) {
         return QVariant::fromValue(bankAccount);
+    } else if (role == TF::IdRole) {
+        return bankAccount->id();
     }
     return QVariant();
 }

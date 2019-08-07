@@ -105,12 +105,15 @@ QPushButton:pressed, QPushButton:hover {
     <widget class="QWidget" name="headerWidget" native="true">
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <widget class="QLabel" name="label_15">
+       <widget class="QLabel" name="headerLabel">
         <property name="font">
          <font>
           <weight>75</weight>
           <bold>true</bold>
          </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: #000000;</string>
         </property>
         <property name="text">
          <string>Veranstaltungsdaten</string>
@@ -568,8 +571,8 @@ QPushButton:pressed, QPushButton:hover {
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>294</width>
-            <height>293</height>
+            <width>313</width>
+            <height>285</height>
            </rect>
           </property>
           <attribute name="label">
@@ -776,8 +779,8 @@ QPushButton:pressed, QPushButton:hover {
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>87</width>
-            <height>97</height>
+            <width>86</width>
+            <height>80</height>
            </rect>
           </property>
           <attribute name="label">

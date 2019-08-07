@@ -391,6 +391,10 @@ void Event::setRound(int round)
 void Event::setMultiRoundEvent(bool multiRoundEvent)
 {
     m_multiRoundEvent = multiRoundEvent;
+
+    if (!multiRoundEvent) {
+        setMainEvent(nullptr);
+    }
 }
 
 void Event::setEndDate(const QDate &endDate)

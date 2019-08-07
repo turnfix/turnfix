@@ -1,11 +1,11 @@
 #include "statedialog.h"
 #include "countrydialog.h"
+#include "countrymodel.h"
 #include "model/entity/country.h"
 #include "model/entity/state.h"
 #include "model/entitymanager.h"
 #include "model/enums.h"
 #include "model/repository/staterepository.h"
-#include "model/view/countrymodel.h"
 #include "ui_statedialog.h"
 #include <QMessageBox>
 

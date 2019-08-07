@@ -69,8 +69,10 @@ QVariant DisciplineFieldModel::data(const QModelIndex &index, int role) const
         case 3:
             return field->enabled() ? Qt::Checked : Qt::Unchecked;
         }
-    } else if (role == Qt::UserRole) {
+    } else if (role == TF::ObjectRole) {
         return QVariant::fromValue(field);
+    } else if (role == TF::IdRole) {
+        return field->id();
     }
     return QVariant();
 }

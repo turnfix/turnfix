@@ -10,6 +10,7 @@ public:
     explicit DisciplineRepository(EntityManager *em);
 
     QList<Discipline *> loadAll();
+    QList<Discipline *> loadByGender(bool women, bool men);
 };
 
 #endif // DISCIPLINEREPOSITORY_H

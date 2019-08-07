@@ -45,8 +45,10 @@ QVariant DisciplineModel::data(const QModelIndex &index, int role) const
         case 1:
             return discipline->sport()->name();
         }
-    } else if (role == Qt::UserRole) {
+    } else if (role == TF::ObjectRole) {
         return QVariant::fromValue(discipline);
+    } else if (role == TF::IdRole) {
+        return discipline->id();
     }
     return QVariant();
 }

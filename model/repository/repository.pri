@@ -3,6 +3,7 @@ HEADERS += \
     $$PWD/athleterepository.h \
     $$PWD/bankaccountrepository.h \
     $$PWD/clubrepository.h \
+    $$PWD/competitiondisciplinerepository.h \
     $$PWD/competitionrepository.h \
     $$PWD/connectionrepository.h \
     $$PWD/countryrepository.h \
@@ -25,6 +26,7 @@ SOURCES += \
     $$PWD/athleterepository.cpp \
     $$PWD/bankaccountrepository.cpp \
     $$PWD/clubrepository.cpp \
+    $$PWD/competitiondisciplinerepository.cpp \
     $$PWD/competitionrepository.cpp \
     $$PWD/connectionrepository.cpp \
     $$PWD/countryrepository.cpp \

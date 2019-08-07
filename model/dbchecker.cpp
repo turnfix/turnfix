@@ -49,28 +49,6 @@ QList<DBTable *> DBChecker::tableData()
     //    group->addColumn("int_vereineid", ColumnType::Integer, 0, false);
     //    group->addColumn("var_name", ColumnType::Varchar, 150);
 
-    //    DBTable *competitionDiscipline = new DBTable("tfx_wettkaempfe_x_disziplinen");
-    //    competitionDiscipline
-    //        ->addColumn("int_wettkaempfe_x_disziplinenid", ColumnType::Integer, 0, false, "", "", true);
-    //    competitionDiscipline->addColumn("int_wettkaempfeid", ColumnType::Integer, 0, false);
-    //    competitionDiscipline->addColumn("int_disziplinenid", ColumnType::Integer, 0, false);
-    //    competitionDiscipline->addColumn("var_ausschreibung", ColumnType::Varchar, 100);
-    //    competitionDiscipline->addColumn("int_sortierung", ColumnType::SmallInt);
-    //    competitionDiscipline->addColumn("bol_kp", ColumnType::Boolean, 0, true, "'false'");
-    //    competitionDiscipline->addColumn("rel_max", ColumnType::Real, 0, true, "0");
-    //    competitionDiscipline->addContraint("fky_disziplinenid",
-    //                                        "tfx_disziplinen",
-    //                                        "int_disziplinenid",
-    //                                        "int_disziplinenid",
-    //                                        "RESTRICT",
-    //                                        "RESTRICT");
-    //    competitionDiscipline->addContraint("fky_wettkaempfeid",
-    //                                        "tfx_wettkaempfe",
-    //                                        "int_wettkaempfeid",
-    //                                        "int_wettkaempfeid",
-    //                                        "RESTRICT",
-    //                                        "CASCADE");
-
     //    DBTable *competitionDisciplinPosition = new DBTable("tfx_wettkaempfe_dispos");
     //    competitionDisciplinPosition
     //        ->addColumn("int_wettkaempfe_disposid", ColumnType::Integer, 0, false, "", "", true);

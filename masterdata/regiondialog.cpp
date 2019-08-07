@@ -4,8 +4,8 @@
 #include "model/entitymanager.h"
 #include "model/enums.h"
 #include "model/repository/regionrepository.h"
-#include "model/view/statemodel.h"
 #include "statedialog.h"
+#include "statemodel.h"
 #include "ui_regiondialog.h"
 #include <QMessageBox>
 

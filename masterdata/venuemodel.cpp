@@ -1,6 +1,7 @@
 #include "venuemodel.h"
 #include "model/entity/venue.h"
 #include "model/entitymanager.h"
+#include "model/enums.h"
 #include "model/repository/venuerepository.h"
 
 VenueModel::VenueModel(EntityManager *em, QObject *parent)
@@ -52,8 +53,10 @@ QVariant VenueModel::data(const QModelIndex &index, int role) const
         case 3:
             return QString("%1, %2").arg(venue->name(), venue->city());
         }
-    } else if (role == Qt::UserRole) {
+    } else if (role == TF::ObjectRole) {
         return QVariant::fromValue(venue);
+    } else if (role == TF::IdRole) {
+        return venue->id();
     }
     return QVariant();
 }
