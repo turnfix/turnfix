@@ -66,6 +66,10 @@ private:
 
     static DBTable *initializeMapping();
     static const DBTable *m_mapping;
+
+signals:
+    void freeAndCompulsaryChanged(bool freeAndCompulsary);
 };
+Q_DECLARE_METATYPE(CompetitionDiscipline *);
 
 #endif // COMPETITIONDISCIPLINE_H

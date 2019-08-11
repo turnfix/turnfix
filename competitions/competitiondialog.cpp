@@ -1,11 +1,13 @@
 #include "competitiondialog.h"
 #include "competitiondisciplinemodel.h"
+#include "controls/doublespinboxdelegate.h"
+#include "disciplineordermodel.h"
 #include "masterdata/disciplinegroupmodel.h"
 #include "masterdata/divisionmodel.h"
 #include "model/entity/competition.h"
+#include "model/entity/competitiondiscipline.h"
 #include "model/entitymanager.h"
-#include "src/global/header/_delegates.h"
-#include "src/global/header/_global.h"
+#include "model/enums.h"
 #include "ui_competitiondialog.h"
 #include <QList>
 #include <QMessageBox>
@@ -59,30 +61,38 @@ CompetitionDialog::CompetitionDialog(Competition *competition, EntityManager *em
     ui->cmb_groups->setModel(disciplineGroupModel);
 
     m_competitionDisciplineModel = new CompetitionDisciplineModel(m_em, this);
-    m_competitionDisciplineModel->fetchDisciplines(m_competition, true, true);
     ui->tbl_disziplinen->setModel(m_competitionDisciplineModel);
 
-    QList<QHeaderView::ResizeMode> resizeModes = {QHeaderView::Fixed,
-                                                  QHeaderView::Fixed,
-                                                  QHeaderView::Stretch,
+    QList<QHeaderView::ResizeMode> resizeModes = {QHeaderView::Stretch,
                                                   QHeaderView::Stretch,
                                                   QHeaderView::Fixed,
                                                   QHeaderView::Stretch,
                                                   QHeaderView::Fixed,
                                                   QHeaderView::ResizeToContents};
-    QList<int> sizes = {24, 24, 300, 250, 40, 100, 24, 50};
-    for (int i = 0; i < 8; i++) {
+    QList<int> sizes = {300, 250, 40, 100, 24, 50};
+    for (int i = 0; i < 6; i++) {
         ui->tbl_disziplinen->horizontalHeader()->setSectionResizeMode(i, resizeModes.at(i));
         ui->tbl_disziplinen->horizontalHeader()->resizeSection(i, sizes.at(i));
     }
-    ui->tbl_disziplinen->setItemDelegateForColumn(7, new DsbxDelegate);
+    ui->tbl_disziplinen->setItemDelegateForColumn(5, new DoubleSpinBoxDelegate);
 
-    enableOptions(0);
+    m_orderModel = new DisciplineOrderModel(m_em, this);
+    ui->tbl_order->setModel(m_orderModel);
 
-    model2 = new QStandardItemModel();
-    ui->tbl_order->setModel(model2);
+    connect(m_competitionDisciplineModel,
+            &CompetitionDisciplineModel::disciplineAdded,
+            m_orderModel,
+            &DisciplineOrderModel::addDiscipline);
+    connect(m_competitionDisciplineModel,
+            &CompetitionDisciplineModel::disciplineRemoved,
+            m_orderModel,
+            &DisciplineOrderModel::removeDiscipline);
+    connect(ui->chk_kuer,
+            &QCheckBox::stateChanged,
+            m_competitionDisciplineModel,
+            &CompetitionDisciplineModel::updateGlobalFreeAndCompulsary);
 
-    connect(ui->cmb_bereich, SIGNAL(currentIndexChanged(int)), this, SLOT(fillTable()));
+    connect(ui->cmb_bereich, SIGNAL(currentIndexChanged(int)), this, SLOT(loadDisciplines()));
     connect(ui->cmb_typ, SIGNAL(currentIndexChanged(int)), this, SLOT(enableOptions(int)));
     connect(ui->but_save, SIGNAL(clicked()), this, SLOT(save()));
     connect(ui->but_up, SIGNAL(clicked()), this, SLOT(moveUp()));
@@ -92,41 +102,44 @@ CompetitionDialog::CompetitionDialog(Competition *competition, EntityManager *em
     connect(ui->but_orderdown, SIGNAL(clicked()), this, SLOT(orderMoveDown()));
     connect(ui->but_orderleft, SIGNAL(clicked()), this, SLOT(orderMoveLeft()));
     connect(ui->but_orderright, SIGNAL(clicked()), this, SLOT(orderMoveRight()));
-    connect(ui->tbl_disziplinen, SIGNAL(clicked(QModelIndex)), this, SLOT(fillTable2()));
-    connect(ui->chk_kuer, SIGNAL(clicked()), this, SLOT(fillTable2()));
 
-    //    ui->txt_wknr->setText(query.value(4).toString());
-    //    ui->txt_wkbez->setText(query.value(5).toString());
-    //    ui->sbx_quali->setValue(query.value(8).toInt());
-    //    ui->dae_wkj1->setDate(QDate().fromString(query.value(6).toString(), "yyyy"));
-    //    ui->dae_wkj2->setDate(QDate().fromString(query.value(7).toString(), "yyyy"));
-    //    switch (query.value(7).toInt()) {
-    //    case 1:
-    //        ui->rab_ua->setChecked(true);
-    //        break;
-    //    case 2:
-    //        ui->rab_uj->setChecked(true);
-    //        break;
-    //    case 3:
-    //        ui->rab_ja->setChecked(true);
-    //        break;
-    //    }
-    //    ui->cmb_bereich->setCurrentIndex(ui->cmb_bereich->findData(query.value(2).toInt()));
-    //    ui->cmb_typ->setCurrentIndex(query.value(3).toInt());
-    //    ui->sbx_wertungen->setValue(query.value(9).toInt());
-    //    ui->chk_streich->setChecked(query.value(10).toBool());
-    //    ui->chk_akjg->setChecked(query.value(11).toBool());
-    //    ui->chk_wahl->setChecked(query.value(12).toBool());
-    //    ui->sbx_durchgang->setValue(query.value(13).toInt());
-    //    ui->tie_start->setTime(QTime().fromString(query.value(15).toString(), "hh:mm:ss"));
-    //    ui->sbx_bahn->setValue(query.value(14).toInt());
-    //    ui->tie_warmup->setTime(QTime().fromString(query.value(16).toString(), "hh:mm:ss"));
-    //    ui->chk_showinfo->setChecked(query.value(17).toBool());
-    //    ui->chk_kuer->setChecked(query.value(18).toBool());
-    //    ui->chk_sortasc->setChecked(query.value(19).toBool());
-    //    ui->gbx_sort->setChecked(query.value(20).toBool());
-    //    ui->chk_gpunkte->setChecked(query.value(21).toBool());
-    //    ui->sbx_anz->setValue(query.value(22).toInt());
+    ui->cmb_bereich->setCurrentIndex(
+        ui->cmb_bereich->findData(m_competition->divisionId(), TF::IdRole));
+
+    loadDisciplines();
+    enableOptions(0);
+
+    ui->txt_wknr->setText(m_competition->number());
+    ui->txt_wkbez->setText(m_competition->name());
+    ui->sbx_quali->setValue(m_competition->qualifiers());
+    ui->dae_wkj1->setDate(QDate().fromString(QString::number(m_competition->minYear()), "yyyy"));
+    ui->dae_wkj2->setDate(QDate().fromString(QString::number(m_competition->maxYear()), "yyyy"));
+    switch (m_competition->maxYear()) {
+    case 1:
+        ui->rab_ua->setChecked(true);
+        break;
+    case 2:
+        ui->rab_uj->setChecked(true);
+        break;
+    case 3:
+        ui->rab_ja->setChecked(true);
+        break;
+    }
+    ui->cmb_typ->setCurrentIndex(m_competition->type());
+    ui->sbx_wertungen->setValue(m_competition->scores());
+    ui->chk_streich->setChecked(m_competition->dropScores());
+    ui->chk_akjg->setChecked(m_competition->showAgeGroup());
+    ui->chk_wahl->setChecked(m_competition->apparatusChoices());
+    ui->sbx_durchgang->setValue(m_competition->round());
+    ui->tie_start->setTime(m_competition->startTime());
+    ui->sbx_bahn->setValue(m_competition->group());
+    ui->tie_warmup->setTime(m_competition->warmUpTime());
+    ui->chk_showinfo->setChecked(m_competition->showInfo());
+    ui->chk_kuer->setChecked(m_competition->freeAndCompulsary());
+    ui->chk_sortasc->setChecked(m_competition->sortAsc());
+    ui->gbx_sort->setChecked(m_competition->manualSort());
+    ui->chk_gpunkte->setChecked(m_competition->extraApparatusPoints());
+    ui->sbx_anz->setValue(m_competition->numDropScores());
 }
 
 CompetitionDialog::~CompetitionDialog()
@@ -149,43 +162,20 @@ void CompetitionDialog::enableOptions(int typ)
     }
 }
 
-//void CompetitionDialog::initData()
-//{
-//    fillTable();
-//    if (editid != 0) {
-//        QSqlQuery query;
-//        query.prepare("SELECT * FROM tfx_wettkaempfe WHERE int_wettkaempfeid=? LIMIT 1");
-//        query.bindValue(0, editid);
-//        query.exec();
-//        query.next();
-
-//        fillTable();
-//    }
-//}
-
 void CompetitionDialog::moveUp()
 {
-    //    if (ui->tbl_disziplinen->currentIndex().isValid()
-    //        && ui->tbl_disziplinen->currentIndex().row() > 0) {
-    //        int insert = ui->tbl_disziplinen->currentIndex().row() - 1;
-    //        m_competitionDisciplineModel->insertRow(insert,
-    //                                                m_competitionDisciplineModel->takeRow(
-    //                                                    ui->tbl_disziplinen->currentIndex().row()));
-    //        ui->tbl_disziplinen->selectRow(insert);
-    //    }
+    auto index = ui->tbl_disziplinen->currentIndex();
+    if (index.isValid()) {
+        m_competitionDisciplineModel->moveUp(index);
+    }
 }
 
 void CompetitionDialog::moveDown()
 {
-    //    if (ui->tbl_disziplinen->currentIndex().isValid()
-    //        && ui->tbl_disziplinen->currentIndex().row()
-    //               < (m_competitionDisciplineModel->rowCount() - 1)) {
-    //        int insert = ui->tbl_disziplinen->currentIndex().row() + 1;
-    //        m_competitionDisciplineModel->insertRow(insert,
-    //                                                m_competitionDisciplineModel->takeRow(
-    //                                                    ui->tbl_disziplinen->currentIndex().row()));
-    //        ui->tbl_disziplinen->selectRow(insert);
-    //    }
+    auto index = ui->tbl_disziplinen->currentIndex();
+    if (index.isValid()) {
+        m_competitionDisciplineModel->moveDown(index);
+    }
 }
 
 void CompetitionDialog::save()
@@ -398,124 +388,6 @@ void CompetitionDialog::save()
     done(1);
 }
 
-void CompetitionDialog::fillTable()
-{
-    //    model->removeRows(0, model->rowCount());
-    //    QSqlQuery bereich;
-    //    bereich.prepare(
-    //        "SELECT bol_maennlich, bol_weiblich FROM tfx_bereiche WHERE int_bereicheid=? LIMIT 1");
-    //    bereich.bindValue(0, ui->cmb_bereich->itemData(ui->cmb_bereich->currentIndex()));
-    //    bereich.exec();
-    //    bereich.next();
-    //    QSqlQuery query2;
-    //    query2.prepare(
-    //        "SELECT var_icon, tfx_disziplinen.int_disziplinenid, tfx_sport.var_name, "
-    //        "tfx_disziplinen.var_name, CASE WHEN bol_m = 'true' AND bol_w = 'true' THEN 'm/w' ELSE "
-    //        "CASE WHEN bol_m = 'true' THEN 'm' ELSE 'w' END END, var_kuerzel, CASE WHEN "
-    //        "int_wettkaempfeid IS NULL THEN 'false' ELSE 'true' END, var_ausschreibung, bol_kp, "
-    //        "rel_max FROM tfx_disziplinen INNER JOIN tfx_sport USING (int_sportid) LEFT JOIN "
-    //        "tfx_wettkaempfe_x_disziplinen ON tfx_wettkaempfe_x_disziplinen.int_disziplinenid = "
-    //        "tfx_disziplinen.int_disziplinenid AND int_wettkaempfeid=? WHERE (bol_m=? OR bol_w=?) "
-    //        "ORDER BY CASE WHEN int_sortierung IS NULL THEN 99999 ELSE int_sortierung END, "
-    //        "tfx_sport.var_name,tfx_disziplinen.var_name");
-    //    query2.bindValue(0, editid);
-    //    query2.bindValue(1, bereich.value(0).toBool());
-    //    query2.bindValue(2, bereich.value(1).toBool());
-    //    query2.exec();
-    //    while (query2.next()) {
-    //        auto *sex = new QStandardItem(query2.value(4).toString());
-    //        sex->setEditable(false);
-    //        sex->setTextAlignment(Qt::AlignCenter);
-    //        model->setItem(query2.at(), 4, sex);
-    //        model->setItem(query2.at(), 5, new QStandardItem(query2.value(7).toString()));
-    //    }
-    //    fillTable2();
-}
-
-void CompetitionDialog::fillTable2()
-{
-    //    model2->clear();
-    //    int count = 0;
-    //    for (int i = 0; i < model->rowCount(); i++) {
-    //        if (model->item(i, 0)->checkState() == Qt::Checked) {
-    //            count++;
-    //        }
-    //    }
-    //    int col = 0;
-    //    QList<QStandardItem *> puffer;
-    //    for (int i = 0; i < model->rowCount(); i++) {
-    //        if (model->item(i, 0)->checkState() == Qt::Checked) {
-    //            QStandardItem *itm = new QStandardItem(model->item(i, 1)->icon(),
-    //                                                   model->item(i, 3)->text());
-    //            itm->setData(model->item(i, 8)->text());
-    //            QStandardItem *itm2;
-    //            if (model->item(i, 6)->checkState() == Qt::Checked || ui->chk_kuer->isChecked()) {
-    //                itm->setText(model->item(i, 3)->text() + " (P)");
-    //                itm2 = new QStandardItem(model->item(i, 1)->icon(),
-    //                                         model->item(i, 3)->text() + " (K)");
-    //                itm2->setData(model->item(i, 8)->text());
-    //            }
-    //            if (ui->gbx_sort->isChecked() && editid > 0) {
-    //                QSqlQuery query;
-    //                query.prepare(
-    //                    "SELECT int_sortx, int_sorty FROM tfx_wettkaempfe_dispos INNER JOIN "
-    //                    "tfx_wettkaempfe_x_disziplinen USING (int_wettkaempfe_x_disziplinenid) WHERE "
-    //                    "int_wettkaempfeid=? AND int_disziplinenid=? AND int_kp=0");
-    //                query.bindValue(0, editid);
-    //                query.bindValue(1, itm->data());
-    //                query.exec();
-    //                if (_global::querySize(query) == 0) {
-    //                    puffer.append(itm);
-    //                } else {
-    //                    query.next();
-    //                    int x;
-    //                    if (ui->cmb_typ->currentIndex() == 1) {
-    //                        x = count - 1 - query.value(0).toInt();
-    //                    } else {
-    //                        x = query.value(0).toInt();
-    //                    }
-    //                    model2->setItem(query.value(1).toInt(), x, itm);
-    //                }
-    //            } else {
-    //                model2->setItem(0, col, itm);
-    //                col++;
-    //            }
-    //            if (model->item(i, 6)->checkState() == Qt::Checked || ui->chk_kuer->isChecked()) {
-    //                if (ui->gbx_sort->isChecked() && editid > 0) {
-    //                    QSqlQuery query;
-    //                    query.prepare(
-    //                        "SELECT int_sortx, int_sorty FROM tfx_wettkaempfe_dispos INNER JOIN "
-    //                        "tfx_wettkaempfe_x_disziplinen USING (int_wettkaempfe_x_disziplinenid) "
-    //                        "WHERE int_wettkaempfeid=? AND int_disziplinenid=? AND int_kp=1");
-    //                    query.bindValue(0, editid);
-    //                    query.bindValue(1, itm2->data());
-    //                    query.exec();
-    //                    if (_global::querySize(query) == 0) {
-    //                        puffer.append(itm2);
-    //                    } else {
-    //                        query.next();
-    //                        int x;
-    //                        if (ui->cmb_typ->currentIndex() == 1) {
-    //                            x = count - 1 - query.value(0).toInt();
-    //                        } else {
-    //                            x = query.value(0).toInt();
-    //                        }
-    //                        model2->setItem(query.value(1).toInt(), x, itm2);
-    //                    }
-    //                } else {
-    //                    model2->setItem(0, col, itm2);
-    //                    col++;
-    //                }
-    //            }
-    //        }
-    //    }
-    //    col = model2->columnCount();
-    //    for (auto i : puffer) {
-    //        model2->setItem(0, col, i);
-    //        col++;
-    //    }
-}
-
 void CompetitionDialog::markGroup()
 {
     //    QSqlQuery getRows;
@@ -532,92 +404,59 @@ void CompetitionDialog::markGroup()
     //    }
 }
 
+void CompetitionDialog::loadDisciplines()
+{
+    QVariant currentDivision = ui->cmb_bereich->currentData();
+    if (currentDivision.isValid()) {
+        auto division = qvariant_cast<Division *>(currentDivision);
+        m_competitionDisciplineModel->fetchDisciplines(m_competition,
+                                                       division->women(),
+                                                       division->men());
+    } else {
+        m_competitionDisciplineModel->reset();
+    }
+}
+
 void CompetitionDialog::orderMoveUp()
 {
-    if (ui->tbl_order->selectionModel()->selectedIndexes().isEmpty())
+    auto model = ui->tbl_order->selectionModel();
+    if (model->selectedIndexes().isEmpty())
         return;
-    QModelIndex selIdx = ui->tbl_order->selectionModel()->selectedIndexes().at(0);
-    if (selIdx.row() == 0)
-        return;
-    QStandardItem *itm = model2->takeItem(selIdx.row(), selIdx.column());
-    QStandardItem *itm2 = model2->takeItem(selIdx.row() - 1, selIdx.column());
-    if (itm2 == nullptr)
-        itm2 = new QStandardItem("");
-    QModelIndex newIdx = model2->index(selIdx.row() - 1, selIdx.column());
-    model2->setItem(selIdx.row(), selIdx.column(), itm2);
-    model2->setItem(selIdx.row() - 1, selIdx.column(), itm);
-    ui->tbl_order->selectionModel()->setCurrentIndex(newIdx, QItemSelectionModel::Select);
-    bool check = true;
-    for (int i = 0; i < model2->columnCount(); i++) {
-        if (model2->item(selIdx.row(), i) == nullptr)
-            continue;
-        if (model2->item(selIdx.row(), i)->text() != "") {
-            check = false;
-            break;
-        }
-    }
-    if (check)
-        model2->removeRow(selIdx.row());
+
+    QModelIndex selIdx = model->selectedIndexes().at(0);
+    QModelIndex newIndex = m_orderModel->moveUp(selIdx);
+    model->setCurrentIndex(newIndex, QItemSelectionModel::Select);
 }
 
 void CompetitionDialog::orderMoveDown()
 {
-    if (ui->tbl_order->selectionModel()->selectedIndexes().isEmpty())
+    auto model = ui->tbl_order->selectionModel();
+    if (model->selectedIndexes().isEmpty())
         return;
-    QModelIndex selIdx = ui->tbl_order->selectionModel()->selectedIndexes().at(0);
-    if (selIdx.row() + 1 == model2->rowCount())
-        model2->insertRow(model2->rowCount());
-    QStandardItem *itm = model2->takeItem(selIdx.row(), selIdx.column());
-    QStandardItem *itm2 = model2->takeItem(selIdx.row() + 1, selIdx.column());
-    if (itm2 == nullptr)
-        itm2 = new QStandardItem("");
-    QModelIndex newIdx = model2->index(selIdx.row() + 1, selIdx.column());
-    model2->setItem(selIdx.row(), selIdx.column(), itm2);
-    model2->setItem(selIdx.row() + 1, selIdx.column(), itm);
-    ui->tbl_order->selectionModel()->setCurrentIndex(newIdx, QItemSelectionModel::Select);
+
+    QModelIndex selIdx = model->selectedIndexes().at(0);
+    QModelIndex newIndex = m_orderModel->moveDown(selIdx);
+    model->setCurrentIndex(newIndex, QItemSelectionModel::Select);
 }
 
 void CompetitionDialog::orderMoveLeft()
 {
-    if (ui->tbl_order->selectionModel()->selectedIndexes().isEmpty())
+    auto model = ui->tbl_order->selectionModel();
+    if (model->selectedIndexes().isEmpty())
         return;
-    QModelIndex selIdx = ui->tbl_order->selectionModel()->selectedIndexes().at(0);
-    if (selIdx.column() == 0)
-        return;
-    QStandardItem *itm = model2->takeItem(selIdx.row(), selIdx.column());
-    QStandardItem *itm2 = model2->takeItem(selIdx.row(), selIdx.column() - 1);
-    if (itm2 == nullptr)
-        itm2 = new QStandardItem("");
-    QModelIndex newIdx = model2->index(selIdx.row(), selIdx.column() - 1);
-    model2->setItem(selIdx.row(), selIdx.column(), itm2);
-    model2->setItem(selIdx.row(), selIdx.column() - 1, itm);
-    ui->tbl_order->selectionModel()->setCurrentIndex(newIdx, QItemSelectionModel::Select);
-    bool check = true;
-    for (int i = 0; i < model2->rowCount(); i++) {
-        if (model2->item(i, selIdx.column()) == nullptr)
-            continue;
-        if (model2->item(i, selIdx.column())->text() != "") {
-            check = false;
-            break;
-        }
-    }
-    if (check)
-        model2->removeColumn(selIdx.column());
+
+    QModelIndex selIdx = model->selectedIndexes().at(0);
+    QModelIndex newIndex = m_orderModel->moveLeft(selIdx);
+    model->setCurrentIndex(newIndex, QItemSelectionModel::Select);
 }
 
 void CompetitionDialog::orderMoveRight()
 {
-    if (ui->tbl_order->selectionModel()->selectedIndexes().isEmpty())
+    auto model = ui->tbl_order->selectionModel();
+    if (model->selectedIndexes().isEmpty())
         return;
-    QModelIndex selIdx = ui->tbl_order->selectionModel()->selectedIndexes().at(0);
-    if (selIdx.column() + 1 == model2->columnCount())
-        model2->insertColumn(model2->columnCount());
-    QStandardItem *itm = model2->takeItem(selIdx.row(), selIdx.column());
-    QStandardItem *itm2 = model2->takeItem(selIdx.row(), selIdx.column() + 1);
-    if (itm2 == nullptr)
-        itm2 = new QStandardItem("");
-    QModelIndex newIdx = model2->index(selIdx.row(), selIdx.column() + 1);
-    model2->setItem(selIdx.row(), selIdx.column(), itm2);
-    model2->setItem(selIdx.row(), selIdx.column() + 1, itm);
-    ui->tbl_order->selectionModel()->setCurrentIndex(newIdx, QItemSelectionModel::Select);
+
+    QModelIndex selIdx = model->selectedIndexes().at(0);
+    QModelIndex newIndex = m_orderModel->moveRight(selIdx);
+    model->setCurrentIndex(newIndex, QItemSelectionModel::Select);
 }

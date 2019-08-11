@@ -30,8 +30,7 @@ QList<Discipline *> DisciplineRepository::loadByGender(bool women, bool men)
     QueryBuilder<Discipline> qb;
     qb.select(Discipline::staticMetaObject, Discipline::mapping());
     qb.join(Sport::staticMetaObject, Sport::mapping(), "Discipline", "sport", "sportId");
-    qb.where("Discipline", "women", women);
-    qb.where("Discipline", "men", men);
+    qb.where(qb.orx("Discipline", "women", women, "Discipline", "men", men));
     qb.orderBy("Discipline", "name");
 
     QList<Discipline *> output = qb.query(db);

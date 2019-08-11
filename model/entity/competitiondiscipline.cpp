@@ -135,7 +135,10 @@ bool CompetitionDiscipline::freeAndCompulsary() const
 
 void CompetitionDiscipline::setFreeAndCompulsary(bool freeAndCompulsary)
 {
-    m_freeAndCompulsary = freeAndCompulsary;
+    if (freeAndCompulsary != m_freeAndCompulsary) {
+        m_freeAndCompulsary = freeAndCompulsary;
+        emit freeAndCompulsaryChanged(freeAndCompulsary);
+    }
 }
 
 double CompetitionDiscipline::maximumScore() const

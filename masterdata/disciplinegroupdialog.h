@@ -23,8 +23,6 @@ public:
     ~DisciplineGroupDialog() override;
 
 private slots:
-    void addItem();
-    void removeItem();
     void moveUp();
     void moveDown();
     void save();
@@ -33,7 +31,6 @@ private:
     Ui::DisciplineGroupDialog *ui;
     DisciplineGroup *m_disciplineGroup;
     EntityManager *m_em;
-    DisciplineModel *m_disciplineModel;
     DisciplineGroupItemModel *m_itemModel;
 };
 

@@ -3,7 +3,6 @@
 #include "model/entity/event.h"
 #include <QApplication>
 #include <QComboBox>
-#include <QDoubleSpinBox>
 #include <QKeyEvent>
 #include <QLineEdit>
 #include <QPainter>
@@ -119,25 +118,4 @@ void AlignCItemDelegate::paint ( QPainter * painter, const QStyleOptionViewItem 
     QStyleOptionViewItem o = option;
     o.displayAlignment = Qt::AlignHCenter | Qt::AlignVCenter;
     QItemDelegate::paint( painter, o, index );
-}
-
-QWidget *DsbxDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &, const QModelIndex &) const {
-    QDoubleSpinBox *editor = new QDoubleSpinBox(parent);
-    return editor;
-}
-
-void DsbxDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const {
-    QString value = index.model()->data(index, Qt::EditRole).toString();
-    QDoubleSpinBox *sbx = static_cast<QDoubleSpinBox*>(editor);
-    sbx->setValue(value.toDouble());
-}
-
-void DsbxDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const {
-    QDoubleSpinBox *sbx = static_cast<QDoubleSpinBox*>(editor);
-    QString value = QString::number(sbx->value());
-    model->setData(index, value, Qt::EditRole);
-}
-
-void DsbxDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &) const{
-    editor->setGeometry(option.rect);
 }

@@ -9,6 +9,7 @@
 #include "repository/disciplinefieldrepository.h"
 #include "repository/disciplinegroupitemrepository.h"
 #include "repository/disciplinegrouprepository.h"
+#include "repository/disciplinepositionrepository.h"
 #include "repository/disciplinerepository.h"
 #include "repository/divisionrepository.h"
 #include "repository/eventrepository.h"
@@ -35,6 +36,7 @@ EntityManager::EntityManager(QObject *parent)
     m_disciplineFieldRepository = new DisciplineFieldRepository(this);
     m_disciplineGroupRepository = new DisciplineGroupRepository(this);
     m_disciplineGroupItemRepository = new DisciplineGroupItemRepository(this);
+    m_disciplinePositionRepository = new DisciplinePositionRepository(this);
     m_divisionRepository = new DivisionRepository(this);
     m_eventRepository = new EventRepository(this);
     m_formulaRepository = new FormulaRepository(this);
@@ -92,6 +94,11 @@ QString EntityManager::connectionName() const
 void EntityManager::setConnectionName(const QString &connectionName)
 {
     m_connectionName = connectionName;
+}
+
+DisciplinePositionRepository *EntityManager::disciplinePositionRepository() const
+{
+    return m_disciplinePositionRepository;
 }
 
 CompetitionDisciplineRepository *EntityManager::competitionDisciplineRepository() const

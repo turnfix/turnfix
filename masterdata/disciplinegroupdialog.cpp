@@ -1,6 +1,5 @@
 #include "disciplinegroupdialog.h"
 #include "disciplinegroupitemmodel.h"
-#include "disciplinemodel.h"
 #include "model/entity/discipline.h"
 #include "model/entity/disciplinegroup.h"
 #include "model/entitymanager.h"
@@ -19,8 +18,6 @@ DisciplineGroupDialog::DisciplineGroupDialog(DisciplineGroup *disciplineGroup,
     setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint
                    | Qt::WindowCloseButtonHint);
 
-    connect(ui->but_add, SIGNAL(clicked()), this, SLOT(addItem()));
-    connect(ui->but_del, SIGNAL(clicked()), this, SLOT(removeItem()));
     connect(ui->but_up, SIGNAL(clicked()), this, SLOT(moveUp()));
     connect(ui->but_down, SIGNAL(clicked()), this, SLOT(moveDown()));
     connect(ui->bbx_done, SIGNAL(rejected()), this, SLOT(close()));
@@ -29,10 +26,6 @@ DisciplineGroupDialog::DisciplineGroupDialog(DisciplineGroup *disciplineGroup,
     if (m_disciplineGroup == nullptr) {
         m_disciplineGroup = new DisciplineGroup();
     }
-
-    m_disciplineModel = new DisciplineModel(m_em, this);
-    m_disciplineModel->fetchDisciplines();
-    ui->tbl_all->setModel(m_disciplineModel);
 
     m_itemModel = new DisciplineGroupItemModel(m_em, this);
     m_itemModel->fetchItems(m_disciplineGroup);
@@ -43,8 +36,6 @@ DisciplineGroupDialog::DisciplineGroupDialog(DisciplineGroup *disciplineGroup,
     QList<int> sizes = {300, 250};
 
     for (int i = 0; i < 2; i++) {
-        ui->tbl_all->horizontalHeader()->setSectionResizeMode(i, resizeModes.at(i));
-        ui->tbl_all->horizontalHeader()->resizeSection(i, sizes.at(i));
         ui->tbl_group->horizontalHeader()->setSectionResizeMode(i, resizeModes.at(i));
         ui->tbl_group->horizontalHeader()->resizeSection(i, sizes.at(i));
     }
@@ -56,19 +47,6 @@ DisciplineGroupDialog::DisciplineGroupDialog(DisciplineGroup *disciplineGroup,
 DisciplineGroupDialog::~DisciplineGroupDialog()
 {
     delete ui;
-}
-
-void DisciplineGroupDialog::addItem()
-{
-    if (ui->tbl_all->selectionModel()->selectedIndexes().empty())
-        return;
-    m_itemModel->addItem(qvariant_cast<Discipline *>(
-        m_disciplineModel->data(ui->tbl_all->currentIndex(), TF::ObjectRole)));
-}
-
-void DisciplineGroupDialog::removeItem()
-{
-    m_itemModel->removeItem(ui->tbl_group->currentIndex());
 }
 
 void DisciplineGroupDialog::moveUp()

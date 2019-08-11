@@ -49,23 +49,6 @@ QList<DBTable *> DBChecker::tableData()
     //    group->addColumn("int_vereineid", ColumnType::Integer, 0, false);
     //    group->addColumn("var_name", ColumnType::Varchar, 150);
 
-    //    DBTable *competitionDisciplinPosition = new DBTable("tfx_wettkaempfe_dispos");
-    //    competitionDisciplinPosition
-    //        ->addColumn("int_wettkaempfe_disposid", ColumnType::Integer, 0, false, "", "", true);
-    //    competitionDisciplinPosition->addColumn("int_wettkaempfe_x_disziplinenid",
-    //                                            ColumnType::Integer,
-    //                                            0,
-    //                                            false);
-    //    competitionDisciplinPosition->addColumn("int_sortx", ColumnType::SmallInt, 0, true, "0");
-    //    competitionDisciplinPosition->addColumn("int_sorty", ColumnType::SmallInt, 0, true, "0");
-    //    competitionDisciplinPosition->addColumn("int_kp", ColumnType::SmallInt, 0, true, "0");
-    //    competitionDisciplinPosition->addContraint("fky_wettkaempfe_x_disziplinenid",
-    //                                               "tfx_wettkaempfe_x_disziplinen",
-    //                                               "int_wettkaempfe_x_disziplinenid",
-    //                                               "int_wettkaempfe_x_disziplinenid",
-    //                                               "RESTRICT",
-    //                                               "RESTRICT");
-
     //    DBTable *team = new DBTable("tfx_mannschaften");
     //    team->addColumn("int_mannschaftenid", ColumnType::Integer, 0, false, "", "", true);
     //    team->addColumn("int_wettkaempfeid", ColumnType::Integer, 0, false);
