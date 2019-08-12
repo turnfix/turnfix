@@ -101,46 +101,16 @@ public:
 
     QueryBuilder where(const QString &className, const QString &propertyName, const QVariant &value)
     {
-        QString statement
-            = QString("%1.%2 = ?")
-                  .arg(m_mappings.value(className)->name(),
-                       m_mappings.value(className)->columnByProperty(propertyName)->name());
-        m_bindValues.append(value);
-
-        return QueryBuilder::where(statement);
-    }
-
-    QueryBuilder where(const QString &statement)
-    {
         if (m_where != "") {
             m_where += " AND ";
         }
 
-        m_where += statement;
+        m_where += QString("%1.%2 = ?")
+                       .arg(m_mappings.value(className)->name(),
+                            m_mappings.value(className)->columnByProperty(propertyName)->name());
+        m_bindValues.append(value);
 
         return *this;
-    }
-
-    QString orx(const QString &className1,
-                const QString &propertyName1,
-                const QVariant &value1,
-                const QString &className2,
-                const QString &propertyName2,
-                const QVariant &value2)
-    {
-        QString statement1
-            = QString("%1.%2 = ?")
-                  .arg(m_mappings.value(className1)->name(),
-                       m_mappings.value(className1)->columnByProperty(propertyName1)->name());
-        QString statement2
-            = QString("%1.%2 = ?")
-                  .arg(m_mappings.value(className2)->name(),
-                       m_mappings.value(className2)->columnByProperty(propertyName2)->name());
-
-        m_bindValues.append(value1);
-        m_bindValues.append(value2);
-
-        return QString("(%1 OR %2)").arg(statement1, statement2);
     }
 
     QList<T *> query(const QSqlDatabase &db)
@@ -332,7 +302,6 @@ private:
                 continue;
             }
 
-            qDebug() << property.name() << query.value(index);
             obj->setProperty(property.name(), query.value(index));
             index++;
         }
@@ -350,7 +319,6 @@ private:
                     continue;
                 }
 
-                qDebug() << property.name() << query.value(index);
                 joinObj->setProperty(property.name(), query.value(index));
 
                 index++;

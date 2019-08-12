@@ -25,7 +25,7 @@ class Competition : public QObject
     Q_PROPERTY(bool apparatusChoices READ apparatusChoices WRITE setApparatusChoices)
     Q_PROPERTY(int round READ round WRITE setRound)
     Q_PROPERTY(int group READ group WRITE setGroup)
-    Q_PROPERTY(QTime startTime READ startTime WRITE setStartTime)
+    Q_PROPERTY(QTime startTme READ startTme WRITE setStartTme)
     Q_PROPERTY(QTime warmUpTime READ warmUpTime WRITE setWarmUpTime)
     Q_PROPERTY(bool showInfo READ showInfo WRITE setShowInfo)
     Q_PROPERTY(bool freeAndCompulsary READ freeAndCompulsary WRITE setFreeAndCompulsary)
@@ -91,8 +91,8 @@ public:
     int group() const;
     void setGroup(int group);
 
-    QTime startTime() const;
-    void setStartTime(const QTime &startTime);
+    QTime startTme() const;
+    void setStartTme(const QTime &startTme);
 
     QTime warmUpTime() const;
     void setWarmUpTime(const QTime &warmUpTime);

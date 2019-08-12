@@ -14,7 +14,6 @@ class DisciplineRepository;
 class DisciplineFieldRepository;
 class DisciplineGroupRepository;
 class DisciplineGroupItemRepository;
-class DisciplinePositionRepository;
 class DivisionRepository;
 class EventRepository;
 class FormulaRepository;
@@ -44,7 +43,6 @@ public:
     DisciplineFieldRepository *disciplineFieldRepository() const;
     DisciplineGroupRepository *disciplineGroupRepository() const;
     DisciplineGroupItemRepository *disciplineGroupItemRepository() const;
-    DisciplinePositionRepository *disciplinePositionRepository() const;
     DivisionRepository *divisionRepository() const;
     EventRepository *eventRepository() const;
     FormulaRepository *formulaRepository() const;
@@ -75,7 +73,6 @@ private:
     DisciplineFieldRepository *m_disciplineFieldRepository;
     DisciplineGroupRepository *m_disciplineGroupRepository;
     DisciplineGroupItemRepository *m_disciplineGroupItemRepository;
-    DisciplinePositionRepository *m_disciplinePositionRepository;
     DivisionRepository *m_divisionRepository;
     EventRepository *m_eventRepository;
     FormulaRepository *m_formulaRepository;

@@ -10,7 +10,6 @@ HEADERS += \
     $$PWD/disciplinefield.h \
     $$PWD/disciplinegroup.h \
     $$PWD/disciplinegroupitem.h \
-    $$PWD/disciplineposition.h \
     $$PWD/division.h \
     $$PWD/event.h \
     $$PWD/formula.h \
@@ -36,7 +35,6 @@ SOURCES += \
     $$PWD/disciplinefield.cpp \
     $$PWD/disciplinegroup.cpp \
     $$PWD/disciplinegroupitem.cpp \
-    $$PWD/disciplineposition.cpp \
     $$PWD/division.cpp \
     $$PWD/event.cpp \
     $$PWD/formula.cpp \

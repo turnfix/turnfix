@@ -21,10 +21,9 @@ public:
                         int role = Qt::DisplayRole) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
-    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
-    Qt::ItemFlags flags(const QModelIndex &index) const override;
-
     void fetchItems(DisciplineGroup *group);
+    void addItem(Discipline *discipline);
+    void removeItem(const QModelIndex &index);
 
     void moveUp(const QModelIndex &index);
     void moveDown(const QModelIndex &index);
@@ -32,9 +31,8 @@ public:
     void persistChanges();
 
 private:
-    QMap<int, DisciplineGroupItem *> m_items;
+    QList<DisciplineGroupItem *> m_items;
     QList<DisciplineGroupItem *> m_removedItems;
-    QList<Discipline *> m_disciplines;
     DisciplineGroup *m_disciplineGroup;
     EntityManager *m_em;
 };

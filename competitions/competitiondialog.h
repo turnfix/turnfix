@@ -9,7 +9,7 @@ class CompetitionDialog;
 class Competition;
 class EntityManager;
 class CompetitionDisciplineModel;
-class DisciplineOrderModel;
+class QStandardItemModel;
 
 class CompetitionDialog : public QDialog
 {
@@ -23,11 +23,12 @@ public:
 
 private slots:
     void save();
+    void fillTable();
+    void fillTable2();
     void enableOptions(int typ);
     void moveUp();
     void moveDown();
     void markGroup();
-    void loadDisciplines();
 
     void orderMoveUp();
     void orderMoveDown();
@@ -39,6 +40,6 @@ private:
     EntityManager *m_em;
     Ui::CompetitionDialog *ui;
     CompetitionDisciplineModel *m_competitionDisciplineModel;
-    DisciplineOrderModel *m_orderModel;
+    QStandardItemModel *model2;
 };
 #endif

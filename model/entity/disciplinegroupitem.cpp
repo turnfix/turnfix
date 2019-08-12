@@ -96,21 +96,10 @@ DisciplineGroup *DisciplineGroupItem::disciplineGroup() const
 
 void DisciplineGroupItem::setDisciplineGroup(DisciplineGroup *disciplineGroup)
 {
-    if (m_disciplineGroup != nullptr) {
-        disconnect(m_disciplineGroup,
-                   &DisciplineGroup::idChanged,
-                   this,
-                   &DisciplineGroupItem::setDisciplineGroupId);
-    }
     m_disciplineGroup = disciplineGroup;
     if (m_disciplineGroup == nullptr) {
         m_disciplineGroupId = 0;
         return;
-    } else {
-        connect(m_disciplineGroup,
-                &DisciplineGroup::idChanged,
-                this,
-                &DisciplineGroupItem::setDisciplineGroupId);
     }
 
     m_disciplineGroupId = disciplineGroup->id();

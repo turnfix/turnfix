@@ -27,10 +27,7 @@ int DisciplineGroup::id() const
 
 void DisciplineGroup::setId(int id)
 {
-    if (id != m_id) {
-        m_id = id;
-        emit idChanged(id);
-    }
+    m_id = id;
 }
 
 QString DisciplineGroup::name() const

@@ -10,7 +10,6 @@ HEADERS += \
     $$PWD/disciplinefieldrepository.h \
     $$PWD/disciplinegroupitemrepository.h \
     $$PWD/disciplinegrouprepository.h \
-    $$PWD/disciplinepositionrepository.h \
     $$PWD/disciplinerepository.h \
     $$PWD/divisionrepository.h \
     $$PWD/eventrepository.h \
@@ -34,7 +33,6 @@ SOURCES += \
     $$PWD/disciplinefieldrepository.cpp \
     $$PWD/disciplinegroupitemrepository.cpp \
     $$PWD/disciplinegrouprepository.cpp \
-    $$PWD/disciplinepositionrepository.cpp \
     $$PWD/disciplinerepository.cpp \
     $$PWD/divisionrepository.cpp \
     $$PWD/eventrepository.cpp \
