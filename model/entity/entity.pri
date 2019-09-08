@@ -13,6 +13,7 @@ HEADERS += \
     $$PWD/division.h \
     $$PWD/event.h \
     $$PWD/formula.h \
+    $$PWD/participant.h \
     $$PWD/penalty.h \
     $$PWD/person.h \
     $$PWD/postgresqlconnection.h \
@@ -38,6 +39,7 @@ SOURCES += \
     $$PWD/division.cpp \
     $$PWD/event.cpp \
     $$PWD/formula.cpp \
+    $$PWD/participant.cpp \
     $$PWD/penalty.cpp \
     $$PWD/person.cpp \
     $$PWD/postgresqlconnection.cpp \
