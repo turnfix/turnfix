@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <model/entity/competition.h>
-#include <model/entity/participant.h>
+#include <model/entity/athlete.h>
 #include <model/entity/groupe.h>
 #include <model/entity/team.h>
 #include <model/entity/state.h>
@@ -24,11 +24,11 @@ public:
     Competition *competition() const;
     void setCompetition(Competition *competition);
 
-    Participant *participant() const;
-    void setParticipant(Participant *participant);
+    Athlete *participant() const;
+    void setParticipant(Athlete *participant);
 
-    Group *group() const;
-    void setGroup(Group *group);
+    Groupe *group() const;
+    void setGroup(Groupe *group);
 
     Team *team() const;
     void setTeam(Team *team);
