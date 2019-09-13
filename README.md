@@ -3,11 +3,11 @@
 TurnFix is a program to manage gymnastics competition data. It was build mainly for competitions held in Germany and is currently available in German only.
 
 ## Build
-
+### Windows
 Builds with Qt5.13 and MinGW on Windows. To Build it successful https://github.com/abhijitkundu/QtPropertyBrowser.git must be cloned to libs. 
 
 ## Execute 
-
+### Windows
 To execute the program some additional files are necesarry and must be copied to execution folder. 
 From Qt\5.13.0\mingw73_64\bin folder: 
 - libgcc_s_seh-1.dll 
@@ -26,7 +26,6 @@ From PostGreSQL 11 folder:
 - ssleay32.dll
 - libiconv-2.dll 
 - libintl-9.dll
-
 
 ## License
 
