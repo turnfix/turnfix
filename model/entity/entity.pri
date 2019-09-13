@@ -15,6 +15,7 @@ HEADERS += \
     $$PWD/formula.h \
     $$PWD/groupe.h \
     $$PWD/groupmember.h \
+    $$PWD/juryresults.h \
     $$PWD/penalty.h \
     $$PWD/person.h \
     $$PWD/postgresqlconnection.h \
@@ -44,6 +45,7 @@ SOURCES += \
     $$PWD/formula.cpp \
     $$PWD/groupe.cpp \
     $$PWD/groupmember.cpp \
+    $$PWD/juryresults.cpp \
     $$PWD/penalty.cpp \
     $$PWD/person.cpp \
     $$PWD/postgresqlconnection.cpp \
