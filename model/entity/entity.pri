@@ -18,8 +18,8 @@ HEADERS += \
     $$PWD/penalty.h \
     $$PWD/person.h \
     $$PWD/postgresqlconnection.h \
-    $$PWD/rating.h \
     $$PWD/region.h \
+    $$PWD/score.h \
     $$PWD/sport.h \
     $$PWD/sqliteconnection.h \
     $$PWD/state.h \
@@ -47,8 +47,8 @@ SOURCES += \
     $$PWD/penalty.cpp \
     $$PWD/person.cpp \
     $$PWD/postgresqlconnection.cpp \
-    $$PWD/rating.cpp \
     $$PWD/region.cpp \
+    $$PWD/score.cpp \
     $$PWD/sport.cpp \
     $$PWD/sqliteconnection.cpp \
     $$PWD/state.cpp \
