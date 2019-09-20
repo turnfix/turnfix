@@ -79,23 +79,6 @@ QList<DBTable *> DBChecker::tableData()
     //                             "RESTRICT",
     //                             "RESTRICT");
 
-    //    DBTable *groupMember = new DBTable("tfx_gruppen_x_teilnehmer");
-    //    groupMember->addColumn("int_gruppen_x_teilnehmerid", ColumnType::Integer, 0, false, "", "", true);
-    //    groupMember->addColumn("int_gruppenid", ColumnType::Integer, 0, false);
-    //    groupMember->addColumn("int_teilnehmerid", ColumnType::Integer, 0, false);
-    //    groupMember->addContraint("fky_gruppenid",
-    //                              "tfx_gruppen",
-    //                              "int_gruppenid",
-    //                              "int_gruppenid",
-    //                              "RESTRICT",
-    //                              "CASCADE");
-    //    groupMember->addContraint("fky_teilnehmerid",
-    //                              "tfx_teilnehmer",
-    //                              "int_teilnehmerid",
-    //                              "int_teilnehmerid",
-    //                              "RESTRICT",
-    //                              "RESTRICT");
-
     //    DBTable *squadDiscipline = new DBTable("tfx_riegen_x_disziplinen");
     //    squadDiscipline
     //        ->addColumn("int_riegen_x_disziplinenid", ColumnType::Integer, 0, false, "", "", true);
@@ -162,26 +145,6 @@ QList<DBTable *> DBChecker::tableData()
     //                                     "int_wertungenid",
     //                                     "RESTRICT",
     //                                     "CASCADE");
-
-    //    DBTable *juryJudgement = new DBTable("tfx_jury_results");
-    //    juryJudgement->addColumn("int_juryresultsid", ColumnType::Integer, 0, false, "", "", true);
-    //    juryJudgement->addColumn("int_wertungenid", ColumnType::Integer, 0, false);
-    //    juryJudgement->addColumn("int_disziplinen_felderid", ColumnType::Integer, 0, false);
-    //    juryJudgement->addColumn("int_versuch", ColumnType::SmallInt);
-    //    juryJudgement->addColumn("rel_leistung", ColumnType::Real);
-    //    juryJudgement->addColumn("int_kp", ColumnType::SmallInt);
-    //    juryJudgement->addContraint("fky_disziplinen_felderid",
-    //                                "tfx_disziplinen_felder",
-    //                                "int_disziplinen_felderid",
-    //                                "int_disziplinen_felderid",
-    //                                "RESTRICT",
-    //                                "RESTRICT");
-    //    juryJudgement->addContraint("fky_wertungenid",
-    //                                "tfx_wertungen",
-    //                                "int_wertungenid",
-    //                                "int_wertungenid",
-    //                                "RESTRICT",
-    //                                "CASCADE");
 
     //    DBTable *layout = new DBTable("tfx_layouts");
     //    layout->addColumn("int_layoutid", ColumnType::Integer, 0, false, "", "", true);

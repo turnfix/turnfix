@@ -34,7 +34,7 @@ public:
     void setCompetitionId(int competitionId);
 
     Competition *competition() const;
-    void setCompoetition(Competition *value);
+    void setCompetition(Competition *value);
 
     int number() const;
     void setNumber(int number);
