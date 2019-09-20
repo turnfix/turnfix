@@ -41,7 +41,7 @@ public:
     void setDisciplineFieldId(int disciplineFieldId);
 
     DisciplineField *disciplineField() const;
-    void setParticipant(DisciplineField *disciplineField);
+    void setDisciplineField(DisciplineField *disciplineField);
 
     int round() const;
     void setRound(int round);

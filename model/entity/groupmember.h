@@ -31,7 +31,7 @@ public:
     void setAthlete(Athlete *value);
 
     int groupId() const;
-    void setGroupeId(int groupId);
+    void setGroupId(int groupId);
 
     Group *group() const;
     void setGroup(Group *value);

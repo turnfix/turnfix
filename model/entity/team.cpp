@@ -46,7 +46,7 @@ Competition *Team::competition() const
     return m_competition;
 }
 
-void Team::setCompoetition(Competition *value)
+void Team::setCompetition(Competition *value)
 {
     m_competition = value;
 

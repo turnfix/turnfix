@@ -146,26 +146,6 @@ QList<DBTable *> DBChecker::tableData()
     //                                     "RESTRICT",
     //                                     "CASCADE");
 
-    //    DBTable *juryJudgement = new DBTable("tfx_jury_results");
-    //    juryJudgement->addColumn("int_juryresultsid", ColumnType::Integer, 0, false, "", "", true);
-    //    juryJudgement->addColumn("int_wertungenid", ColumnType::Integer, 0, false);
-    //    juryJudgement->addColumn("int_disziplinen_felderid", ColumnType::Integer, 0, false);
-    //    juryJudgement->addColumn("int_versuch", ColumnType::SmallInt);
-    //    juryJudgement->addColumn("rel_leistung", ColumnType::Real);
-    //    juryJudgement->addColumn("int_kp", ColumnType::SmallInt);
-    //    juryJudgement->addContraint("fky_disziplinen_felderid",
-    //                                "tfx_disziplinen_felder",
-    //                                "int_disziplinen_felderid",
-    //                                "int_disziplinen_felderid",
-    //                                "RESTRICT",
-    //                                "RESTRICT");
-    //    juryJudgement->addContraint("fky_wertungenid",
-    //                                "tfx_wertungen",
-    //                                "int_wertungenid",
-    //                                "int_wertungenid",
-    //                                "RESTRICT",
-    //                                "CASCADE");
-
     //    DBTable *layout = new DBTable("tfx_layouts");
     //    layout->addColumn("int_layoutid", ColumnType::Integer, 0, false, "", "", true);
     //    layout->addColumn("var_name", ColumnType::Varchar, 100);

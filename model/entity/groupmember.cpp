@@ -26,6 +26,16 @@ const DBTable *GroupMember::mapping()
     return m_mapping;
 }
 
+int GroupMember::id() const
+{
+    return m_id;
+}
+
+void GroupMember::setId(int id)
+{
+    m_id = id;
+}
+
 Group *GroupMember::group() const
 {
     return m_group;
@@ -48,7 +58,7 @@ int GroupMember::groupId() const
     return m_groupeId;
 }
 
-void GroupMember::setGroupeId(int groupeId)
+void GroupMember::setGroupId(int groupeId)
 {
     m_groupeId = groupeId;
 }

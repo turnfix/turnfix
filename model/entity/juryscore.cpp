@@ -65,7 +65,7 @@ DisciplineField *JuryScore::disciplineField() const
     return m_disciplineField;
 }
 
-void JuryScore::setParticipant(DisciplineField *value)
+void JuryScore::setDisciplineField(DisciplineField *value)
 {
     m_disciplineField = value;
     if(m_disciplineField == nullptr){
