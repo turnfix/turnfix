@@ -14,14 +14,17 @@ HEADERS += \
     $$PWD/division.h \
     $$PWD/event.h \
     $$PWD/formula.h \
+    $$PWD/group.h \
     $$PWD/penalty.h \
     $$PWD/person.h \
     $$PWD/postgresqlconnection.h \
     $$PWD/region.h \
+    $$PWD/score.h \
     $$PWD/sport.h \
     $$PWD/sqliteconnection.h \
     $$PWD/state.h \
     $$PWD/status.h \
+    $$PWD/team.h \
     $$PWD/venue.h
 
 SOURCES += \
@@ -40,12 +43,15 @@ SOURCES += \
     $$PWD/division.cpp \
     $$PWD/event.cpp \
     $$PWD/formula.cpp \
+    $$PWD/group.cpp \
     $$PWD/penalty.cpp \
     $$PWD/person.cpp \
     $$PWD/postgresqlconnection.cpp \
     $$PWD/region.cpp \
+    $$PWD/score.cpp \
     $$PWD/sport.cpp \
     $$PWD/sqliteconnection.cpp \
     $$PWD/state.cpp \
     $$PWD/status.cpp \
+    $$PWD/team.cpp \
     $$PWD/venue.cpp
