@@ -124,50 +124,6 @@ QList<DBTable *> DBChecker::tableData()
     //                                  "RESTRICT",
     //                                  "CASCADE");
 
-    //    DBTable *judgement = new DBTable("tfx_wertungen");
-    //    judgement->addColumn("int_wertungenid", ColumnType::Integer, 0, false, "", "", true);
-    //    judgement->addColumn("int_wettkaempfeid", ColumnType::Integer, 0, false);
-    //    judgement->addColumn("int_teilnehmerid", ColumnType::Integer);
-    //    judgement->addColumn("int_gruppenid", ColumnType::Integer);
-    //    judgement->addColumn("int_mannschaftenid", ColumnType::Integer);
-    //    judgement->addColumn("int_statusid", ColumnType::Integer, 0, false);
-    //    judgement->addColumn("int_runde", ColumnType::SmallInt, 0, true, "1");
-    //    judgement->addColumn("int_startnummer", ColumnType::Integer);
-    //    judgement->addColumn("bol_ak", ColumnType::Boolean, 0, true, "'false'");
-    //    judgement->addColumn("bol_startet_nicht", ColumnType::Boolean, 0, true, "'false'");
-    //    judgement->addColumn("var_riege", ColumnType::Varchar, 5);
-    //    judgement->addColumn("var_comment", ColumnType::Varchar, 150);
-    //    judgement->addContraint("fky_gruppenid",
-    //                            "tfx_gruppen",
-    //                            "int_gruppenid",
-    //                            "int_gruppenid",
-    //                            "RESTRICT",
-    //                            "CASCADE");
-    //    judgement->addContraint("fky_mannschaftenid",
-    //                            "tfx_mannschaften",
-    //                            "int_mannschaftenid",
-    //                            "int_mannschaftenid",
-    //                            "RESTRICT",
-    //                            "CASCADE");
-    //    judgement->addContraint("fky_statusid",
-    //                            "tfx_status",
-    //                            "int_statusid",
-    //                            "int_statusid",
-    //                            "RESTRICT",
-    //                            "RESTRICT");
-    //    judgement->addContraint("fky_teilnehmerid",
-    //                            "tfx_teilnehmer",
-    //                            "int_teilnehmerid",
-    //                            "int_teilnehmerid",
-    //                            "RESTRICT",
-    //                            "RESTRICT");
-    //    judgement->addContraint("fky_wettkaempfeid",
-    //                            "tfx_wettkaempfe",
-    //                            "int_wettkaempfeid",
-    //                            "int_wettkaempfeid",
-    //                            "RESTRICT",
-    //                            "CASCADE");
-
     //    DBTable *judgementDetail = new DBTable("tfx_wertungen_details");
     //    judgementDetail
     //        ->addColumn("int_wertungen_detailsid", ColumnType::Integer, 0, false, "", "", true);
