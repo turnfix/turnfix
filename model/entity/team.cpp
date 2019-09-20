@@ -12,7 +12,7 @@ DBTable *Team::initializeMapping()
         ->addContraint("fky_vereineid", "tfx_vereine", "int_vereineid", "RESTRICT", "RESTRICT");
     team->addColumn("number", "int_nummer", ColumnType::Integer, 0, false);
     team->addColumn("squad", "var_riege", ColumnType::Varchar, 150);
-    team->addColumn("startnumber", "int_startnummer", ColumnType::Integer, 0, false);
+    team->addColumn("bib", "int_startnummer", ColumnType::Integer, 0, false);
 
     return team;
 }
@@ -108,13 +108,13 @@ void Team::setNumber(int number)
     m_number = number;
 }
 
-int Team::startNumber() const
+int Team::bib() const
 {
-    return m_startNumber;
+    return m_bib;
 }
 
-void Team::setStartNumber(int startNumber)
+void Team::setBib(int bib)
 {
-    m_startNumber = startNumber;
+    m_bib = bib;
 }
 

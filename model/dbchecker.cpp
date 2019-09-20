@@ -44,31 +44,6 @@ void DBChecker::columnUpdate(int count)
 
 QList<DBTable *> DBChecker::tableData()
 {
-    //    DBTable *group = new DBTable("tfx_gruppen");
-    //    group->addColumn("int_gruppenid", ColumnType::Integer, 0, false, "", "", true);
-    //    group->addColumn("int_vereineid", ColumnType::Integer, 0, false);
-    //    group->addColumn("var_name", ColumnType::Varchar, 150);
-
-    //    DBTable *team = new DBTable("tfx_mannschaften");
-    //    team->addColumn("int_mannschaftenid", ColumnType::Integer, 0, false, "", "", true);
-    //    team->addColumn("int_wettkaempfeid", ColumnType::Integer, 0, false);
-    //    team->addColumn("int_vereineid", ColumnType::Integer, 0, false);
-    //    team->addColumn("int_nummer", ColumnType::SmallInt, 0, true, "1");
-    //    team->addColumn("var_riege", ColumnType::Varchar, 5, true, "1");
-    //    team->addColumn("int_startnummer", ColumnType::Integer);
-    //    team->addContraint("fky_vereineid",
-    //                       "tfx_vereine",
-    //                       "int_vereineid",
-    //                       "int_vereineid",
-    //                       "RESTRICT",
-    //                       "RESTRICT");
-    //    team->addContraint("fky_wettkaempfeid",
-    //                       "tfx_wettkaempfe",
-    //                       "int_wettkaempfeid",
-    //                       "int_wettkaempfeid",
-    //                       "RESTRICT",
-    //                       "CASCADE");
-
     //    DBTable *teamPenalty = new DBTable("tfx_man_x_man_ab");
     //    teamPenalty->addColumn("int_man_x_man_abid", ColumnType::Integer, 0, false, "", "", true);
     //    teamPenalty->addColumn("int_mannschaftenid", ColumnType::Integer, 0, false);

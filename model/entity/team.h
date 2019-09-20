@@ -9,6 +9,17 @@ class DBTable;
 
 class Team : public QObject
 {
+    Q_OBJECT
+    Q_PROPERTY(int id READ id WRITE setId)
+    Q_PROPERTY(int clubId READ clubId WRITE setClubId)
+    Q_PROPERTY(int competitionId READ competitionId WRITE setCompetitionId)
+    Q_PROPERTY(int number READ number WRITE setNumber)
+    Q_PROPERTY(QString squad READ squad WRITE setSquad)
+    Q_PROPERTY(int bib READ bib WRITE setBib)
+
+    Q_PROPERTY(Club *club READ club WRITE setClub STORED false)
+    Q_PROPERTY(Competition *competition READ competition WRITE setCompetition STORED false)
+
 public:
     int id() const;
     void setId(int id);
@@ -31,8 +42,8 @@ public:
     QString squad() const;
     void setSquad(const QString &squad);
 
-    int startNumber() const;
-    void setStartNumber(int startNumber);
+    int bib() const;
+    void setBib(int bib);
 
     static const DBTable *mapping();
 private:
@@ -43,7 +54,7 @@ private:
     int m_competitionId;
     int m_number;
     QString m_squad;
-    int m_startNumber;
+    int m_bib;
 
     static DBTable *initializeMapping();
     static const DBTable *m_mapping;
