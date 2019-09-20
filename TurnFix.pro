@@ -66,4 +66,6 @@ RESOURCES += resources/TurnFix.qrc \
 
 
 DISTFILES += \
-    .gitignore
+    .gitignore \
+    .gitmodules \
+    README.md
