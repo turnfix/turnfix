@@ -1,13 +1,20 @@
-#ifndef GROUPE_H
-#define GROUPE_H
+#ifndef GROUP_H
+#define GROUP_H
 
 #include "club.h"
 #include <QObject>
 
 class DBTable;
 
-class Groupe : public QObject
+class Group : public QObject
 {
+    Q_OBJECT
+    Q_PROPERTY(int id READ id WRITE setId)
+    Q_PROPERTY(int clubId READ clubId WRITE setClubId)
+    Q_PROPERTY(QString name READ name WRITE setName)
+
+    Q_PROPERTY(Club *club READ club WRITE setClub STORED false)
+
 public:
     int id() const;
     void setId(int id);
@@ -31,5 +38,6 @@ private:
     static DBTable *initializeMapping();
     static const DBTable *m_mapping;
 };
+Q_DECLARE_METATYPE(Group *);
 
-#endif // GROUPE_H
+#endif // GROUP_H
