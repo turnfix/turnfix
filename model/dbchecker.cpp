@@ -79,23 +79,6 @@ QList<DBTable *> DBChecker::tableData()
     //                             "RESTRICT",
     //                             "RESTRICT");
 
-    //    DBTable *groupMember = new DBTable("tfx_gruppen_x_teilnehmer");
-    //    groupMember->addColumn("int_gruppen_x_teilnehmerid", ColumnType::Integer, 0, false, "", "", true);
-    //    groupMember->addColumn("int_gruppenid", ColumnType::Integer, 0, false);
-    //    groupMember->addColumn("int_teilnehmerid", ColumnType::Integer, 0, false);
-    //    groupMember->addContraint("fky_gruppenid",
-    //                              "tfx_gruppen",
-    //                              "int_gruppenid",
-    //                              "int_gruppenid",
-    //                              "RESTRICT",
-    //                              "CASCADE");
-    //    groupMember->addContraint("fky_teilnehmerid",
-    //                              "tfx_teilnehmer",
-    //                              "int_teilnehmerid",
-    //                              "int_teilnehmerid",
-    //                              "RESTRICT",
-    //                              "RESTRICT");
-
     //    DBTable *squadDiscipline = new DBTable("tfx_riegen_x_disziplinen");
     //    squadDiscipline
     //        ->addColumn("int_riegen_x_disziplinenid", ColumnType::Integer, 0, false, "", "", true);

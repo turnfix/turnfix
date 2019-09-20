@@ -2,14 +2,25 @@
 #define GROUPMEMBER_H
 
 #include <QObject>
+
 #include "athlete.h"
-#include "groupe.h"
+#include "group.h"
 
 class DBTable;
 
-class GroupeMember : public QObject
+class GroupMember : public QObject
 {
+    Q_OBJECT
+    Q_PROPERTY(int id READ id WRITE setId)
+    Q_PROPERTY(int athleteId READ athleteId WRITE setAthleteId)
+    Q_PROPERTY(int groupId READ groupId WRITE setGroupId)
+
+    Q_PROPERTY(Athlete *athlete READ athlete WRITE setAthlete STORED false)
+    Q_PROPERTY(Group *group READ group WRITE setGroup STORED false)
+
 public:
+    Q_INVOKABLE GroupMember() = default;
+
     int id() const;
     void setId(int id);
 
@@ -19,23 +30,25 @@ public:
     Athlete *athlete() const;
     void setAthlete(Athlete *value);
 
-    int groupeId() const;
-    void setGroupeId(int groupeId);
+    int groupId() const;
+    void setGroupeId(int groupId);
 
-    Groupe *groupe() const;
-    void setGroupe(Groupe *value);
+    Group *group() const;
+    void setGroup(Group *value);
 
     static const DBTable *mapping();
+
 private:
     int m_id = 0;
     int m_athleteId;
     Athlete *m_athlete;
 
     int m_groupeId;
-    Groupe *m_groupe;
+    Group *m_group;
 
     static DBTable *initializeMapping();
     static const DBTable *m_mapping;
 };
+Q_DECLARE_METATYPE(GroupMember *);
 
 #endif // GROUPMEMBER_H

@@ -2,58 +2,63 @@
 #include "model/dbcolumn.h"
 #include "model/dbtable.h"
 
-DBTable *GroupeMember::initializeMapping()
+DBTable *GroupMember::initializeMapping()
 {
-    DBTable *groupeMember = new DBTable("tfx_gruppen_x_teilnehmer");
-    groupeMember->addColumn("id", "int_gruppen_x_teilnehmerid", ColumnType::Integer, 0, false, "", "", true);
-    groupeMember->addColumn("groupeId", "int_gruppenid", ColumnType::Integer, 0, false)
-            ->addContraint("fky_gruppenid", "tfx_gruppen", "int_gruppenid", "RESTRICT", "CASCADE");
-    groupeMember->addColumn("athleteId", "int_teilnehmerid", ColumnType::Integer, 0, false)
-            ->addContraint("fky_teilnehmerid", "tfx_teilnehmer", "int_teilnehmerid", "RESTRICT", "RESTRICT");
+    DBTable *groupMember = new DBTable("tfx_gruppen_x_teilnehmer");
+    groupMember
+        ->addColumn("id", "int_gruppen_x_teilnehmerid", ColumnType::Integer, 0, false, "", "", true);
+    groupMember->addColumn("groupId", "int_gruppenid", ColumnType::Integer, 0, false)
+        ->addContraint("fky_gruppenid", "tfx_gruppen", "int_gruppenid", "RESTRICT", "CASCADE");
+    groupMember->addColumn("athleteId", "int_teilnehmerid", ColumnType::Integer, 0, false)
+        ->addContraint("fky_teilnehmerid",
+                       "tfx_teilnehmer",
+                       "int_teilnehmerid",
+                       "RESTRICT",
+                       "RESTRICT");
 
-    return groupeMember;
+    return groupMember;
 }
 
-const DBTable *GroupeMember::m_mapping = GroupeMember::initializeMapping();
+const DBTable *GroupMember::m_mapping = GroupMember::initializeMapping();
 
-const DBTable *GroupeMember::mapping()
+const DBTable *GroupMember::mapping()
 {
     return m_mapping;
 }
 
-Groupe *GroupeMember::groupe() const
+Group *GroupMember::group() const
 {
-    return m_groupe;
+    return m_group;
 }
 
-void GroupeMember::setGroupe(Groupe *value)
+void GroupMember::setGroup(Group *group)
 {
-    m_groupe = value;
+    m_group = group;
 
-    if (m_groupe == nullptr) {
+    if (m_group == nullptr) {
         m_groupeId = 0;
         return;
     }
 
-    m_groupeId = m_groupe->id();
+    m_groupeId = m_group->id();
 }
 
-int GroupeMember::groupeId() const
+int GroupMember::groupId() const
 {
     return m_groupeId;
 }
 
-void GroupeMember::setGroupeId(int groupeId)
+void GroupMember::setGroupeId(int groupeId)
 {
     m_groupeId = groupeId;
 }
 
-Athlete *GroupeMember::athlete() const
+Athlete *GroupMember::athlete() const
 {
     return m_athlete;
 }
 
-void GroupeMember::setAthlete(Athlete *value)
+void GroupMember::setAthlete(Athlete *value)
 {
     m_athlete = value;
 
@@ -65,12 +70,12 @@ void GroupeMember::setAthlete(Athlete *value)
     m_athleteId = m_athlete->id();
 }
 
-int GroupeMember::athleteId() const
+int GroupMember::athleteId() const
 {
     return m_athleteId;
 }
 
-void GroupeMember::setAthleteId(int athleteId)
+void GroupMember::setAthleteId(int athleteId)
 {
     m_athleteId = athleteId;
 }
