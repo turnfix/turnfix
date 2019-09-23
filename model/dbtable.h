@@ -28,12 +28,12 @@ public:
     DBColumn *columnByProperty(const QString &propertName) const;
     QList<DBConstraint *> existingConstraints(const QString &connectionName);
 
-    void check(const QString &connectionName);
+    void check(const QString &connectionName) const;
 
 private:
-    void create(const QString &connectionName);
-    bool exists(const QString &connectionName);
-    QList<DBColumn *> existingColumns(const QString &connectionName);
+    void create(const QString &connectionName) const;
+    bool exists(const QString &connectionName) const;
+    QList<DBColumn *> existingColumns(const QString &connectionName) const;
 
     QString m_name;
     QMap<QString, DBColumn *> m_columns;
@@ -41,8 +41,7 @@ private:
 signals:
     void tableOK();
     void tablesDoesNotExist();
-    void columnsChecked(int);
-
+    void columnsChecked(int) const;
 };
 
 #endif // DBTABLE_H

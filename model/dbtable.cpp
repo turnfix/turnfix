@@ -34,7 +34,7 @@ DBColumn *DBTable::columnByProperty(const QString &propertName) const
     return m_columns.value(propertName);
 }
 
-void DBTable::check(const QString &connectionName)
+void DBTable::check(const QString &connectionName) const
 {
     if (!exists(connectionName)) {
         create(connectionName);
@@ -55,7 +55,7 @@ void DBTable::check(const QString &connectionName)
     }
 }
 
-void DBTable::create(const QString &connectionName)
+void DBTable::create(const QString &connectionName) const
 {
     QSqlDatabase db = QSqlDatabase::database(connectionName);
     QString driverName = db.driverName();
@@ -113,7 +113,7 @@ void DBTable::create(const QString &connectionName)
     create.exec(query);
 }
 
-bool DBTable::exists(const QString &connectionName)
+bool DBTable::exists(const QString &connectionName) const
 {
     QSqlDatabase db = QSqlDatabase::database(connectionName);
     QString driverName = db.driverName();
@@ -132,7 +132,7 @@ bool DBTable::exists(const QString &connectionName)
     return query.next();
 }
 
-QList<DBColumn *> DBTable::existingColumns(const QString &connectionName)
+QList<DBColumn *> DBTable::existingColumns(const QString &connectionName) const
 {
     QSqlDatabase db = QSqlDatabase::database(connectionName);
     QString driverName = db.driverName();

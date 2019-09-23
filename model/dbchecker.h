@@ -20,7 +20,7 @@ private slots:
 
 private:
     AbstractConnection *connection;
-    QList<DBTable *> tableData();
+    QList<const DBTable *> tableData();
 
 signals:
     void tableCount(int);

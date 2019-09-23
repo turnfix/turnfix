@@ -2,16 +2,22 @@
 <ui version="4.0">
  <class>CheckDatabaseDialog</class>
  <widget class="QDialog" name="CheckDatabaseDialog">
+  <property name="windowModality">
+   <enum>Qt::ApplicationModal</enum>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>510</width>
-    <height>178</height>
+    <height>180</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Datenbank überprüfen</string>
+  </property>
+  <property name="modal">
+   <bool>true</bool>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
